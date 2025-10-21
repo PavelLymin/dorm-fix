@@ -2,7 +2,7 @@ import 'package:dorm_fix/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../features/authentication/data/repository/auth_repository.dart';
-import '../../features/authentication/state_management/bloc/authentication_bloc.dart';
+import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
 import '../model/dependencies.dart';
 
 abstract class Factory<T> {

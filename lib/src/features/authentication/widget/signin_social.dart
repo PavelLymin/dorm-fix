@@ -1,7 +1,7 @@
 import 'package:ui_kit/ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/extension/build_context.dart';
-import '../state_management/bloc/authentication_bloc.dart';
+import '../state_management/authentication/authentication_bloc.dart';
 
 class AuthWithSocial extends StatelessWidget {
   const AuthWithSocial({super.key});

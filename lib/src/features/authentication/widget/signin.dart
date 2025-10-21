@@ -4,7 +4,7 @@ import 'package:ui_kit/ui.dart';
 import 'signin_form.dart';
 import 'signin_social.dart';
 import '../../../core/constant/config.dart';
-import '../state_management/bloc/authentication_bloc.dart';
+import '../state_management/authentication/authentication_bloc.dart';
 part 'auth_validate.dart';
 
 @RoutePage()

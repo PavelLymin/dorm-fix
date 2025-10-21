@@ -48,6 +48,16 @@ app.*.map.json
 lib/firebase_options.dart
 firebase.json
 
+# Google Api
 macos/Runner/GoogleService-Info.plist
 ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
+
+# Debug ios config
+ios/Flutter/Debug.xcconfig
+# Release ios config
+ios/Flutter/Release.xcconfig
+# Debug macos config
+macos/Flutter/Flutter-Debug.xcconfig
+# Release macos config
+macos/Flutter/Flutter-Release.xcconfig

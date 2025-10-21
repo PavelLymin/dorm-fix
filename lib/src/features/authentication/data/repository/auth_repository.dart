@@ -1,7 +1,8 @@
-import 'package:dorm_fix/src/features/authentication/data/dto/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../../../../core/firebase/firebase.dart';
 import '../../model/user.dart';
+import '../dto/user.dart';
 
 abstract interface class IAuthRepository {
   Stream<UserEntity> get userChanges;
@@ -50,19 +51,25 @@ class AuthRepository implements IAuthRepository {
     required String email,
     required String password,
   }) async {
-    final data = await _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      final data = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    final user = data.user;
-    if (user == null) throw Exception('Пользователь не найден');
+      final user = data.user;
+      if (user == null) throw AuthException(code: 'user-null');
 
-    await user.sendEmailVerification();
+      await user.sendEmailVerification();
 
-    final authenticatedUser = UserDto.fromFirebase(user).toEntity();
+      final authenticatedUser = UserDto.fromFirebase(user).toEntity();
 
-    return authenticatedUser;
+      return authenticatedUser;
+    } on FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(AuthException(code: e.code), stackTrace);
+    } on AuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(e.message, stackTrace);
+    }
   }
 
   @override
@@ -72,41 +79,53 @@ class AuthRepository implements IAuthRepository {
     required String photoURL,
     required String password,
   }) async {
-    final data = await _firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .then((result) {
-          result.user?.updateDisplayName(displayName);
-          result.user?.updatePhotoURL(photoURL);
-        })
-        .catchError((error) {});
+    try {
+      final data = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((result) {
+            result.user?.updateDisplayName(displayName);
+            result.user?.updatePhotoURL(photoURL);
+          })
+          .catchError((error) {});
 
-    final user = data.user;
-    if (user == null) throw Exception('Пользователь не найден');
+      final user = data.user;
+      if (user == null) throw AuthException(code: 'user-null');
 
-    final authenticatedUser = UserDto.fromFirebase(user).toEntity();
+      final authenticatedUser = UserDto.fromFirebase(user).toEntity();
 
-    return authenticatedUser;
+      return authenticatedUser;
+    } on FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(AuthException(code: e.code), stackTrace);
+    } on AuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(e.message, stackTrace);
+    }
   }
 
   @override
   Future<AuthenticatedUser> signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await GoogleSignIn.instance
-        .authenticate();
-    final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-    final credential = GoogleAuthProvider.credential(
-      idToken: googleAuth.idToken,
-    );
-    final userCredential = await FirebaseAuth.instance.signInWithCredential(
-      credential,
-    );
+    try {
+      final GoogleSignInAccount googleUser = await GoogleSignIn.instance
+          .authenticate();
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(
+        credential,
+      );
 
-    if (userCredential.user == null) throw Exception('Пользователь не найден');
+      if (userCredential.user == null) throw AuthException(code: 'user-null');
 
-    final authenticatedUser = UserDto.fromFirebase(
-      userCredential.user!,
-    ).toEntity();
+      final authenticatedUser = UserDto.fromFirebase(
+        userCredential.user!,
+      ).toEntity();
 
-    return authenticatedUser;
+      return authenticatedUser;
+    } on FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(AuthException(code: e.code), stackTrace);
+    } on AuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(e.message, stackTrace);
+    }
   }
 
   @override

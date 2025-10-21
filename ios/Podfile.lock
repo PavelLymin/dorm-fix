@@ -18,13 +18,12 @@ PODS:
   - Firebase/CoreOnly (12.4.0):
     - FirebaseCore (~> 12.4.0)
   - firebase_auth (6.1.1):
-    - Firebase/Auth (~> 12.4.0)
-    - Firebase/CoreOnly (~> 12.4.0)
+    - Firebase/Auth (= 12.4.0)
     - firebase_core
-    - FlutterMacOS
+    - Flutter
   - firebase_core (4.2.0):
-    - Firebase/CoreOnly (~> 12.4.0)
-    - FlutterMacOS
+    - Firebase/CoreOnly (= 12.4.0)
+    - Flutter
   - FirebaseAppCheckInterop (12.4.0)
   - FirebaseAuth (12.4.0):
     - FirebaseAppCheckInterop (~> 12.4.0)
@@ -44,7 +43,7 @@ PODS:
     - FirebaseCore (~> 12.4.0)
   - FirebaseCoreInternal (12.4.0):
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
-  - FlutterMacOS (1.0.0)
+  - Flutter (1.0.0)
   - google_sign_in_ios (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -88,20 +87,21 @@ PODS:
   - GTMSessionFetcher/Full (3.5.0):
     - GTMSessionFetcher/Core
   - objective_c (0.0.1):
-    - FlutterMacOS
+    - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.4.0)
+  - RecaptchaInterop (101.0.0)
 
 DEPENDENCIES:
-  - cupertino_http (from `Flutter/ephemeral/.symlinks/plugins/cupertino_http/darwin`)
-  - firebase_auth (from `Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos`)
-  - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
-  - FlutterMacOS (from `Flutter/ephemeral`)
-  - google_sign_in_ios (from `Flutter/ephemeral/.symlinks/plugins/google_sign_in_ios/darwin`)
-  - objective_c (from `Flutter/ephemeral/.symlinks/plugins/objective_c/macos`)
-  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - cupertino_http (from `.symlinks/plugins/cupertino_http/darwin`)
+  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
+  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - Flutter (from `Flutter`)
+  - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
+  - objective_c (from `.symlinks/plugins/objective_c/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -119,46 +119,48 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - PromisesObjC
+    - RecaptchaInterop
 
 EXTERNAL SOURCES:
   cupertino_http:
-    :path: Flutter/ephemeral/.symlinks/plugins/cupertino_http/darwin
+    :path: ".symlinks/plugins/cupertino_http/darwin"
   firebase_auth:
-    :path: Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos
+    :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
-    :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
-  FlutterMacOS:
-    :path: Flutter/ephemeral
+    :path: ".symlinks/plugins/firebase_core/ios"
+  Flutter:
+    :path: Flutter
   google_sign_in_ios:
-    :path: Flutter/ephemeral/.symlinks/plugins/google_sign_in_ios/darwin
+    :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   objective_c:
-    :path: Flutter/ephemeral/.symlinks/plugins/objective_c/macos
+    :path: ".symlinks/plugins/objective_c/ios"
   path_provider_foundation:
-    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
 
 SPEC CHECKSUMS:
   AppAuth: 1c1a8afa7e12f2ec3a294d9882dfa5ab7d3cb063
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
   cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
   Firebase: f07b15ae5a6ec0f93713e30b923d9970d144af3e
-  firebase_auth: b6e7af6050a882814c2450b4302f680abde292a9
-  firebase_core: d81d1a44df95699ce074ae63d8cb43e9df21e142
+  firebase_auth: c2b8be95d602d4e8a9148fae72333ef78e69cc20
+  firebase_core: 744984dbbed8b3036abf34f0b98d80f130a7e464
   FirebaseAppCheckInterop: f734c802f21fe1da0837708f0f9a27218c8a4ed0
   FirebaseAuth: 4a2aed737c84114a9d9b33d11ae1b147d6b94889
   FirebaseAuthInterop: 858e6b754966e70740a4370dd1503dfffe6dbb49
   FirebaseCore: bb595f3114953664e3c1dc032f008a244147cfd3
   FirebaseCoreExtension: 7e1f7118ee970e001a8013719fb90950ee5e0018
   FirebaseCoreInternal: d7f5a043c2cd01a08103ab586587c1468047bca6
-  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   google_sign_in_ios: 00dfa94252eb10278b64828c81bcb7158a81a53a
   GoogleSignIn: c7f09cfbc85a1abf69187be091997c317cc33b77
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   GTMAppAuth: 217a876b249c3c585a54fd6f73e6b58c4f5c4238
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
-  objective_c: ec13431e45ba099cb734eb2829a5c1cd37986cba
+  objective_c: 89e720c30d716b036faf9c9684022048eee1eee2
   path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
 
-PODFILE CHECKSUM: d4b7aeec5de0965339b8d0481378db51881a2c97
+PODFILE CHECKSUM: 4e3d500109cf1c9437b41588d4581c6d443f40cb
 
 COCOAPODS: 1.16.2

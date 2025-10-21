@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
-import 'src/features/authentication/state_management/bloc/authentication_bloc.dart';
+import 'src/features/authentication/state_management/authentication/authentication_bloc.dart';
 import 'src/features/authentication/widget/signin.dart';
 
 void main() async {
