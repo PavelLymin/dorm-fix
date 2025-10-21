@@ -1,0 +1,42 @@
+name: dorm_fix
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+workspace:
+  - packages/ui_kit
+
+environment:
+  sdk: ^3.11.0-16.0.dev
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # BLoC
+  flutter_bloc: ^9.1.1
+  bloc_concurrency: ^0.3.0
+  # Route
+  auto_route: ^10.1.2
+  # Api
+  dio: ^5.9.0
+  # Firebase
+  firebase_auth: ^6.1.1
+  firebase_core: ^4.2.0
+  # Google sign in
+  google_sign_in: ^7.2.0
+  # Logs
+  logger: ^2.6.2
+  # RX
+  rxdart: ^0.28.0
+  # WS
+  web_socket_channel: ^3.0.3
+
+  ui_kit:
+    path: packages/ui_kit
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
