@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'signin_form.dart';
 import 'signin_social.dart';
-import '../../../core/constant/config.dart';
+import '../../../app/model/application_config.dart';
 import '../state_management/authentication/authentication_bloc.dart';
 part 'auth_validate.dart';
 

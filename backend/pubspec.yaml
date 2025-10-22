@@ -1,0 +1,22 @@
+name: backend
+description: A server app using the shelf package and Docker.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.11.0-16.0.dev
+
+dependencies:
+  # Database 
+  drift: ^2.29.0
+  # Server
+  firebase_admin: ^0.3.1
+  shelf: ^1.4.2
+  shelf_router: ^1.1.2
+
+dev_dependencies:
+  # Codegen
+  build_runner: ^2.10.0
+  http: ^1.2.2
+  lints: ^6.0.0
+  test: ^1.25.6

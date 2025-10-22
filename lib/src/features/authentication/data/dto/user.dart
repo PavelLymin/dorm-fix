@@ -1,5 +1,5 @@
-import 'package:dorm_fix/src/features/authentication/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../model/user.dart';
 
 class UserDto {
   const UserDto({
@@ -40,16 +40,6 @@ class UserDto {
     phoneNumber: user.phoneNumber,
   );
 
-  factory UserDto.fromJson(Map<String, dynamic> json) {
-    return UserDto(
-      uid: json['uid'] as String,
-      displayName: json['display_name'] as String?,
-      photoURL: json['photo_url'] as String?,
-      email: json['email'] as String?,
-      phoneNumber: json['phone_number'] as String?,
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
@@ -58,5 +48,15 @@ class UserDto {
       'email': email,
       'phone_number': phoneNumber,
     };
+  }
+
+  factory UserDto.fromJson(Map<String, dynamic> json) {
+    return UserDto(
+      uid: json['uid'] as String,
+      displayName: json['display_name'] as String?,
+      photoURL: json['photo_url'] as String?,
+      email: json['email'] as String?,
+      phoneNumber: json['phone_number'] as String?,
+    );
   }
 }
