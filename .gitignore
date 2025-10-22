@@ -47,6 +47,7 @@ app.*.map.json
 # Firebase
 lib/firebase_options.dart
 firebase.json
+backend/bin/service-account.json
 
 # Google Api
 macos/Runner/GoogleService-Info.plist

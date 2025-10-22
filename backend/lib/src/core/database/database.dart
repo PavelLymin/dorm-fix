@@ -1,25 +1,30 @@
-// part of 'entity.dart';
+import 'dart:io';
 
-// @DriftDatabase(tables: [Users, Buildings, Rooms])
-// class AppDatabase extends _$AppDatabase {
-//   AppDatabase._(super.e);
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 
-//   static AppDatabase? instance;
+part 'database.g.dart';
+part 'entity.dart';
 
-//   factory AppDatabase() => instance ?? AppDatabase._(_openConnection());
+@DriftDatabase(tables: [Users, Buildings, Rooms])
+class AppDatabase extends _$AppDatabase {
+  AppDatabase._(super.e);
 
-//   @override
-//   int get schemaVersion => 1;
+  static AppDatabase? instance;
 
-//   static QueryExecutor _openConnection() {
-//     final path = Config.databasePath;
-//     return NativeDatabase(File(path));
-//   }
+  factory AppDatabase({required String path}) =>
+      instance ?? AppDatabase._(_openConnection(path: path));
 
-//   @override
-//   Future<void> close() {
-//     instance?.close();
-//     instance = null;
-//     return super.close();
-//   }
-// }
+  @override
+  int get schemaVersion => 1;
+
+  static QueryExecutor _openConnection({required String path}) {
+    return NativeDatabase(File(path));
+  }
+
+  @override
+  Future<void> close() {
+    instance?.close();
+    return super.close();
+  }
+}

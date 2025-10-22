@@ -2,7 +2,7 @@ import 'package:firebase_admin/firebase_admin.dart';
 import 'package:shelf/shelf.dart';
 
 abstract class AuthenticationMiddleware {
-  static Middleware checkAuthentication({required App firebaseAdmin}) {
+  static Middleware check({required App firebaseAdmin}) {
     return (Handler innerHandler) {
       return (Request request) async {
         try {

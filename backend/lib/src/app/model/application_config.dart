@@ -1,20 +1,21 @@
-/// Config for app.
-abstract final class Config {
+class Config {
+  const Config();
   // --- ENVIRONMENT --- //
 
   /// Environment flavor.
   /// e.g. development, staging, production
-  static final EnvironmentFlavor environment = EnvironmentFlavor.from(
+  EnvironmentFlavor get environment => EnvironmentFlavor.from(
     const String.fromEnvironment('ENVIRONMENT', defaultValue: 'development'),
   );
 
   // --- DATABASE --- //
-
-  /// Database path.
-  static final String databasePath = const String.fromEnvironment(
+  String get databasePath => const String.fromEnvironment(
     'DATABASE_PATH',
     defaultValue: 'database.db',
   );
+
+  // --- SERVER --- //
+  String get port => const String.fromEnvironment('PORT', defaultValue: '8080');
 }
 
 /// Environment flavor.

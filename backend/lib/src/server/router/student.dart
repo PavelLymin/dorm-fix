@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-import '../data/dto/user.dart';
+import '../data/dto/student.dart';
 import '../data/repository/student_repository.dart';
 
 class StudentRouter {
@@ -11,7 +11,7 @@ class StudentRouter {
 
   final IStudentRepository _studentRepository;
 
-  Handler get student {
+  Handler get handler {
     final router = Router();
 
     router.get('/<id>', _getStudent);
@@ -61,6 +61,7 @@ class StudentRouter {
           body: 'Query parameter "id" must be greater than 0',
         );
       }
+
       await _studentRepository.deleteStudent(id: id);
       return Response.ok('The student was successfully deleted.');
     } catch (e) {

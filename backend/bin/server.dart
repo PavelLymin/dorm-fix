@@ -1,34 +1,39 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:backend/src/app/logic/composition_root.dart';
+import 'package:backend/src/server/middleware/authentication.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
-import 'package:shelf_router/shelf_router.dart';
-
-// Configure routes.
-final _router = Router()
-  ..get('/', _rootHandler)
-  ..get('/echo/<message>', _echoHandler);
-
-Response _rootHandler(Request req) {
-  return Response.ok('Hello, World!\n');
-}
-
-Response _echoHandler(Request request) {
-  final message = request.params['message'];
-  return Response.ok('$message\n');
-}
 
 void main(List<String> args) async {
-  // Use any available host or container IP (usually `0.0.0.0`).
-  final ip = InternetAddress.anyIPv4;
+  final logger = CreateAppLogger().create();
 
-  // Configure a pipeline that logs requests.
-  final handler = Pipeline()
-      .addMiddleware(logRequests())
-      .addHandler(_router.call);
+  await runZonedGuarded(
+    () async {
+      final dependency = await CompositionRoot(logger: logger).compose();
 
-  // For running in containers, we respect the PORT environment variable.
-  final port = int.parse(Platform.environment['PORT'] ?? '8080');
-  final server = await serve(handler, ip, port);
-  print('Server listening on port ${server.port}');
+      ProcessSignal.sigint.watch().listen((_) async {
+        await dependency.database.close();
+        exit(0);
+      });
+
+      final ip = InternetAddress.anyIPv4;
+
+      final handler = Pipeline()
+          .addMiddleware(logRequests())
+          .addMiddleware(
+            AuthenticationMiddleware.check(
+              firebaseAdmin: dependency.firebaseAdmin,
+            ),
+          )
+          .addHandler(dependency.studentRouter.handler);
+
+      final port = int.parse(dependency.config.port);
+      await serve(handler, ip, port);
+    },
+    (e, stackTrace) {
+      logger.e(e.toString(), stackTrace: stackTrace);
+    },
+  );
 }

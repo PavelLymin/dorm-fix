@@ -10,9 +10,12 @@ dependencies:
   # Database 
   drift: ^2.29.0
   # Server
+  drift_dev: ^2.29.0
   firebase_admin: ^0.3.1
+  logger: ^2.6.2
   shelf: ^1.4.2
   shelf_router: ^1.1.2
+  sqlite3: ^2.9.3
 
 dev_dependencies:
   # Codegen
