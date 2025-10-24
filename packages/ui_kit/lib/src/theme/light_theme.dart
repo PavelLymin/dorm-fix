@@ -50,6 +50,6 @@ ThemeData createLightTheme() {
       ),
     ),
     inputDecorationTheme: createInputTheme(AppColors.white),
-    extensions: [ThemeColors.light, ThemeDecorationInput.light],
+    // extensions: [ThemeColors.light, ThemeDecorationInput.light],
   );
 }

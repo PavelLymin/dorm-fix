@@ -41,7 +41,7 @@ class _MainAppState extends State<MainApp> {
     child: MaterialApp(
       title: 'Dorm Fix',
       debugShowCheckedModeBanner: false,
-      theme: createLightTheme(),
+      // theme: createLightTheme(),
       home: const SignIn(),
     ),
   );

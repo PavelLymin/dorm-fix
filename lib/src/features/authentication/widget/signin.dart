@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'signin_form.dart';
-import 'signin_social.dart';
 import '../../../core/constant/config.dart';
 import '../state_management/authentication/authentication_bloc.dart';
 part 'auth_validate.dart';
@@ -148,7 +147,7 @@ class _SignInState extends State<SignIn>
                             ),
                       ),
                       const SizedBox(height: 32),
-                      const AuthWithSocial(),
+                      // const AuthWithSocial(),
                     ],
                   ),
                 ),
@@ -202,7 +201,7 @@ class _SignInState extends State<SignIn>
                                   ),
                             ),
                             const SizedBox(height: 32),
-                            const AuthWithSocial(),
+                            // const AuthWithSocial(),
                           ],
                         ),
                       ),

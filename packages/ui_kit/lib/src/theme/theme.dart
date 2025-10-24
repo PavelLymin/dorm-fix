@@ -6,7 +6,6 @@ part 'contsants.dart';
 part 'dark_theme.dart';
 part 'light_theme.dart';
 part 'text_theme.dart';
-part 'theme_extension.dart';
 
 InputDecorationTheme createInputTheme(Color fillColor) => InputDecorationTheme(
   filled: true,

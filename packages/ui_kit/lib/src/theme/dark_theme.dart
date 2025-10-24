@@ -46,6 +46,6 @@ ThemeData createDarkTheme() {
       ),
     ),
     inputDecorationTheme: createInputTheme(AppColors.darkGrey),
-    extensions: [ThemeColors.light, ThemeDecorationInput.dark],
+    // extensions: [ThemeColors.light, ThemeDecorationInput.dark],
   );
 }

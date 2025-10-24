@@ -1,4 +1,3 @@
-import 'package:dorm_fix/src/core/extension/build_context.dart';
 import 'package:ui_kit/ui.dart';
 
 class SignInForm extends StatefulWidget {
@@ -44,7 +43,7 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
         const SizedBox(height: 16),
         Text(
           'Start using My App today',
-          style: context.extentions.themeText.titleLarge,
+          // style: context.extentions.themeText.titleLarge,
         ),
         const SizedBox(height: 32),
         ValueListenableBuilder(
@@ -91,16 +90,16 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
                         ),
                       ],
                     ),
-              InkWell(
-                onTap: () {},
-                borderRadius: BorderRadius.circular(8),
-                child: Text(
-                  'Forgot Password?',
-                  style: context.extentions.themeText.bodyMedium!.copyWith(
-                    color: AppColors.green,
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {},
+              //   borderRadius: BorderRadius.circular(8),
+              //   child: Text(
+              //     'Forgot Password?',
+              //     style: context.extentions.themeText.bodyMedium!.copyWith(
+              //       color: AppColors.green,
+              //     ),
+              //   ),
+              // ),
               const SizedBox(height: 16),
             ],
           ),

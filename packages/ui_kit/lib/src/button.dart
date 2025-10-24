@@ -14,19 +14,19 @@ class BaseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ElevatedButton(
     onPressed: !isEnable ? null : onPressed,
-    style: ButtonStyle(
-      foregroundColor: !isEnable
-          ? WidgetStatePropertyAll<Color>(
-              Theme.of(context).extension<ThemeColors>()!.disableTextColor,
-            )
-          : null,
-      fixedSize: WidgetStatePropertyAll<Size>(Size(double.maxFinite, 60)),
-      backgroundColor: !isEnable
-          ? WidgetStatePropertyAll<Color>(
-              Theme.of(context).extension<ThemeColors>()!.disableButtonColor,
-            )
-          : null,
-    ),
+    // style: ButtonStyle(
+    //   foregroundColor: !isEnable
+    //       ? WidgetStatePropertyAll<Color>(
+    //           Theme.of(context).extension<ThemeColors>()!.disableTextColor,
+    //         )
+    //       : null,
+    //   fixedSize: WidgetStatePropertyAll<Size>(Size(double.maxFinite, 60)),
+    //   backgroundColor: !isEnable
+    //       ? WidgetStatePropertyAll<Color>(
+    //           Theme.of(context).extension<ThemeColors>()!.disableButtonColor,
+    //         )
+    //       : null,
+    // ),
     child: widget,
   );
 }

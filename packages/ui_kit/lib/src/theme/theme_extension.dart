@@ -1,134 +1,234 @@
-part of 'theme.dart';
+import 'package:ui_kit/ui.dart';
 
-class ThemeColors extends ThemeExtension<ThemeColors> {
-  const ThemeColors({
-    required this.borderInputTextColor,
-    required this.containerChatsColor,
-    required this.disableButtonColor,
-    required this.disableTextColor,
-    required this.buttonSocialColor,
+class ColorPalette extends ThemeExtension<ColorPalette> {
+  const ColorPalette({
+    required this.background,
+    required this.foreground,
+    required this.muted,
+    required this.mutedForeground,
+    required this.border,
+    required this.primary,
+    required this.primaryForeground,
+    required this.secondary,
+    required this.secondaryForeground,
+    required this.accent,
+    required this.accentForeground,
+    required this.destructive,
+    required this.destructiveForeground,
+    required this.ring,
   });
+  final Color background;
+  final Color foreground;
+  final Color muted;
+  final Color mutedForeground;
+  final Color border;
+  final Color primary;
+  final Color primaryForeground;
+  final Color secondary;
+  final Color secondaryForeground;
+  final Color accent;
+  final Color accentForeground;
+  final Color destructive;
+  final Color destructiveForeground;
 
-  final Color borderInputTextColor;
-  final Color containerChatsColor;
-  final Color disableButtonColor;
-  final Color disableTextColor;
-  final Color buttonSocialColor;
-
+  final Color ring;
   @override
-  ThemeExtension<ThemeColors> copyWith({
-    Color? borderInputTextColor,
-    Color? containerChatsColor,
-    Color? disableButtonColor,
-    Color? disableTextColor,
-    Color? buttonSocialColor,
-  }) => ThemeColors(
-    borderInputTextColor: borderInputTextColor ?? this.borderInputTextColor,
-    containerChatsColor: containerChatsColor ?? this.containerChatsColor,
-    disableButtonColor: disableButtonColor ?? this.disableButtonColor,
-    disableTextColor: disableTextColor ?? this.disableTextColor,
-    buttonSocialColor: buttonSocialColor ?? this.buttonSocialColor,
+  ThemeExtension<ColorPalette> copyWith({
+    Color? background,
+    Color? foreground,
+    Color? muted,
+    Color? mutedForeground,
+    Color? border,
+    Color? primary,
+    Color? primaryForeground,
+    Color? secondary,
+    Color? secondaryForeground,
+    Color? accent,
+    Color? accentForeground,
+    Color? destructive,
+    Color? destructiveForeground,
+    Color? ring,
+  }) => ColorPalette(
+    background: background ?? this.background,
+    foreground: foreground ?? this.foreground,
+    muted: muted ?? this.muted,
+    mutedForeground: mutedForeground ?? this.mutedForeground,
+    border: border ?? this.border,
+    primary: primary ?? this.primary,
+    primaryForeground: primaryForeground ?? this.primaryForeground,
+    secondary: secondary ?? this.secondary,
+    secondaryForeground: secondaryForeground ?? this.secondaryForeground,
+    accent: accent ?? this.accent,
+    accentForeground: accentForeground ?? this.accentForeground,
+    destructive: destructive ?? this.destructive,
+    destructiveForeground: destructiveForeground ?? this.destructiveForeground,
+    ring: ring ?? this.ring,
   );
 
   @override
-  ThemeExtension<ThemeColors> lerp(
-    covariant ThemeExtension<ThemeColors>? other,
+  ThemeExtension<ColorPalette> lerp(
+    covariant ThemeExtension<ColorPalette>? other,
     double t,
   ) {
-    if (other is! ThemeColors) return this;
+    if (other == null || other is! ColorPalette) {
+      return this;
+    }
 
-    return ThemeColors(
-      borderInputTextColor: Color.lerp(
-        borderInputTextColor,
-        other.borderInputTextColor,
+    return ColorPalette(
+      background: Color.lerp(background, other.background, t)!,
+      foreground: Color.lerp(foreground, other.foreground, t)!,
+      muted: Color.lerp(muted, other.muted, t)!,
+      mutedForeground: Color.lerp(mutedForeground, other.mutedForeground, t)!,
+      border: Color.lerp(border, other.border, t)!,
+      primary: Color.lerp(primary, other.primary, t)!,
+      primaryForeground: Color.lerp(
+        primaryForeground,
+        other.primaryForeground,
         t,
       )!,
-      containerChatsColor: Color.lerp(
-        containerChatsColor,
-        other.containerChatsColor,
+      secondary: Color.lerp(secondary, other.secondary, t)!,
+      secondaryForeground: Color.lerp(
+        secondaryForeground,
+        other.secondaryForeground,
         t,
       )!,
-      disableButtonColor: Color.lerp(
-        disableButtonColor,
-        other.disableButtonColor,
+      accent: Color.lerp(accent, other.accent, t)!,
+      accentForeground: Color.lerp(
+        accentForeground,
+        other.accentForeground,
         t,
       )!,
-      disableTextColor: Color.lerp(
-        disableTextColor,
-        other.disableTextColor,
+      destructive: Color.lerp(destructive, other.destructive, t)!,
+      destructiveForeground: Color.lerp(
+        destructiveForeground,
+        other.destructiveForeground,
         t,
       )!,
-      buttonSocialColor: Color.lerp(
-        buttonSocialColor,
-        other.buttonSocialColor,
-        t,
-      )!,
+      ring: Color.lerp(ring, other.ring, t)!,
     );
   }
 
-  static ThemeColors get light => ThemeColors(
-    borderInputTextColor: AppColors.white,
-    containerChatsColor: AppColors.containerColorLight,
-    disableButtonColor: AppColors.grey,
-    disableTextColor: AppColors.lightgrey,
-    buttonSocialColor: AppColors.white,
-  );
-
-  static ThemeColors get dark => ThemeColors(
-    borderInputTextColor: AppColors.black,
-    containerChatsColor: AppColors.containerColorDark,
-    disableButtonColor: AppColors.grey,
-    disableTextColor: AppColors.lightgrey,
-    buttonSocialColor: AppColors.white,
-  );
+  Map<String, Color> toMap() => {
+    'Background': background,
+    'Foreground': foreground,
+    'Muted': muted,
+    'Muted Foreground': mutedForeground,
+    'Border': border,
+    'Primary': primary,
+    'Primary Foreground': primaryForeground,
+    'Secondary': secondary,
+    'Secondary Foreground': secondaryForeground,
+    'Accent': accent,
+    'Accent Foreground': accentForeground,
+    'Destructive': destructive,
+    'Destructive Foreground': destructiveForeground,
+    'Ring': ring,
+  };
 }
 
-class ThemeDecorationInput extends ThemeExtension<ThemeDecorationInput> {
-  const ThemeDecorationInput({required this.chatInputDecoration});
+class AppTypography extends ThemeExtension<AppTypography> {
+  const AppTypography({
+    required this.displayLarge,
+    required this.displayMedium,
+    required this.displaySmall,
+    required this.headlineLarge,
+    required this.headlineMedium,
+    required this.headlineSmall,
+    required this.titleLarge,
+    required this.titleMedium,
+    required this.titleSmall,
+    required this.bodyLarge,
+    required this.bodyMedium,
+    required this.bodySmall,
+    required this.labelLarge,
+    required this.labelMedium,
+    required this.labelSmall,
+  });
 
-  final InputDecoration chatInputDecoration;
+  final TextStyle displayLarge;
+  final TextStyle displayMedium;
+  final TextStyle displaySmall;
+  final TextStyle headlineLarge;
+  final TextStyle headlineMedium;
+  final TextStyle headlineSmall;
+  final TextStyle titleLarge;
+  final TextStyle titleMedium;
+  final TextStyle titleSmall;
+  final TextStyle bodyLarge;
+  final TextStyle bodyMedium;
+  final TextStyle bodySmall;
+  final TextStyle labelLarge;
+  final TextStyle labelMedium;
+  final TextStyle labelSmall;
 
   @override
-  ThemeExtension<ThemeDecorationInput> copyWith({
-    InputDecoration? chatInputDecoration,
-  }) => ThemeDecorationInput(
-    chatInputDecoration: chatInputDecoration ?? this.chatInputDecoration,
+  ThemeExtension<AppTypography> copyWith({
+    TextStyle? displayLarge,
+    TextStyle? displayMedium,
+    TextStyle? displaySmall,
+    TextStyle? headlineLarge,
+    TextStyle? headlineMedium,
+    TextStyle? headlineSmall,
+    TextStyle? titleLarge,
+    TextStyle? titleMedium,
+    TextStyle? titleSmall,
+    TextStyle? bodyLarge,
+    TextStyle? bodyMedium,
+    TextStyle? bodySmall,
+    TextStyle? labelLarge,
+    TextStyle? labelMedium,
+    TextStyle? labelSmall,
+  }) => AppTypography(
+    displayLarge: displayLarge ?? this.displayLarge,
+    displayMedium: displayMedium ?? this.displayMedium,
+    displaySmall: displaySmall ?? this.displaySmall,
+    headlineLarge: headlineLarge ?? this.headlineLarge,
+    headlineMedium: headlineMedium ?? this.headlineMedium,
+    headlineSmall: headlineSmall ?? this.headlineSmall,
+    titleLarge: titleLarge ?? this.titleLarge,
+    titleMedium: titleMedium ?? this.titleMedium,
+    titleSmall: titleSmall ?? this.titleSmall,
+    bodyLarge: bodyLarge ?? this.bodyLarge,
+    bodyMedium: bodyMedium ?? this.bodyMedium,
+    bodySmall: bodySmall ?? this.bodySmall,
+    labelLarge: labelLarge ?? this.labelLarge,
+    labelMedium: labelMedium ?? this.labelMedium,
+    labelSmall: labelSmall ?? this.labelSmall,
   );
 
   @override
-  ThemeExtension<ThemeDecorationInput> lerp(
-    covariant ThemeExtension<ThemeDecorationInput>? other,
+  ThemeExtension<AppTypography> lerp(
+    covariant ThemeExtension<AppTypography>? other,
     double t,
   ) {
-    if (other is! ThemeDecorationInput) return this;
-    return ThemeDecorationInput(chatInputDecoration: InputDecoration());
+    if (other == null || other is! AppTypography) {
+      return this;
+    }
+
+    return AppTypography(
+      displayLarge: TextStyle.lerp(displayLarge, other.displayLarge, t)!,
+      displayMedium: TextStyle.lerp(displayMedium, other.displayMedium, t)!,
+      displaySmall: TextStyle.lerp(displaySmall, other.displaySmall, t)!,
+      headlineLarge: TextStyle.lerp(headlineLarge, other.headlineLarge, t)!,
+      headlineMedium: TextStyle.lerp(headlineMedium, other.headlineMedium, t)!,
+      headlineSmall: TextStyle.lerp(headlineSmall, other.headlineSmall, t)!,
+      titleLarge: TextStyle.lerp(titleLarge, other.titleLarge, t)!,
+      titleMedium: TextStyle.lerp(titleMedium, other.titleMedium, t)!,
+      titleSmall: TextStyle.lerp(titleSmall, other.titleSmall, t)!,
+      bodyLarge: TextStyle.lerp(bodyLarge, other.bodyLarge, t)!,
+      bodyMedium: TextStyle.lerp(bodyMedium, other.bodyMedium, t)!,
+      bodySmall: TextStyle.lerp(bodySmall, other.bodySmall, t)!,
+      labelLarge: TextStyle.lerp(labelLarge, other.labelLarge, t)!,
+      labelMedium: TextStyle.lerp(labelMedium, other.labelMedium, t)!,
+      labelSmall: TextStyle.lerp(labelSmall, other.labelSmall, t)!,
+    );
   }
+}
 
-  static ThemeDecorationInput get light => ThemeDecorationInput(
-    chatInputDecoration: InputDecoration(
-      hintText: 'Enter your message',
-      hintStyle: TextStyle(color: AppColors.grey),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(32),
-        borderSide: const BorderSide(color: AppColors.lightgrey),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(32),
-        borderSide: const BorderSide(color: AppColors.lightgrey),
-      ),
-    ),
-  );
+extension ThemeDataExtensions on ThemeData {
+  ColorPalette get colorPalette =>
+      extension<ColorPalette>() ?? lightColorPalette;
 
-  static ThemeDecorationInput get dark => ThemeDecorationInput(
-    chatInputDecoration: InputDecoration(
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(32),
-        borderSide: const BorderSide(color: AppColors.lightgrey),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(32),
-        borderSide: const BorderSide(color: AppColors.lightgrey),
-      ),
-    ),
-  );
+  AppTypography get appTypography =>
+      extension<AppTypography>() ?? defaultTypography;
 }
