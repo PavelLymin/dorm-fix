@@ -38,7 +38,7 @@ abstract class AuthenticationMiddleware {
 
   static Response _getUnauthorizedResponse(Request request) {
     return Response.unauthorized(
-      'Request is missing user_id header: ${request.handlerPath}',
+      'Request is missing jwt header: ${request.handlerPath}',
     );
   }
 }

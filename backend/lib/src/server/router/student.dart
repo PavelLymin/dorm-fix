@@ -14,10 +14,10 @@ class StudentRouter {
   Handler get handler {
     final router = Router();
 
-    router.get('/<id>', _getStudent);
-    router.post('/', _createStudent);
-    router.put('/', _updateStudent);
-    router.delete('/<id>', _deleteStudent);
+    router.get('/student/<id>', _getStudent);
+    router.post('/student', _createStudent);
+    router.put('/student', _updateStudent);
+    router.delete('/student/<id>', _deleteStudent);
     return router.call;
   }
 
@@ -30,7 +30,7 @@ class StudentRouter {
       }
 
       final json = jsonDecode(body);
-      final student = StudentDTO.fromJson(json).toEntity();
+      final student = StudentDto.fromJson(json).toEntity();
       await _studentRepository.createStudent(student: student);
       return Response(201, body: 'The student was successfully created.');
     } on FormatException catch (e) {
@@ -46,7 +46,7 @@ class StudentRouter {
     try {
       final query = request.params['id'];
       if (query == null || query.isEmpty) {
-        return Response.badRequest(body: 'Missing query parameter "id"');
+        return Response.badRequest(body: 'Missing path parameter "id"');
       }
 
       int? id = int.tryParse(query);
@@ -75,7 +75,7 @@ class StudentRouter {
     try {
       final query = request.params['id'];
       if (query == null || query.isEmpty) {
-        return Response.badRequest(body: 'Missing query parameter "id"');
+        return Response.badRequest(body: 'Missing path parameter "id"');
       }
 
       int? id = int.tryParse(query);
@@ -95,7 +95,7 @@ class StudentRouter {
         return Response.notFound('Student not found');
       }
 
-      final json = StudentDTO.fromEntity(student).toJson();
+      final json = StudentDto.fromEntity(student).toJson();
       return Response.ok(jsonEncode(json));
     } catch (e) {
       return Response.internalServerError(
@@ -113,7 +113,7 @@ class StudentRouter {
       }
 
       final json = jsonDecode(body);
-      final student = StudentDTO.fromJson(json).toEntity();
+      final student = StudentDto.fromJson(json).toEntity();
       await _studentRepository.updateStudent(student: student);
 
       return Response.ok('The student was successfully updated');

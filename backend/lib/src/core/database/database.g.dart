@@ -744,11 +744,11 @@ class RoomsCompanion extends UpdateCompanion<Room> {
   }
 }
 
-class $UsersTable extends Users with TableInfo<$UsersTable, User> {
+class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $UsersTable(this.attachedDatabase, [this._alias]);
+  $StudentsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -850,10 +850,10 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'users';
+  static const String $name = 'students';
   @override
   VerificationContext validateIntegrity(
-    Insertable<User> instance, {
+    Insertable<Student> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -923,9 +923,9 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  User map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Student map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return User(
+    return Student(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -962,12 +962,12 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   }
 
   @override
-  $UsersTable createAlias(String alias) {
-    return $UsersTable(attachedDatabase, alias);
+  $StudentsTable createAlias(String alias) {
+    return $StudentsTable(attachedDatabase, alias);
   }
 }
 
-class User extends DataClass implements Insertable<User> {
+class Student extends DataClass implements Insertable<Student> {
   final int id;
   final int buildingId;
   final int roomId;
@@ -976,7 +976,7 @@ class User extends DataClass implements Insertable<User> {
   final String phone;
   final String photoUrl;
   final String role;
-  const User({
+  const Student({
     required this.id,
     required this.buildingId,
     required this.roomId,
@@ -1000,8 +1000,8 @@ class User extends DataClass implements Insertable<User> {
     return map;
   }
 
-  UsersCompanion toCompanion(bool nullToAbsent) {
-    return UsersCompanion(
+  StudentsCompanion toCompanion(bool nullToAbsent) {
+    return StudentsCompanion(
       id: Value(id),
       buildingId: Value(buildingId),
       roomId: Value(roomId),
@@ -1013,12 +1013,12 @@ class User extends DataClass implements Insertable<User> {
     );
   }
 
-  factory User.fromJson(
+  factory Student.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return User(
+    return Student(
       id: serializer.fromJson<int>(json['id']),
       buildingId: serializer.fromJson<int>(json['buildingId']),
       roomId: serializer.fromJson<int>(json['roomId']),
@@ -1044,7 +1044,7 @@ class User extends DataClass implements Insertable<User> {
     };
   }
 
-  User copyWith({
+  Student copyWith({
     int? id,
     int? buildingId,
     int? roomId,
@@ -1053,7 +1053,7 @@ class User extends DataClass implements Insertable<User> {
     String? phone,
     String? photoUrl,
     String? role,
-  }) => User(
+  }) => Student(
     id: id ?? this.id,
     buildingId: buildingId ?? this.buildingId,
     roomId: roomId ?? this.roomId,
@@ -1063,8 +1063,8 @@ class User extends DataClass implements Insertable<User> {
     photoUrl: photoUrl ?? this.photoUrl,
     role: role ?? this.role,
   );
-  User copyWithCompanion(UsersCompanion data) {
-    return User(
+  Student copyWithCompanion(StudentsCompanion data) {
+    return Student(
       id: data.id.present ? data.id.value : this.id,
       buildingId: data.buildingId.present
           ? data.buildingId.value
@@ -1080,7 +1080,7 @@ class User extends DataClass implements Insertable<User> {
 
   @override
   String toString() {
-    return (StringBuffer('User(')
+    return (StringBuffer('Student(')
           ..write('id: $id, ')
           ..write('buildingId: $buildingId, ')
           ..write('roomId: $roomId, ')
@@ -1099,7 +1099,7 @@ class User extends DataClass implements Insertable<User> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is User &&
+      (other is Student &&
           other.id == this.id &&
           other.buildingId == this.buildingId &&
           other.roomId == this.roomId &&
@@ -1110,7 +1110,7 @@ class User extends DataClass implements Insertable<User> {
           other.role == this.role);
 }
 
-class UsersCompanion extends UpdateCompanion<User> {
+class StudentsCompanion extends UpdateCompanion<Student> {
   final Value<int> id;
   final Value<int> buildingId;
   final Value<int> roomId;
@@ -1119,7 +1119,7 @@ class UsersCompanion extends UpdateCompanion<User> {
   final Value<String> phone;
   final Value<String> photoUrl;
   final Value<String> role;
-  const UsersCompanion({
+  const StudentsCompanion({
     this.id = const Value.absent(),
     this.buildingId = const Value.absent(),
     this.roomId = const Value.absent(),
@@ -1129,7 +1129,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     this.photoUrl = const Value.absent(),
     this.role = const Value.absent(),
   });
-  UsersCompanion.insert({
+  StudentsCompanion.insert({
     this.id = const Value.absent(),
     required int buildingId,
     required int roomId,
@@ -1145,7 +1145,7 @@ class UsersCompanion extends UpdateCompanion<User> {
        phone = Value(phone),
        photoUrl = Value(photoUrl),
        role = Value(role);
-  static Insertable<User> custom({
+  static Insertable<Student> custom({
     Expression<int>? id,
     Expression<int>? buildingId,
     Expression<int>? roomId,
@@ -1167,7 +1167,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     });
   }
 
-  UsersCompanion copyWith({
+  StudentsCompanion copyWith({
     Value<int>? id,
     Value<int>? buildingId,
     Value<int>? roomId,
@@ -1177,7 +1177,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     Value<String>? photoUrl,
     Value<String>? role,
   }) {
-    return UsersCompanion(
+    return StudentsCompanion(
       id: id ?? this.id,
       buildingId: buildingId ?? this.buildingId,
       roomId: roomId ?? this.roomId,
@@ -1221,7 +1221,7 @@ class UsersCompanion extends UpdateCompanion<User> {
 
   @override
   String toString() {
-    return (StringBuffer('UsersCompanion(')
+    return (StringBuffer('StudentsCompanion(')
           ..write('id: $id, ')
           ..write('buildingId: $buildingId, ')
           ..write('roomId: $roomId, ')
@@ -1240,12 +1240,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $BuildingsTable buildings = $BuildingsTable(this);
   late final $RoomsTable rooms = $RoomsTable(this);
-  late final $UsersTable users = $UsersTable(this);
+  late final $StudentsTable students = $StudentsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [buildings, rooms, users];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    buildings,
+    rooms,
+    students,
+  ];
 }
 
 typedef $$BuildingsTableCreateCompanionBuilder =
@@ -1290,20 +1294,20 @@ final class $$BuildingsTableReferences
     );
   }
 
-  static MultiTypedResultKey<$UsersTable, List<User>> _usersRefsTable(
+  static MultiTypedResultKey<$StudentsTable, List<Student>> _studentsRefsTable(
     _$AppDatabase db,
   ) => MultiTypedResultKey.fromTable(
-    db.users,
-    aliasName: $_aliasNameGenerator(db.buildings.id, db.users.buildingId),
+    db.students,
+    aliasName: $_aliasNameGenerator(db.buildings.id, db.students.buildingId),
   );
 
-  $$UsersTableProcessedTableManager get usersRefs {
-    final manager = $$UsersTableTableManager(
+  $$StudentsTableProcessedTableManager get studentsRefs {
+    final manager = $$StudentsTableTableManager(
       $_db,
-      $_db.users,
+      $_db.students,
     ).filter((f) => f.buildingId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(_usersRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_studentsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -1374,22 +1378,22 @@ class $$BuildingsTableFilterComposer
     return f(composer);
   }
 
-  Expression<bool> usersRefs(
-    Expression<bool> Function($$UsersTableFilterComposer f) f,
+  Expression<bool> studentsRefs(
+    Expression<bool> Function($$StudentsTableFilterComposer f) f,
   ) {
-    final $$UsersTableFilterComposer composer = $composerBuilder(
+    final $$StudentsTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.users,
+      referencedTable: $db.students,
       getReferencedColumn: (t) => t.buildingId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$UsersTableFilterComposer(
+          }) => $$StudentsTableFilterComposer(
             $db: $db,
-            $table: $db.users,
+            $table: $db.students,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -1492,22 +1496,22 @@ class $$BuildingsTableAnnotationComposer
     return f(composer);
   }
 
-  Expression<T> usersRefs<T extends Object>(
-    Expression<T> Function($$UsersTableAnnotationComposer a) f,
+  Expression<T> studentsRefs<T extends Object>(
+    Expression<T> Function($$StudentsTableAnnotationComposer a) f,
   ) {
-    final $$UsersTableAnnotationComposer composer = $composerBuilder(
+    final $$StudentsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.users,
+      referencedTable: $db.students,
       getReferencedColumn: (t) => t.buildingId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$UsersTableAnnotationComposer(
+          }) => $$StudentsTableAnnotationComposer(
             $db: $db,
-            $table: $db.users,
+            $table: $db.students,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -1531,7 +1535,7 @@ class $$BuildingsTableTableManager
           $$BuildingsTableUpdateCompanionBuilder,
           (Building, $$BuildingsTableReferences),
           Building,
-          PrefetchHooks Function({bool roomsRefs, bool usersRefs})
+          PrefetchHooks Function({bool roomsRefs, bool studentsRefs})
         > {
   $$BuildingsTableTableManager(_$AppDatabase db, $BuildingsTable table)
     : super(
@@ -1584,12 +1588,12 @@ class $$BuildingsTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({roomsRefs = false, usersRefs = false}) {
+          prefetchHooksCallback: ({roomsRefs = false, studentsRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (roomsRefs) db.rooms,
-                if (usersRefs) db.users,
+                if (studentsRefs) db.students,
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -1605,13 +1609,21 @@ class $$BuildingsTableTableManager
                           referencedItems.where((e) => e.buildingId == item.id),
                       typedResults: items,
                     ),
-                  if (usersRefs)
-                    await $_getPrefetchedData<Building, $BuildingsTable, User>(
+                  if (studentsRefs)
+                    await $_getPrefetchedData<
+                      Building,
+                      $BuildingsTable,
+                      Student
+                    >(
                       currentTable: table,
                       referencedTable: $$BuildingsTableReferences
-                          ._usersRefsTable(db),
+                          ._studentsRefsTable(db),
                       managerFromTypedResult: (p0) =>
-                          $$BuildingsTableReferences(db, table, p0).usersRefs,
+                          $$BuildingsTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).studentsRefs,
                       referencedItemsForCurrentItem: (item, referencedItems) =>
                           referencedItems.where((e) => e.buildingId == item.id),
                       typedResults: items,
@@ -1636,7 +1648,7 @@ typedef $$BuildingsTableProcessedTableManager =
       $$BuildingsTableUpdateCompanionBuilder,
       (Building, $$BuildingsTableReferences),
       Building,
-      PrefetchHooks Function({bool roomsRefs, bool usersRefs})
+      PrefetchHooks Function({bool roomsRefs, bool studentsRefs})
     >;
 typedef $$RoomsTableCreateCompanionBuilder =
     RoomsCompanion Function({
@@ -1676,20 +1688,20 @@ final class $$RoomsTableReferences
     );
   }
 
-  static MultiTypedResultKey<$UsersTable, List<User>> _usersRefsTable(
+  static MultiTypedResultKey<$StudentsTable, List<Student>> _studentsRefsTable(
     _$AppDatabase db,
   ) => MultiTypedResultKey.fromTable(
-    db.users,
-    aliasName: $_aliasNameGenerator(db.rooms.id, db.users.roomId),
+    db.students,
+    aliasName: $_aliasNameGenerator(db.rooms.id, db.students.roomId),
   );
 
-  $$UsersTableProcessedTableManager get usersRefs {
-    final manager = $$UsersTableTableManager(
+  $$StudentsTableProcessedTableManager get studentsRefs {
+    final manager = $$StudentsTableTableManager(
       $_db,
-      $_db.users,
+      $_db.students,
     ).filter((f) => f.roomId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(_usersRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_studentsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -1747,22 +1759,22 @@ class $$RoomsTableFilterComposer extends Composer<_$AppDatabase, $RoomsTable> {
     return composer;
   }
 
-  Expression<bool> usersRefs(
-    Expression<bool> Function($$UsersTableFilterComposer f) f,
+  Expression<bool> studentsRefs(
+    Expression<bool> Function($$StudentsTableFilterComposer f) f,
   ) {
-    final $$UsersTableFilterComposer composer = $composerBuilder(
+    final $$StudentsTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.users,
+      referencedTable: $db.students,
       getReferencedColumn: (t) => t.roomId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$UsersTableFilterComposer(
+          }) => $$StudentsTableFilterComposer(
             $db: $db,
-            $table: $db.users,
+            $table: $db.students,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -1872,22 +1884,22 @@ class $$RoomsTableAnnotationComposer
     return composer;
   }
 
-  Expression<T> usersRefs<T extends Object>(
-    Expression<T> Function($$UsersTableAnnotationComposer a) f,
+  Expression<T> studentsRefs<T extends Object>(
+    Expression<T> Function($$StudentsTableAnnotationComposer a) f,
   ) {
-    final $$UsersTableAnnotationComposer composer = $composerBuilder(
+    final $$StudentsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.users,
+      referencedTable: $db.students,
       getReferencedColumn: (t) => t.roomId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$UsersTableAnnotationComposer(
+          }) => $$StudentsTableAnnotationComposer(
             $db: $db,
-            $table: $db.users,
+            $table: $db.students,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -1911,7 +1923,7 @@ class $$RoomsTableTableManager
           $$RoomsTableUpdateCompanionBuilder,
           (Room, $$RoomsTableReferences),
           Room,
-          PrefetchHooks Function({bool buildingId, bool usersRefs})
+          PrefetchHooks Function({bool buildingId, bool studentsRefs})
         > {
   $$RoomsTableTableManager(_$AppDatabase db, $RoomsTable table)
     : super(
@@ -1958,10 +1970,10 @@ class $$RoomsTableTableManager
                     (e.readTable(table), $$RoomsTableReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({buildingId = false, usersRefs = false}) {
+          prefetchHooksCallback: ({buildingId = false, studentsRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (usersRefs) db.users],
+              explicitlyWatchedTables: [if (studentsRefs) db.students],
               addJoins:
                   <
                     T extends TableManagerState<
@@ -1996,14 +2008,13 @@ class $$RoomsTableTableManager
                   },
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (usersRefs)
-                    await $_getPrefetchedData<Room, $RoomsTable, User>(
+                  if (studentsRefs)
+                    await $_getPrefetchedData<Room, $RoomsTable, Student>(
                       currentTable: table,
-                      referencedTable: $$RoomsTableReferences._usersRefsTable(
-                        db,
-                      ),
+                      referencedTable: $$RoomsTableReferences
+                          ._studentsRefsTable(db),
                       managerFromTypedResult: (p0) =>
-                          $$RoomsTableReferences(db, table, p0).usersRefs,
+                          $$RoomsTableReferences(db, table, p0).studentsRefs,
                       referencedItemsForCurrentItem: (item, referencedItems) =>
                           referencedItems.where((e) => e.roomId == item.id),
                       typedResults: items,
@@ -2028,10 +2039,10 @@ typedef $$RoomsTableProcessedTableManager =
       $$RoomsTableUpdateCompanionBuilder,
       (Room, $$RoomsTableReferences),
       Room,
-      PrefetchHooks Function({bool buildingId, bool usersRefs})
+      PrefetchHooks Function({bool buildingId, bool studentsRefs})
     >;
-typedef $$UsersTableCreateCompanionBuilder =
-    UsersCompanion Function({
+typedef $$StudentsTableCreateCompanionBuilder =
+    StudentsCompanion Function({
       Value<int> id,
       required int buildingId,
       required int roomId,
@@ -2041,8 +2052,8 @@ typedef $$UsersTableCreateCompanionBuilder =
       required String photoUrl,
       required String role,
     });
-typedef $$UsersTableUpdateCompanionBuilder =
-    UsersCompanion Function({
+typedef $$StudentsTableUpdateCompanionBuilder =
+    StudentsCompanion Function({
       Value<int> id,
       Value<int> buildingId,
       Value<int> roomId,
@@ -2053,12 +2064,14 @@ typedef $$UsersTableUpdateCompanionBuilder =
       Value<String> role,
     });
 
-final class $$UsersTableReferences
-    extends BaseReferences<_$AppDatabase, $UsersTable, User> {
-  $$UsersTableReferences(super.$_db, super.$_table, super.$_typedResult);
+final class $$StudentsTableReferences
+    extends BaseReferences<_$AppDatabase, $StudentsTable, Student> {
+  $$StudentsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $BuildingsTable _buildingIdTable(_$AppDatabase db) => db.buildings
-      .createAlias($_aliasNameGenerator(db.users.buildingId, db.buildings.id));
+  static $BuildingsTable _buildingIdTable(_$AppDatabase db) =>
+      db.buildings.createAlias(
+        $_aliasNameGenerator(db.students.buildingId, db.buildings.id),
+      );
 
   $$BuildingsTableProcessedTableManager get buildingId {
     final $_column = $_itemColumn<int>('building_id')!;
@@ -2074,8 +2087,9 @@ final class $$UsersTableReferences
     );
   }
 
-  static $RoomsTable _roomIdTable(_$AppDatabase db) =>
-      db.rooms.createAlias($_aliasNameGenerator(db.users.roomId, db.rooms.id));
+  static $RoomsTable _roomIdTable(_$AppDatabase db) => db.rooms.createAlias(
+    $_aliasNameGenerator(db.students.roomId, db.rooms.id),
+  );
 
   $$RoomsTableProcessedTableManager get roomId {
     final $_column = $_itemColumn<int>('room_id')!;
@@ -2092,8 +2106,9 @@ final class $$UsersTableReferences
   }
 }
 
-class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
-  $$UsersTableFilterComposer({
+class $$StudentsTableFilterComposer
+    extends Composer<_$AppDatabase, $StudentsTable> {
+  $$StudentsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2177,9 +2192,9 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
   }
 }
 
-class $$UsersTableOrderingComposer
-    extends Composer<_$AppDatabase, $UsersTable> {
-  $$UsersTableOrderingComposer({
+class $$StudentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $StudentsTable> {
+  $$StudentsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2263,9 +2278,9 @@ class $$UsersTableOrderingComposer
   }
 }
 
-class $$UsersTableAnnotationComposer
-    extends Composer<_$AppDatabase, $UsersTable> {
-  $$UsersTableAnnotationComposer({
+class $$StudentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $StudentsTable> {
+  $$StudentsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2337,32 +2352,32 @@ class $$UsersTableAnnotationComposer
   }
 }
 
-class $$UsersTableTableManager
+class $$StudentsTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $UsersTable,
-          User,
-          $$UsersTableFilterComposer,
-          $$UsersTableOrderingComposer,
-          $$UsersTableAnnotationComposer,
-          $$UsersTableCreateCompanionBuilder,
-          $$UsersTableUpdateCompanionBuilder,
-          (User, $$UsersTableReferences),
-          User,
+          $StudentsTable,
+          Student,
+          $$StudentsTableFilterComposer,
+          $$StudentsTableOrderingComposer,
+          $$StudentsTableAnnotationComposer,
+          $$StudentsTableCreateCompanionBuilder,
+          $$StudentsTableUpdateCompanionBuilder,
+          (Student, $$StudentsTableReferences),
+          Student,
           PrefetchHooks Function({bool buildingId, bool roomId})
         > {
-  $$UsersTableTableManager(_$AppDatabase db, $UsersTable table)
+  $$StudentsTableTableManager(_$AppDatabase db, $StudentsTable table)
     : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$UsersTableFilterComposer($db: db, $table: table),
+              $$StudentsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$UsersTableOrderingComposer($db: db, $table: table),
+              $$StudentsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$UsersTableAnnotationComposer($db: db, $table: table),
+              $$StudentsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
@@ -2373,7 +2388,7 @@ class $$UsersTableTableManager
                 Value<String> phone = const Value.absent(),
                 Value<String> photoUrl = const Value.absent(),
                 Value<String> role = const Value.absent(),
-              }) => UsersCompanion(
+              }) => StudentsCompanion(
                 id: id,
                 buildingId: buildingId,
                 roomId: roomId,
@@ -2393,7 +2408,7 @@ class $$UsersTableTableManager
                 required String phone,
                 required String photoUrl,
                 required String role,
-              }) => UsersCompanion.insert(
+              }) => StudentsCompanion.insert(
                 id: id,
                 buildingId: buildingId,
                 roomId: roomId,
@@ -2405,8 +2420,10 @@ class $$UsersTableTableManager
               ),
           withReferenceMapper: (p0) => p0
               .map(
-                (e) =>
-                    (e.readTable(table), $$UsersTableReferences(db, table, e)),
+                (e) => (
+                  e.readTable(table),
+                  $$StudentsTableReferences(db, table, e),
+                ),
               )
               .toList(),
           prefetchHooksCallback: ({buildingId = false, roomId = false}) {
@@ -2434,9 +2451,9 @@ class $$UsersTableTableManager
                           state.withJoin(
                                 currentTable: table,
                                 currentColumn: table.buildingId,
-                                referencedTable: $$UsersTableReferences
+                                referencedTable: $$StudentsTableReferences
                                     ._buildingIdTable(db),
-                                referencedColumn: $$UsersTableReferences
+                                referencedColumn: $$StudentsTableReferences
                                     ._buildingIdTable(db)
                                     .id,
                               )
@@ -2447,9 +2464,9 @@ class $$UsersTableTableManager
                           state.withJoin(
                                 currentTable: table,
                                 currentColumn: table.roomId,
-                                referencedTable: $$UsersTableReferences
+                                referencedTable: $$StudentsTableReferences
                                     ._roomIdTable(db),
-                                referencedColumn: $$UsersTableReferences
+                                referencedColumn: $$StudentsTableReferences
                                     ._roomIdTable(db)
                                     .id,
                               )
@@ -2467,18 +2484,18 @@ class $$UsersTableTableManager
       );
 }
 
-typedef $$UsersTableProcessedTableManager =
+typedef $$StudentsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $UsersTable,
-      User,
-      $$UsersTableFilterComposer,
-      $$UsersTableOrderingComposer,
-      $$UsersTableAnnotationComposer,
-      $$UsersTableCreateCompanionBuilder,
-      $$UsersTableUpdateCompanionBuilder,
-      (User, $$UsersTableReferences),
-      User,
+      $StudentsTable,
+      Student,
+      $$StudentsTableFilterComposer,
+      $$StudentsTableOrderingComposer,
+      $$StudentsTableAnnotationComposer,
+      $$StudentsTableCreateCompanionBuilder,
+      $$StudentsTableUpdateCompanionBuilder,
+      (Student, $$StudentsTableReferences),
+      Student,
       PrefetchHooks Function({bool buildingId, bool roomId})
     >;
 
@@ -2489,6 +2506,6 @@ class $AppDatabaseManager {
       $$BuildingsTableTableManager(_db, _db.buildings);
   $$RoomsTableTableManager get rooms =>
       $$RoomsTableTableManager(_db, _db.rooms);
-  $$UsersTableTableManager get users =>
-      $$UsersTableTableManager(_db, _db.users);
+  $$StudentsTableTableManager get students =>
+      $$StudentsTableTableManager(_db, _db.students);
 }

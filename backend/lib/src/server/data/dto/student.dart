@@ -1,7 +1,7 @@
 import '../../model/student.dart';
 
-class StudentDTO {
-  const StudentDTO({
+class StudentDto {
+  const StudentDto({
     required this.id,
     required this.buildingId,
     required this.roomId,
@@ -32,7 +32,7 @@ class StudentDTO {
     photoURL: photoURL,
   );
 
-  static StudentDTO fromEntity(StudentEntity entity) => StudentDTO(
+  static StudentDto fromEntity(StudentEntity entity) => StudentDto(
     id: entity.id,
     buildingId: entity.buildingId,
     roomId: entity.roomId,
@@ -54,7 +54,7 @@ class StudentDTO {
     'photo_url': photoURL,
   };
 
-  factory StudentDTO.fromJson(Map<String, dynamic> json) => StudentDTO(
+  factory StudentDto.fromJson(Map<String, dynamic> json) => StudentDto(
     id: json['id'],
     buildingId: json['building_id'],
     roomId: json['room_id'],
@@ -64,4 +64,16 @@ class StudentDTO {
     phoneNumber: json['phone'],
     photoURL: json['photo_url'],
   );
+
+  @override
+  String toString() =>
+      'StudentDto('
+      'id: $id, '
+      'buildingId: $buildingId, '
+      'roomId: $roomId, '
+      'name: $name, '
+      'role: $role, '
+      'email: $email, '
+      'phoneNumber: $phoneNumber, '
+      'photoURL: $photoURL)';
 }

@@ -20,6 +20,10 @@ void main(List<String> args) async {
 
       final ip = InternetAddress.anyIPv4;
 
+      Cascade cascade = Cascade()
+          .add(dependency.studentRouter.handler)
+          .add(dependency.buildingRouter.handler);
+
       final handler = Pipeline()
           .addMiddleware(logRequests())
           .addMiddleware(
@@ -27,7 +31,7 @@ void main(List<String> args) async {
               firebaseAdmin: dependency.firebaseAdmin,
             ),
           )
-          .addHandler(dependency.studentRouter.handler);
+          .addHandler(cascade.handler);
 
       final port = int.parse(dependency.config.port);
       await serve(handler, ip, port);

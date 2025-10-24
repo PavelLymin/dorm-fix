@@ -16,6 +16,13 @@ class Config {
 
   // --- SERVER --- //
   String get port => const String.fromEnvironment('PORT', defaultValue: '8080');
+
+  // --- FIREBASE --- //
+  String get serviceAccount => const String.fromEnvironment(
+    'SERVICE_ACCOUNT',
+    defaultValue:
+        '/Users/pavellyamin/Development/dorm_fix/backend/bin/service-account.json',
+  );
 }
 
 /// Environment flavor.

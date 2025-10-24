@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:backend/src/app/model/application_config.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
 import '../../core/database/database.dart';
+import '../../server/data/repository/building_repository.dart';
 import '../../server/data/repository/student_repository.dart';
+import '../../server/router/building.dart';
 import '../../server/router/student.dart';
 import '../model/dependencies_container.dart';
 
@@ -26,26 +30,35 @@ class CompositionRoot {
   Future<DependencyContainer> compose() async {
     logger.i('Initializing dependencies...');
 
+    // Config
     final config = Config();
 
+    // Firebase
     final options = AppOptions(
-      credential: FirebaseAdmin.instance.certFromPath(
-        '/Users/pavellyamin/Development/dorm_fix/backend/bin/service-account.json',
-      ),
+      credential: FirebaseAdmin.instance.certFromPath(config.serviceAccount),
     );
 
     final app = FirebaseAdmin.instance.initializeApp(options);
 
-    final database = AppDatabase(path: config.databasePath);
+    // Database
+    final database = Database.lazy(file: File(config.databasePath));
 
+    // Student
     final studentRepository = StudentRepositoryImpl();
     final studentRouter = StudentRouter(studentRepository: studentRepository);
+
+    // Building
+    final buildingRepository = BuildingRepositoryImpl(database: database);
+    final buildingRouter = BuildingRouter(
+      buildingRepository: buildingRepository,
+    );
 
     return _DependencyFactory(
       firebaseAdmin: app,
       config: config,
       database: database,
       studentRouter: studentRouter,
+      buildingRouter: buildingRouter,
     ).create();
   }
 }
@@ -56,15 +69,18 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.config,
     required this.database,
     required this.studentRouter,
+    required this.buildingRouter,
   });
 
   final App firebaseAdmin;
 
   final Config config;
 
-  final AppDatabase database;
+  final Database database;
 
   final StudentRouter studentRouter;
+
+  final BuildingRouter buildingRouter;
 
   @override
   DependencyContainer create() => DependencyContainer(
@@ -72,6 +88,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     config: config,
     database: database,
     studentRouter: studentRouter,
+    buildingRouter: buildingRouter,
   );
 }
 

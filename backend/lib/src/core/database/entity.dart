@@ -1,6 +1,6 @@
 part of 'database.dart';
 
-class Users extends Table {
+class Students extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
   IntColumn get buildingId =>
       integer().named('building_id').references(Buildings, #id)();
