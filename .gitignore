@@ -47,6 +47,7 @@ app.*.map.json
 # Firebase
 lib/firebase_options.dart
 firebase.json
+backend/bin/service-account.json
 
 # Google Api
 macos/Runner/GoogleService-Info.plist
@@ -61,3 +62,5 @@ ios/Flutter/Release.xcconfig
 macos/Flutter/Flutter-Debug.xcconfig
 # Release macos config
 macos/Flutter/Flutter-Release.xcconfig
+
+backend/database.db

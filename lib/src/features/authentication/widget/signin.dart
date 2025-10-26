@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../app/model/application_config.dart';
 import 'signin_form.dart';
-import '../../../core/constant/config.dart';
 import '../state_management/authentication/authentication_bloc.dart';
 part 'auth_validate.dart';
 
