@@ -1,23 +1,20 @@
 part of 'authentication_bloc.dart';
 
-typedef AuthenticationStateMatch<R, S extends AuthenticationState> =
-    R Function(S state);
+typedef AuthStateMatch<R, S extends AuthState> = R Function(S state);
 
-sealed class AuthenticationState {
-  const AuthenticationState();
+sealed class AuthState {
+  const AuthState();
 
-  const factory AuthenticationState.authenticated({
-    required AuthenticatedUser user,
-  }) = _Authenticated;
+  const factory AuthState.authenticated({required AuthenticatedUser user}) =
+      _Authenticated;
 
-  const factory AuthenticationState.notAuthenticated({
+  const factory AuthState.notAuthenticated({
     required NotAuthenticatedUser user,
   }) = _NotAuthenticated;
 
-  const factory AuthenticationState.loading({required UserEntity user}) =
-      _Loading;
+  const factory AuthState.loading({required UserEntity user}) = _Loading;
 
-  const factory AuthenticationState.error({
+  const factory AuthState.error({
     required UserEntity user,
     required String message,
   }) = _Error;
@@ -36,21 +33,17 @@ sealed class AuthenticationState {
     notAuthenticated: (_) => null,
   );
 
-  bool get isLoading => maybeMap(
-    orElse: () => true,
-    notAuthenticated: (_) => false,
-    authenticated: (_) => false,
-  );
+  bool get isLoading => maybeMap(loading: (_) => true, orElse: () => false);
 
   R map<R>({
     // ignore: library_private_types_in_public_api
-    required AuthenticationStateMatch<R, _Authenticated> authenticated,
+    required AuthStateMatch<R, _Authenticated> authenticated,
     // ignore: library_private_types_in_public_api
-    required AuthenticationStateMatch<R, _NotAuthenticated> notAuthenticated,
+    required AuthStateMatch<R, _NotAuthenticated> notAuthenticated,
     // ignore: library_private_types_in_public_api
-    required AuthenticationStateMatch<R, _Loading> loading,
+    required AuthStateMatch<R, _Loading> loading,
     // ignore: library_private_types_in_public_api
-    required AuthenticationStateMatch<R, _Error> error,
+    required AuthStateMatch<R, _Error> error,
   }) => switch (this) {
     _Authenticated s => authenticated(s),
     _NotAuthenticated s => notAuthenticated(s),
@@ -61,13 +54,13 @@ sealed class AuthenticationState {
   R maybeMap<R>({
     required R Function() orElse,
     // ignore: library_private_types_in_public_api
-    AuthenticationStateMatch<R, _Authenticated>? authenticated,
+    AuthStateMatch<R, _Authenticated>? authenticated,
     // ignore: library_private_types_in_public_api
-    AuthenticationStateMatch<R, _NotAuthenticated>? notAuthenticated,
+    AuthStateMatch<R, _NotAuthenticated>? notAuthenticated,
     // ignore: library_private_types_in_public_api
-    AuthenticationStateMatch<R, _Loading>? loading,
+    AuthStateMatch<R, _Loading>? loading,
     // ignore: library_private_types_in_public_api
-    AuthenticationStateMatch<R, _Error>? error,
+    AuthStateMatch<R, _Error>? error,
   }) => map<R>(
     authenticated: authenticated ?? (_) => orElse(),
     notAuthenticated: notAuthenticated ?? (_) => orElse(),
@@ -77,13 +70,13 @@ sealed class AuthenticationState {
 
   R? mapOrNull<R>({
     // ignore: library_private_types_in_public_api
-    AuthenticationStateMatch<R, _Authenticated>? authenticated,
+    AuthStateMatch<R, _Authenticated>? authenticated,
     // ignore: library_private_types_in_public_api
-    AuthenticationStateMatch<R, _NotAuthenticated>? notAuthenticated,
+    AuthStateMatch<R, _NotAuthenticated>? notAuthenticated,
     // ignore: library_private_types_in_public_api
-    AuthenticationStateMatch<R, _Loading>? loading,
+    AuthStateMatch<R, _Loading>? loading,
     // ignore: library_private_types_in_public_api
-    AuthenticationStateMatch<R, _Error>? error,
+    AuthStateMatch<R, _Error>? error,
   }) => map<R?>(
     authenticated: authenticated ?? (_) => null,
     notAuthenticated: notAuthenticated ?? (_) => null,
@@ -92,22 +85,22 @@ sealed class AuthenticationState {
   );
 }
 
-final class _Authenticated extends AuthenticationState {
+final class _Authenticated extends AuthState {
   const _Authenticated({required this.user});
   final AuthenticatedUser user;
 }
 
-final class _NotAuthenticated extends AuthenticationState {
+final class _NotAuthenticated extends AuthState {
   const _NotAuthenticated({required this.user});
   final NotAuthenticatedUser user;
 }
 
-final class _Loading extends AuthenticationState {
+final class _Loading extends AuthState {
   const _Loading({required this.user});
   final UserEntity user;
 }
 
-final class _Error extends AuthenticationState {
+final class _Error extends AuthState {
   const _Error({required this.user, required this.message});
   final UserEntity user;
   final String message;

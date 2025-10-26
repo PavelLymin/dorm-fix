@@ -65,10 +65,13 @@ class AuthRepository implements IAuthRepository {
       final authenticatedUser = UserDto.fromFirebase(user).toEntity();
 
       return authenticatedUser;
-    } on FirebaseAuthException catch (e, stackTrace) {
-      Error.throwWithStackTrace(AuthException(code: e.code), stackTrace);
     } on AuthException catch (e, stackTrace) {
       Error.throwWithStackTrace(e.message, stackTrace);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(
+        AuthException(code: e.code).message,
+        stackTrace,
+      );
     }
   }
 
@@ -94,10 +97,13 @@ class AuthRepository implements IAuthRepository {
       final authenticatedUser = UserDto.fromFirebase(user).toEntity();
 
       return authenticatedUser;
-    } on FirebaseAuthException catch (e, stackTrace) {
-      Error.throwWithStackTrace(AuthException(code: e.code), stackTrace);
     } on AuthException catch (e, stackTrace) {
       Error.throwWithStackTrace(e.message, stackTrace);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(
+        AuthException(code: e.code).message,
+        stackTrace,
+      );
     }
   }
 
@@ -121,10 +127,13 @@ class AuthRepository implements IAuthRepository {
       ).toEntity();
 
       return authenticatedUser;
-    } on FirebaseAuthException catch (e, stackTrace) {
-      Error.throwWithStackTrace(AuthException(code: e.code), stackTrace);
     } on AuthException catch (e, stackTrace) {
       Error.throwWithStackTrace(e.message, stackTrace);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(
+        AuthException(code: e.code).message,
+        stackTrace,
+      );
     }
   }
 

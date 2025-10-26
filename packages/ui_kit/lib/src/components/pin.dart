@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ui_kit/ui.dart';
 
 class PinScope extends StatefulWidget {
   const PinScope({super.key, required this.child});
@@ -82,8 +82,8 @@ class _PinState extends State<Pin> {
 
   @override
   void initState() {
-    state = PinScope.of(context);
     super.initState();
+    state = PinScope.of(context);
   }
 
   @override
@@ -134,6 +134,7 @@ class _PinInputState extends State<PinInput> {
   @override
   void initState() {
     widget.controller.addListener(() {
+      widget.onChange(widget.controller.text);
       setState(() {
         _hasText = widget.controller.text.isNotEmpty;
       });
@@ -144,33 +145,16 @@ class _PinInputState extends State<PinInput> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: _hasText ? 60 : 50,
       width: _hasText ? 50 : 40,
-      child: TextField(
+      child: UiTextField.standard(
         controller: widget.controller,
         focusNode: widget.focusNode,
-        textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        maxLines: 1,
+        textAlign: TextAlign.center,
         maxLength: 1,
-        onChanged: widget.onChange,
-        decoration: InputDecoration(
-          counterText: '',
-          disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: _hasText ? Colors.green : Colors.grey,
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.green),
-            borderRadius: BorderRadius.circular(8),
-          ),
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        style: UiTextFieldStyle(
+          contentPadding: EdgeInsets.symmetric(vertical: _hasText ? 16 : 12),
         ),
       ),
     );

@@ -73,11 +73,8 @@ mixin _EmailPasswordPhoneNumberFormStateMixin on State<SignIn> {
   }
 
   void _signInWithEmailAndPassword(String email, String password) {
-    context.read<AuthenticationBloc>().add(
-      AuthenticationEvent.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      ),
+    context.read<AuthBloc>().add(
+      AuthEvent.signInWithEmailAndPassword(email: email, password: password),
     );
   }
 }

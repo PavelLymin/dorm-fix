@@ -30,7 +30,7 @@ class CompositionRoot {
 
     // Authentication
     final repository = AuthRepository(firebaseAuth: firebaseAuth);
-    final authenticationBloc = AuthenticationBloc(repository: repository);
+    final authenticationBloc = AuthBloc(repository: repository);
 
     return _DependencyFactory(authenticationBloc: authenticationBloc).create();
   }
@@ -39,7 +39,7 @@ class CompositionRoot {
 class _DependencyFactory extends Factory<DependencyContainer> {
   const _DependencyFactory({required this.authenticationBloc});
 
-  final AuthenticationBloc authenticationBloc;
+  final AuthBloc authenticationBloc;
 
   @override
   DependencyContainer create() =>

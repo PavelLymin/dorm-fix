@@ -6,9 +6,8 @@ import '../../model/user.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>
-    with SetStateMixin {
-  AuthenticationBloc({required IAuthRepository repository})
+class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
+  AuthBloc({required IAuthRepository repository})
     : _repository = repository,
       super(const _NotAuthenticated(user: NotAuthenticatedUser())) {
     _streamSubscription = _repository.userChanges.listen(
@@ -24,7 +23,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>
           setState(_Error(message: e.toString(), user: state.currentUser)),
     );
 
-    on<AuthenticationEvent>((event, emit) async {
+    on<AuthEvent>((event, emit) async {
       await event.map(
         signInWithEmailAndPassword: (s) => _signIn(s, emit),
         signUp: (s) => _signUp(s, emit),
@@ -39,27 +38,22 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>
 
   Future<void> _signIn(
     _SignInWithEmailAndPassword s,
-    Emitter<AuthenticationState> emit,
+    Emitter<AuthState> emit,
   ) async {
     try {
-      emit(AuthenticationState.loading(user: state.currentUser));
+      emit(AuthState.loading(user: state.currentUser));
       await _repository.signInWithEmailAndPassword(
         email: s.email,
         password: s.password,
       );
-    } catch (e) {
-      emit(
-        AuthenticationState.error(
-          user: state.currentUser,
-          message: 'Прозошла ошибка',
-        ),
-      );
+    } catch (e, _) {
+      emit(AuthState.error(user: state.currentUser, message: e.toString()));
     }
   }
 
-  Future<void> _signUp(_SignUp s, Emitter<AuthenticationState> emit) async {
+  Future<void> _signUp(_SignUp s, Emitter<AuthState> emit) async {
     try {
-      emit(AuthenticationState.loading(user: state.currentUser));
+      emit(AuthState.loading(user: state.currentUser));
       await _repository.signUpWithEmailAndPassword(
         email: s.email,
         displayName: s.displayName,
@@ -68,38 +62,27 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>
       );
     } catch (_) {
       emit(
-        AuthenticationState.error(
-          user: state.currentUser,
-          message: 'Прозошла ошибка',
-        ),
+        AuthState.error(user: state.currentUser, message: 'Прозошла ошибка'),
       );
     }
   }
 
-  Future<void> _signInWithGoogle(Emitter<AuthenticationState> emit) async {
+  Future<void> _signInWithGoogle(Emitter<AuthState> emit) async {
     try {
-      emit(AuthenticationState.loading(user: state.currentUser));
+      emit(AuthState.loading(user: state.currentUser));
       await _repository.signInWithGoogle();
     } catch (e) {
-      emit(
-        AuthenticationState.error(
-          user: state.currentUser,
-          message: e.toString(),
-        ),
-      );
+      emit(AuthState.error(user: state.currentUser, message: e.toString()));
     }
   }
 
-  Future<void> _signOut(Emitter<AuthenticationState> emit) async {
+  Future<void> _signOut(Emitter<AuthState> emit) async {
     try {
-      emit(AuthenticationState.loading(user: state.currentUser));
+      emit(AuthState.loading(user: state.currentUser));
       await _repository.signOut();
     } catch (_) {
       emit(
-        AuthenticationState.error(
-          user: state.currentUser,
-          message: 'Прозошла ошибка',
-        ),
+        AuthState.error(user: state.currentUser, message: 'Прозошла ошибка'),
       );
     }
   }
@@ -111,7 +94,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>
   }
 }
 
-mixin SetStateMixin<State extends AuthenticationState>
-    implements Emittable<State> {
+mixin SetStateMixin<State extends AuthState> implements Emittable<State> {
   void setState(State state) => emit(state);
 }

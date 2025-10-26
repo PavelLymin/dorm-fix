@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../app/model/application_config.dart';
+import 'auth_button.dart';
 import 'signin_form.dart';
 import '../state_management/authentication/authentication_bloc.dart';
+import 'signin_social.dart';
 part 'auth_validate.dart';
 
 @RoutePage()
@@ -24,6 +28,8 @@ class _SignInState extends State<SignIn>
   bool _isValidateEmail = false;
   bool _isValidatePassword = false;
   bool _isValidatePhone = false;
+  bool _isLoading = false;
+  StreamSubscription? _subscription;
 
   @override
   void initState() {
@@ -31,6 +37,7 @@ class _SignInState extends State<SignIn>
     _onEmailChanged();
     _onPasswordChanged();
     _onPhoneChanged();
+    _onLoading();
   }
 
   void _onEmailChanged() {
@@ -77,6 +84,14 @@ class _SignInState extends State<SignIn>
     });
   }
 
+  void _onLoading() {
+    _subscription = context.read<AuthBloc>().stream.listen((state) {
+      setState(() {
+        state.isLoading ? _isLoading = true : _isLoading = false;
+      });
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -85,11 +100,12 @@ class _SignInState extends State<SignIn>
     _emailController.dispose();
     _passwordController.dispose();
     _phoneController.dispose();
+    _subscription?.cancel();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: BlocListener<AuthenticationBloc, AuthenticationState>(
+    body: BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.mapOrNull(
           authenticated: (_) => context.router.replace(NamedRoute('Home')),
@@ -100,19 +116,21 @@ class _SignInState extends State<SignIn>
       },
       child: SafeArea(
         child: Center(
-          child: LayoutBuilder(
-            builder: (context, constraints) => SingleChildScrollView(
-              child: switch (constraints.maxWidth) {
-                final width when width < 656 => Padding(
-                  padding: EdgeInsets.only(
-                    left: constraints.maxWidth > 528
-                        ? (constraints.maxWidth - (400 + 64))
-                        : 40,
-                    right: 40,
-                  ),
+          child: SingleChildScrollView(
+            child: WindowSize.fromSize(MediaQuery.sizeOf(context)).maybeMap(
+              compact: (_) => Padding(
+                padding: const EdgeInsets.only(left: 48, right: 48),
+                child: SizedBox(
+                  width: 400,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Image.asset(
+                        width: double.infinity,
+                        height: 128,
+                        'packages/ui_kit/assets/icons/microsoft.png',
+                      ),
+                      const SizedBox(height: 32),
                       SignInForm(
                         emailFocusNode: _emailFocusNode,
                         phoneFocusNode: _phoneFocusNode,
@@ -121,50 +139,38 @@ class _SignInState extends State<SignIn>
                         phoneController: _phoneController,
                       ),
                       const SizedBox(height: 32),
-                      BaseButton(
-                        onPressed: () {
-                          _signInWithEmailAndPassword(
-                            _emailController.text,
-                            _passwordController.text,
-                          );
-                        },
+                      AuthButton(
                         isEnable:
-                            _isValidateEmail && _isValidatePassword ||
-                            _isValidatePhone,
-                        widget:
-                            BlocBuilder<
-                              AuthenticationBloc,
-                              AuthenticationState
-                            >(
-                              builder: (context, state) {
-                                return state.maybeMap(
-                                  orElse: () => const Text('Continue'),
-                                  loading: (_) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
-                              },
-                            ),
+                            (_isValidateEmail & _isValidatePassword ||
+                                _isValidatePhone) &
+                            !_isLoading,
+                        onPressed: () => _signInWithEmailAndPassword(
+                          _emailController.text,
+                          _passwordController.text,
+                        ),
                       ),
                       const SizedBox(height: 32),
-                      // const AuthWithSocial(),
+                      const AuthWithSocial(),
                     ],
                   ),
                 ),
-                _ => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+              orElse: () => Padding(
+                padding: const EdgeInsets.only(left: 48, right: 48),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: (constraints.maxWidth - 656) / 2,
-                      ),
-                      child: const Image(
-                        image: AssetImage('assets/icons/microsoft.png'),
+                    Expanded(
+                      child: Image.asset(
+                        width: double.infinity,
+                        height: 256,
+                        'packages/ui_kit/assets/icons/microsoft.png',
                       ),
                     ),
-                    Flexible(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      child: SizedBox(
+                        width: 400,
                         child: Column(
                           children: [
                             SignInForm(
@@ -175,40 +181,25 @@ class _SignInState extends State<SignIn>
                               phoneController: _phoneController,
                             ),
                             const SizedBox(height: 32),
-                            BaseButton(
-                              onPressed: () {
-                                _signInWithEmailAndPassword(
-                                  _emailController.text,
-                                  _passwordController.text,
-                                );
-                              },
+                            AuthButton(
                               isEnable:
-                                  _isValidateEmail & _isValidatePassword ||
-                                  _isValidatePhone,
-                              widget:
-                                  BlocBuilder<
-                                    AuthenticationBloc,
-                                    AuthenticationState
-                                  >(
-                                    builder: (context, state) {
-                                      return state.isLoading
-                                          ? const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            )
-                                          : const Text('Continue');
-                                    },
-                                  ),
+                                  (_isValidateEmail & _isValidatePassword ||
+                                      _isValidatePhone) &
+                                  !_isLoading,
+                              onPressed: () => _signInWithEmailAndPassword(
+                                _emailController.text,
+                                _passwordController.text,
+                              ),
                             ),
                             const SizedBox(height: 32),
-                            // const AuthWithSocial(),
+                            const AuthWithSocial(),
                           ],
                         ),
                       ),
                     ),
                   ],
                 ),
-              },
+              ),
             ),
           ),
         ),

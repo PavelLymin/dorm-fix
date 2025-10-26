@@ -1,17 +1,16 @@
 part of 'authentication_bloc.dart';
 
-typedef AuthenticationEventMatch<R, S extends AuthenticationEvent> =
-    FutureOr<R> Function(S event);
+typedef AuthEventMatch<R, S extends AuthEvent> = FutureOr<R> Function(S event);
 
-sealed class AuthenticationEvent {
-  const AuthenticationEvent();
+sealed class AuthEvent {
+  const AuthEvent();
 
-  const factory AuthenticationEvent.signInWithEmailAndPassword({
+  const factory AuthEvent.signInWithEmailAndPassword({
     required String email,
     required String password,
   }) = _SignInWithEmailAndPassword;
 
-  const factory AuthenticationEvent.signUp({
+  const factory AuthEvent.signUp({
     required String email,
     required String displayName,
     required String photoURL,
@@ -19,20 +18,20 @@ sealed class AuthenticationEvent {
     required String phoneNumber,
   }) = _SignUp;
 
-  const factory AuthenticationEvent.signInWithGoogle() = _SignInWithGoogle;
+  const factory AuthEvent.signInWithGoogle() = _SignInWithGoogle;
 
-  const factory AuthenticationEvent.signOut() = _SignOut;
+  const factory AuthEvent.signOut() = _SignOut;
 
   FutureOr<R> map<R>({
     // ignore: library_private_types_in_public_api
-    required AuthenticationEventMatch<R, _SignInWithEmailAndPassword>
+    required AuthEventMatch<R, _SignInWithEmailAndPassword>
     signInWithEmailAndPassword,
     // ignore: library_private_types_in_public_api
-    required AuthenticationEventMatch<R, _SignUp> signUp,
+    required AuthEventMatch<R, _SignUp> signUp,
     // ignore: library_private_types_in_public_api
-    required AuthenticationEventMatch<R, _SignInWithGoogle> signInWithGoogle,
+    required AuthEventMatch<R, _SignInWithGoogle> signInWithGoogle,
     // ignore: library_private_types_in_public_api
-    required AuthenticationEventMatch<R, _SignOut> signOut,
+    required AuthEventMatch<R, _SignOut> signOut,
   }) => switch (this) {
     _SignInWithEmailAndPassword s => signInWithEmailAndPassword(s),
     _SignUp s => signUp(s),
@@ -41,7 +40,7 @@ sealed class AuthenticationEvent {
   };
 }
 
-final class _SignInWithEmailAndPassword extends AuthenticationEvent {
+final class _SignInWithEmailAndPassword extends AuthEvent {
   const _SignInWithEmailAndPassword({
     required this.email,
     required this.password,
@@ -51,7 +50,7 @@ final class _SignInWithEmailAndPassword extends AuthenticationEvent {
   final String password;
 }
 
-final class _SignUp extends AuthenticationEvent {
+final class _SignUp extends AuthEvent {
   const _SignUp({
     required this.email,
     required this.displayName,
@@ -67,10 +66,10 @@ final class _SignUp extends AuthenticationEvent {
   final String phoneNumber;
 }
 
-final class _SignInWithGoogle extends AuthenticationEvent {
+final class _SignInWithGoogle extends AuthEvent {
   const _SignInWithGoogle();
 }
 
-final class _SignOut extends AuthenticationEvent {
+final class _SignOut extends AuthEvent {
   const _SignOut();
 }

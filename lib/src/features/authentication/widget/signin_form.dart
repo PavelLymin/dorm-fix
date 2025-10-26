@@ -41,10 +41,7 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 16),
-        Text(
-          'Start using My App today',
-          // style: context.extentions.themeText.titleLarge,
-        ),
+        UiText.titleMedium('Начни использовать приложение'),
         const SizedBox(height: 32),
         ValueListenableBuilder(
           valueListenable: _isPhoneNumber,
@@ -54,52 +51,49 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
               value
                   ? Column(
                       children: [
-                        TextPlaceholder(
+                        UiTextField.standard(
                           focusNode: widget.phoneFocusNode,
                           controller: widget.phoneController,
-                          onChanged: (text) => _onChanged(text),
-                          autofillHints: const [AutofillHints.telephoneNumber],
-                          hintText: 'Enter your phone number',
-                          icon: Icons.phone_enabled_outlined,
-                          suffixIcon: _clearSuffixIcon(widget.phoneController),
+                          keyboardType: TextInputType.phone,
+                          style: UiTextFieldStyle(
+                            prefixIcon: Icon(Icons.phone_enabled_outlined),
+                            suffixIcon: _clearSuffixIcon(
+                              widget.phoneController,
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 8),
-                        const Pin(),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 64, child: Pin()),
                       ],
                     )
                   : Column(
                       children: [
-                        TextPlaceholder(
+                        UiTextField.standard(
                           focusNode: widget.emailFocusNode,
                           controller: widget.emailController,
-                          onChanged: (text) => _onChanged(text),
-                          autofillHints: [AutofillHints.email],
-                          hintText: 'name@mail.ru or +71234567890',
-                          icon: Icons.email_outlined,
-                          suffixIcon: _clearSuffixIcon(widget.emailController),
+                          keyboardType: TextInputType.emailAddress,
+                          style: UiTextFieldStyle(
+                            hintText: 'name@mail.ru или +71234567890',
+                            prefixIcon: Icon(Icons.email_outlined),
+                            suffixIcon: _clearSuffixIcon(
+                              widget.emailController,
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 8),
-                        TextPlaceholder(
+                        UiTextField.standard(
                           controller: widget.passwordController,
-                          autofillHints: [AutofillHints.password],
-                          hintText: 'Enter your password',
-                          icon: Icons.password_outlined,
                           obscureText: _obscureText,
-                          suffixIcon: _visibilitySuffixIcon(),
+                          keyboardType: TextInputType.visiblePassword,
+                          style: UiTextFieldStyle(
+                            hintText: 'Ввведите пароль',
+                            prefixIcon: Icon(Icons.password_outlined),
+                            suffixIcon: _visibilitySuffixIcon(),
+                          ),
                         ),
+                        const SizedBox(height: 8),
                       ],
                     ),
-              // InkWell(
-              //   onTap: () {},
-              //   borderRadius: BorderRadius.circular(8),
-              //   child: Text(
-              //     'Forgot Password?',
-              //     style: context.extentions.themeText.bodyMedium!.copyWith(
-              //       color: AppColors.green,
-              //     ),
-              //   ),
-              // ),
+              InkWell(onTap: () {}, child: Text('Забыли пароль?')),
               const SizedBox(height: 16),
             ],
           ),
@@ -115,6 +109,7 @@ mixin _SignInFormStateMixin on State<SignInForm> {
   bool _clearText = false;
 
   void _emailListener() {
+    _onChanged(widget.emailController.text);
     if (widget.emailController.text.startsWith('+7')) {
       setState(() {
         widget.phoneController.text = widget.emailController.text;
@@ -126,6 +121,7 @@ mixin _SignInFormStateMixin on State<SignInForm> {
   }
 
   void _phonelistener() {
+    _onChanged(widget.phoneController.text);
     if (!widget.phoneController.text.startsWith('+7')) {
       setState(() {
         widget.emailController.text = widget.phoneController.text;

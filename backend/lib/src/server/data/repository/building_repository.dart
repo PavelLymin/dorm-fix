@@ -19,10 +19,10 @@ class BuildingRepositoryImpl implements IBuildingRepository {
     final data = await _database
         .customSelect(
           '''
-        SELECT * FROM buildings
-        WHERE number LIKE ? OR name LIKE ? OR address LIKE ?
-        ORDER BY number
-        ''',
+          SELECT * FROM buildings
+          WHERE number LIKE ? OR name LIKE ? OR address LIKE ?
+          ORDER BY number
+          ''',
           variables: [
             Variable('%$query%'),
             Variable('%$query%'),

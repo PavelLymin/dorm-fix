@@ -14,7 +14,10 @@ void main() async {
     final dependency = await CompositionRoot().compose();
 
     runApp(
-      DependeciesScope(dependencyContainer: dependency, child: const MainApp()),
+      DependeciesScope(
+        dependencyContainer: dependency,
+        child: WindowSizeScope(child: const MainApp()),
+      ),
     );
   }, (error, stackTrace) {});
 }
@@ -27,7 +30,7 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  late AuthenticationBloc _authenticationBloc;
+  late AuthBloc _authenticationBloc;
 
   @override
   void initState() {
@@ -41,7 +44,6 @@ class _MainAppState extends State<MainApp> {
     child: MaterialApp(
       title: 'Dorm Fix',
       debugShowCheckedModeBanner: false,
-      // theme: createLightTheme(),
       home: const SignIn(),
     ),
   );

@@ -17,6 +17,10 @@ class AuthException implements Exception {
         message = 'Слишком много запросов, доступ временно заблокирован.';
       case 'user-disabled':
         message = 'Учетная запись пользователя отключена администратором.';
+      case 'invalid-credential':
+        message = 'Введенные учетные данные неверны.';
+      default:
+        message = code;
     }
   }
 

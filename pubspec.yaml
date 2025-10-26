@@ -43,3 +43,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - packages/ui_kit/assets/icons/

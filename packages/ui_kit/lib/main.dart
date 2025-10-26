@@ -1,6 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:ui_kit/button_previews.dart';
+import 'package:ui_kit/text_fields_preview.dart';
+import 'package:ui_kit/typography_preview.dart';
+import 'pin_preview.dart';
 import 'package:ui_kit/ui.dart';
 
 final themeModeSwitcher = ValueNotifier(ThemeMode.system);
@@ -25,11 +28,13 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-    debugShowCheckedModeBanner: false,
-    darkTheme: darkTheme,
-    theme: lightTheme,
-    home: const UiPreview(),
+  Widget build(BuildContext context) => WindowSizeScope(
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      darkTheme: darkTheme,
+      theme: lightTheme,
+      home: const UiPreview(),
+    ),
   );
 }
 
@@ -77,6 +82,26 @@ class UiPreview extends StatelessWidget {
                 const SizedBox(height: 8),
                 const ButtonsPreview(),
                 const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.center,
+                  child: UiText.titleLarge('Typography'),
+                ),
+                const SizedBox(height: 8),
+                const TypographyPreview(),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.center,
+                  child: UiText.titleLarge('Text Fields'),
+                ),
+                const SizedBox(height: 8),
+                const TextFieldsPreview(),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.center,
+                  child: UiText.titleLarge('Pin'),
+                ),
+                const SizedBox(height: 8),
+                PinScope(child: const PinPreview()),
               ],
             ),
           ),
