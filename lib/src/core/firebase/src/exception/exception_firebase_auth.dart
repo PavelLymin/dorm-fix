@@ -9,6 +9,8 @@ class AuthException implements Exception {
         message = 'Указан некорректно сформированный email.';
       case 'weak-password	':
         message = 'Пароль слишком слабый.';
+      case 'invalid-phone-number':
+        message = 'Указанный номер телефона недопустим';
       case 'user-not-found':
         message = 'Пользователя с таким email не существует.';
       case 'wrong-password':

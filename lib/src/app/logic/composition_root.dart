@@ -2,6 +2,7 @@ import 'package:dorm_fix/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../features/authentication/data/repository/auth_repository.dart';
+import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
 import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
 import '../model/dependencies.dart';
 
@@ -31,19 +32,30 @@ class CompositionRoot {
     // Authentication
     final repository = AuthRepository(firebaseAuth: firebaseAuth);
     final authenticationBloc = AuthBloc(repository: repository);
+    final authButton = AuthButtonBloc();
 
-    return _DependencyFactory(authenticationBloc: authenticationBloc).create();
+    return _DependencyFactory(
+      authenticationBloc: authenticationBloc,
+      authButton: authButton,
+    ).create();
   }
 }
 
 class _DependencyFactory extends Factory<DependencyContainer> {
-  const _DependencyFactory({required this.authenticationBloc});
+  const _DependencyFactory({
+    required this.authenticationBloc,
+    required this.authButton,
+  });
 
   final AuthBloc authenticationBloc;
 
+  final AuthButtonBloc authButton;
+
   @override
-  DependencyContainer create() =>
-      DependencyContainer(authenticationBloc: authenticationBloc);
+  DependencyContainer create() => DependencyContainer(
+    authenticationBloc: authenticationBloc,
+    authButton: authButton,
+  );
 }
 
 class _CreateFirebaseAuth extends AsyncFactory<FirebaseAuth> {

@@ -1,4 +1,6 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../state_management/auth_button/auth_button_bloc.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({
@@ -36,70 +38,95 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) => PinScope(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(height: 16),
-        UiText.titleMedium('Начни использовать приложение'),
-        const SizedBox(height: 32),
-        ValueListenableBuilder(
-          valueListenable: _isPhoneNumber,
-          builder: (context, value, child) => Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              value
-                  ? Column(
-                      children: [
-                        UiTextField.standard(
-                          focusNode: widget.phoneFocusNode,
-                          controller: widget.phoneController,
-                          keyboardType: TextInputType.phone,
-                          style: UiTextFieldStyle(
-                            prefixIcon: Icon(Icons.phone_enabled_outlined),
-                            suffixIcon: _clearSuffixIcon(
-                              widget.phoneController,
-                            ),
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      const SizedBox(height: 16),
+      WindowSizeScope.of(context).isMediumOrLarger
+          ? UiText.titleLarge('Начните использовать приложение')
+          : UiText.titleMedium('Начните использовать приложение'),
+      const SizedBox(height: 32),
+      ValueListenableBuilder(
+        valueListenable: _isPhoneNumber,
+        builder: (context, value, child) => Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            value
+                ? Column(
+                    children: [
+                      UiTextField.standard(
+                        focusNode: widget.phoneFocusNode,
+                        controller: widget.phoneController,
+                        keyboardType: TextInputType.phone,
+                        style: UiTextFieldStyle(
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 18,
                           ),
+                          prefixIcon: Icon(Icons.phone_enabled_outlined),
+                          suffixIcon: _clearSuffixIcon(widget.phoneController),
                         ),
-                        const SizedBox(height: 64, child: Pin()),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        UiTextField.standard(
-                          focusNode: widget.emailFocusNode,
-                          controller: widget.emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          style: UiTextFieldStyle(
-                            hintText: 'name@mail.ru или +71234567890',
-                            prefixIcon: Icon(Icons.email_outlined),
-                            suffixIcon: _clearSuffixIcon(
-                              widget.emailController,
-                            ),
+                      ),
+                      SizedBox(
+                        height: 80,
+                        child: BlocBuilder<AuthButtonBloc, AuthButtonState>(
+                          builder: (context, state) {
+                            return state.maybeMap(
+                              orElse: () {
+                                PinScope.of(context).pin.clear();
+                                return const Pin(isEnable: false);
+                              },
+                              isPin: () => const Pin(isEnable: true),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      UiTextField.standard(
+                        focusNode: widget.emailFocusNode,
+                        controller: widget.emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        style: UiTextFieldStyle(
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 18,
                           ),
+                          hintText: 'name@mail.ru или +71234567890',
+                          prefixIcon: Icon(Icons.email_outlined),
+                          suffixIcon: _clearSuffixIcon(widget.emailController),
                         ),
-                        const SizedBox(height: 8),
-                        UiTextField.standard(
-                          controller: widget.passwordController,
-                          obscureText: _obscureText,
-                          keyboardType: TextInputType.visiblePassword,
-                          style: UiTextFieldStyle(
-                            hintText: 'Ввведите пароль',
-                            prefixIcon: Icon(Icons.password_outlined),
-                            suffixIcon: _visibilitySuffixIcon(),
+                      ),
+                      const SizedBox(height: 16),
+                      UiTextField.standard(
+                        controller: widget.passwordController,
+                        obscureText: _obscureText,
+                        keyboardType: TextInputType.visiblePassword,
+                        style: UiTextFieldStyle(
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 18,
                           ),
+                          hintText: 'Пароль',
+                          prefixIcon: Icon(Icons.password_outlined),
+                          suffixIcon: _visibilitySuffixIcon(),
                         ),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
-              InkWell(onTap: () {}, child: Text('Забыли пароль?')),
-              const SizedBox(height: 16),
-            ],
-          ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
+            InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: () {},
+              child: const Padding(
+                padding: EdgeInsets.all(1.5),
+                child: Text('Забыли пароль?'),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
         ),
-      ],
-    ),
+      ),
+    ],
   );
 }
 
@@ -113,6 +140,7 @@ mixin _SignInFormStateMixin on State<SignInForm> {
     if (widget.emailController.text.startsWith('+7')) {
       setState(() {
         widget.phoneController.text = widget.emailController.text;
+        widget.emailController.clear();
         _isPhoneNumber.value = true;
         widget.emailFocusNode.unfocus();
         widget.phoneFocusNode.requestFocus();
@@ -125,6 +153,8 @@ mixin _SignInFormStateMixin on State<SignInForm> {
     if (!widget.phoneController.text.startsWith('+7')) {
       setState(() {
         widget.emailController.text = widget.phoneController.text;
+        PinScope.of(context).pin.clear();
+        widget.phoneController.clear();
         _isPhoneNumber.value = false;
         widget.phoneFocusNode.unfocus();
         widget.emailFocusNode.requestFocus();

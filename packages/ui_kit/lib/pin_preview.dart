@@ -5,6 +5,6 @@ class PinPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const UiCard(
-    child: Padding(padding: EdgeInsets.all(16), child: Pin()),
+    child: Padding(padding: EdgeInsets.all(16), child: Pin(isEnable: true)),
   );
 }

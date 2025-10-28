@@ -27,6 +27,12 @@ class _PinScopeState extends State<PinScope> with PinCodeLogic {
   Stream<bool> get isValidate => isAllFieldFill(_controllers);
   String get pinCode => getPinCode(_controllers);
 
+  void clear() {
+    for (var controller in _controllers) {
+      controller.clear();
+    }
+  }
+
   void _onTextChanged(
     List<TextEditingController> controllers,
     List<FocusNode> focusNodes,
@@ -71,7 +77,9 @@ class _PinInherited extends InheritedWidget {
 }
 
 class Pin extends StatefulWidget {
-  const Pin({super.key});
+  const Pin({super.key, required this.isEnable});
+
+  final bool isEnable;
 
   @override
   State<Pin> createState() => _PinState();
@@ -104,6 +112,7 @@ class _PinState extends State<Pin> {
               index,
             );
           },
+          isEnable: widget.isEnable,
         ),
       ),
     );
@@ -117,12 +126,14 @@ class PinInput extends StatefulWidget {
     required this.controller,
     required this.focusNode,
     required this.onChange,
+    required this.isEnable,
   });
 
   final int index;
   final TextEditingController controller;
   final FocusNode focusNode;
   final Function(String) onChange;
+  final bool isEnable;
 
   @override
   State<PinInput> createState() => _PinInputState();
@@ -133,28 +144,38 @@ class _PinInputState extends State<PinInput> {
 
   @override
   void initState() {
-    widget.controller.addListener(() {
-      widget.onChange(widget.controller.text);
-      setState(() {
-        _hasText = widget.controller.text.isNotEmpty;
-      });
-    });
     super.initState();
+
+    widget.controller.addListener(_change);
+  }
+
+  void _change() {
+    widget.onChange(widget.controller.text);
+    setState(() {
+      _hasText = widget.controller.text.isNotEmpty;
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_change);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: _hasText ? 50 : 40,
+      width: _hasText ? 40 : 35,
       child: UiTextField.standard(
         controller: widget.controller,
         focusNode: widget.focusNode,
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         maxLength: 1,
+        enabled: widget.isEnable,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         style: UiTextFieldStyle(
-          contentPadding: EdgeInsets.symmetric(vertical: _hasText ? 16 : 12),
+          contentPadding: EdgeInsets.symmetric(vertical: _hasText ? 20 : 18),
         ),
       ),
     );
@@ -239,7 +260,7 @@ mixin PinCodeLogic<T extends StatefulWidget> on State<T> {
     List<TextEditingController> controllers,
     List<FocusNode> focusNodes,
   ) {
-    for (var controller in controllers) {
+    for (final controller in controllers) {
       controller.dispose();
     }
     for (final focusNode in focusNodes) {

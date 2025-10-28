@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dorm_fix/src/core/firebase/firebase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/repository/auth_repository.dart';
 import '../../model/user.dart';
@@ -26,7 +27,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
     on<AuthEvent>((event, emit) async {
       await event.map(
         signInWithEmailAndPassword: (s) => _signIn(s, emit),
-        signUp: (s) => _signUp(s, emit),
+        signUpWithEmailAndPassword: (s) => _signUp(s, emit),
+        verifyPhoneNumber: (s) => _verifyPhoneNumber(s, emit),
+        signInWithPhoneNumber: (s) => _signInWithPhoneNumber(s, emit),
         signInWithGoogle: (_) => _signInWithGoogle(emit),
         signOut: (_) => _signOut(emit),
       );
@@ -46,12 +49,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
         email: s.email,
         password: s.password,
       );
+    } on AuthException catch (e) {
+      emit(AuthState.error(user: state.currentUser, message: e.message));
     } catch (e, _) {
       emit(AuthState.error(user: state.currentUser, message: e.toString()));
     }
   }
 
-  Future<void> _signUp(_SignUp s, Emitter<AuthState> emit) async {
+  Future<void> _signUp(
+    _SignUpWithEmailAndPassword s,
+    Emitter<AuthState> emit,
+  ) async {
     try {
       emit(AuthState.loading(user: state.currentUser));
       await _repository.signUpWithEmailAndPassword(
@@ -60,10 +68,49 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
         photoURL: s.photoURL,
         password: s.password,
       );
-    } catch (_) {
-      emit(
-        AuthState.error(user: state.currentUser, message: 'Прозошла ошибка'),
+    } on AuthException catch (e) {
+      emit(AuthState.error(user: state.currentUser, message: e.message));
+    } catch (e) {
+      emit(AuthState.error(user: state.currentUser, message: e.toString()));
+    }
+  }
+
+  Future<void> _signInWithPhoneNumber(
+    _SignInWithPhoneNumber s,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      emit(AuthState.loading(user: state.currentUser));
+      await _repository.signInWithPhoneNumber(
+        verificationId: s.verificationId,
+        smsCode: s.smsCode,
       );
+    } on AuthException catch (e) {
+      emit(AuthState.error(user: state.currentUser, message: e.message));
+    } catch (e) {
+      emit(AuthState.error(user: state.currentUser, message: e.toString()));
+    }
+  }
+
+  Future<void> _verifyPhoneNumber(
+    _VerifyPhoneNumber s,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      emit(AuthState.loading(user: state.currentUser));
+      final result = await _repository.verifyPhoneNumber(
+        phoneNumber: s.phoneNumber,
+      );
+
+      result.maybeMap(
+        orElse: () => null,
+        smsCodeSent: (verificationId) =>
+            emit(AuthState.smsCodeSent(verificationId: verificationId)),
+      );
+    } on AuthException catch (e) {
+      emit(AuthState.error(user: state.currentUser, message: e.message));
+    } catch (e) {
+      emit(AuthState.error(user: state.currentUser, message: e.toString()));
     }
   }
 
@@ -80,10 +127,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
     try {
       emit(AuthState.loading(user: state.currentUser));
       await _repository.signOut();
-    } catch (_) {
-      emit(
-        AuthState.error(user: state.currentUser, message: 'Прозошла ошибка'),
-      );
+    } catch (e) {
+      emit(AuthState.error(user: state.currentUser, message: e.toString()));
     }
   }
 

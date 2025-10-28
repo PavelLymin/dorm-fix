@@ -77,4 +77,21 @@ mixin _EmailPasswordPhoneNumberFormStateMixin on State<SignIn> {
       AuthEvent.signInWithEmailAndPassword(email: email, password: password),
     );
   }
+
+  void _verifyPhoneNumber(String phoneNumber) {
+    context.read<AuthBloc>().add(
+      AuthEvent.verifyPhoneNumber(phoneNumber: phoneNumber),
+    );
+  }
+
+  void _signInWithPhoneNumber(String smsCode) {
+    context.read<AuthBloc>().state.mapOrNull(
+      smsCodeSent: (state) => context.read<AuthBloc>().add(
+        AuthEvent.signInWithPhoneNumber(
+          verificationId: state.verificationId,
+          smsCode: smsCode,
+        ),
+      ),
+    );
+  }
 }

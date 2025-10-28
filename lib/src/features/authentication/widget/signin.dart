@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:dorm_fix/src/app/widget/dependencies_scope.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../app/model/application_config.dart';
+import '../state_management/auth_button/auth_button_bloc.dart';
 import 'auth_button.dart';
 import 'signin_form.dart';
 import '../state_management/authentication/authentication_bloc.dart';
@@ -25,31 +27,33 @@ class _SignInState extends State<SignIn>
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _phoneController = TextEditingController();
-  bool _isValidateEmail = false;
-  bool _isValidatePassword = false;
-  bool _isValidatePhone = false;
   bool _isLoading = false;
-  StreamSubscription? _subscription;
+  bool _isValidatePassword = false;
+  bool _isValidateEmail = false;
+  bool _isValidatePhone = false;
+  bool _isPinValidate = false;
+  bool _isSmsCode = false;
+  StreamSubscription? _pinStreamSubscription;
+  late AuthButtonBloc _authButtonBloc;
 
   @override
   void initState() {
     super.initState();
+    _authButtonBloc = DependeciesScope.of(context).authButton;
     _onEmailChanged();
     _onPasswordChanged();
     _onPhoneChanged();
-    _onLoading();
+    _onPinChanged();
   }
 
   void _onEmailChanged() {
     _emailController.addListener(() {
       if (_validateEmail(_emailController.text) && !_isValidateEmail) {
-        setState(() {
-          _isValidateEmail = true;
-        });
+        _isValidateEmail = true;
+        _authButtonBloc.add(AuthButtonEvent.addIsEmail(isEmail: true));
       } else if (!_validateEmail(_emailController.text) && _isValidateEmail) {
-        setState(() {
-          _isValidateEmail = false;
-        });
+        _isValidateEmail = false;
+        _authButtonBloc.add(AuthButtonEvent.addIsEmail(isEmail: false));
       }
     });
   }
@@ -57,14 +61,12 @@ class _SignInState extends State<SignIn>
   void _onPasswordChanged() {
     _passwordController.addListener(() {
       if (_validatePassword(_passwordController.text) && !_isValidatePassword) {
-        setState(() {
-          _isValidatePassword = true;
-        });
+        _isValidatePassword = true;
+        _authButtonBloc.add(AuthButtonEvent.addIsPassword(isPassword: true));
       } else if (!_validatePassword(_passwordController.text) &&
           _isValidatePassword) {
-        setState(() {
-          _isValidatePassword = false;
-        });
+        _isValidatePassword = false;
+        _authButtonBloc.add(AuthButtonEvent.addIsPassword(isPassword: false));
       }
     });
   }
@@ -72,24 +74,52 @@ class _SignInState extends State<SignIn>
   void _onPhoneChanged() {
     _phoneController.addListener(() {
       if (_validatePhoneNumber(_phoneController.text) && !_isValidatePhone) {
-        setState(() {
-          _isValidatePhone = true;
-        });
+        _isValidatePhone = true;
+        _authButtonBloc.add(
+          AuthButtonEvent.addIsPhoneNumber(isPhoneNumber: true),
+        );
       } else if (!_validatePhoneNumber(_phoneController.text) &&
           _isValidatePhone) {
-        setState(() {
-          _isValidatePhone = false;
-        });
+        _isValidatePhone = false;
+        _authButtonBloc.add(
+          AuthButtonEvent.addIsPhoneNumber(isPhoneNumber: false),
+        );
       }
     });
   }
 
-  void _onLoading() {
-    _subscription = context.read<AuthBloc>().stream.listen((state) {
-      setState(() {
-        state.isLoading ? _isLoading = true : _isLoading = false;
-      });
+  void _onPinChanged() {
+    _pinStreamSubscription = PinScope.of(context).pin.isValidate.listen((
+      value,
+    ) {
+      if (value && !_isPinValidate) {
+        _isPinValidate = true;
+        _authButtonBloc.add(AuthButtonEvent.addIsPin(isPin: true));
+      } else if (!value && _isPinValidate) {
+        _isPinValidate = false;
+        _authButtonBloc.add(AuthButtonEvent.addIsPin(isPin: false));
+      }
     });
+  }
+
+  void _addLoading(bool state) {
+    if (!_isLoading && state) {
+      _authButtonBloc.add(AuthButtonEvent.addIsLoaded(isLoading: true));
+      _isLoading = true;
+    } else if (_isLoading && !state) {
+      _authButtonBloc.add(AuthButtonEvent.addIsLoaded(isLoading: false));
+      _isLoading = false;
+    }
+  }
+
+  void _addSmsCodeSent(bool state) {
+    if (!_isSmsCode && state) {
+      _authButtonBloc.add(AuthButtonEvent.addIsCodeSent(isCodeSent: true));
+      _isSmsCode = true;
+    } else if (_isSmsCode && !state) {
+      _authButtonBloc.add(AuthButtonEvent.addIsCodeSent(isCodeSent: false));
+      _isSmsCode = false;
+    }
   }
 
   @override
@@ -97,107 +127,137 @@ class _SignInState extends State<SignIn>
     super.dispose();
     _emailFocusNode.dispose();
     _phoneFocusNode.dispose();
+    _emailController.removeListener(_onEmailChanged);
+    _passwordController.removeListener(_onPasswordChanged);
+    _phoneController.removeListener(_onPhoneChanged);
     _emailController.dispose();
     _passwordController.dispose();
     _phoneController.dispose();
-    _subscription?.cancel();
+    _pinStreamSubscription?.cancel();
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    body: BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        state.mapOrNull(
-          authenticated: (_) => context.router.replace(NamedRoute('Home')),
-          error: (error) => ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(error.message))),
-        );
-      },
-      child: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: WindowSize.fromSize(MediaQuery.sizeOf(context)).maybeMap(
-              compact: (_) => Padding(
-                padding: const EdgeInsets.only(left: 48, right: 48),
-                child: SizedBox(
-                  width: 400,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        width: double.infinity,
-                        height: 128,
-                        'packages/ui_kit/assets/icons/microsoft.png',
-                      ),
-                      const SizedBox(height: 32),
-                      SignInForm(
-                        emailFocusNode: _emailFocusNode,
-                        phoneFocusNode: _phoneFocusNode,
-                        emailController: _emailController,
-                        passwordController: _passwordController,
-                        phoneController: _phoneController,
-                      ),
-                      const SizedBox(height: 32),
-                      AuthButton(
-                        isEnable:
-                            (_isValidateEmail & _isValidatePassword ||
-                                _isValidatePhone) &
-                            !_isLoading,
-                        onPressed: () => _signInWithEmailAndPassword(
-                          _emailController.text,
-                          _passwordController.text,
+  Widget build(BuildContext context) => BlocProvider.value(
+    value: _authButtonBloc,
+    child: Scaffold(
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          state.maybeMap(
+            orElse: () {
+              _addLoading(false);
+              _addSmsCodeSent(false);
+            },
+            loading: (_) {
+              _addLoading(true);
+              _addSmsCodeSent(false);
+            },
+            authenticated: (_) {
+              _addLoading(false);
+              context.router.replace(NamedRoute('Home'));
+            },
+            smsCodeSent: (_) {
+              _addLoading(false);
+              _addSmsCodeSent(true);
+            },
+            error: (error) {
+              _addLoading(false);
+              _addSmsCodeSent(false);
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(error.message)));
+            },
+          );
+        },
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: WindowSizeScope.of(context).maybeMap(
+                orElse: () => Padding(
+                  padding: const EdgeInsets.only(left: 48, right: 48),
+                  child: SizedBox(
+                    width: 400,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          width: double.infinity,
+                          height: 128,
+                          'packages/ui_kit/assets/icons/microsoft.png',
                         ),
-                      ),
-                      const SizedBox(height: 32),
-                      const AuthWithSocial(),
-                    ],
-                  ),
-                ),
-              ),
-              orElse: () => Padding(
-                padding: const EdgeInsets.only(left: 48, right: 48),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Image.asset(
-                        width: double.infinity,
-                        height: 256,
-                        'packages/ui_kit/assets/icons/microsoft.png',
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
-                      child: SizedBox(
-                        width: 400,
-                        child: Column(
-                          children: [
-                            SignInForm(
-                              emailFocusNode: _emailFocusNode,
-                              phoneFocusNode: _phoneFocusNode,
-                              emailController: _emailController,
-                              passwordController: _passwordController,
-                              phoneController: _phoneController,
-                            ),
-                            const SizedBox(height: 32),
-                            AuthButton(
-                              isEnable:
-                                  (_isValidateEmail & _isValidatePassword ||
-                                      _isValidatePhone) &
-                                  !_isLoading,
-                              onPressed: () => _signInWithEmailAndPassword(
+                        const SizedBox(height: 32),
+                        SignInForm(
+                          emailFocusNode: _emailFocusNode,
+                          phoneFocusNode: _phoneFocusNode,
+                          emailController: _emailController,
+                          passwordController: _passwordController,
+                          phoneController: _phoneController,
+                        ),
+                        const SizedBox(height: 32),
+                        AuthButton(
+                          signInWithEmailAndPassword: () =>
+                              _signInWithEmailAndPassword(
                                 _emailController.text,
                                 _passwordController.text,
                               ),
-                            ),
-                            const SizedBox(height: 32),
-                            const AuthWithSocial(),
-                          ],
+                          signInWithPhoneNumber: () => _signInWithPhoneNumber(
+                            PinScope.of(context).pin.pinCode,
+                          ),
+                          verifyPhoneNumber: () =>
+                              _verifyPhoneNumber(_phoneController.text),
+                        ),
+                        const SizedBox(height: 32),
+                        const AuthWithSocial(),
+                      ],
+                    ),
+                  ),
+                ),
+                large: (_) => Padding(
+                  padding: const EdgeInsets.only(left: 48, right: 48),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Image.asset(
+                          width: double.infinity,
+                          height: 256,
+                          'packages/ui_kit/assets/icons/microsoft.png',
                         ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40),
+                        child: SizedBox(
+                          width: 400,
+                          child: Column(
+                            children: [
+                              SignInForm(
+                                emailFocusNode: _emailFocusNode,
+                                phoneFocusNode: _phoneFocusNode,
+                                emailController: _emailController,
+                                passwordController: _passwordController,
+                                phoneController: _phoneController,
+                              ),
+                              const SizedBox(height: 32),
+                              AuthButton(
+                                signInWithEmailAndPassword: () =>
+                                    _signInWithEmailAndPassword(
+                                      _emailController.text,
+                                      _passwordController.text,
+                                    ),
+                                signInWithPhoneNumber: () =>
+                                    _signInWithPhoneNumber(
+                                      _phoneController.text,
+                                    ),
+                                verifyPhoneNumber: () =>
+                                    _verifyPhoneNumber(_phoneController.text),
+                              ),
+                              const SizedBox(height: 32),
+                              const AuthWithSocial(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

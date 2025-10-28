@@ -39,12 +39,14 @@ class _MainAppState extends State<MainApp> {
   }
 
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-    providers: [BlocProvider(create: (context) => _authenticationBloc)],
-    child: MaterialApp(
-      title: 'Dorm Fix',
-      debugShowCheckedModeBanner: false,
-      home: const SignIn(),
+  Widget build(BuildContext context) => PinScope(
+    child: MultiBlocProvider(
+      providers: [BlocProvider(create: (context) => _authenticationBloc)],
+      child: MaterialApp(
+        title: 'Dorm Fix',
+        debugShowCheckedModeBanner: false,
+        home: const SignIn(),
+      ),
     ),
   );
 }
