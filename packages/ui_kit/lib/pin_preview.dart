@@ -1,10 +1,17 @@
 import 'package:ui_kit/ui.dart';
 
-class PinPreview extends StatelessWidget {
-  const PinPreview({super.key});
+class PinCodePreview extends StatelessWidget {
+  const PinCodePreview({super.key});
 
   @override
-  Widget build(BuildContext context) => const UiCard(
-    child: Padding(padding: EdgeInsets.all(16), child: Pin(isEnable: true)),
+  Widget build(BuildContext context) => UiCard(
+    child: Padding(
+      padding: EdgeInsets.all(16),
+      child: PinCode(
+        isFocus: true,
+        length: 6,
+        controller: TextEditingController(),
+      ),
+    ),
   );
 }

@@ -62,7 +62,7 @@ class AuthButtonState {
       return isEmailPassword();
     } else if (_isPhoneNumber && !_isCodeSent) {
       return isPhoneNumber();
-    } else if (_isPhoneNumber && _isCodeSent) {
+    } else if (_isCodeSent) {
       return isPin();
     } else {
       return isLoading();

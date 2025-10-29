@@ -8,7 +8,7 @@ export 'package:ui_kit/src/components/button.dart';
 export 'package:ui_kit/src/components/card.dart';
 export 'package:ui_kit/src/components/surface.dart';
 export 'package:ui_kit/src/components/text_field.dart';
-export 'package:ui_kit/src/components/pin.dart';
+export 'package:ui_kit/src/components/pin_code.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

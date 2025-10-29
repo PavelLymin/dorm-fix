@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:ui_kit/button_previews.dart';
+import 'package:ui_kit/pin_preview.dart';
 import 'package:ui_kit/text_fields_preview.dart';
 import 'package:ui_kit/typography_preview.dart';
-import 'pin_preview.dart';
 import 'package:ui_kit/ui.dart';
 
 final themeModeSwitcher = ValueNotifier(ThemeMode.system);
@@ -101,7 +101,7 @@ class UiPreview extends StatelessWidget {
                   child: UiText.titleLarge('Pin'),
                 ),
                 const SizedBox(height: 8),
-                PinScope(child: const PinPreview()),
+                const PinCodePreview(),
               ],
             ),
           ),
