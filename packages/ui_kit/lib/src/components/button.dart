@@ -331,15 +331,15 @@ class _IconButtonStandardStyle extends _IconButtonBaseStyle {
   WidgetStateProperty<Color?>? get overlayColor =>
       WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.pressed)) {
-          return colorPalette.foreground.withOpacity(0.1);
+          return colorPalette.foreground.withValues(alpha: 0.1);
         }
 
         if (states.contains(WidgetState.hovered)) {
-          return colorPalette.foreground.withOpacity(0.08);
+          return colorPalette.foreground.withValues(alpha: 0.08);
         }
 
         if (states.contains(WidgetState.focused)) {
-          return colorPalette.foreground.withOpacity(0.1);
+          return colorPalette.foreground.withValues(alpha: 0.1);
         }
 
         return null;
@@ -360,7 +360,7 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<Color?>? get foregroundColor =>
       WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
-          return colorPalette.foreground.withOpacity(0.38);
+          return colorPalette.foreground.withValues(alpha: 0.38);
         }
 
         return colorPalette.foreground;
@@ -370,13 +370,13 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<Color?>? get overlayColor =>
       WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.pressed)) {
-          return colorPalette.foreground.withOpacity(0.1);
+          return colorPalette.foreground.withValues(alpha: 0.1);
         }
         if (states.contains(WidgetState.hovered)) {
-          return colorPalette.foreground.withOpacity(0.08);
+          return colorPalette.foreground.withValues(alpha: 0.08);
         }
         if (states.contains(WidgetState.focused)) {
-          return colorPalette.foreground.withOpacity(0.1);
+          return colorPalette.foreground.withValues(alpha: 0.1);
         }
         return null;
       });
@@ -408,7 +408,7 @@ class _TextButtonStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<Color?>? get foregroundColor =>
       WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
-          return colorPalette.foreground.withOpacity(0.38);
+          return colorPalette.foreground.withValues(alpha: 0.38);
         }
 
         return colorPalette.primary;
@@ -418,13 +418,13 @@ class _TextButtonStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<Color?>? get overlayColor =>
       WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.pressed)) {
-          return colorPalette.primary.withOpacity(0.1);
+          return colorPalette.primary.withValues(alpha: 0.1);
         }
         if (states.contains(WidgetState.hovered)) {
-          return colorPalette.primary.withOpacity(0.08);
+          return colorPalette.primary.withValues(alpha: 0.08);
         }
         if (states.contains(WidgetState.focused)) {
-          return colorPalette.primary.withOpacity(0.1);
+          return colorPalette.primary.withValues(alpha: 0.1);
         }
         return null;
       });
