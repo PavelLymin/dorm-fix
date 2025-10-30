@@ -32,3 +32,9 @@ Runner/GeneratedPluginRegistrant.*
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
+<<<<<<< HEAD
+=======
+
+ios/Flutter/Debug.xcconfig
+ios/Flutter/Release.xcconfig
+>>>>>>> d737d5e7faf81f4e2516c07623291b3f733fc6a1

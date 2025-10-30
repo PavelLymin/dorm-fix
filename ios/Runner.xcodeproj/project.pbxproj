@@ -93,7 +93,11 @@
 				2ED86A1377E7C4E3E076AB78 /* Pods_Runner.framework */,
 				4B05FB3A091C1FBC539D3954 /* Pods_RunnerTests.framework */,
 			);
+<<<<<<< HEAD
 			name = Frameworks;
+=======
+			path = Pods;
+>>>>>>> d737d5e7faf81f4e2516c07623291b3f733fc6a1
 			sourceTree = "<group>";
 		};
 		331C8082294A63A400263BE5 /* RunnerTests */ = {

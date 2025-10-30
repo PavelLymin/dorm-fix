@@ -51,8 +51,18 @@ mixin _EmailPasswordPhoneNumberFormStateMixin on State<SignIn> {
     return null;
   }
 
+  static String? _pinCodeValidator(String pinCode) {
+    if (pinCode.isEmpty) {
+      return 'Please enter pin code';
+    } else if (pinCode.length != 6) {
+      return 'Please enter valid pin code';
+    }
+
+    return null;
+  }
+
   // ignore: unused_field
-  String? _usernameError, _passwordError, _phoneNumberError;
+  String? _usernameError, _passwordError, _phoneNumberError, _pinCodeError;
 
   bool _validateEmail(String email) {
     _usernameError = _emailValidator(email);
@@ -72,11 +82,31 @@ mixin _EmailPasswordPhoneNumberFormStateMixin on State<SignIn> {
     return _phoneNumberError == null;
   }
 
+  bool _validatePinCode(String pinCode) {
+    _pinCodeError = _pinCodeValidator(pinCode);
+
+    return _pinCodeError == null;
+  }
+
   void _signInWithEmailAndPassword(String email, String password) {
-    context.read<AuthenticationBloc>().add(
-      AuthenticationEvent.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+    context.read<AuthBloc>().add(
+      AuthEvent.signInWithEmailAndPassword(email: email, password: password),
+    );
+  }
+
+  void _verifyPhoneNumber(String phoneNumber) {
+    context.read<AuthBloc>().add(
+      AuthEvent.verifyPhoneNumber(phoneNumber: phoneNumber),
+    );
+  }
+
+  void _signInWithPhoneNumber(String smsCode) {
+    context.read<AuthBloc>().state.mapOrNull(
+      smsCodeSent: (state) => context.read<AuthBloc>().add(
+        AuthEvent.signInWithPhoneNumber(
+          verificationId: state.verificationId,
+          smsCode: smsCode,
+        ),
       ),
     );
   }

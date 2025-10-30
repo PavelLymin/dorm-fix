@@ -9,6 +9,8 @@ class AuthException implements Exception {
         message = 'Указан некорректно сформированный email.';
       case 'weak-password	':
         message = 'Пароль слишком слабый.';
+      case 'invalid-phone-number':
+        message = 'Указанный номер телефона недопустим';
       case 'user-not-found':
         message = 'Пользователя с таким email не существует.';
       case 'wrong-password':
@@ -17,6 +19,10 @@ class AuthException implements Exception {
         message = 'Слишком много запросов, доступ временно заблокирован.';
       case 'user-disabled':
         message = 'Учетная запись пользователя отключена администратором.';
+      case 'invalid-credential':
+        message = 'Введенные учетные данные неверны.';
+      default:
+        message = code;
     }
   }
 
