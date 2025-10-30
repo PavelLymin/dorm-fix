@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ui_kit/src/components/yandex_map/utils/extension_utils.dart';
+import 'package:dorm_fix/src/features/yandex_map/utils/extension_utils.dart';
 
 bool showSnackBar(BuildContext? context, String text) {
   final isShown = context?.let((it) {

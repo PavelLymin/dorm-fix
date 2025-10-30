@@ -1,22 +1,22 @@
 import 'dart:math' as math;
 import 'package:ui_kit/ui.dart';
-import 'package:ui_kit/src/components/yandex_map/listeners/map_object_tap_listener.dart';
-import 'package:ui_kit/src/components/yandex_map/utils/extension_utils.dart';
-import 'package:ui_kit/src/components/yandex_map/utils/snackbar.dart';
-import 'package:ui_kit/src/components/yandex_map/data/geometry_provider.dart';
-import 'package:ui_kit/src/components/yandex_map/map/yandex_map_kit.dart';
+import 'package:dorm_fix/src/features/yandex_map/listeners/map_object_tap_listener.dart';
+import 'package:dorm_fix/src/features/yandex_map/utils/extension_utils.dart';
+import 'package:dorm_fix/src/features/yandex_map/utils/snackbar.dart';
+import 'package:dorm_fix/src/features/yandex_map/data/geometry_provider.dart';
+import 'package:dorm_fix/src/features/yandex_map/map/yandex_map_kit.dart';
 import 'package:yandex_maps_mapkit/mapkit.dart' as mapkit;
 import 'package:yandex_maps_mapkit/image.dart' as image_provider;
 
-class MapPreviews extends StatefulWidget {
-  const MapPreviews({super.key, this.onMapDispose});
+class MapWithDormPins extends StatefulWidget {
+  const MapWithDormPins({super.key, this.onMapDispose});
   final VoidCallback? onMapDispose;
 
   @override
-  State<MapPreviews> createState() => _MapPreviewsState();
+  State<MapWithDormPins> createState() => _MapWithDormPins();
 }
 
-class _MapPreviewsState extends State<MapPreviews> {
+class _MapWithDormPins extends State<MapWithDormPins> {
   late final mapkit.MapObjectCollection _pinsCollection;
 
   late final _placemarkTapListener = MapObjectTapListenerImpl(
@@ -31,7 +31,7 @@ class _MapPreviewsState extends State<MapPreviews> {
   );
 
   final _imageProvider = image_provider.ImageProvider.fromImageProvider(
-    const AssetImage("assets/dorm_pin.png"),
+    const AssetImage("packages/ui_kit/assets/icons/dorm_pin.png"),
   );
 
   mapkit.MapWindow? _mapWindow;

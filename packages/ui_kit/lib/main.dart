@@ -1,19 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:ui_kit/button_previews.dart';
-import 'package:ui_kit/src/ui_kit_config/ui_kit_config.dart';
 import 'package:ui_kit/pin_preview.dart';
 import 'package:ui_kit/text_fields_preview.dart';
 import 'package:ui_kit/typography_preview.dart';
 import 'package:ui_kit/ui.dart';
-import 'package:yandex_maps_mapkit/init.dart' as init;
 
 final themeModeSwitcher = ValueNotifier(ThemeMode.system);
 
 void main() async {
-  final mapkitApiKey = UiKitConfig.mapKitApiKey;
-  await init.initMapkit(apiKey: mapkitApiKey);
-
   runApp(const MainApp());
 }
 
