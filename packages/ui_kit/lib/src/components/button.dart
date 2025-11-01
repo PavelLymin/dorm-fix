@@ -1,6 +1,6 @@
 import 'package:ui_kit/ui.dart';
 
-enum ButtonVariant { filledPrimary, icon }
+enum ButtonVariant { filledPrimary, filledGradient, icon }
 
 class UiButton extends ButtonStyleButton {
   UiButton.filledPrimary({
@@ -20,6 +20,33 @@ class UiButton extends ButtonStyleButton {
     super.isSemanticButton,
     super.key,
   }) : variant = ButtonVariant.filledPrimary,
+       super(
+         child: _ButtonIconAndLabel(
+           icon: icon,
+           label: label,
+           iconAlignment: iconAlignment,
+         ),
+         onPressed: enabled ? onPressed : null,
+         onLongPress: enabled ? onLongPress : null,
+       );
+
+  UiButton.filledGradient({
+    required VoidCallback? onPressed,
+    bool enabled = true,
+    IconAlignment iconAlignment = IconAlignment.start,
+    Widget? label,
+    Widget? icon,
+    VoidCallback? onLongPress,
+    super.autofocus = false,
+    super.onHover,
+    super.onFocusChange,
+    super.style,
+    super.focusNode,
+    super.clipBehavior,
+    super.statesController,
+    super.isSemanticButton,
+    super.key,
+  }) : variant = ButtonVariant.filledGradient,
        super(
          child: _ButtonIconAndLabel(
            icon: icon,
@@ -65,6 +92,10 @@ class UiButton extends ButtonStyleButton {
         colorPalette: colors,
         typography: typography,
       ),
+      ButtonVariant.filledGradient => _FilledButtonGradientStyle(
+        colorPalette: colors,
+        typography: typography,
+      ),
       ButtonVariant.icon => _IconButtonStandardStyle(
         colorPalette: colors,
         typography: typography,
@@ -74,6 +105,48 @@ class UiButton extends ButtonStyleButton {
 
   @override
   ButtonStyle? themeStyleOf(BuildContext context) => null;
+}
+
+class _FilledButtonGradientStyle extends _UiBaseButtonStyle {
+  const _FilledButtonGradientStyle({
+    required super.colorPalette,
+    required super.typography,
+  });
+
+  @override
+  WidgetStateProperty<Color?>? get backgroundColor =>
+      WidgetStatePropertyAll<Color>(Colors.transparent);
+
+  @override
+  WidgetStateProperty<Color?>? get foregroundColor =>
+      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+        return states.contains(WidgetState.disabled)
+            ? colorPalette.secondaryForeground
+            : colorPalette.primaryForeground;
+      });
+
+  @override
+  Widget _backgroundBuilder(
+    BuildContext context,
+    Set<WidgetState> states,
+    Widget? child,
+  ) {
+    if (child == null) return const SizedBox.shrink();
+
+    return OutlineFocusButtonBorder(
+      showBorder: states.contains(WidgetState.focused),
+      border: RoundedRectangleBorder(
+        side: BorderSide(color: colorPalette.secondary, width: 2),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Ink(
+        decoration: BoxDecoration(
+          gradient: Theme.of(context).appGradient.primary,
+        ),
+        child: child,
+      ),
+    );
+  }
 }
 
 class _ButtonIconAndLabel extends StatelessWidget {
@@ -152,15 +225,15 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
           return 0.1;
         }
         if (states.contains(WidgetState.pressed)) {
-          return 0.0;
+          return 1.0;
         }
         if (states.contains(WidgetState.hovered)) {
           return 1.0;
         }
         if (states.contains(WidgetState.focused)) {
-          return 0.0;
+          return 1.0;
         }
-        return 0.0;
+        return 1.0;
       });
 
   @override
@@ -394,6 +467,7 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
       const WidgetStatePropertyAll<double>(24.0);
 }
 
+// ignore: unused_element
 class _TextButtonStyle extends _UiBaseButtonStyle {
   const _TextButtonStyle({
     required super.colorPalette,

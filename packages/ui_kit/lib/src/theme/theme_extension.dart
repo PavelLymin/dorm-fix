@@ -17,6 +17,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     required this.destructiveForeground,
     required this.ring,
   });
+
   final Color background;
   final Color foreground;
   final Color muted;
@@ -126,6 +127,42 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
   };
 }
 
+class AppGradient extends ThemeExtension<AppGradient> {
+  const AppGradient({required this.background, required this.primary});
+
+  final Gradient background;
+  final Gradient primary;
+
+  @override
+  ThemeExtension<AppGradient> copyWith({
+    Gradient? background,
+    Gradient? primary,
+  }) => AppGradient(
+    background: background ?? this.background,
+    primary: primary ?? this.primary,
+  );
+
+  @override
+  ThemeExtension<AppGradient> lerp(
+    covariant ThemeExtension<AppGradient>? other,
+    double t,
+  ) {
+    if (other == null || other is! AppGradient) {
+      return this;
+    }
+
+    return AppGradient(
+      background: Gradient.lerp(background, other.background, t)!,
+      primary: Gradient.lerp(primary, other.primary, t)!,
+    );
+  }
+
+  Map<String, Gradient> toMap() => {
+    'Background': background,
+    'Primary': primary,
+  };
+}
+
 class AppTypography extends ThemeExtension<AppTypography> {
   const AppTypography({
     required this.displayLarge,
@@ -228,6 +265,8 @@ class AppTypography extends ThemeExtension<AppTypography> {
 extension ThemeDataExtensions on ThemeData {
   ColorPalette get colorPalette =>
       extension<ColorPalette>() ?? lightColorPalette;
+
+  AppGradient get appGradient => extension<AppGradient>() ?? lightGradient;
 
   AppTypography get appTypography =>
       extension<AppTypography>() ?? defaultTypography;

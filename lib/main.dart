@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dorm_fix/src/app/model/application_config.dart';
-import 'package:dorm_fix/src/features/yandex_map/widget/map_with_dorm_pins.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'src/app/logic/composition_root.dart';
@@ -50,7 +49,7 @@ class _MainAppState extends State<MainApp> {
     child: MaterialApp(
       title: 'Dorm Fix',
       debugShowCheckedModeBanner: false,
-      home: const MapWithDormPins(),
+      home: const SignIn(),
     ),
   );
 }

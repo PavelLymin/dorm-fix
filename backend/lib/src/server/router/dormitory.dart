@@ -2,19 +2,19 @@ import 'dart:convert';
 
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-import '../data/dto/building.dart';
+import '../data/dto/dormitory.dart';
 import '../data/repository/dormitory_repository.dart';
 
-class BuildingRouter {
-  BuildingRouter({required IBuildingRepository buildingRepository})
-    : _buildingRepository = buildingRepository;
+class DormitoryRouter {
+  DormitoryRouter({required IDormitoryRepository dormitoryRepository})
+    : _dormitoryRepository = dormitoryRepository;
 
-  final IBuildingRepository _buildingRepository;
+  final IDormitoryRepository _dormitoryRepository;
 
   Handler get handler {
     final router = Router();
 
-    router.get('/buildings', _search);
+    router.get('/dormitories', _search);
     return router.call;
   }
 
@@ -26,10 +26,10 @@ class BuildingRouter {
         return Response.badRequest(body: 'Missing query parameter "query"');
       }
 
-      final buildings = await _buildingRepository.search(query: query);
+      final dormitories = await _dormitoryRepository.search(query: query);
 
-      final json = buildings
-          .map((building) => BuildingDto.fromEntity(building).toJson())
+      final json = dormitories
+          .map((dormitory) => DormitoryDto.fromEntity(dormitory).toJson())
           .toList();
 
       return Response.ok(jsonEncode(json));

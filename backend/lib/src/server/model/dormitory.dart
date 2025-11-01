@@ -1,5 +1,5 @@
-class BuildingEntity {
-  const BuildingEntity({
+class DormitoryEntity {
+  const DormitoryEntity({
     required this.id,
     required this.number,
     required this.name,
@@ -15,14 +15,14 @@ class BuildingEntity {
   final double long;
   final double lat;
 
-  BuildingEntity copyWith({
+  DormitoryEntity copyWith({
     int? id,
     int? number,
     String? name,
     String? address,
     double? long,
     double? lat,
-  }) => BuildingEntity(
+  }) => DormitoryEntity(
     id: id ?? this.id,
     number: number ?? this.number,
     name: name ?? this.name,
@@ -33,7 +33,7 @@ class BuildingEntity {
 
   @override
   String toString() =>
-      'BuildingEntity('
+      'DormitoryEntity('
       'id: $id, '
       'number: $number, '
       'name: $name, '
@@ -42,7 +42,7 @@ class BuildingEntity {
       'lat: $lat)';
 
   @override
-  bool operator ==(Object other) => other is BuildingEntity && id == other.id;
+  bool operator ==(Object other) => other is DormitoryEntity && id == other.id;
 
   @override
   int get hashCode => id.hashCode;

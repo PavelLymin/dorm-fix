@@ -44,8 +44,8 @@ class _MapWithDormPins extends State<MapWithDormPins> {
 
   void _createMapObjects(mapkit.MapWindow mapWindow) {
     _mapWindow = mapWindow;
-    mapWindow.map.move(GeometryProvider.startPosition);
-    _pinsCollection = mapWindow.map.mapObjects.addCollection();
+    _mapWindow!.map.move(GeometryProvider.startPosition);
+    _pinsCollection = _mapWindow!.map.mapObjects.addCollection();
     _addPlacemarkCollection(_pinsCollection);
   }
 

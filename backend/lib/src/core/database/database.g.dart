@@ -757,12 +757,12 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _buildingIdMeta = const VerificationMeta(
-    'buildingId',
+  static const VerificationMeta _dormitoryIdMeta = const VerificationMeta(
+    'dormitoryId',
   );
   @override
-  late final GeneratedColumn<int> buildingId = GeneratedColumn<int>(
-    'building_id',
+  late final GeneratedColumn<int> dormitoryId = GeneratedColumn<int>(
+    'dormitory_id',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -806,7 +806,7 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    buildingId,
+    dormitoryId,
     floor,
     number,
     isOccupied,
@@ -826,13 +826,16 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('building_id')) {
+    if (data.containsKey('dormitory_id')) {
       context.handle(
-        _buildingIdMeta,
-        buildingId.isAcceptableOrUnknown(data['building_id']!, _buildingIdMeta),
+        _dormitoryIdMeta,
+        dormitoryId.isAcceptableOrUnknown(
+          data['dormitory_id']!,
+          _dormitoryIdMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_buildingIdMeta);
+      context.missing(_dormitoryIdMeta);
     }
     if (data.containsKey('floor')) {
       context.handle(
@@ -871,9 +874,9 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      buildingId: attachedDatabase.typeMapping.read(
+      dormitoryId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}building_id'],
+        data['${effectivePrefix}dormitory_id'],
       )!,
       floor: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -898,13 +901,13 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
 
 class Room extends DataClass implements Insertable<Room> {
   final int id;
-  final int buildingId;
+  final int dormitoryId;
   final int floor;
   final int number;
   final bool isOccupied;
   const Room({
     required this.id,
-    required this.buildingId,
+    required this.dormitoryId,
     required this.floor,
     required this.number,
     required this.isOccupied,
@@ -913,7 +916,7 @@ class Room extends DataClass implements Insertable<Room> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['building_id'] = Variable<int>(buildingId);
+    map['dormitory_id'] = Variable<int>(dormitoryId);
     map['floor'] = Variable<int>(floor);
     map['number'] = Variable<int>(number);
     map['is_occupied'] = Variable<bool>(isOccupied);
@@ -923,7 +926,7 @@ class Room extends DataClass implements Insertable<Room> {
   RoomsCompanion toCompanion(bool nullToAbsent) {
     return RoomsCompanion(
       id: Value(id),
-      buildingId: Value(buildingId),
+      dormitoryId: Value(dormitoryId),
       floor: Value(floor),
       number: Value(number),
       isOccupied: Value(isOccupied),
@@ -937,7 +940,7 @@ class Room extends DataClass implements Insertable<Room> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Room(
       id: serializer.fromJson<int>(json['id']),
-      buildingId: serializer.fromJson<int>(json['buildingId']),
+      dormitoryId: serializer.fromJson<int>(json['dormitoryId']),
       floor: serializer.fromJson<int>(json['floor']),
       number: serializer.fromJson<int>(json['number']),
       isOccupied: serializer.fromJson<bool>(json['isOccupied']),
@@ -948,7 +951,7 @@ class Room extends DataClass implements Insertable<Room> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'buildingId': serializer.toJson<int>(buildingId),
+      'dormitoryId': serializer.toJson<int>(dormitoryId),
       'floor': serializer.toJson<int>(floor),
       'number': serializer.toJson<int>(number),
       'isOccupied': serializer.toJson<bool>(isOccupied),
@@ -957,13 +960,13 @@ class Room extends DataClass implements Insertable<Room> {
 
   Room copyWith({
     int? id,
-    int? buildingId,
+    int? dormitoryId,
     int? floor,
     int? number,
     bool? isOccupied,
   }) => Room(
     id: id ?? this.id,
-    buildingId: buildingId ?? this.buildingId,
+    dormitoryId: dormitoryId ?? this.dormitoryId,
     floor: floor ?? this.floor,
     number: number ?? this.number,
     isOccupied: isOccupied ?? this.isOccupied,
@@ -971,9 +974,9 @@ class Room extends DataClass implements Insertable<Room> {
   Room copyWithCompanion(RoomsCompanion data) {
     return Room(
       id: data.id.present ? data.id.value : this.id,
-      buildingId: data.buildingId.present
-          ? data.buildingId.value
-          : this.buildingId,
+      dormitoryId: data.dormitoryId.present
+          ? data.dormitoryId.value
+          : this.dormitoryId,
       floor: data.floor.present ? data.floor.value : this.floor,
       number: data.number.present ? data.number.value : this.number,
       isOccupied: data.isOccupied.present
@@ -986,7 +989,7 @@ class Room extends DataClass implements Insertable<Room> {
   String toString() {
     return (StringBuffer('Room(')
           ..write('id: $id, ')
-          ..write('buildingId: $buildingId, ')
+          ..write('dormitoryId: $dormitoryId, ')
           ..write('floor: $floor, ')
           ..write('number: $number, ')
           ..write('isOccupied: $isOccupied')
@@ -995,13 +998,13 @@ class Room extends DataClass implements Insertable<Room> {
   }
 
   @override
-  int get hashCode => Object.hash(id, buildingId, floor, number, isOccupied);
+  int get hashCode => Object.hash(id, dormitoryId, floor, number, isOccupied);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Room &&
           other.id == this.id &&
-          other.buildingId == this.buildingId &&
+          other.dormitoryId == this.dormitoryId &&
           other.floor == this.floor &&
           other.number == this.number &&
           other.isOccupied == this.isOccupied);
@@ -1009,37 +1012,37 @@ class Room extends DataClass implements Insertable<Room> {
 
 class RoomsCompanion extends UpdateCompanion<Room> {
   final Value<int> id;
-  final Value<int> buildingId;
+  final Value<int> dormitoryId;
   final Value<int> floor;
   final Value<int> number;
   final Value<bool> isOccupied;
   const RoomsCompanion({
     this.id = const Value.absent(),
-    this.buildingId = const Value.absent(),
+    this.dormitoryId = const Value.absent(),
     this.floor = const Value.absent(),
     this.number = const Value.absent(),
     this.isOccupied = const Value.absent(),
   });
   RoomsCompanion.insert({
     this.id = const Value.absent(),
-    required int buildingId,
+    required int dormitoryId,
     required int floor,
     required int number,
     required bool isOccupied,
-  }) : buildingId = Value(buildingId),
+  }) : dormitoryId = Value(dormitoryId),
        floor = Value(floor),
        number = Value(number),
        isOccupied = Value(isOccupied);
   static Insertable<Room> custom({
     Expression<int>? id,
-    Expression<int>? buildingId,
+    Expression<int>? dormitoryId,
     Expression<int>? floor,
     Expression<int>? number,
     Expression<bool>? isOccupied,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (buildingId != null) 'building_id': buildingId,
+      if (dormitoryId != null) 'dormitory_id': dormitoryId,
       if (floor != null) 'floor': floor,
       if (number != null) 'number': number,
       if (isOccupied != null) 'is_occupied': isOccupied,
@@ -1048,14 +1051,14 @@ class RoomsCompanion extends UpdateCompanion<Room> {
 
   RoomsCompanion copyWith({
     Value<int>? id,
-    Value<int>? buildingId,
+    Value<int>? dormitoryId,
     Value<int>? floor,
     Value<int>? number,
     Value<bool>? isOccupied,
   }) {
     return RoomsCompanion(
       id: id ?? this.id,
-      buildingId: buildingId ?? this.buildingId,
+      dormitoryId: dormitoryId ?? this.dormitoryId,
       floor: floor ?? this.floor,
       number: number ?? this.number,
       isOccupied: isOccupied ?? this.isOccupied,
@@ -1068,8 +1071,8 @@ class RoomsCompanion extends UpdateCompanion<Room> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (buildingId.present) {
-      map['building_id'] = Variable<int>(buildingId.value);
+    if (dormitoryId.present) {
+      map['dormitory_id'] = Variable<int>(dormitoryId.value);
     }
     if (floor.present) {
       map['floor'] = Variable<int>(floor.value);
@@ -1087,7 +1090,7 @@ class RoomsCompanion extends UpdateCompanion<Room> {
   String toString() {
     return (StringBuffer('RoomsCompanion(')
           ..write('id: $id, ')
-          ..write('buildingId: $buildingId, ')
+          ..write('dormitoryId: $dormitoryId, ')
           ..write('floor: $floor, ')
           ..write('number: $number, ')
           ..write('isOccupied: $isOccupied')
@@ -2419,14 +2422,14 @@ final class $$DormitoriesTableReferences
     _$Database db,
   ) => MultiTypedResultKey.fromTable(
     db.rooms,
-    aliasName: $_aliasNameGenerator(db.dormitories.id, db.rooms.buildingId),
+    aliasName: $_aliasNameGenerator(db.dormitories.id, db.rooms.dormitoryId),
   );
 
   $$RoomsTableProcessedTableManager get roomsRefs {
     final manager = $$RoomsTableTableManager(
       $_db,
       $_db.rooms,
-    ).filter((f) => f.buildingId.id.sqlEquals($_itemColumn<int>('id')!));
+    ).filter((f) => f.dormitoryId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_roomsRefsTable($_db));
     return ProcessedTableManager(
@@ -2519,7 +2522,7 @@ class $$DormitoriesTableFilterComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.rooms,
-      getReferencedColumn: (t) => t.buildingId,
+      getReferencedColumn: (t) => t.dormitoryId,
       builder:
           (
             joinBuilder, {
@@ -2662,7 +2665,7 @@ class $$DormitoriesTableAnnotationComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.rooms,
-      getReferencedColumn: (t) => t.buildingId,
+      getReferencedColumn: (t) => t.dormitoryId,
       builder:
           (
             joinBuilder, {
@@ -2830,7 +2833,7 @@ class $$DormitoriesTableTableManager
                               ).roomsRefs,
                           referencedItemsForCurrentItem:
                               (item, referencedItems) => referencedItems.where(
-                                (e) => e.buildingId == item.id,
+                                (e) => e.dormitoryId == item.id,
                               ),
                           typedResults: items,
                         ),
@@ -2905,7 +2908,7 @@ typedef $$DormitoriesTableProcessedTableManager =
 typedef $$RoomsTableCreateCompanionBuilder =
     RoomsCompanion Function({
       Value<int> id,
-      required int buildingId,
+      required int dormitoryId,
       required int floor,
       required int number,
       required bool isOccupied,
@@ -2913,7 +2916,7 @@ typedef $$RoomsTableCreateCompanionBuilder =
 typedef $$RoomsTableUpdateCompanionBuilder =
     RoomsCompanion Function({
       Value<int> id,
-      Value<int> buildingId,
+      Value<int> dormitoryId,
       Value<int> floor,
       Value<int> number,
       Value<bool> isOccupied,
@@ -2923,19 +2926,19 @@ final class $$RoomsTableReferences
     extends BaseReferences<_$Database, $RoomsTable, Room> {
   $$RoomsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $DormitoriesTable _buildingIdTable(_$Database db) =>
+  static $DormitoriesTable _dormitoryIdTable(_$Database db) =>
       db.dormitories.createAlias(
-        $_aliasNameGenerator(db.rooms.buildingId, db.dormitories.id),
+        $_aliasNameGenerator(db.rooms.dormitoryId, db.dormitories.id),
       );
 
-  $$DormitoriesTableProcessedTableManager get buildingId {
-    final $_column = $_itemColumn<int>('building_id')!;
+  $$DormitoriesTableProcessedTableManager get dormitoryId {
+    final $_column = $_itemColumn<int>('dormitory_id')!;
 
     final manager = $$DormitoriesTableTableManager(
       $_db,
       $_db.dormitories,
     ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_buildingIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_dormitoryIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -2990,10 +2993,10 @@ class $$RoomsTableFilterComposer extends Composer<_$Database, $RoomsTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  $$DormitoriesTableFilterComposer get buildingId {
+  $$DormitoriesTableFilterComposer get dormitoryId {
     final $$DormitoriesTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.buildingId,
+      getCurrentColumn: (t) => t.dormitoryId,
       referencedTable: $db.dormitories,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -3067,10 +3070,10 @@ class $$RoomsTableOrderingComposer extends Composer<_$Database, $RoomsTable> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  $$DormitoriesTableOrderingComposer get buildingId {
+  $$DormitoriesTableOrderingComposer get dormitoryId {
     final $$DormitoriesTableOrderingComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.buildingId,
+      getCurrentColumn: (t) => t.dormitoryId,
       referencedTable: $db.dormitories,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -3113,10 +3116,10 @@ class $$RoomsTableAnnotationComposer extends Composer<_$Database, $RoomsTable> {
     builder: (column) => column,
   );
 
-  $$DormitoriesTableAnnotationComposer get buildingId {
+  $$DormitoriesTableAnnotationComposer get dormitoryId {
     final $$DormitoriesTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.buildingId,
+      getCurrentColumn: (t) => t.dormitoryId,
       referencedTable: $db.dormitories,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -3175,7 +3178,7 @@ class $$RoomsTableTableManager
           $$RoomsTableUpdateCompanionBuilder,
           (Room, $$RoomsTableReferences),
           Room,
-          PrefetchHooks Function({bool buildingId, bool studentsRefs})
+          PrefetchHooks Function({bool dormitoryId, bool studentsRefs})
         > {
   $$RoomsTableTableManager(_$Database db, $RoomsTable table)
     : super(
@@ -3191,13 +3194,13 @@ class $$RoomsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<int> buildingId = const Value.absent(),
+                Value<int> dormitoryId = const Value.absent(),
                 Value<int> floor = const Value.absent(),
                 Value<int> number = const Value.absent(),
                 Value<bool> isOccupied = const Value.absent(),
               }) => RoomsCompanion(
                 id: id,
-                buildingId: buildingId,
+                dormitoryId: dormitoryId,
                 floor: floor,
                 number: number,
                 isOccupied: isOccupied,
@@ -3205,13 +3208,13 @@ class $$RoomsTableTableManager
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required int buildingId,
+                required int dormitoryId,
                 required int floor,
                 required int number,
                 required bool isOccupied,
               }) => RoomsCompanion.insert(
                 id: id,
-                buildingId: buildingId,
+                dormitoryId: dormitoryId,
                 floor: floor,
                 number: number,
                 isOccupied: isOccupied,
@@ -3222,7 +3225,7 @@ class $$RoomsTableTableManager
                     (e.readTable(table), $$RoomsTableReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({buildingId = false, studentsRefs = false}) {
+          prefetchHooksCallback: ({dormitoryId = false, studentsRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [if (studentsRefs) db.students],
@@ -3242,15 +3245,15 @@ class $$RoomsTableTableManager
                       dynamic
                     >
                   >(state) {
-                    if (buildingId) {
+                    if (dormitoryId) {
                       state =
                           state.withJoin(
                                 currentTable: table,
-                                currentColumn: table.buildingId,
+                                currentColumn: table.dormitoryId,
                                 referencedTable: $$RoomsTableReferences
-                                    ._buildingIdTable(db),
+                                    ._dormitoryIdTable(db),
                                 referencedColumn: $$RoomsTableReferences
-                                    ._buildingIdTable(db)
+                                    ._dormitoryIdTable(db)
                                     .id,
                               )
                               as T;
@@ -3291,7 +3294,7 @@ typedef $$RoomsTableProcessedTableManager =
       $$RoomsTableUpdateCompanionBuilder,
       (Room, $$RoomsTableReferences),
       Room,
-      PrefetchHooks Function({bool buildingId, bool studentsRefs})
+      PrefetchHooks Function({bool dormitoryId, bool studentsRefs})
     >;
 typedef $$StudentsTableCreateCompanionBuilder =
     StudentsCompanion Function({

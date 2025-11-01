@@ -39,8 +39,8 @@ class Dormitories extends Table {
 
 class Rooms extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
-  IntColumn get buildingId =>
-      integer().named('building_id').references(Dormitories, #id)();
+  IntColumn get dormitoryId =>
+      integer().named('dormitory_id').references(Dormitories, #id)();
   IntColumn get floor => integer().named('floor')();
   IntColumn get number => integer().named('number')();
   BoolColumn get isOccupied => boolean().named('is_occupied')();

@@ -6,7 +6,7 @@ import 'package:logger/web.dart';
 import '../../core/database/database.dart';
 import '../../server/data/repository/dormitory_repository.dart';
 import '../../server/data/repository/student_repository.dart';
-import '../../server/router/building.dart';
+import '../../server/router/dormitory.dart';
 import '../../server/router/student.dart';
 import '../model/dependencies_container.dart';
 
@@ -47,10 +47,10 @@ class CompositionRoot {
     final studentRepository = StudentRepositoryImpl();
     final studentRouter = StudentRouter(studentRepository: studentRepository);
 
-    // Building
-    final buildingRepository = BuildingRepositoryImpl(database: database);
-    final buildingRouter = BuildingRouter(
-      buildingRepository: buildingRepository,
+    // Dormitory
+    final dormitoryRepository = DormitoryRepositoryImpl(database: database);
+    final dormitoryRouter = DormitoryRouter(
+      dormitoryRepository: dormitoryRepository,
     );
 
     return _DependencyFactory(
@@ -58,7 +58,7 @@ class CompositionRoot {
       config: config,
       database: database,
       studentRouter: studentRouter,
-      buildingRouter: buildingRouter,
+      dormitoryRouter: dormitoryRouter,
     ).create();
   }
 }
@@ -69,7 +69,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.config,
     required this.database,
     required this.studentRouter,
-    required this.buildingRouter,
+    required this.dormitoryRouter,
   });
 
   final App firebaseAdmin;
@@ -80,7 +80,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final StudentRouter studentRouter;
 
-  final BuildingRouter buildingRouter;
+  final DormitoryRouter dormitoryRouter;
 
   @override
   DependencyContainer create() => DependencyContainer(
@@ -88,7 +88,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     config: config,
     database: database,
     studentRouter: studentRouter,
-    buildingRouter: buildingRouter,
+    dormitoryRouter: dormitoryRouter,
   );
 }
 

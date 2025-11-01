@@ -20,33 +20,55 @@ class PinCode extends StatefulWidget {
 }
 
 class _PinCodeState extends State<PinCode> {
-  final _focusNodes = FocusNode();
+  final _focusNode = FocusNode();
   String _pinCode = '';
-  late List<bool> _isFilled;
 
   @override
   void initState() {
     super.initState();
-    _isFilled = List.filled(widget.length, false);
     widget.controller.addListener(_onTextChanged);
+    _focusNode.addListener(_onFocusChanged);
   }
 
   @override
   void dispose() {
     widget.controller.removeListener(_onTextChanged);
-    _focusNodes.dispose();
+    widget.controller.removeListener(_onFocusChanged);
+    _focusNode.dispose();
     super.dispose();
+  }
+
+  void _onFocusChanged() {
+    setState(() {});
   }
 
   void _onTextChanged() {
     String pin = widget.controller.text;
 
     if (pin.length <= widget.length) {
-      _isFilled = List.generate(widget.length, (index) => index < pin.length);
       setState(() {
         _pinCode = pin;
       });
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant PinCode oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (oldWidget.isFocus != widget.isFocus) {
+        if (widget.isFocus) {
+          _focusNode.requestFocus();
+        } else {
+          _focusNode.unfocus();
+        }
+      }
+    });
+  }
+
+  bool _isFilled(int index) {
+    return index < _pinCode.length;
   }
 
   @override
@@ -61,7 +83,7 @@ class _PinCodeState extends State<PinCode> {
             height: 0,
             child: TextField(
               controller: widget.controller,
-              focusNode: _focusNodes,
+              focusNode: _focusNode,
               enabled: widget.isEnable,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -73,7 +95,7 @@ class _PinCodeState extends State<PinCode> {
           onTap: () {
             if (widget.isFocus) {
               setState(() {
-                _focusNodes.requestFocus();
+                _focusNode.requestFocus();
               });
             }
           },
@@ -82,11 +104,9 @@ class _PinCodeState extends State<PinCode> {
             children: List.generate(
               widget.length,
               (index) => PinInput(
-                isFocus: _focusNodes.hasFocus,
-                isCurentFocus: index > 0
-                    ? _isFilled[index - 1]
-                    : _focusNodes.hasFocus,
-                number: _isFilled[index] ? _pinCode[index] : '',
+                isFocus: _focusNode.hasFocus,
+                isCurrentFocus: index == _pinCode.length && _focusNode.hasFocus,
+                number: _isFilled(index) ? _pinCode[index] : '',
               ),
             ),
           ),
@@ -100,12 +120,12 @@ class PinInput extends StatelessWidget {
   const PinInput({
     super.key,
     required this.isFocus,
-    required this.isCurentFocus,
+    required this.isCurrentFocus,
     required this.number,
   });
 
   final bool isFocus;
-  final bool isCurentFocus;
+  final bool isCurrentFocus;
   final String number;
 
   @override
@@ -114,15 +134,16 @@ class PinInput extends StatelessWidget {
         ? Theme.of(context).colorPalette.accent
         : Theme.of(context).colorPalette.border;
 
-    return Container(
-      width: isCurentFocus ? 45 : 40,
-      height: isCurentFocus ? 60 : 50,
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      width: isCurrentFocus ? 45 : 40,
+      height: isCurrentFocus ? 60 : 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: color),
       ),
       child: Center(
-        child: number.isEmpty && isCurentFocus
+        child: number.isEmpty && isCurrentFocus
             ? Container(
                 height: 40,
                 width: 1.5,

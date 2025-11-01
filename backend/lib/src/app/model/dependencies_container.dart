@@ -1,7 +1,7 @@
 import 'package:backend/src/app/model/application_config.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import '../../core/database/database.dart';
-import '../../server/router/building.dart';
+import '../../server/router/dormitory.dart';
 import '../../server/router/student.dart';
 
 class DependencyContainer {
@@ -10,7 +10,7 @@ class DependencyContainer {
     required this.config,
     required this.database,
     required this.studentRouter,
-    required this.buildingRouter,
+    required this.dormitoryRouter,
   });
   final App firebaseAdmin;
 
@@ -20,5 +20,5 @@ class DependencyContainer {
 
   final StudentRouter studentRouter;
 
-  final BuildingRouter buildingRouter;
+  final DormitoryRouter dormitoryRouter;
 }

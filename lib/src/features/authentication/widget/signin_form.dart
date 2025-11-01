@@ -48,28 +48,26 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
           ? UiText.titleLarge('Начните использовать приложение')
           : UiText.titleMedium('Начните использовать приложение'),
       const SizedBox(height: 32),
-      AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.bounceIn,
-        child: ValueListenableBuilder(
-          valueListenable: _isPhoneNumber,
-          builder: (context, value, child) => value
-              ? Column(
-                  children: [
-                    UiTextField.standard(
-                      focusNode: widget.phoneFocusNode,
-                      controller: widget.phoneController,
-                      keyboardType: TextInputType.phone,
-                      style: UiTextFieldStyle(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 18,
-                        ),
-                        prefixIcon: Icon(Icons.phone_enabled_outlined),
-                        suffixIcon: _clearSuffixIcon(widget.phoneController),
-                      ),
+      ValueListenableBuilder(
+        valueListenable: _isPhoneNumber,
+        builder: (context, value, child) => value
+            ? Column(
+                children: [
+                  UiTextField.standard(
+                    focusNode: widget.phoneFocusNode,
+                    controller: widget.phoneController,
+                    keyboardType: TextInputType.phone,
+                    style: UiTextFieldStyle(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                      prefixIcon: Icon(Icons.phone_enabled_outlined),
+                      suffixIcon: _clearSuffixIcon(widget.phoneController),
                     ),
-                    const SizedBox(height: 12),
-                    BlocBuilder<AuthButtonBloc, AuthButtonState>(
+                  ),
+                  const SizedBox(height: 12),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    switchInCurve: Curves.easeInOutBack,
+                    child: BlocBuilder<AuthButtonBloc, AuthButtonState>(
                       buildWhen: (previous, current) {
                         final bool wasPin = previous.maybeMap(
                           isPin: () => true,
@@ -100,39 +98,41 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
                         );
                       },
                     ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {},
-                        child: const Padding(
-                          padding: EdgeInsets.all(1.5),
-                          child: Text('Изменить номер?'),
-                        ),
+                  ),
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () {},
+                      child: const Padding(
+                        padding: EdgeInsets.all(1.5),
+                        child: Text('Изменить номер?'),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                  ],
-                )
-              : Column(
-                  children: [
-                    UiTextField.standard(
-                      focusNode: widget.emailFocusNode,
-                      controller: widget.emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      style: UiTextFieldStyle(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 18,
-                        ),
-                        hintText: 'name@mail.ru или +71234567890',
-                        prefixIcon: Icon(Icons.email_outlined),
-                        suffixIcon: _clearSuffixIcon(widget.emailController),
-                      ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              )
+            : Column(
+                children: [
+                  UiTextField.standard(
+                    focusNode: widget.emailFocusNode,
+                    controller: widget.emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    style: UiTextFieldStyle(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                      hintText: 'name@mail.ru или +71234567890',
+                      prefixIcon: Icon(Icons.email_outlined),
+                      suffixIcon: _clearSuffixIcon(widget.emailController),
                     ),
-                    const SizedBox(height: 16),
-                    UiTextField.standard(
+                  ),
+                  const SizedBox(height: 16),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    switchInCurve: Curves.easeInOutBack,
+                    child: UiTextField.standard(
                       controller: widget.passwordController,
                       obscureText: _obscureText,
                       keyboardType: TextInputType.visiblePassword,
@@ -146,22 +146,22 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
                         suffixIcon: _visibilitySuffixIcon(),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {},
-                        child: const Padding(
-                          padding: EdgeInsets.all(1.5),
-                          child: Text('Забыли пароль?'),
-                        ),
+                  ),
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () {},
+                      child: const Padding(
+                        padding: EdgeInsets.all(1.5),
+                        child: Text('Забыли пароль?'),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
-        ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
       ),
     ],
   );

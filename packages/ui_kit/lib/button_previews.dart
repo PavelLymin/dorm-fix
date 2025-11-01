@@ -37,6 +37,11 @@ class _FilledPrimaryButton extends StatelessWidget {
         children: [
           UiText.titleSmall('Filled Primary Button'),
           const SizedBox(height: 16),
+          UiButton.filledGradient(
+            onPressed: () {},
+            label: const Text('Gradient'),
+          ),
+          const SizedBox(height: 8),
           UiButton.filledPrimary(
             onPressed: () {},
             label: const Text('Primary'),

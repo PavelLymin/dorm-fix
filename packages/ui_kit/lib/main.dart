@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       darkTheme: darkTheme,
-      theme: lightTheme,
+      theme: darkTheme,
       home: const UiPreview(),
     ),
   );
@@ -48,64 +48,69 @@ class UiPreview extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorPalette.background,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Theme.of(context).colorPalette.background,
-            surfaceTintColor: Theme.of(context).colorPalette.background,
-            pinned: true,
-            actions: [
-              UiButton.icon(
-                icon: brightness == Brightness.light
-                    ? const Icon(Icons.dark_mode_rounded)
-                    : const Icon(Icons.light_mode_rounded),
-                onPressed: () {
-                  themeModeSwitcher.value = brightness == Brightness.light
-                      ? ThemeMode.dark
-                      : ThemeMode.light;
-                },
-              ),
-            ],
-          ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(
-              horizontal: math.max((size.width - 900) / 2, 16),
-              vertical: 24,
-            ),
-            sliver: SliverList.list(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: UiText.titleLarge('Buttons'),
+      backgroundColor: Colors.transparent,
+      body: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: Theme.of(context).appGradient.background,
+        ),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              pinned: true,
+              actions: [
+                UiButton.icon(
+                  icon: brightness == Brightness.light
+                      ? const Icon(Icons.dark_mode_rounded)
+                      : const Icon(Icons.light_mode_rounded),
+                  onPressed: () {
+                    themeModeSwitcher.value = brightness == Brightness.light
+                        ? ThemeMode.dark
+                        : ThemeMode.light;
+                  },
                 ),
-                const SizedBox(height: 8),
-                const ButtonsPreview(),
-                const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: UiText.titleLarge('Typography'),
-                ),
-                const SizedBox(height: 8),
-                const TypographyPreview(),
-                const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: UiText.titleLarge('Text Fields'),
-                ),
-                const SizedBox(height: 8),
-                const TextFieldsPreview(),
-                const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: UiText.titleLarge('Pin'),
-                ),
-                const SizedBox(height: 8),
-                const PinCodePreview(),
               ],
             ),
-          ),
-        ],
+            SliverPadding(
+              padding: EdgeInsets.symmetric(
+                horizontal: math.max((size.width - 900) / 2, 16),
+                vertical: 24,
+              ),
+              sliver: SliverList.list(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: UiText.titleLarge('Buttons'),
+                  ),
+                  const SizedBox(height: 8),
+                  const ButtonsPreview(),
+                  const SizedBox(height: 24),
+                  Align(
+                    alignment: Alignment.center,
+                    child: UiText.titleLarge('Typography'),
+                  ),
+                  const SizedBox(height: 8),
+                  const TypographyPreview(),
+                  const SizedBox(height: 24),
+                  Align(
+                    alignment: Alignment.center,
+                    child: UiText.titleLarge('Text Fields'),
+                  ),
+                  const SizedBox(height: 8),
+                  const TextFieldsPreview(),
+                  const SizedBox(height: 24),
+                  Align(
+                    alignment: Alignment.center,
+                    child: UiText.titleLarge('Pin'),
+                  ),
+                  const SizedBox(height: 8),
+                  const PinCodePreview(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

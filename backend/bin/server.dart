@@ -22,7 +22,7 @@ void main(List<String> args) async {
 
       Cascade cascade = Cascade()
           .add(dependency.studentRouter.handler)
-          .add(dependency.buildingRouter.handler);
+          .add(dependency.dormitoryRouter.handler);
 
       final handler = Pipeline()
           .addMiddleware(logRequests())

@@ -1,7 +1,7 @@
-import '../../model/building.dart';
+import '../../model/dormitory.dart';
 
-class BuildingDto {
-  const BuildingDto({
+class DormitoryDto {
+  const DormitoryDto({
     required this.id,
     required this.number,
     required this.name,
@@ -17,7 +17,7 @@ class BuildingDto {
   final double long;
   final double lat;
 
-  BuildingEntity toEntity() => BuildingEntity(
+  DormitoryEntity toEntity() => DormitoryEntity(
     id: id,
     number: number,
     name: name,
@@ -26,7 +26,7 @@ class BuildingDto {
     lat: lat,
   );
 
-  static BuildingDto fromEntity(BuildingEntity entity) => BuildingDto(
+  static DormitoryDto fromEntity(DormitoryEntity entity) => DormitoryDto(
     id: entity.id,
     number: entity.number,
     name: entity.name,
@@ -44,7 +44,7 @@ class BuildingDto {
     'lat': lat,
   };
 
-  static BuildingDto fromJson(Map<String, dynamic> json) => BuildingDto(
+  static DormitoryDto fromJson(Map<String, dynamic> json) => DormitoryDto(
     id: json['id'],
     number: json['number'],
     name: json['name'],
@@ -55,7 +55,7 @@ class BuildingDto {
 
   @override
   String toString() =>
-      'BuildingDto('
+      'DormitoryDto('
       'id: $id, '
       'number: $number, '
       'name: $name, '
