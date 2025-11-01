@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../data/dto/building.dart';
-import '../data/repository/building_repository.dart';
+import '../data/repository/dormitory_repository.dart';
 
 class BuildingRouter {
   BuildingRouter({required IBuildingRepository buildingRepository})
@@ -22,7 +22,6 @@ class BuildingRouter {
     try {
       final query = request.url.queryParameters['query'];
 
-      print(query);
       if (query == null || query.isEmpty) {
         return Response.badRequest(body: 'Missing query parameter "query"');
       }

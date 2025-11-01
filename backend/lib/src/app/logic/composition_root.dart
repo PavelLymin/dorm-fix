@@ -4,7 +4,7 @@ import 'package:backend/src/app/model/application_config.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
 import '../../core/database/database.dart';
-import '../../server/data/repository/building_repository.dart';
+import '../../server/data/repository/dormitory_repository.dart';
 import '../../server/data/repository/student_repository.dart';
 import '../../server/router/building.dart';
 import '../../server/router/student.dart';

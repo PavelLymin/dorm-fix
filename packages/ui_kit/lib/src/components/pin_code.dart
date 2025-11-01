@@ -110,12 +110,9 @@ class PinInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late Color color;
-    if (isFocus) {
-      color = Theme.of(context).colorPalette.primary;
-    } else {
-      color = Theme.of(context).colorPalette.border;
-    }
+    Color color = isFocus
+        ? Theme.of(context).colorPalette.accent
+        : Theme.of(context).colorPalette.border;
 
     return Container(
       width: isCurentFocus ? 45 : 40,

@@ -152,7 +152,7 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   @override
   InputBorder? get focusedBorder => OutlineInputBorder(
     borderRadius: BorderRadius.circular(6),
-    borderSide: BorderSide(color: palette.primary, width: 1),
+    borderSide: BorderSide(color: palette.accent, width: 1),
   );
 
   @override
@@ -187,7 +187,7 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   BoxConstraints? get constraints => const BoxConstraints(minHeight: 32);
 
   @override
-  Color? get cursorColor => palette.primary;
+  Color? get cursorColor => palette.accent;
 
   @override
   bool? get isDense => true;

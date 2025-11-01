@@ -28,7 +28,7 @@ class BuildingRepositoryImpl implements IBuildingRepository {
             Variable('%$query%'),
             Variable('%$query%'),
           ],
-          readsFrom: {_database.buildings},
+          readsFrom: {_database.dormitories},
         )
         .get();
 

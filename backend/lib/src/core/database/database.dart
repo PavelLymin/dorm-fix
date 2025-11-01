@@ -6,8 +6,10 @@ import 'package:drift/native.dart';
 part 'database.g.dart';
 part 'entity.dart';
 
-@DriftDatabase(tables: [Students, Buildings, Rooms])
-class Database extends _$AppDatabase {
+@DriftDatabase(
+  tables: [Users, Students, Masters, Dormitories, Specializations, Rooms],
+)
+class Database extends _$Database {
   Database.lazy({
     required File file,
     bool logStatements = false,

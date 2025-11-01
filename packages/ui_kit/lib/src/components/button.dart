@@ -114,7 +114,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<Color?>? get foregroundColor =>
       WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
-          return colorPalette.primary.withValues(alpha: .38);
+          return colorPalette.secondaryForeground;
         }
         return colorPalette.primaryForeground;
       });
@@ -123,7 +123,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<Color?>? get backgroundColor =>
       WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
-          return colorPalette.primary.withValues(alpha: .12);
+          return colorPalette.primary.withValues(alpha: .5);
         }
 
         return colorPalette.primary;
@@ -149,7 +149,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<double>? get elevation =>
       WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
-          return 0.0;
+          return 0.1;
         }
         if (states.contains(WidgetState.pressed)) {
           return 0.0;
