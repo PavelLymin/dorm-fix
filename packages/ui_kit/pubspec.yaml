@@ -13,13 +13,6 @@ dependencies:
   # Fonts
   google_fonts: ^6.3.2
 
-  # Yandex MapKit SDK
-  # yandex_maps_mapkit_lite: ^4.25.0-beta
-
-  # MapKit that allows you to use the features of Yandex.Maps
-  yandex_maps_mapkit: ^4.25.0-beta
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -29,6 +29,8 @@ dependencies:
   rxdart: ^0.28.0
   # WS
   web_socket_channel: ^3.0.3
+  # MapKit that allows you to use the features of Yandex.Maps
+  yandex_maps_mapkit: ^4.25.0-beta
 
   ui_kit:
     path: packages/ui_kit

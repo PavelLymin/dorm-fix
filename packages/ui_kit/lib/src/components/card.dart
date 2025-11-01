@@ -7,13 +7,15 @@ class UiCard extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: margin ?? const EdgeInsets.all(4),
-    child: Surface(
-      color: color,
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: child,
-    ),
-  );
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: margin ?? const EdgeInsets.all(4),
+      child: Surface(
+        color: color,
+        elevation: 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: child,
+      ),
+    );
+  }
 }

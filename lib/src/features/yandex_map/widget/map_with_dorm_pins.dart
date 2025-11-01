@@ -2,9 +2,8 @@ import 'dart:math' as math;
 import 'package:ui_kit/ui.dart';
 import 'package:dorm_fix/src/features/yandex_map/listeners/map_object_tap_listener.dart';
 import 'package:dorm_fix/src/features/yandex_map/utils/extension_utils.dart';
-import 'package:dorm_fix/src/features/yandex_map/utils/snackbar.dart';
 import 'package:dorm_fix/src/features/yandex_map/data/geometry_provider.dart';
-import 'package:dorm_fix/src/features/yandex_map/map/yandex_map_kit.dart';
+import 'package:dorm_fix/src/features/yandex_map/widget/yandex_map_kit.dart';
 import 'package:yandex_maps_mapkit/mapkit.dart' as mapkit;
 import 'package:yandex_maps_mapkit/image.dart' as image_provider;
 
@@ -25,7 +24,7 @@ class _MapWithDormPins extends State<MapWithDormPins> {
           .castOrNull<mapkit.PlacemarkMapObject>()
           ?.geometry;
 
-      showSnackBar(context, "Tapped the placemark:\n$placemarkPoint");
+      _showModalSheet(context, "Tapped the placemark:\n$placemarkPoint");
       return true;
     },
   );
@@ -38,7 +37,9 @@ class _MapWithDormPins extends State<MapWithDormPins> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: YandexMapKit(onMapCreated: _createMapObjects));
+    return Scaffold(
+      body: Stack(children: [YandexMapKit(onMapCreated: _createMapObjects)]),
+    );
   }
 
   void _createMapObjects(mapkit.MapWindow mapWindow) {
@@ -58,5 +59,14 @@ class _MapWithDormPins extends State<MapWithDormPins> {
         )
         ..addTapListener(_placemarkTapListener);
     }
+  }
+
+  void _showModalSheet(BuildContext context, String text) {
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return UiModalBottomSheet(text: text, child: Text(''));
+      },
+    );
   }
 }
