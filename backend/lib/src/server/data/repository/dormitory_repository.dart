@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-
 import '../../../core/database/database.dart';
 import '../../model/dormitory.dart';
 import '../dto/dormitory.dart';
@@ -16,24 +15,18 @@ class DormitoryRepositoryImpl implements IDormitoryRepository {
 
   @override
   Future<List<DormitoryEntity>> search({required String query}) async {
-    final data = await _database
-        .customSelect(
-          '''
-          SELECT * FROM dormitories
-          WHERE number LIKE ? OR name LIKE ? OR address LIKE ?
-          ORDER BY number
-          ''',
-          variables: [
-            Variable('%$query%'),
-            Variable('%$query%'),
-            Variable('%$query%'),
-          ],
-          readsFrom: {_database.dormitories},
-        )
-        .get();
+    final pattern = '%$query%';
+    final data =
+        await (_database.select(_database.dormitories)..where((row) {
+              final numberString = row.number.cast<String>();
+              return numberString.like(pattern) |
+                  row.name.like(pattern) |
+                  row.address.like(pattern);
+            }))
+            .get();
 
     final result = data
-        .map((row) => DormitoryDto.fromJson(row.data).toEntity())
+        .map((row) => DormitoryDto.fromData(row).toEntity())
         .toList();
 
     return result;

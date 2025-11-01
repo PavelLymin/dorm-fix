@@ -4,12 +4,14 @@ class Users extends Table {
   TextColumn get uid => text().named('uid')();
   TextColumn get name => text().named('name')();
   TextColumn get email => text().named('email')();
-  TextColumn get photoUrl => text().named('photo_url')();
+  TextColumn get phoneNumber => text().named('phone_number')();
+  TextColumn get photoURL => text().named('photo_url')();
   TextColumn get role => text().named('role')();
 }
 
 class Students extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
+  TextColumn get uid => text().named('uid').references(Users, #uid)();
   IntColumn get dormitoryId =>
       integer().named('dormitory_id').references(Dormitories, #id)();
   IntColumn get roomId => integer().named('room_id').references(Rooms, #id)();

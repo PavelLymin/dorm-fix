@@ -44,25 +44,18 @@ class StudentRouter {
 
   Future<Response> _deleteStudent(Request request) async {
     try {
-      final query = request.params['id'];
-      if (query == null || query.isEmpty) {
+      final uid = request.params['uid'];
+      if (uid == null || uid.isEmpty) {
         return Response.badRequest(body: 'Missing path parameter "id"');
       }
 
-      int? id = int.tryParse(query);
-      if (id == null) {
-        return Response.badRequest(
-          body: 'Query parameter "id" must be integer',
+      if (uid != request.context['user_id']) {
+        return Response.forbidden(
+          'You are not allowed to delete this student.',
         );
       }
 
-      if (id <= 0) {
-        return Response.badRequest(
-          body: 'Query parameter "id" must be greater than 0',
-        );
-      }
-
-      await _studentRepository.deleteStudent(id: id);
+      await _studentRepository.deleteStudent(uid: uid);
       return Response.ok('The student was successfully deleted.');
     } catch (e) {
       return Response.internalServerError(
@@ -73,24 +66,18 @@ class StudentRouter {
 
   Future<Response> _getStudent(Request request) async {
     try {
-      final query = request.params['id'];
-      if (query == null || query.isEmpty) {
+      final uid = request.params['uid'];
+      if (uid == null || uid.isEmpty) {
         return Response.badRequest(body: 'Missing path parameter "id"');
       }
 
-      int? id = int.tryParse(query);
-      if (id == null) {
-        return Response.badRequest(
-          body: 'Query parameter "id" must be integer',
-        );
-      }
-      if (id <= 0) {
-        return Response.badRequest(
-          body: 'Query parameter "id" must be greater than 0',
+      if (uid != request.context['user_id']) {
+        return Response.forbidden(
+          'You are not allowed to delete this student.',
         );
       }
 
-      final student = await _studentRepository.getStudent(id: id);
+      final student = await _studentRepository.getStudent(uid: uid);
       if (student == null) {
         return Response.notFound('Student not found');
       }

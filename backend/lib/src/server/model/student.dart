@@ -1,23 +1,29 @@
+import 'package:backend/src/server/model/user.dart';
+
 class StudentEntity {
   const StudentEntity({
     required this.id,
     required this.buildingId,
     required this.roomId,
+    required this.user,
   });
 
   final int id;
   final int buildingId;
   final int roomId;
+  final UserEntity user;
 
   StudentEntity copyWith({
     int? id,
     String? uid,
     int? buildingId,
     int? roomId,
+    UserEntity? user,
   }) => StudentEntity(
     id: id ?? this.id,
     buildingId: buildingId ?? this.buildingId,
     roomId: roomId ?? this.roomId,
+    user: user ?? this.user,
   );
 
   @override
@@ -25,7 +31,8 @@ class StudentEntity {
       'UserEntity('
       'id: $id, '
       'buildingId: $buildingId, '
-      'roomId: $roomId)';
+      'roomId: $roomId, '
+      'user: $user)';
 
   @override
   bool operator ==(Object other) => other is StudentEntity && id == other.id;

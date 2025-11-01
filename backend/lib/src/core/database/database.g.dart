@@ -35,11 +35,22 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _photoUrlMeta = const VerificationMeta(
-    'photoUrl',
+  static const VerificationMeta _phoneNumberMeta = const VerificationMeta(
+    'phoneNumber',
   );
   @override
-  late final GeneratedColumn<String> photoUrl = GeneratedColumn<String>(
+  late final GeneratedColumn<String> phoneNumber = GeneratedColumn<String>(
+    'phone_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _photoURLMeta = const VerificationMeta(
+    'photoURL',
+  );
+  @override
+  late final GeneratedColumn<String> photoURL = GeneratedColumn<String>(
     'photo_url',
     aliasedName,
     false,
@@ -56,7 +67,14 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [uid, name, email, photoUrl, role];
+  List<GeneratedColumn> get $columns => [
+    uid,
+    name,
+    email,
+    phoneNumber,
+    photoURL,
+    role,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -93,13 +111,24 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     } else if (isInserting) {
       context.missing(_emailMeta);
     }
-    if (data.containsKey('photo_url')) {
+    if (data.containsKey('phone_number')) {
       context.handle(
-        _photoUrlMeta,
-        photoUrl.isAcceptableOrUnknown(data['photo_url']!, _photoUrlMeta),
+        _phoneNumberMeta,
+        phoneNumber.isAcceptableOrUnknown(
+          data['phone_number']!,
+          _phoneNumberMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_photoUrlMeta);
+      context.missing(_phoneNumberMeta);
+    }
+    if (data.containsKey('photo_url')) {
+      context.handle(
+        _photoURLMeta,
+        photoURL.isAcceptableOrUnknown(data['photo_url']!, _photoURLMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_photoURLMeta);
     }
     if (data.containsKey('role')) {
       context.handle(
@@ -130,7 +159,11 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
         DriftSqlType.string,
         data['${effectivePrefix}email'],
       )!,
-      photoUrl: attachedDatabase.typeMapping.read(
+      phoneNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}phone_number'],
+      )!,
+      photoURL: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}photo_url'],
       )!,
@@ -151,13 +184,15 @@ class User extends DataClass implements Insertable<User> {
   final String uid;
   final String name;
   final String email;
-  final String photoUrl;
+  final String phoneNumber;
+  final String photoURL;
   final String role;
   const User({
     required this.uid,
     required this.name,
     required this.email,
-    required this.photoUrl,
+    required this.phoneNumber,
+    required this.photoURL,
     required this.role,
   });
   @override
@@ -166,7 +201,8 @@ class User extends DataClass implements Insertable<User> {
     map['uid'] = Variable<String>(uid);
     map['name'] = Variable<String>(name);
     map['email'] = Variable<String>(email);
-    map['photo_url'] = Variable<String>(photoUrl);
+    map['phone_number'] = Variable<String>(phoneNumber);
+    map['photo_url'] = Variable<String>(photoURL);
     map['role'] = Variable<String>(role);
     return map;
   }
@@ -176,7 +212,8 @@ class User extends DataClass implements Insertable<User> {
       uid: Value(uid),
       name: Value(name),
       email: Value(email),
-      photoUrl: Value(photoUrl),
+      phoneNumber: Value(phoneNumber),
+      photoURL: Value(photoURL),
       role: Value(role),
     );
   }
@@ -190,7 +227,8 @@ class User extends DataClass implements Insertable<User> {
       uid: serializer.fromJson<String>(json['uid']),
       name: serializer.fromJson<String>(json['name']),
       email: serializer.fromJson<String>(json['email']),
-      photoUrl: serializer.fromJson<String>(json['photoUrl']),
+      phoneNumber: serializer.fromJson<String>(json['phoneNumber']),
+      photoURL: serializer.fromJson<String>(json['photoURL']),
       role: serializer.fromJson<String>(json['role']),
     );
   }
@@ -201,7 +239,8 @@ class User extends DataClass implements Insertable<User> {
       'uid': serializer.toJson<String>(uid),
       'name': serializer.toJson<String>(name),
       'email': serializer.toJson<String>(email),
-      'photoUrl': serializer.toJson<String>(photoUrl),
+      'phoneNumber': serializer.toJson<String>(phoneNumber),
+      'photoURL': serializer.toJson<String>(photoURL),
       'role': serializer.toJson<String>(role),
     };
   }
@@ -210,13 +249,15 @@ class User extends DataClass implements Insertable<User> {
     String? uid,
     String? name,
     String? email,
-    String? photoUrl,
+    String? phoneNumber,
+    String? photoURL,
     String? role,
   }) => User(
     uid: uid ?? this.uid,
     name: name ?? this.name,
     email: email ?? this.email,
-    photoUrl: photoUrl ?? this.photoUrl,
+    phoneNumber: phoneNumber ?? this.phoneNumber,
+    photoURL: photoURL ?? this.photoURL,
     role: role ?? this.role,
   );
   User copyWithCompanion(UsersCompanion data) {
@@ -224,7 +265,10 @@ class User extends DataClass implements Insertable<User> {
       uid: data.uid.present ? data.uid.value : this.uid,
       name: data.name.present ? data.name.value : this.name,
       email: data.email.present ? data.email.value : this.email,
-      photoUrl: data.photoUrl.present ? data.photoUrl.value : this.photoUrl,
+      phoneNumber: data.phoneNumber.present
+          ? data.phoneNumber.value
+          : this.phoneNumber,
+      photoURL: data.photoURL.present ? data.photoURL.value : this.photoURL,
       role: data.role.present ? data.role.value : this.role,
     );
   }
@@ -235,14 +279,16 @@ class User extends DataClass implements Insertable<User> {
           ..write('uid: $uid, ')
           ..write('name: $name, ')
           ..write('email: $email, ')
-          ..write('photoUrl: $photoUrl, ')
+          ..write('phoneNumber: $phoneNumber, ')
+          ..write('photoURL: $photoURL, ')
           ..write('role: $role')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(uid, name, email, photoUrl, role);
+  int get hashCode =>
+      Object.hash(uid, name, email, phoneNumber, photoURL, role);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -250,7 +296,8 @@ class User extends DataClass implements Insertable<User> {
           other.uid == this.uid &&
           other.name == this.name &&
           other.email == this.email &&
-          other.photoUrl == this.photoUrl &&
+          other.phoneNumber == this.phoneNumber &&
+          other.photoURL == this.photoURL &&
           other.role == this.role);
 }
 
@@ -258,14 +305,16 @@ class UsersCompanion extends UpdateCompanion<User> {
   final Value<String> uid;
   final Value<String> name;
   final Value<String> email;
-  final Value<String> photoUrl;
+  final Value<String> phoneNumber;
+  final Value<String> photoURL;
   final Value<String> role;
   final Value<int> rowid;
   const UsersCompanion({
     this.uid = const Value.absent(),
     this.name = const Value.absent(),
     this.email = const Value.absent(),
-    this.photoUrl = const Value.absent(),
+    this.phoneNumber = const Value.absent(),
+    this.photoURL = const Value.absent(),
     this.role = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -273,19 +322,22 @@ class UsersCompanion extends UpdateCompanion<User> {
     required String uid,
     required String name,
     required String email,
-    required String photoUrl,
+    required String phoneNumber,
+    required String photoURL,
     required String role,
     this.rowid = const Value.absent(),
   }) : uid = Value(uid),
        name = Value(name),
        email = Value(email),
-       photoUrl = Value(photoUrl),
+       phoneNumber = Value(phoneNumber),
+       photoURL = Value(photoURL),
        role = Value(role);
   static Insertable<User> custom({
     Expression<String>? uid,
     Expression<String>? name,
     Expression<String>? email,
-    Expression<String>? photoUrl,
+    Expression<String>? phoneNumber,
+    Expression<String>? photoURL,
     Expression<String>? role,
     Expression<int>? rowid,
   }) {
@@ -293,7 +345,8 @@ class UsersCompanion extends UpdateCompanion<User> {
       if (uid != null) 'uid': uid,
       if (name != null) 'name': name,
       if (email != null) 'email': email,
-      if (photoUrl != null) 'photo_url': photoUrl,
+      if (phoneNumber != null) 'phone_number': phoneNumber,
+      if (photoURL != null) 'photo_url': photoURL,
       if (role != null) 'role': role,
       if (rowid != null) 'rowid': rowid,
     });
@@ -303,7 +356,8 @@ class UsersCompanion extends UpdateCompanion<User> {
     Value<String>? uid,
     Value<String>? name,
     Value<String>? email,
-    Value<String>? photoUrl,
+    Value<String>? phoneNumber,
+    Value<String>? photoURL,
     Value<String>? role,
     Value<int>? rowid,
   }) {
@@ -311,7 +365,8 @@ class UsersCompanion extends UpdateCompanion<User> {
       uid: uid ?? this.uid,
       name: name ?? this.name,
       email: email ?? this.email,
-      photoUrl: photoUrl ?? this.photoUrl,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      photoURL: photoURL ?? this.photoURL,
       role: role ?? this.role,
       rowid: rowid ?? this.rowid,
     );
@@ -329,8 +384,11 @@ class UsersCompanion extends UpdateCompanion<User> {
     if (email.present) {
       map['email'] = Variable<String>(email.value);
     }
-    if (photoUrl.present) {
-      map['photo_url'] = Variable<String>(photoUrl.value);
+    if (phoneNumber.present) {
+      map['phone_number'] = Variable<String>(phoneNumber.value);
+    }
+    if (photoURL.present) {
+      map['photo_url'] = Variable<String>(photoURL.value);
     }
     if (role.present) {
       map['role'] = Variable<String>(role.value);
@@ -347,7 +405,8 @@ class UsersCompanion extends UpdateCompanion<User> {
           ..write('uid: $uid, ')
           ..write('name: $name, ')
           ..write('email: $email, ')
-          ..write('photoUrl: $photoUrl, ')
+          ..write('phoneNumber: $phoneNumber, ')
+          ..write('photoURL: $photoURL, ')
           ..write('role: $role, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1117,6 +1176,18 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
+  static const VerificationMeta _uidMeta = const VerificationMeta('uid');
+  @override
+  late final GeneratedColumn<String> uid = GeneratedColumn<String>(
+    'uid',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES users (uid)',
+    ),
+  );
   static const VerificationMeta _dormitoryIdMeta = const VerificationMeta(
     'dormitoryId',
   );
@@ -1144,7 +1215,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
     ),
   );
   @override
-  List<GeneratedColumn> get $columns => [id, dormitoryId, roomId];
+  List<GeneratedColumn> get $columns => [id, uid, dormitoryId, roomId];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1159,6 +1230,14 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('uid')) {
+      context.handle(
+        _uidMeta,
+        uid.isAcceptableOrUnknown(data['uid']!, _uidMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_uidMeta);
     }
     if (data.containsKey('dormitory_id')) {
       context.handle(
@@ -1192,6 +1271,10 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
+      uid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}uid'],
+      )!,
       dormitoryId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}dormitory_id'],
@@ -1211,10 +1294,12 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
 
 class Student extends DataClass implements Insertable<Student> {
   final int id;
+  final String uid;
   final int dormitoryId;
   final int roomId;
   const Student({
     required this.id,
+    required this.uid,
     required this.dormitoryId,
     required this.roomId,
   });
@@ -1222,6 +1307,7 @@ class Student extends DataClass implements Insertable<Student> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['uid'] = Variable<String>(uid);
     map['dormitory_id'] = Variable<int>(dormitoryId);
     map['room_id'] = Variable<int>(roomId);
     return map;
@@ -1230,6 +1316,7 @@ class Student extends DataClass implements Insertable<Student> {
   StudentsCompanion toCompanion(bool nullToAbsent) {
     return StudentsCompanion(
       id: Value(id),
+      uid: Value(uid),
       dormitoryId: Value(dormitoryId),
       roomId: Value(roomId),
     );
@@ -1242,6 +1329,7 @@ class Student extends DataClass implements Insertable<Student> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Student(
       id: serializer.fromJson<int>(json['id']),
+      uid: serializer.fromJson<String>(json['uid']),
       dormitoryId: serializer.fromJson<int>(json['dormitoryId']),
       roomId: serializer.fromJson<int>(json['roomId']),
     );
@@ -1251,19 +1339,23 @@ class Student extends DataClass implements Insertable<Student> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'uid': serializer.toJson<String>(uid),
       'dormitoryId': serializer.toJson<int>(dormitoryId),
       'roomId': serializer.toJson<int>(roomId),
     };
   }
 
-  Student copyWith({int? id, int? dormitoryId, int? roomId}) => Student(
-    id: id ?? this.id,
-    dormitoryId: dormitoryId ?? this.dormitoryId,
-    roomId: roomId ?? this.roomId,
-  );
+  Student copyWith({int? id, String? uid, int? dormitoryId, int? roomId}) =>
+      Student(
+        id: id ?? this.id,
+        uid: uid ?? this.uid,
+        dormitoryId: dormitoryId ?? this.dormitoryId,
+        roomId: roomId ?? this.roomId,
+      );
   Student copyWithCompanion(StudentsCompanion data) {
     return Student(
       id: data.id.present ? data.id.value : this.id,
+      uid: data.uid.present ? data.uid.value : this.uid,
       dormitoryId: data.dormitoryId.present
           ? data.dormitoryId.value
           : this.dormitoryId,
@@ -1275,6 +1367,7 @@ class Student extends DataClass implements Insertable<Student> {
   String toString() {
     return (StringBuffer('Student(')
           ..write('id: $id, ')
+          ..write('uid: $uid, ')
           ..write('dormitoryId: $dormitoryId, ')
           ..write('roomId: $roomId')
           ..write(')'))
@@ -1282,38 +1375,45 @@ class Student extends DataClass implements Insertable<Student> {
   }
 
   @override
-  int get hashCode => Object.hash(id, dormitoryId, roomId);
+  int get hashCode => Object.hash(id, uid, dormitoryId, roomId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Student &&
           other.id == this.id &&
+          other.uid == this.uid &&
           other.dormitoryId == this.dormitoryId &&
           other.roomId == this.roomId);
 }
 
 class StudentsCompanion extends UpdateCompanion<Student> {
   final Value<int> id;
+  final Value<String> uid;
   final Value<int> dormitoryId;
   final Value<int> roomId;
   const StudentsCompanion({
     this.id = const Value.absent(),
+    this.uid = const Value.absent(),
     this.dormitoryId = const Value.absent(),
     this.roomId = const Value.absent(),
   });
   StudentsCompanion.insert({
     this.id = const Value.absent(),
+    required String uid,
     required int dormitoryId,
     required int roomId,
-  }) : dormitoryId = Value(dormitoryId),
+  }) : uid = Value(uid),
+       dormitoryId = Value(dormitoryId),
        roomId = Value(roomId);
   static Insertable<Student> custom({
     Expression<int>? id,
+    Expression<String>? uid,
     Expression<int>? dormitoryId,
     Expression<int>? roomId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (uid != null) 'uid': uid,
       if (dormitoryId != null) 'dormitory_id': dormitoryId,
       if (roomId != null) 'room_id': roomId,
     });
@@ -1321,11 +1421,13 @@ class StudentsCompanion extends UpdateCompanion<Student> {
 
   StudentsCompanion copyWith({
     Value<int>? id,
+    Value<String>? uid,
     Value<int>? dormitoryId,
     Value<int>? roomId,
   }) {
     return StudentsCompanion(
       id: id ?? this.id,
+      uid: uid ?? this.uid,
       dormitoryId: dormitoryId ?? this.dormitoryId,
       roomId: roomId ?? this.roomId,
     );
@@ -1336,6 +1438,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (uid.present) {
+      map['uid'] = Variable<String>(uid.value);
     }
     if (dormitoryId.present) {
       map['dormitory_id'] = Variable<int>(dormitoryId.value);
@@ -1350,6 +1455,7 @@ class StudentsCompanion extends UpdateCompanion<Student> {
   String toString() {
     return (StringBuffer('StudentsCompanion(')
           ..write('id: $id, ')
+          ..write('uid: $uid, ')
           ..write('dormitoryId: $dormitoryId, ')
           ..write('roomId: $roomId')
           ..write(')'))
@@ -2110,7 +2216,8 @@ typedef $$UsersTableCreateCompanionBuilder =
       required String uid,
       required String name,
       required String email,
-      required String photoUrl,
+      required String phoneNumber,
+      required String photoURL,
       required String role,
       Value<int> rowid,
     });
@@ -2119,7 +2226,8 @@ typedef $$UsersTableUpdateCompanionBuilder =
       Value<String> uid,
       Value<String> name,
       Value<String> email,
-      Value<String> photoUrl,
+      Value<String> phoneNumber,
+      Value<String> photoURL,
       Value<String> role,
       Value<int> rowid,
     });
@@ -2127,6 +2235,25 @@ typedef $$UsersTableUpdateCompanionBuilder =
 final class $$UsersTableReferences
     extends BaseReferences<_$Database, $UsersTable, User> {
   $$UsersTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$StudentsTable, List<Student>> _studentsRefsTable(
+    _$Database db,
+  ) => MultiTypedResultKey.fromTable(
+    db.students,
+    aliasName: $_aliasNameGenerator(db.users.uid, db.students.uid),
+  );
+
+  $$StudentsTableProcessedTableManager get studentsRefs {
+    final manager = $$StudentsTableTableManager(
+      $_db,
+      $_db.students,
+    ).filter((f) => f.uid.uid.sqlEquals($_itemColumn<String>('uid')!));
+
+    final cache = $_typedResult.readTableOrNull(_studentsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 
   static MultiTypedResultKey<$MastersTable, List<Master>> _mastersRefsTable(
     _$Database db,
@@ -2171,8 +2298,13 @@ class $$UsersTableFilterComposer extends Composer<_$Database, $UsersTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get photoUrl => $composableBuilder(
-    column: $table.photoUrl,
+  ColumnFilters<String> get phoneNumber => $composableBuilder(
+    column: $table.phoneNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get photoURL => $composableBuilder(
+    column: $table.photoURL,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2180,6 +2312,31 @@ class $$UsersTableFilterComposer extends Composer<_$Database, $UsersTable> {
     column: $table.role,
     builder: (column) => ColumnFilters(column),
   );
+
+  Expression<bool> studentsRefs(
+    Expression<bool> Function($$StudentsTableFilterComposer f) f,
+  ) {
+    final $$StudentsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.students,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$StudentsTableFilterComposer(
+            $db: $db,
+            $table: $db.students,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 
   Expression<bool> mastersRefs(
     Expression<bool> Function($$MastersTableFilterComposer f) f,
@@ -2230,8 +2387,13 @@ class $$UsersTableOrderingComposer extends Composer<_$Database, $UsersTable> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get photoUrl => $composableBuilder(
-    column: $table.photoUrl,
+  ColumnOrderings<String> get phoneNumber => $composableBuilder(
+    column: $table.phoneNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get photoURL => $composableBuilder(
+    column: $table.photoURL,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -2258,11 +2420,41 @@ class $$UsersTableAnnotationComposer extends Composer<_$Database, $UsersTable> {
   GeneratedColumn<String> get email =>
       $composableBuilder(column: $table.email, builder: (column) => column);
 
-  GeneratedColumn<String> get photoUrl =>
-      $composableBuilder(column: $table.photoUrl, builder: (column) => column);
+  GeneratedColumn<String> get phoneNumber => $composableBuilder(
+    column: $table.phoneNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get photoURL =>
+      $composableBuilder(column: $table.photoURL, builder: (column) => column);
 
   GeneratedColumn<String> get role =>
       $composableBuilder(column: $table.role, builder: (column) => column);
+
+  Expression<T> studentsRefs<T extends Object>(
+    Expression<T> Function($$StudentsTableAnnotationComposer a) f,
+  ) {
+    final $$StudentsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.students,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$StudentsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.students,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 
   Expression<T> mastersRefs<T extends Object>(
     Expression<T> Function($$MastersTableAnnotationComposer a) f,
@@ -2303,7 +2495,7 @@ class $$UsersTableTableManager
           $$UsersTableUpdateCompanionBuilder,
           (User, $$UsersTableReferences),
           User,
-          PrefetchHooks Function({bool mastersRefs})
+          PrefetchHooks Function({bool studentsRefs, bool mastersRefs})
         > {
   $$UsersTableTableManager(_$Database db, $UsersTable table)
     : super(
@@ -2321,14 +2513,16 @@ class $$UsersTableTableManager
                 Value<String> uid = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> email = const Value.absent(),
-                Value<String> photoUrl = const Value.absent(),
+                Value<String> phoneNumber = const Value.absent(),
+                Value<String> photoURL = const Value.absent(),
                 Value<String> role = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => UsersCompanion(
                 uid: uid,
                 name: name,
                 email: email,
-                photoUrl: photoUrl,
+                phoneNumber: phoneNumber,
+                photoURL: photoURL,
                 role: role,
                 rowid: rowid,
               ),
@@ -2337,14 +2531,16 @@ class $$UsersTableTableManager
                 required String uid,
                 required String name,
                 required String email,
-                required String photoUrl,
+                required String phoneNumber,
+                required String photoURL,
                 required String role,
                 Value<int> rowid = const Value.absent(),
               }) => UsersCompanion.insert(
                 uid: uid,
                 name: name,
                 email: email,
-                photoUrl: photoUrl,
+                phoneNumber: phoneNumber,
+                photoURL: photoURL,
                 role: role,
                 rowid: rowid,
               ),
@@ -2354,13 +2550,27 @@ class $$UsersTableTableManager
                     (e.readTable(table), $$UsersTableReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({mastersRefs = false}) {
+          prefetchHooksCallback: ({studentsRefs = false, mastersRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (mastersRefs) db.masters],
+              explicitlyWatchedTables: [
+                if (studentsRefs) db.students,
+                if (mastersRefs) db.masters,
+              ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
+                  if (studentsRefs)
+                    await $_getPrefetchedData<User, $UsersTable, Student>(
+                      currentTable: table,
+                      referencedTable: $$UsersTableReferences
+                          ._studentsRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$UsersTableReferences(db, table, p0).studentsRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.uid == item.uid),
+                      typedResults: items,
+                    ),
                   if (mastersRefs)
                     await $_getPrefetchedData<User, $UsersTable, Master>(
                       currentTable: table,
@@ -2393,7 +2603,7 @@ typedef $$UsersTableProcessedTableManager =
       $$UsersTableUpdateCompanionBuilder,
       (User, $$UsersTableReferences),
       User,
-      PrefetchHooks Function({bool mastersRefs})
+      PrefetchHooks Function({bool studentsRefs, bool mastersRefs})
     >;
 typedef $$DormitoriesTableCreateCompanionBuilder =
     DormitoriesCompanion Function({
@@ -3299,12 +3509,14 @@ typedef $$RoomsTableProcessedTableManager =
 typedef $$StudentsTableCreateCompanionBuilder =
     StudentsCompanion Function({
       Value<int> id,
+      required String uid,
       required int dormitoryId,
       required int roomId,
     });
 typedef $$StudentsTableUpdateCompanionBuilder =
     StudentsCompanion Function({
       Value<int> id,
+      Value<String> uid,
       Value<int> dormitoryId,
       Value<int> roomId,
     });
@@ -3312,6 +3524,23 @@ typedef $$StudentsTableUpdateCompanionBuilder =
 final class $$StudentsTableReferences
     extends BaseReferences<_$Database, $StudentsTable, Student> {
   $$StudentsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $UsersTable _uidTable(_$Database db) =>
+      db.users.createAlias($_aliasNameGenerator(db.students.uid, db.users.uid));
+
+  $$UsersTableProcessedTableManager get uid {
+    final $_column = $_itemColumn<String>('uid')!;
+
+    final manager = $$UsersTableTableManager(
+      $_db,
+      $_db.users,
+    ).filter((f) => f.uid.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_uidTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
 
   static $DormitoriesTable _dormitoryIdTable(_$Database db) =>
       db.dormitories.createAlias(
@@ -3364,6 +3593,29 @@ class $$StudentsTableFilterComposer
     column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$UsersTableFilterComposer get uid {
+    final $$UsersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.users,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UsersTableFilterComposer(
+            $db: $db,
+            $table: $db.users,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 
   $$DormitoriesTableFilterComposer get dormitoryId {
     final $$DormitoriesTableFilterComposer composer = $composerBuilder(
@@ -3426,6 +3678,29 @@ class $$StudentsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  $$UsersTableOrderingComposer get uid {
+    final $$UsersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.users,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UsersTableOrderingComposer(
+            $db: $db,
+            $table: $db.users,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
   $$DormitoriesTableOrderingComposer get dormitoryId {
     final $$DormitoriesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -3484,6 +3759,29 @@ class $$StudentsTableAnnotationComposer
   });
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
+
+  $$UsersTableAnnotationComposer get uid {
+    final $$UsersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.users,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UsersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.users,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 
   $$DormitoriesTableAnnotationComposer get dormitoryId {
     final $$DormitoriesTableAnnotationComposer composer = $composerBuilder(
@@ -3545,7 +3843,7 @@ class $$StudentsTableTableManager
           $$StudentsTableUpdateCompanionBuilder,
           (Student, $$StudentsTableReferences),
           Student,
-          PrefetchHooks Function({bool dormitoryId, bool roomId})
+          PrefetchHooks Function({bool uid, bool dormitoryId, bool roomId})
         > {
   $$StudentsTableTableManager(_$Database db, $StudentsTable table)
     : super(
@@ -3561,20 +3859,24 @@ class $$StudentsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                Value<String> uid = const Value.absent(),
                 Value<int> dormitoryId = const Value.absent(),
                 Value<int> roomId = const Value.absent(),
               }) => StudentsCompanion(
                 id: id,
+                uid: uid,
                 dormitoryId: dormitoryId,
                 roomId: roomId,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                required String uid,
                 required int dormitoryId,
                 required int roomId,
               }) => StudentsCompanion.insert(
                 id: id,
+                uid: uid,
                 dormitoryId: dormitoryId,
                 roomId: roomId,
               ),
@@ -3586,60 +3888,74 @@ class $$StudentsTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({dormitoryId = false, roomId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (dormitoryId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.dormitoryId,
-                                referencedTable: $$StudentsTableReferences
-                                    ._dormitoryIdTable(db),
-                                referencedColumn: $$StudentsTableReferences
-                                    ._dormitoryIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
-                    if (roomId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.roomId,
-                                referencedTable: $$StudentsTableReferences
-                                    ._roomIdTable(db),
-                                referencedColumn: $$StudentsTableReferences
-                                    ._roomIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({uid = false, dormitoryId = false, roomId = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (uid) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.uid,
+                                    referencedTable: $$StudentsTableReferences
+                                        ._uidTable(db),
+                                    referencedColumn: $$StudentsTableReferences
+                                        ._uidTable(db)
+                                        .uid,
+                                  )
+                                  as T;
+                        }
+                        if (dormitoryId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.dormitoryId,
+                                    referencedTable: $$StudentsTableReferences
+                                        ._dormitoryIdTable(db),
+                                    referencedColumn: $$StudentsTableReferences
+                                        ._dormitoryIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+                        if (roomId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.roomId,
+                                    referencedTable: $$StudentsTableReferences
+                                        ._roomIdTable(db),
+                                    referencedColumn: $$StudentsTableReferences
+                                        ._roomIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -3656,7 +3972,7 @@ typedef $$StudentsTableProcessedTableManager =
       $$StudentsTableUpdateCompanionBuilder,
       (Student, $$StudentsTableReferences),
       Student,
-      PrefetchHooks Function({bool dormitoryId, bool roomId})
+      PrefetchHooks Function({bool uid, bool dormitoryId, bool roomId})
     >;
 typedef $$SpecializationsTableCreateCompanionBuilder =
     SpecializationsCompanion Function({

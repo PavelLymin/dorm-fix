@@ -44,7 +44,7 @@ class CompositionRoot {
     final database = Database.lazy(file: File(config.databasePath));
 
     // Student
-    final studentRepository = StudentRepositoryImpl();
+    final studentRepository = StudentRepositoryImpl(database: database);
     final studentRouter = StudentRouter(studentRepository: studentRepository);
 
     // Dormitory
