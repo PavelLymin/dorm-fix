@@ -145,7 +145,7 @@ class PinInput extends StatelessWidget {
           const BoxShadow(
             color: Colors.white,
             offset: Offset(0.0, 0.0),
-            blurRadius: 3.0,
+            blurRadius: 2.0,
             spreadRadius: 0.0,
           ),
         ],

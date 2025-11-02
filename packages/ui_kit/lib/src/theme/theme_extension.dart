@@ -7,6 +7,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     required this.muted,
     required this.mutedForeground,
     required this.border,
+    required this.buttonBorder,
     required this.primary,
     required this.primaryForeground,
     required this.secondary,
@@ -23,6 +24,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
   final Color muted;
   final Color mutedForeground;
   final Color border;
+  final Color buttonBorder;
   final Color primary;
   final Color primaryForeground;
   final Color secondary;
@@ -40,6 +42,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     Color? muted,
     Color? mutedForeground,
     Color? border,
+    Color? buttonBorder,
     Color? primary,
     Color? primaryForeground,
     Color? secondary,
@@ -55,6 +58,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     muted: muted ?? this.muted,
     mutedForeground: mutedForeground ?? this.mutedForeground,
     border: border ?? this.border,
+    buttonBorder: buttonBorder ?? this.buttonBorder,
     primary: primary ?? this.primary,
     primaryForeground: primaryForeground ?? this.primaryForeground,
     secondary: secondary ?? this.secondary,
@@ -81,6 +85,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
       muted: Color.lerp(muted, other.muted, t)!,
       mutedForeground: Color.lerp(mutedForeground, other.mutedForeground, t)!,
       border: Color.lerp(border, other.border, t)!,
+      buttonBorder: Color.lerp(buttonBorder, other.buttonBorder, t)!,
       primary: Color.lerp(primary, other.primary, t)!,
       primaryForeground: Color.lerp(
         primaryForeground,
@@ -115,6 +120,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     'Muted': muted,
     'Muted Foreground': mutedForeground,
     'Border': border,
+    'ButtonBorder': buttonBorder,
     'Primary': primary,
     'Primary Foreground': primaryForeground,
     'Secondary': secondary,

@@ -48,3 +48,13 @@ flutter:
 
   assets:
     - packages/ui_kit/assets/icons/
+
+  fonts:
+    - family: Proximanova
+      fonts:
+        - asset: fonts/proximanova_regular.ttf
+        - asset: fonts/proximanova_boldit.otf
+          style: italic
+          weight: 700
+        - asset: fonts/proximanova_bold.otf
+          weight: 700

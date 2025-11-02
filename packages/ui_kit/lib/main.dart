@@ -13,18 +13,6 @@ void main() async {
   runApp(const MainApp());
 }
 
-final lightTheme = createThemeData(
-  brightness: Brightness.light,
-  palette: lightColorPalette,
-  typography: defaultTypography,
-);
-
-final darkTheme = createThemeData(
-  brightness: Brightness.dark,
-  palette: darkColorPalette,
-  typography: defaultTypography,
-);
-
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 

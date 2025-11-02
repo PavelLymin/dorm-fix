@@ -14,7 +14,7 @@ class AuthWithSocial extends StatelessWidget {
           children: [
             const SizedBox(width: 100, child: Divider(thickness: 3)),
             const SizedBox(width: 8),
-            const Text('ИЛИ'),
+            UiText.bodyLarge('ИЛИ'),
             const SizedBox(width: 8),
             const SizedBox(width: 100, child: Divider(thickness: 3)),
           ],

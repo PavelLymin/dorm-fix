@@ -70,41 +70,58 @@ class _UiTextFieldState extends State<UiTextField> {
 
     final style = variantStyle.merge(widget.style);
 
-    return TextField(
-      enabled: widget.enabled,
-      inputFormatters: widget.inputFormatters,
-      keyboardType: widget.keyboardType,
-      textCapitalization: widget.textCapitalization,
-      textAlign: widget.textAlign,
-      maxLength: widget.maxLength,
-      maxLines: widget.maxLines,
-      obscureText: widget.obscureText,
-      restorationId: widget.restorationId,
-      onTap: widget.onTap,
-      onEditingComplete: widget.onEditingComplete,
-      expands: widget.expands,
-      focusNode: widget.focusNode,
-      autofocus: widget.autofocus,
-      controller: widget.controller,
-      maxLengthEnforcement: widget.maxLengthEnforcement,
-      textInputAction: widget.textInputAction,
-      selectionControls: widget.selectionControls,
-      cursorColor: style.cursorColor,
-      style: style.textStyle,
-      decoration: style,
-      cursorWidth: style.cursorWidth,
-      cursorHeight: style.cursorHeight,
-      buildCounter:
-          (
-            context, {
-            required currentLength,
-            required isFocused,
-            required maxLength,
-          }) {
-            if (!widget.showCounter || maxLength == null) return null;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(27),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0.0, 0.0),
+            blurRadius: 1.0,
+            spreadRadius: 0.0,
+          ),
+        ],
+      ),
+      child: TextField(
+        enabled: widget.enabled,
+        inputFormatters: widget.inputFormatters,
+        keyboardType: widget.keyboardType,
+        textCapitalization: widget.textCapitalization,
+        textAlign: widget.textAlign,
+        maxLength: widget.maxLength,
+        maxLines: widget.maxLines,
+        obscureText: widget.obscureText,
+        restorationId: widget.restorationId,
+        onTap: widget.onTap,
+        onEditingComplete: widget.onEditingComplete,
+        expands: widget.expands,
+        focusNode: widget.focusNode,
+        autofocus: widget.autofocus,
+        controller: widget.controller,
+        maxLengthEnforcement: widget.maxLengthEnforcement,
+        textInputAction: widget.textInputAction,
+        selectionControls: widget.selectionControls,
+        cursorColor: style.cursorColor,
+        style: style.textStyle,
+        decoration: style,
+        cursorWidth: style.cursorWidth,
+        cursorHeight: style.cursorHeight,
 
-            return Text('$currentLength/$maxLength', style: style.counterStyle);
-          },
+        buildCounter:
+            (
+              context, {
+              required currentLength,
+              required isFocused,
+              required maxLength,
+            }) {
+              if (!widget.showCounter || maxLength == null) return null;
+
+              return Text(
+                '$currentLength/$maxLength',
+                style: style.counterStyle,
+              );
+            },
+      ),
     );
   }
 }
@@ -119,8 +136,10 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   final AppTypography typography;
 
   @override
-  TextStyle? get textStyle =>
-      typography.bodyMedium.copyWith(color: palette.foreground);
+  TextStyle? get textStyle => typography.bodyMedium.copyWith(
+    color: palette.foreground,
+    fontFamily: 'Proximanova',
+  );
 
   @override
   TextStyle? get counterStyle => typography.labelSmall.copyWith(
@@ -135,7 +154,7 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   TextStyle? get hintStyle => WidgetStateTextStyle.resolveWith((states) {
     if (states.contains(WidgetState.disabled)) {
       return typography.bodyMedium.copyWith(
-        color: palette.foreground.withValues(alpha: .38),
+        color: palette.foreground.withValues(alpha: .3),
       );
     }
 
@@ -151,37 +170,37 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
 
   @override
   InputBorder? get focusedBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(6),
-    borderSide: BorderSide(color: palette.accent, width: 1),
+    borderRadius: BorderRadius.circular(27),
+    borderSide: BorderSide(color: palette.secondaryForeground, width: 1),
   );
 
   @override
   InputBorder? get focusedErrorBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(6),
+    borderRadius: BorderRadius.circular(27),
     borderSide: BorderSide(color: palette.destructive, width: 1),
   );
 
   @override
   InputBorder? get errorBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(6),
+    borderRadius: BorderRadius.circular(27),
     borderSide: BorderSide(color: palette.destructive),
   );
 
   @override
   InputBorder? get enabledBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(6),
+    borderRadius: BorderRadius.circular(27),
     borderSide: BorderSide(color: palette.border),
   );
 
   @override
   InputBorder? get disabledBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(6),
+    borderRadius: BorderRadius.circular(27),
     borderSide: BorderSide(color: palette.foreground.withValues(alpha: .08)),
   );
 
   @override
   EdgeInsetsGeometry? get contentPadding =>
-      const EdgeInsets.symmetric(horizontal: 12, vertical: 12);
+      const EdgeInsets.symmetric(horizontal: 12, vertical: 16);
 
   @override
   BoxConstraints? get constraints => const BoxConstraints(minHeight: 32);

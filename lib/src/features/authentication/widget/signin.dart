@@ -159,104 +159,105 @@ class _SignInState extends State<SignIn>
           },
         );
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: WindowSizeScope.of(context).maybeMap(
-              orElse: () => Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 48,
-                  vertical: 48,
-                ),
-                child: SizedBox(
-                  width: 400,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        width: double.infinity,
-                        height: 128,
-                        'packages/ui_kit/assets/icons/microsoft.png',
-                      ),
-                      const SizedBox(height: 32),
-                      SignInForm(
-                        emailFocusNode: _emailFocusNode,
-                        phoneFocusNode: _phoneFocusNode,
-                        emailController: _emailController,
-                        passwordController: _passwordController,
-                        phoneController: _phoneController,
-                        pinCodeController: _pinCodeController,
-                      ),
-                      const SizedBox(height: 32),
-                      AuthButton(
-                        signInWithEmailAndPassword: () =>
-                            _signInWithEmailAndPassword(
-                              _emailController.text,
-                              _passwordController.text,
-                            ),
-                        signInWithPhoneNumber: () =>
-                            _signInWithPhoneNumber(_pinCodeController.text),
-                        verifyPhoneNumber: () =>
-                            _verifyPhoneNumber(_phoneController.text),
-                      ),
-                      const SizedBox(height: 32),
-                      const AuthWithSocial(),
-                    ],
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: Theme.of(context).appGradient.background,
+        ),
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Colors.transparent,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: WindowSizeScope.of(context).maybeMap(
+                orElse: () => Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 48,
+                  ),
+                  child: SizedBox(
+                    width: 400,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        UiText.displayLarge('Dorm Fix'),
+                        const SizedBox(height: 92),
+                        SignInForm(
+                          emailFocusNode: _emailFocusNode,
+                          phoneFocusNode: _phoneFocusNode,
+                          emailController: _emailController,
+                          passwordController: _passwordController,
+                          phoneController: _phoneController,
+                          pinCodeController: _pinCodeController,
+                        ),
+                        const SizedBox(height: 32),
+                        AuthButton(
+                          signInWithEmailAndPassword: () =>
+                              _signInWithEmailAndPassword(
+                                _emailController.text,
+                                _passwordController.text,
+                              ),
+                          signInWithPhoneNumber: () =>
+                              _signInWithPhoneNumber(_pinCodeController.text),
+                          verifyPhoneNumber: () =>
+                              _verifyPhoneNumber(_phoneController.text),
+                        ),
+                        const SizedBox(height: 32),
+                        const AuthWithSocial(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              large: (_) => Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 48,
-                  vertical: 176,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Image.asset(
-                        width: double.infinity,
-                        height: 256,
-                        'packages/ui_kit/assets/icons/microsoft.png',
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
-                      child: SizedBox(
-                        width: 400,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SignInForm(
-                              emailFocusNode: _emailFocusNode,
-                              phoneFocusNode: _phoneFocusNode,
-                              emailController: _emailController,
-                              passwordController: _passwordController,
-                              phoneController: _phoneController,
-                              pinCodeController: _pinCodeController,
-                            ),
-                            const SizedBox(height: 32),
-                            AuthButton(
-                              signInWithEmailAndPassword: () =>
-                                  _signInWithEmailAndPassword(
-                                    _emailController.text,
-                                    _passwordController.text,
-                                  ),
-                              signInWithPhoneNumber: () =>
-                                  _signInWithPhoneNumber(
-                                    _pinCodeController.text,
-                                  ),
-                              verifyPhoneNumber: () =>
-                                  _verifyPhoneNumber(_phoneController.text),
-                            ),
-                            const SizedBox(height: 32),
-                            const AuthWithSocial(),
-                          ],
+                large: (_) => Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 48,
+                    vertical: 176,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: UiText.displayLarge(
+                          'Dorm Fix',
+                          style: TextStyle(fontWeight: FontWeight.w900),
                         ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40),
+                        child: SizedBox(
+                          width: 400,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SignInForm(
+                                emailFocusNode: _emailFocusNode,
+                                phoneFocusNode: _phoneFocusNode,
+                                emailController: _emailController,
+                                passwordController: _passwordController,
+                                phoneController: _phoneController,
+                                pinCodeController: _pinCodeController,
+                              ),
+                              const SizedBox(height: 32),
+                              AuthButton(
+                                signInWithEmailAndPassword: () =>
+                                    _signInWithEmailAndPassword(
+                                      _emailController.text,
+                                      _passwordController.text,
+                                    ),
+                                signInWithPhoneNumber: () =>
+                                    _signInWithPhoneNumber(
+                                      _pinCodeController.text,
+                                    ),
+                                verifyPhoneNumber: () =>
+                                    _verifyPhoneNumber(_phoneController.text),
+                              ),
+                              const SizedBox(height: 32),
+                              const AuthWithSocial(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

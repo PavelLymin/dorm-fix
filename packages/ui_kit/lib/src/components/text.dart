@@ -342,7 +342,7 @@ class UiText extends StatelessWidget {
     final typography = Theme.of(context).appTypography;
     final palette = Theme.of(context).colorPalette;
 
-    final style = _styleBuilder?.call(typography) ?? typography.bodyLarge;
+    final baseStyle = _styleBuilder?.call(typography) ?? typography.bodyLarge;
 
     return Text(
       data,
@@ -350,7 +350,12 @@ class UiText extends StatelessWidget {
       overflow: overflow,
       maxLines: maxLines,
       softWrap: softWrap,
-      style: style.copyWith(color: color ?? palette.foreground),
+      style: baseStyle
+          .copyWith(
+            color: color ?? palette.foreground,
+            fontFamily: 'Proximanova',
+          )
+          .merge(style),
     );
   }
 }

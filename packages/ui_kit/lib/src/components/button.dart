@@ -170,13 +170,14 @@ class _FilledButtonGradientStyle extends _UiBaseButtonStyle {
       showBorder: states.contains(WidgetState.focused),
       border: RoundedRectangleBorder(
         side: BorderSide(color: colorPalette.secondary, width: 2),
-        borderRadius: BorderRadius.circular(8),
       ),
       child: Ink(
         decoration: BoxDecoration(
           gradient: states.contains(WidgetState.disabled)
               ? gradient.muted
               : gradient.primary,
+          borderRadius: BorderRadius.circular(27),
+          border: BoxBorder.all(color: colorPalette.buttonBorder),
         ),
         child: child,
       ),
@@ -268,7 +269,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
   WidgetStateProperty<OutlinedBorder?>? get shape =>
       const WidgetStatePropertyAll(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: BorderRadius.all(Radius.circular(27)),
         ),
       );
 
@@ -295,7 +296,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
 
   @override
   WidgetStateProperty<Color>? get shadowColor =>
-      const WidgetStatePropertyAll<Color>(Colors.transparent);
+      WidgetStatePropertyAll<Color>(colorPalette.accent);
 
   @override
   VisualDensity? get visualDensity => VisualDensity.adaptivePlatformDensity;
@@ -306,7 +307,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
 
   @override
   WidgetStateProperty<double?>? get elevation =>
-      const WidgetStatePropertyAll(0);
+      const WidgetStatePropertyAll(1);
 
   @override
   WidgetStateProperty<MouseCursor?>? get mouseCursor =>
@@ -435,7 +436,7 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<Color?>? get backgroundColor =>
-      const WidgetStatePropertyAll(Colors.transparent);
+      WidgetStatePropertyAll(colorPalette.primary);
 
   @override
   WidgetStateProperty<Color?>? get foregroundColor =>

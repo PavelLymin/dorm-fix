@@ -42,9 +42,10 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
     muted: materialPalette.onSurface.withValues(alpha: .12),
     mutedForeground: materialPalette.onSurface.withValues(alpha: .38),
     border: Color(0xFF3B3B3B),
+    buttonBorder: Color(0xFF7DB3FC),
     primary: Color(0xFF212121),
     primaryForeground: Color(0xFFFFFFFF),
-    secondary: Color(0xFF3B3B3B),
+    secondary: Color(0xFF292828),
     secondaryForeground: Color(0xFF8A8888),
     accent: materialPalette.tertiary,
     accentForeground: materialPalette.onTertiary,
@@ -65,7 +66,7 @@ AppGradient generateGradientForBrightness(Brightness brightness) {
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     stops: [0, 0.66],
-    colors: [Color(0xFF2E55BB), materialPalette.onSurface],
+    colors: [Color(0xFF2E55BB), Color(0xFF0E0E0E)],
   );
 
   final primary = LinearGradient(
