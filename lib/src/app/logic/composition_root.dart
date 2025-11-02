@@ -1,6 +1,8 @@
 import 'package:dorm_fix/firebase_options.dart';
+import 'package:dorm_fix/src/app/model/application_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import '../../core/rest_client/src/http/rest_client_http.dart';
 import '../../features/authentication/data/repository/auth_repository.dart';
 import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
 import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
@@ -26,6 +28,12 @@ class CompositionRoot {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
+    // Http
+    final RestClientHttp client = RestClientHttp(
+      baseUrl: Config.apiBaseUrl,
+      client: createDefaultHttpClient(),
+    );
+
     // Firebase
     final firebaseAuth = await _CreateFirebaseAuth().create();
 
@@ -35,6 +43,7 @@ class CompositionRoot {
     final authButton = AuthButtonBloc();
 
     return _DependencyFactory(
+      client: client,
       authenticationBloc: authenticationBloc,
       authButton: authButton,
     ).create();
@@ -43,9 +52,12 @@ class CompositionRoot {
 
 class _DependencyFactory extends Factory<DependencyContainer> {
   const _DependencyFactory({
+    required this.client,
     required this.authenticationBloc,
     required this.authButton,
   });
+
+  final RestClientHttp client;
 
   final AuthBloc authenticationBloc;
 
@@ -53,6 +65,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   @override
   DependencyContainer create() => DependencyContainer(
+    client: client,
     authenticationBloc: authenticationBloc,
     authButton: authButton,
   );

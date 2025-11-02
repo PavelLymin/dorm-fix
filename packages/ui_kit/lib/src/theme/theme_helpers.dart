@@ -61,17 +61,22 @@ AppGradient generateGradientForBrightness(Brightness brightness) {
     brightness: brightness,
   );
 
+  final background = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    stops: [0, 0.66],
+    colors: [Color(0xFF2E55BB), materialPalette.onSurface],
+  );
+
+  final primary = LinearGradient(
+    stops: [0, 0.5, 1],
+    colors: [Color(0xFF1E60F7), Color(0xFF7DB3FC), Color(0xFF1E60F7)],
+  );
+
   return AppGradient(
-    background: LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      stops: [0, 0.66],
-      colors: [Color(0xFF2E55BB), materialPalette.onSurface],
-    ),
-    primary: LinearGradient(
-      stops: [0, 0.5, 1],
-      colors: [Color(0xFF1E60F7), Color(0xFF7DB3FC), Color(0xFF1E60F7)],
-    ),
+    background: background,
+    primary: primary,
+    muted: primary.withOpacity(0.5),
   );
 }
 

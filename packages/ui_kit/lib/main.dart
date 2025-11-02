@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:ui_kit/button_previews.dart';
+import 'package:ui_kit/color_palette_preview.dart';
 import 'package:ui_kit/pin_preview.dart';
 import 'package:ui_kit/text_fields_preview.dart';
 import 'package:ui_kit/typography_preview.dart';
@@ -79,6 +80,13 @@ class UiPreview extends StatelessWidget {
               ),
               sliver: SliverList.list(
                 children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: UiText.titleLarge('Color palette'),
+                  ),
+                  const SizedBox(height: 8),
+                  ColorPalettePreview(),
+                  const SizedBox(height: 24),
                   Align(
                     alignment: Alignment.center,
                     child: UiText.titleLarge('Buttons'),

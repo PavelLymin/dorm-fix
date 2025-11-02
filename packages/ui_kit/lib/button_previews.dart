@@ -42,6 +42,12 @@ class _FilledPrimaryButton extends StatelessWidget {
             label: const Text('Gradient'),
           ),
           const SizedBox(height: 8),
+          UiButton.filledGradient(
+            icon: const Icon(Icons.add_rounded),
+            onPressed: () {},
+            label: const Text('Gradient'),
+          ),
+          const SizedBox(height: 8),
           UiButton.filledPrimary(
             onPressed: () {},
             label: const Text('Primary'),
@@ -51,6 +57,19 @@ class _FilledPrimaryButton extends StatelessWidget {
             icon: const Icon(Icons.add_rounded),
             onPressed: () {},
             label: const Text('Primary'),
+          ),
+          const SizedBox(height: 8),
+          UiButton.filledGradient(
+            onPressed: () {},
+            enabled: false,
+            label: const Text('Gradient'),
+          ),
+          const SizedBox(height: 8),
+          UiButton.filledGradient(
+            icon: const Icon(Icons.add_rounded),
+            onPressed: () {},
+            enabled: false,
+            label: const Text('Gradient'),
           ),
           const SizedBox(height: 8),
           UiButton.filledPrimary(
@@ -73,9 +92,7 @@ class _FilledPrimaryButton extends StatelessWidget {
               dimension: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: Theme.of(
-                  context,
-                ).colorPalette.primary.withValues(alpha: .38),
+                color: Theme.of(context).colorPalette.mutedForeground,
               ),
             ),
           ),

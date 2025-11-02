@@ -1,13 +1,15 @@
 import 'dart:io';
 
-import 'package:backend/src/app/model/application_config.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
 import '../../core/database/database.dart';
 import '../../server/data/repository/dormitory_repository.dart';
+import '../../server/data/repository/specialization_repository.dart';
 import '../../server/data/repository/student_repository.dart';
 import '../../server/router/dormitory.dart';
+import '../../server/router/specialization.dart';
 import '../../server/router/student.dart';
+import '../model/application_config.dart';
 import '../model/dependencies_container.dart';
 
 abstract class Factory<T> {
@@ -53,12 +55,21 @@ class CompositionRoot {
       dormitoryRepository: dormitoryRepository,
     );
 
+    // Specialization
+    final specializationRepository = SpecializationRepositoryImpl(
+      database: database,
+    );
+    final specializationRouter = SpecializationRouter(
+      specializationRepository: specializationRepository,
+    );
+
     return _DependencyFactory(
       firebaseAdmin: app,
       config: config,
       database: database,
       studentRouter: studentRouter,
       dormitoryRouter: dormitoryRouter,
+      specializationRouter: specializationRouter,
     ).create();
   }
 }
@@ -70,6 +81,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.database,
     required this.studentRouter,
     required this.dormitoryRouter,
+    required this.specializationRouter,
   });
 
   final App firebaseAdmin;
@@ -82,6 +94,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final DormitoryRouter dormitoryRouter;
 
+  final SpecializationRouter specializationRouter;
+
   @override
   DependencyContainer create() => DependencyContainer(
     firebaseAdmin: firebaseAdmin,
@@ -89,6 +103,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     database: database,
     studentRouter: studentRouter,
     dormitoryRouter: dormitoryRouter,
+    specializationRouter: specializationRouter,
   );
 }
 

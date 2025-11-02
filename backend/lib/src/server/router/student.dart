@@ -83,7 +83,7 @@ class StudentRouter {
       }
 
       final json = StudentDto.fromEntity(student).toJson();
-      return Response.ok(jsonEncode(json));
+      return Response.ok(jsonEncode({'data': json}));
     } catch (e) {
       return Response.internalServerError(
         body: 'Error processing request: ${e.toString()}',

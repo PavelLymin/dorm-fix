@@ -14,7 +14,7 @@ abstract final class Config {
   /// e.g. https://api.domain.tld
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://localhost:8080',
+    defaultValue: 'http://localhost:8080',
   );
 
   /// Base url for ws.

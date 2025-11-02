@@ -86,6 +86,7 @@ class UiButton extends ButtonStyleButton {
     final theme = Theme.of(context);
     final colors = theme.colorPalette;
     final typography = theme.appTypography;
+    final gradient = theme.appGradient;
 
     return switch (variant) {
       ButtonVariant.filledPrimary => _FilledButtonPrimaryStyle(
@@ -95,6 +96,7 @@ class UiButton extends ButtonStyleButton {
       ButtonVariant.filledGradient => _FilledButtonGradientStyle(
         colorPalette: colors,
         typography: typography,
+        gradient: gradient,
       ),
       ButtonVariant.icon => _IconButtonStandardStyle(
         colorPalette: colors,
@@ -105,48 +107,6 @@ class UiButton extends ButtonStyleButton {
 
   @override
   ButtonStyle? themeStyleOf(BuildContext context) => null;
-}
-
-class _FilledButtonGradientStyle extends _UiBaseButtonStyle {
-  const _FilledButtonGradientStyle({
-    required super.colorPalette,
-    required super.typography,
-  });
-
-  @override
-  WidgetStateProperty<Color?>? get backgroundColor =>
-      WidgetStatePropertyAll<Color>(Colors.transparent);
-
-  @override
-  WidgetStateProperty<Color?>? get foregroundColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        return states.contains(WidgetState.disabled)
-            ? colorPalette.secondaryForeground
-            : colorPalette.primaryForeground;
-      });
-
-  @override
-  Widget _backgroundBuilder(
-    BuildContext context,
-    Set<WidgetState> states,
-    Widget? child,
-  ) {
-    if (child == null) return const SizedBox.shrink();
-
-    return OutlineFocusButtonBorder(
-      showBorder: states.contains(WidgetState.focused),
-      border: RoundedRectangleBorder(
-        side: BorderSide(color: colorPalette.secondary, width: 2),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Ink(
-        decoration: BoxDecoration(
-          gradient: Theme.of(context).appGradient.primary,
-        ),
-        child: child,
-      ),
-    );
-  }
 }
 
 class _ButtonIconAndLabel extends StatelessWidget {
@@ -177,6 +137,53 @@ class _ButtonIconAndLabel extends StatelessWidget {
   );
 }
 
+class _FilledButtonGradientStyle extends _UiBaseButtonStyle {
+  const _FilledButtonGradientStyle({
+    required super.colorPalette,
+    required super.typography,
+    required this.gradient,
+  });
+
+  final AppGradient gradient;
+
+  @override
+  WidgetStateProperty<Color?>? get backgroundColor =>
+      WidgetStatePropertyAll<Color>(Colors.transparent);
+
+  @override
+  WidgetStateProperty<Color?>? get foregroundColor =>
+      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+        return states.contains(WidgetState.disabled)
+            ? colorPalette.mutedForeground
+            : colorPalette.primaryForeground;
+      });
+
+  @override
+  Widget _backgroundBuilder(
+    BuildContext context,
+    Set<WidgetState> states,
+    Widget? child,
+  ) {
+    if (child == null) return const SizedBox.shrink();
+
+    return OutlineFocusButtonBorder(
+      showBorder: states.contains(WidgetState.focused),
+      border: RoundedRectangleBorder(
+        side: BorderSide(color: colorPalette.secondary, width: 2),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Ink(
+        decoration: BoxDecoration(
+          gradient: states.contains(WidgetState.disabled)
+              ? gradient.muted
+              : gradient.primary,
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
 class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   const _FilledButtonPrimaryStyle({
     required super.colorPalette,
@@ -187,7 +194,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<Color?>? get foregroundColor =>
       WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
-          return colorPalette.secondaryForeground;
+          return colorPalette.mutedForeground;
         }
         return colorPalette.primaryForeground;
       });
@@ -196,7 +203,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<Color?>? get backgroundColor =>
       WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
-          return colorPalette.primary.withValues(alpha: .5);
+          return colorPalette.muted;
         }
 
         return colorPalette.primary;
@@ -222,7 +229,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<double>? get elevation =>
       WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
-          return 0.1;
+          return 0.0;
         }
         if (states.contains(WidgetState.pressed)) {
           return 1.0;
@@ -231,9 +238,9 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
           return 1.0;
         }
         if (states.contains(WidgetState.focused)) {
-          return 1.0;
+          return 0.0;
         }
-        return 1.0;
+        return 2.0;
       });
 
   @override
@@ -247,6 +254,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
     required this.colorPalette,
     required this.typography,
   });
+
   final ColorPalette colorPalette;
   final AppTypography typography;
 
@@ -465,41 +473,4 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
   @override
   WidgetStateProperty<double>? get iconSize =>
       const WidgetStatePropertyAll<double>(24.0);
-}
-
-// ignore: unused_element
-class _TextButtonStyle extends _UiBaseButtonStyle {
-  const _TextButtonStyle({
-    required super.colorPalette,
-    required super.typography,
-  });
-
-  @override
-  WidgetStateProperty<Color?>? get backgroundColor =>
-      const WidgetStatePropertyAll(Colors.transparent);
-
-  @override
-  WidgetStateProperty<Color?>? get foregroundColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
-          return colorPalette.foreground.withValues(alpha: 0.38);
-        }
-
-        return colorPalette.primary;
-      });
-
-  @override
-  WidgetStateProperty<Color?>? get overlayColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.pressed)) {
-          return colorPalette.primary.withValues(alpha: 0.1);
-        }
-        if (states.contains(WidgetState.hovered)) {
-          return colorPalette.primary.withValues(alpha: 0.08);
-        }
-        if (states.contains(WidgetState.focused)) {
-          return colorPalette.primary.withValues(alpha: 0.1);
-        }
-        return null;
-      });
 }

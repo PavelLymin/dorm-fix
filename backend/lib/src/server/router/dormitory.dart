@@ -32,7 +32,7 @@ class DormitoryRouter {
           .map((dormitory) => DormitoryDto.fromEntity(dormitory).toJson())
           .toList();
 
-      return Response.ok(jsonEncode(json));
+      return Response.ok(jsonEncode({'data': json}));
     } on FormatException catch (e) {
       return Response.badRequest(body: 'Invalid JSON format: ${e.toString()}');
     } catch (e) {
