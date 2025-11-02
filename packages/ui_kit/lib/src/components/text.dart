@@ -8,6 +8,7 @@ class UiText extends StatelessWidget {
     this.textAlign,
     this.overflow,
     this.maxLines,
+    this.softWrap,
     TextStyle? Function(AppTypography)? styleBuilder,
     super.key,
   }) : _styleBuilder = styleBuilder;
@@ -18,6 +19,7 @@ class UiText extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
   final Color? color;
+  final bool? softWrap;
   final TextStyle? Function(AppTypography)? _styleBuilder;
 
   factory UiText.displayLarge(
@@ -27,6 +29,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -35,6 +38,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.displayLarge,
     key: key,
   );
@@ -46,6 +50,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -54,6 +59,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.displayMedium,
     key: key,
   );
@@ -65,6 +71,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -73,6 +80,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.displaySmall,
     key: key,
   );
@@ -84,6 +92,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -92,6 +101,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.headlineLarge,
     key: key,
   );
@@ -103,6 +113,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -111,6 +122,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.headlineMedium,
     key: key,
   );
@@ -122,6 +134,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -130,6 +143,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.headlineSmall,
     key: key,
   );
@@ -141,6 +155,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -149,6 +164,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.titleLarge,
     key: key,
   );
@@ -160,6 +176,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -168,6 +185,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.titleMedium,
     key: key,
   );
@@ -179,6 +197,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -187,6 +206,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.titleSmall,
     key: key,
   );
@@ -198,6 +218,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -206,6 +227,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.bodyLarge,
     key: key,
   );
@@ -217,6 +239,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -225,6 +248,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.bodyMedium,
     key: key,
   );
@@ -236,6 +260,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -244,6 +269,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.bodySmall,
     key: key,
   );
@@ -255,6 +281,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -263,6 +290,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.labelLarge,
     key: key,
   );
@@ -274,6 +302,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -282,6 +311,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.labelMedium,
     key: key,
   );
@@ -293,6 +323,7 @@ class UiText extends StatelessWidget {
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
+    bool? softWrap,
     Key? key,
   }) => UiText(
     data,
@@ -301,6 +332,7 @@ class UiText extends StatelessWidget {
     textAlign: textAlign,
     overflow: overflow,
     maxLines: maxLines,
+    softWrap: softWrap,
     styleBuilder: (typography) => typography.labelSmall,
     key: key,
   );
@@ -317,6 +349,7 @@ class UiText extends StatelessWidget {
       textAlign: textAlign,
       overflow: overflow,
       maxLines: maxLines,
+      softWrap: softWrap,
       style: style.copyWith(color: color ?? palette.foreground),
     );
   }

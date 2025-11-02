@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:backend/src/app/logic/composition_root.dart';
-import 'package:backend/src/server/middleware/authentication.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 
@@ -27,11 +26,11 @@ void main(List<String> args) async {
 
       final handler = Pipeline()
           .addMiddleware(logRequests())
-          .addMiddleware(
-            AuthenticationMiddleware.check(
-              firebaseAdmin: dependency.firebaseAdmin,
-            ),
-          )
+          // .addMiddleware(
+          //   AuthenticationMiddleware.check(
+          //     firebaseAdmin: dependency.firebaseAdmin,
+          //   ),
+          // )
           .addHandler(cascade.handler);
 
       final port = int.parse(dependency.config.port);

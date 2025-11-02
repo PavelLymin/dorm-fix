@@ -17,7 +17,7 @@ class UiCard extends StatelessWidget {
           color: Theme.of(context).colorPalette.border,
           width: 2,
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(27),
       ),
       child: child,
     ),

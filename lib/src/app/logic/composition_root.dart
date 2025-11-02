@@ -6,6 +6,10 @@ import '../../core/rest_client/src/http/rest_client_http.dart';
 import '../../features/authentication/data/repository/auth_repository.dart';
 import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
 import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
+import '../../features/home/data/repository/specialization_repository.dart';
+import '../../features/home/state_management/bloc/specialization_bloc.dart';
+import '../../shared/student/data/repository/student_repository.dart';
+import '../../shared/student/state_management/bloc/student_bloc.dart';
 import '../model/dependencies.dart';
 
 abstract class Factory<T> {
@@ -42,10 +46,24 @@ class CompositionRoot {
     final authenticationBloc = AuthBloc(repository: repository);
     final authButton = AuthButtonBloc();
 
+    // Student
+    final studentRepository = StudentRepositoryImpl(client: client);
+    final studentBloc = StudentBloc(studentRepository: studentRepository);
+
+    // Specialization
+    final specializationRepository = SpecializationRepositoryImpl(
+      client: client,
+    );
+    final specializationBloc = SpecializationBloc(
+      specializationRepository: specializationRepository,
+    );
+
     return _DependencyFactory(
       client: client,
       authenticationBloc: authenticationBloc,
       authButton: authButton,
+      studentBloc: studentBloc,
+      specializationBloc: specializationBloc,
     ).create();
   }
 }
@@ -55,6 +73,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.client,
     required this.authenticationBloc,
     required this.authButton,
+    required this.studentBloc,
+    required this.specializationBloc,
   });
 
   final RestClientHttp client;
@@ -63,11 +83,17 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final AuthButtonBloc authButton;
 
+  final StudentBloc studentBloc;
+
+  final SpecializationBloc specializationBloc;
+
   @override
   DependencyContainer create() => DependencyContainer(
     client: client,
     authenticationBloc: authenticationBloc,
     authButton: authButton,
+    studentBloc: studentBloc,
+    specializationBloc: specializationBloc,
   );
 }
 

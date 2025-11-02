@@ -39,9 +39,6 @@ sealed class AuthState {
 
   bool get isLoading => maybeMap(loading: (_) => true, orElse: () => false);
 
-  bool get isSmsCodeSent =>
-      maybeMap(smsCodeSent: (_) => true, orElse: () => false);
-
   R map<R>({
     // ignore: library_private_types_in_public_api
     required AuthStateMatch<R, _Authenticated> authenticated,
