@@ -3,6 +3,7 @@ import 'package:dorm_fix/src/app/widget/dependencies_scope.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../app/model/application_config.dart';
+import '../../home/widget/home.dart';
 import '../state_management/auth_button/auth_button_bloc.dart';
 import 'auth_button.dart';
 import 'signin_form.dart';
@@ -32,18 +33,18 @@ class _SignInState extends State<SignIn>
   bool _isValidatePhone = false;
   bool _isPinValidate = false;
   bool _isSmsCode = false;
-  // StreamSubscription? _pinStreamSubscription;
   late AuthButtonBloc _authButtonBloc;
+  late AuthBloc _authBloc;
 
   @override
   void initState() {
     super.initState();
     _authButtonBloc = DependeciesScope.of(context).authButton;
+    _authBloc = DependeciesScope.of(context).authenticationBloc;
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
     _phoneController.addListener(_onPhoneChanged);
     _pinCodeController.addListener(_onPinChanged);
-    // _onPinChanged();
   }
 
   void _onEmailChanged() {
@@ -85,6 +86,14 @@ class _SignInState extends State<SignIn>
   void _onPinChanged() {
     if (_validatePinCode(_pinCodeController.text) && !_isPinValidate) {
       _isPinValidate = true;
+      _authBloc.state.mapOrNull(
+        smsCodeSent: (state) => _authBloc.add(
+          AuthEvent.signInWithPhoneNumber(
+            verificationId: state.verificationId,
+            smsCode: _pinCodeController.text,
+          ),
+        ),
+      );
       _authButtonBloc.add(AuthButtonEvent.addIsPin(isPin: true));
     } else if (!_validatePinCode(_pinCodeController.text) && _isPinValidate) {
       _isPinValidate = false;
@@ -124,7 +133,6 @@ class _SignInState extends State<SignIn>
     _emailController.dispose();
     _passwordController.dispose();
     _phoneController.dispose();
-    // _pinStreamSubscription?.cancel();
     _authButtonBloc.close();
   }
 
@@ -144,7 +152,10 @@ class _SignInState extends State<SignIn>
           },
           authenticated: (_) {
             _addLoading(false);
-            context.router.replace(NamedRoute('Home'));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Home()),
+            );
           },
           smsCodeSent: (_) {
             _addLoading(false);
@@ -159,7 +170,7 @@ class _SignInState extends State<SignIn>
           },
         );
       },
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: Theme.of(context).appGradient.background,
         ),
@@ -179,7 +190,10 @@ class _SignInState extends State<SignIn>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        UiText.displayLarge('Dorm Fix'),
+                        UiText.displayLarge(
+                          'Dorm Fix',
+                          style: TextStyle(fontWeight: FontWeight.w900),
+                        ),
                         const SizedBox(height: 92),
                         SignInForm(
                           emailFocusNode: _emailFocusNode,

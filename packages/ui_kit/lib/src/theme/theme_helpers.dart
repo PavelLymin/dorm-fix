@@ -56,12 +56,6 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
 }
 
 AppGradient generateGradientForBrightness(Brightness brightness) {
-  final materialPalette = ColorScheme.fromSeed(
-    seedColor: Color(0xFF2E55BB),
-    dynamicSchemeVariant: DynamicSchemeVariant.monochrome,
-    brightness: brightness,
-  );
-
   final background = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,

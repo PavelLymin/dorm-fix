@@ -23,7 +23,7 @@ class DormitoryRouter {
       final query = request.url.queryParameters['query'];
 
       if (query == null || query.isEmpty) {
-        return Response.badRequest(body: 'Missing query parameter "query"');
+        return Response.badRequest(body: 'Missing query parameter "query".');
       }
 
       final dormitories = await _dormitoryRepository.search(query: query);
@@ -34,10 +34,10 @@ class DormitoryRouter {
 
       return Response.ok(jsonEncode({'data': json}));
     } on FormatException catch (e) {
-      return Response.badRequest(body: 'Invalid JSON format: ${e.toString()}');
+      return Response.badRequest(body: 'Invalid JSON format: ${e.toString()}.');
     } catch (e) {
       return Response.internalServerError(
-        body: 'Error processing request: ${e.toString()}',
+        body: 'Error processing request: ${e.toString()}.',
       );
     }
   }

@@ -1,4 +1,4 @@
-import '../../../features/authentication/model/user.dart';
+import '../../../authentication/model/user.dart';
 
 class StudentEntity {
   const StudentEntity({
@@ -12,6 +12,8 @@ class StudentEntity {
   final int buildingId;
   final int roomId;
   final AuthenticatedUser user;
+
+  String get uid => user.uid;
 
   StudentEntity copyWith({
     int? id,

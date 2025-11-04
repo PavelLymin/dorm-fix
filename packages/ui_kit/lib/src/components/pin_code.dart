@@ -8,12 +8,14 @@ class PinCode extends StatefulWidget {
     this.isFocus = false,
     this.isEnable = true,
     this.length = 6,
+    this.height = 60,
   });
 
   final TextEditingController controller;
   final bool isFocus;
   final bool isEnable;
   final int length;
+  final double height;
 
   @override
   State<PinCode> createState() => _PinCodeState();
@@ -73,7 +75,7 @@ class _PinCodeState extends State<PinCode> {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-    height: 60,
+    height: widget.height,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

@@ -7,19 +7,21 @@ class UiCard extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Surface(
-    color: color,
-    child: Container(
-      padding: margin ?? const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorPalette.primary,
-        border: Border.all(
-          color: Theme.of(context).colorPalette.border,
-          width: 2,
+  Widget build(BuildContext context) => Container(
+    margin: margin ?? const EdgeInsets.all(8),
+    child: Surface(
+      color: color,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorPalette.primary,
+          border: Border.all(
+            color: Theme.of(context).colorPalette.border,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(27),
         ),
-        borderRadius: BorderRadius.circular(27),
+        child: child,
       ),
-      child: child,
     ),
   );
 }

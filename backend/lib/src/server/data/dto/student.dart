@@ -16,6 +16,8 @@ class StudentDto {
   final int roomId;
   final UserDto user;
 
+  String get uid => user.uid;
+
   StudentEntity toEntity() => StudentEntity(
     id: id,
     buildingId: dormitoryId,

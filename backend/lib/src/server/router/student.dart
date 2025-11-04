@@ -32,6 +32,7 @@ class StudentRouter {
       final json = jsonDecode(body);
       final student = StudentDto.fromJson(json).toEntity();
       await _studentRepository.createStudent(student: student);
+
       return Response(201, body: 'The student was successfully created.');
     } on FormatException catch (e) {
       return Response.badRequest(body: 'Invalid JSON format: ${e.toString()}');

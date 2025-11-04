@@ -2,14 +2,16 @@ import 'package:dorm_fix/firebase_options.dart';
 import 'package:dorm_fix/src/app/model/application_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:logger/logger.dart';
+import 'package:yandex_maps_mapkit/init.dart' as init;
 import '../../core/rest_client/src/http/rest_client_http.dart';
 import '../../features/authentication/data/repository/auth_repository.dart';
 import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
 import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
 import '../../features/home/data/repository/specialization_repository.dart';
 import '../../features/home/state_management/bloc/specialization_bloc.dart';
-import '../../shared/student/data/repository/student_repository.dart';
-import '../../shared/student/state_management/bloc/student_bloc.dart';
+import '../../features/profile/student/data/repository/student_repository.dart';
+import '../../features/profile/student/state_management/bloc/student_bloc.dart';
 import '../model/dependencies.dart';
 
 abstract class Factory<T> {
@@ -25,12 +27,21 @@ abstract class AsyncFactory<T> {
 }
 
 class CompositionRoot {
-  const CompositionRoot();
+  const CompositionRoot({required this.logger});
+
+  final Logger logger;
 
   Future<DependencyContainer> compose() async {
+    logger.i('Initializing dependencies...');
+
+    // Firebase
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+    // Mapkit
+    final mapkitApiKey = Config.mapKitApiKey;
+    await init.initMapkit(apiKey: mapkitApiKey);
 
     // Http
     final RestClientHttp client = RestClientHttp(
@@ -107,5 +118,15 @@ class _CreateFirebaseAuth extends AsyncFactory<FirebaseAuth> {
     );
 
     return FirebaseAuth.instance;
+  }
+}
+
+class CreateAppLogger extends Factory<Logger> {
+  const CreateAppLogger();
+
+  @override
+  Logger create() {
+    final logger = Logger(printer: PrettyPrinter(colors: false));
+    return logger;
   }
 }

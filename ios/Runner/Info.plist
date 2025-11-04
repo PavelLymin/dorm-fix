@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.889571705211-kh4h97obtfafa04uu038st215mkue5p4</string>
+				<string>app-1-889571705211-ios-59ff114a601cdd13a7bdde</string>
 			</array>
 		</dict>
 		<dict>
@@ -37,7 +37,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>app-1-889571705211-ios-59ff114a601cdd13a7bdde</string>
+				<string>com.googleusercontent.apps.889571705211-kh4h97obtfafa04uu038st215mkue5p4</string>
 			</array>
 		</dict>
 	</array>
@@ -65,6 +65,10 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)com.google.GIDSignIn</string>
 	</array>
 </dict>
 </plist>

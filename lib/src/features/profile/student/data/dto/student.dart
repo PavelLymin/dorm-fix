@@ -1,4 +1,4 @@
-import '../../../../features/authentication/data/dto/user.dart';
+import '../../../../authentication/data/dto/user.dart';
 import '../../model/student.dart';
 
 class StudentDto {
@@ -13,6 +13,8 @@ class StudentDto {
   final int dormitoryId;
   final int roomId;
   final UserDto user;
+
+  String get uid => user.uid;
 
   StudentEntity toEntity() => StudentEntity(
     id: id,

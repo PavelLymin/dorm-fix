@@ -2,7 +2,7 @@ import '../../core/rest_client/src/http/rest_client_http.dart';
 import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
 import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
 import '../../features/home/state_management/bloc/specialization_bloc.dart';
-import '../../shared/student/state_management/bloc/student_bloc.dart';
+import '../../features/profile/student/state_management/bloc/student_bloc.dart';
 
 class DependencyContainer {
   const DependencyContainer({

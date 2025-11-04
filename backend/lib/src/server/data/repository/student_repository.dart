@@ -1,6 +1,5 @@
 import 'package:backend/src/server/data/dto/student.dart';
 import 'package:drift/drift.dart';
-
 import '../../../core/database/database.dart';
 import '../../model/student.dart';
 import '../dto/user.dart';

@@ -1,3 +1,23 @@
+enum Role {
+  student(name: 'student'),
+  master(name: 'master');
+
+  const Role({required this.name});
+
+  final String name;
+
+  static Role fromString(String name) => values.firstWhere(
+    (role) => role.name == name,
+    orElse: () => throw FormatException('Unknown role: $name'),
+  );
+
+  T map<T>({required T Function() student, required T Function() master}) =>
+      switch (this) {
+        Role.student => student(),
+        Role.master => master(),
+      };
+}
+
 abstract class UserEntity with _UserPatternMatching {
   const factory UserEntity.notAuthenticated() = NotAuthenticatedUser;
 

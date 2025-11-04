@@ -59,69 +59,38 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
         ValueListenableBuilder(
           valueListenable: _isPhoneNumber,
           builder: (context, value, child) => value
-              ? Column(
-                  children: [
-                    UiTextField.standard(
-                      focusNode: widget.phoneFocusNode,
-                      controller: widget.phoneController,
-                      keyboardType: TextInputType.phone,
-                      style: UiTextFieldStyle(
-                        filled: true,
-                        fillColor: color.primary,
-                        prefixIcon: Icon(Icons.phone_enabled_outlined),
-                        suffixIcon: _clearSuffixIcon(widget.phoneController),
-                      ),
+              ? BlocBuilder<AuthButtonBloc, AuthButtonState>(
+                  buildWhen: (previous, current) {
+                    bool wasPin = previous.maybeMap(
+                      isPin: () => true,
+                      orElse: () => false,
+                    );
+                    bool isPin = current.maybeMap(
+                      isPin: () => true,
+                      orElse: () => false,
+                    );
+                    return wasPin != isPin;
+                  },
+                  builder: (context, state) => state.maybeMap(
+                    orElse: () => _PhoneNumberForm(
+                      color: color,
+                      phoneFocusNode: widget.phoneFocusNode,
+                      phoneController: widget.phoneController,
+                      pinCodeController: widget.pinCodeController,
+                      isEnabledTextField: true,
+                      isEnabledPinCode: false,
+                      clearSuffixIcon: _clearSuffixIcon(widget.phoneController),
                     ),
-                    const SizedBox(height: 12),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      switchInCurve: Curves.easeInOutBack,
-                      child: BlocBuilder<AuthButtonBloc, AuthButtonState>(
-                        buildWhen: (previous, current) {
-                          final bool wasPin = previous.maybeMap(
-                            isPin: () => true,
-                            orElse: () => false,
-                          );
-                          final bool isPin = current.maybeMap(
-                            isPin: () => true,
-                            orElse: () => false,
-                          );
-                          return wasPin != isPin;
-                        },
-                        builder: (context, state) {
-                          return state.maybeMap(
-                            orElse: () {
-                              return PinCode(
-                                length: 6,
-                                isEnable: false,
-                                isFocus: false,
-                                controller: widget.pinCodeController,
-                              );
-                            },
-                            isPin: () => PinCode(
-                              length: 6,
-                              isEnable: true,
-                              isFocus: true,
-                              controller: widget.pinCodeController,
-                            ),
-                          );
-                        },
-                      ),
+                    isPin: () => _PhoneNumberForm(
+                      color: color,
+                      phoneFocusNode: widget.phoneFocusNode,
+                      phoneController: widget.phoneController,
+                      pinCodeController: widget.pinCodeController,
+                      isEnabledTextField: false,
+                      isEnabledPinCode: true,
+                      onTap: () {},
                     ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {},
-                        child: Padding(
-                          padding: EdgeInsets.all(1.5),
-                          child: UiText.bodyLarge('Изменить номер?'),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+                  ),
                 )
               : Column(
                   children: [
@@ -141,7 +110,7 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
                         suffixIcon: _clearSuffixIcon(widget.emailController),
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 12),
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       switchInCurve: Curves.easeInOutBack,
@@ -178,6 +147,77 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
                   ],
                 ),
         ),
+      ],
+    );
+  }
+}
+
+class _PhoneNumberForm extends StatelessWidget {
+  const _PhoneNumberForm({
+    required this.color,
+    required this.isEnabledTextField,
+    required this.isEnabledPinCode,
+    required this.phoneController,
+    required this.pinCodeController,
+    required this.phoneFocusNode,
+    this.clearSuffixIcon,
+    this.onTap,
+  });
+
+  final ColorPalette color;
+  final TextEditingController phoneController;
+  final TextEditingController pinCodeController;
+  final FocusNode phoneFocusNode;
+  final bool isEnabledTextField;
+  final bool isEnabledPinCode;
+  final Widget? clearSuffixIcon;
+  final Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    context.findAncestorWidgetOfExactType<SignInForm>()?.emailController;
+    return Column(
+      children: [
+        UiTextField.standard(
+          enabled: isEnabledTextField,
+          focusNode: phoneFocusNode,
+          controller: phoneController,
+          keyboardType: TextInputType.phone,
+          style: UiTextFieldStyle(
+            filled: true,
+            fillColor: color.primary,
+            prefixIcon: Icon(Icons.phone_enabled_outlined),
+            suffixIcon: clearSuffixIcon,
+          ),
+        ),
+        const SizedBox(height: 12),
+        PinCode(
+          height: 60,
+          length: 6,
+          isEnable: isEnabledPinCode,
+          isFocus: isEnabledPinCode,
+          controller: pinCodeController,
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerRight,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: onTap,
+            child: Padding(
+              padding: EdgeInsets.all(1.5),
+              child: UiText.bodyLarge(
+                'Изменить номер?',
+                style: TextStyle(
+                  color: isEnabledPinCode
+                      ? color.foreground
+                      : color.mutedForeground,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
       ],
     );
   }

@@ -13,6 +13,8 @@ class StudentEntity {
   final int roomId;
   final UserEntity user;
 
+  String get uid => user.uid;
+
   StudentEntity copyWith({
     int? id,
     String? uid,

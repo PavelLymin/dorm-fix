@@ -70,58 +70,42 @@ class _UiTextFieldState extends State<UiTextField> {
 
     final style = variantStyle.merge(widget.style);
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(27),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            offset: Offset(0.0, 0.0),
-            blurRadius: 1.0,
-            spreadRadius: 0.0,
-          ),
-        ],
-      ),
-      child: TextField(
-        enabled: widget.enabled,
-        inputFormatters: widget.inputFormatters,
-        keyboardType: widget.keyboardType,
-        textCapitalization: widget.textCapitalization,
-        textAlign: widget.textAlign,
-        maxLength: widget.maxLength,
-        maxLines: widget.maxLines,
-        obscureText: widget.obscureText,
-        restorationId: widget.restorationId,
-        onTap: widget.onTap,
-        onEditingComplete: widget.onEditingComplete,
-        expands: widget.expands,
-        focusNode: widget.focusNode,
-        autofocus: widget.autofocus,
-        controller: widget.controller,
-        maxLengthEnforcement: widget.maxLengthEnforcement,
-        textInputAction: widget.textInputAction,
-        selectionControls: widget.selectionControls,
-        cursorColor: style.cursorColor,
-        style: style.textStyle,
-        decoration: style,
-        cursorWidth: style.cursorWidth,
-        cursorHeight: style.cursorHeight,
+    return TextField(
+      enabled: widget.enabled,
+      inputFormatters: widget.inputFormatters,
+      keyboardType: widget.keyboardType,
+      textCapitalization: widget.textCapitalization,
+      textAlign: widget.textAlign,
+      maxLength: widget.maxLength,
+      maxLines: widget.maxLines,
+      obscureText: widget.obscureText,
+      restorationId: widget.restorationId,
+      onTap: widget.onTap,
+      onEditingComplete: widget.onEditingComplete,
+      expands: widget.expands,
+      focusNode: widget.focusNode,
+      autofocus: widget.autofocus,
+      controller: widget.controller,
+      maxLengthEnforcement: widget.maxLengthEnforcement,
+      textInputAction: widget.textInputAction,
+      selectionControls: widget.selectionControls,
+      cursorColor: style.cursorColor,
+      style: style.textStyle,
+      decoration: style,
+      cursorWidth: style.cursorWidth,
+      cursorHeight: style.cursorHeight,
 
-        buildCounter:
-            (
-              context, {
-              required currentLength,
-              required isFocused,
-              required maxLength,
-            }) {
-              if (!widget.showCounter || maxLength == null) return null;
+      buildCounter:
+          (
+            context, {
+            required currentLength,
+            required isFocused,
+            required maxLength,
+          }) {
+            if (!widget.showCounter || maxLength == null) return null;
 
-              return Text(
-                '$currentLength/$maxLength',
-                style: style.counterStyle,
-              );
-            },
-      ),
+            return Text('$currentLength/$maxLength', style: style.counterStyle);
+          },
     );
   }
 }
@@ -171,7 +155,7 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   @override
   InputBorder? get focusedBorder => OutlineInputBorder(
     borderRadius: BorderRadius.circular(27),
-    borderSide: BorderSide(color: palette.secondaryForeground, width: 1),
+    borderSide: BorderSide(color: palette.accent, width: 1),
   );
 
   @override

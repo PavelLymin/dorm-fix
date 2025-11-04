@@ -5,7 +5,6 @@ class UserEntity {
     required this.email,
     required this.phoneNumber,
     required this.photoURL,
-    required this.role,
   });
 
   final String uid;
@@ -13,7 +12,6 @@ class UserEntity {
   final String email;
   final String phoneNumber;
   final String photoURL;
-  final String role;
 
   UserEntity copyWith({
     String? uid,
@@ -28,7 +26,6 @@ class UserEntity {
     email: email ?? this.email,
     phoneNumber: phoneNumber ?? this.phoneNumber,
     photoURL: photoURL ?? this.photoURL,
-    role: role ?? this.role,
   );
 
   @override
@@ -38,8 +35,7 @@ class UserEntity {
       'name: $name, '
       'email: $email, '
       'phoneNumber: $phoneNumber, '
-      'photoURL: $photoURL, '
-      'role: $role)';
+      'photoURL: $photoURL)';
 
   @override
   bool operator ==(Object other) => other is UserEntity && uid == other.uid;

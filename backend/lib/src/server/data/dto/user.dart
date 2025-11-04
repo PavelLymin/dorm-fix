@@ -2,6 +2,26 @@ import 'package:drift/drift.dart';
 import '../../../core/database/database.dart';
 import '../../model/user.dart';
 
+enum Role {
+  student(name: 'student'),
+  master(name: 'master');
+
+  const Role({required this.name});
+
+  final String name;
+
+  static Role fromString(String name) => values.firstWhere(
+    (role) => role.name == name,
+    orElse: () => throw FormatException('Unknown role: $name'),
+  );
+
+  T map<T>({required T Function() student, required T Function() master}) =>
+      switch (this) {
+        Role.student => student(),
+        Role.master => master(),
+      };
+}
+
 class UserDto {
   const UserDto({
     required this.uid,
@@ -9,7 +29,6 @@ class UserDto {
     required this.photoURL,
     required this.email,
     required this.phoneNumber,
-    required this.role,
   });
 
   final String uid;
@@ -17,7 +36,6 @@ class UserDto {
   final String photoURL;
   final String email;
   final String phoneNumber;
-  final String role;
 
   UserDto copyWith({
     String? uid,
@@ -32,7 +50,6 @@ class UserDto {
     photoURL: photoURL ?? this.photoURL,
     email: email ?? this.email,
     phoneNumber: phoneNumber ?? this.phoneNumber,
-    role: role ?? this.role,
   );
 
   Map<String, dynamic> toJson() => {
@@ -41,7 +58,6 @@ class UserDto {
     'photo_url': photoURL,
     'email': email,
     'phone_number': phoneNumber,
-    'role': role,
   };
 
   static UserDto fromJson(Map<String, dynamic> json) => UserDto(
@@ -50,7 +66,6 @@ class UserDto {
     photoURL: json['photo_url'],
     email: json['email'],
     phoneNumber: json['phone_number'],
-    role: json['role'],
   );
 
   UsersCompanion toCompanion() => UsersCompanion(
@@ -59,7 +74,6 @@ class UserDto {
     photoURL: Value(photoURL),
     email: Value(email),
     phoneNumber: Value(phoneNumber),
-    role: Value(role),
   );
 
   static UserDto fromData(User companion) => UserDto(
@@ -68,7 +82,6 @@ class UserDto {
     photoURL: companion.photoURL,
     email: companion.email,
     phoneNumber: companion.phoneNumber,
-    role: companion.role,
   );
 
   static UserDto fromEntity(UserEntity entity) => UserDto(
@@ -77,7 +90,6 @@ class UserDto {
     photoURL: entity.photoURL,
     email: entity.email,
     phoneNumber: entity.phoneNumber,
-    role: entity.role,
   );
 
   UserEntity toEntity() => UserEntity(
@@ -86,7 +98,6 @@ class UserDto {
     photoURL: photoURL,
     email: email,
     phoneNumber: phoneNumber,
-    role: role,
   );
 
   @override
@@ -96,8 +107,7 @@ class UserDto {
       'name: $name, '
       'photoURL: $photoURL, '
       'email: $email, '
-      'phoneNumber: $phoneNumber, '
-      'role: $role)';
+      'phoneNumber: $phoneNumber)';
 
   @override
   bool operator ==(Object other) => other is UserDto && uid == other.uid;

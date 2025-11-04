@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/rest_client/rest_client.dart';
+import '../../../../../core/rest_client/rest_client.dart';
 import '../../data/repository/student_repository.dart';
 import '../../model/student.dart';
 

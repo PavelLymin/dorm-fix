@@ -1,31 +1,35 @@
 import 'dart:async';
 
-import 'package:dorm_fix/src/app/model/application_config.dart';
+import 'package:dorm_fix/src/features/home/widget/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import 'src/app/bloc/app_bloc_observer.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
 import 'src/features/authentication/state_management/authentication/authentication_bloc.dart';
-import 'package:yandex_maps_mapkit/init.dart' as init;
-import 'src/features/authentication/widget/signin.dart';
-import 'src/shared/student/state_management/bloc/student_bloc.dart';
+import 'src/features/profile/student/state_management/bloc/student_bloc.dart';
 
 void main() async {
-  await runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  final logger = CreateAppLogger().create();
+  await runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
 
-    final mapkitApiKey = Config.mapKitApiKey;
-    await init.initMapkit(apiKey: mapkitApiKey);
+      final dependency = await CompositionRoot(logger: logger).compose();
 
-    final dependency = await CompositionRoot().compose();
+      Bloc.observer = AppBlocObserver(logger: logger);
 
-    runApp(
-      DependeciesScope(
-        dependencyContainer: dependency,
-        child: WindowSizeScope(child: const MainApp()),
-      ),
-    );
-  }, (error, stackTrace) {});
+      runApp(
+        DependeciesScope(
+          dependencyContainer: dependency,
+          child: WindowSizeScope(child: const MainApp()),
+        ),
+      );
+    },
+    (error, stackTrace) {
+      logger.e(error, stackTrace: stackTrace);
+    },
+  );
 }
 
 class MainApp extends StatefulWidget {
@@ -56,7 +60,7 @@ class _MainAppState extends State<MainApp> {
       title: 'Dorm Fix',
       debugShowCheckedModeBanner: false,
       theme: darkTheme,
-      home: const SignIn(),
+      home: const Home(),
     ),
   );
 }
