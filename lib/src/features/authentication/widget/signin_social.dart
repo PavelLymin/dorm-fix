@@ -7,57 +7,72 @@ class AuthWithSocial extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(width: 100, child: Divider(thickness: 3)),
-            const SizedBox(width: 8),
-            UiText.bodyLarge('ИЛИ'),
-            const SizedBox(width: 8),
-            const SizedBox(width: 100, child: Divider(thickness: 3)),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: UiButton.icon(
-                icon: Image.asset(
-                  'packages/ui_kit/assets/icons/google.png',
-                  height: 32,
-                  width: 32,
+    return Padding(
+      padding: AppPadding.symmetricIncrement(horizontal: 3),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Expanded(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Divider(thickness: 3),
                 ),
-                onPressed: () =>
-                    context.read<AuthBloc>().add(AuthEvent.signInWithGoogle()),
-                style: ButtonStyle(
-                  side: WidgetStatePropertyAll<BorderSide>(
-                    BorderSide(color: Theme.of(context).colorPalette.border),
+              ),
+              const SizedBox(width: 8),
+              UiText.bodyLarge('ИЛИ'),
+              const SizedBox(width: 8),
+              const Expanded(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Divider(thickness: 3),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: UiButton.icon(
+                  icon: Image.asset(
+                    'packages/ui_kit/assets/icons/google.png',
+                    height: 32,
+                    width: 32,
+                  ),
+                  onPressed: () => context.read<AuthBloc>().add(
+                    AuthEvent.signInWithGoogle(),
+                  ),
+                  style: ButtonStyle(
+                    side: WidgetStatePropertyAll<BorderSide>(
+                      BorderSide(color: Theme.of(context).colorPalette.border),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: UiButton.icon(
-                icon: Image.asset(
-                  'packages/ui_kit/assets/icons/apple.png',
-                  height: 32,
-                  width: 32,
-                ),
-                onPressed: () =>
-                    context.read<AuthBloc>().add(AuthEvent.signInWithGoogle()),
-                style: ButtonStyle(
-                  side: WidgetStatePropertyAll<BorderSide>(
-                    BorderSide(color: Theme.of(context).colorPalette.border),
+              const SizedBox(width: 16),
+              Expanded(
+                child: UiButton.icon(
+                  icon: Image.asset(
+                    'packages/ui_kit/assets/icons/apple.png',
+                    height: 32,
+                    width: 32,
+                  ),
+                  onPressed: () => context.read<AuthBloc>().add(
+                    AuthEvent.signInWithGoogle(),
+                  ),
+                  style: ButtonStyle(
+                    side: WidgetStatePropertyAll<BorderSide>(
+                      BorderSide(color: Theme.of(context).colorPalette.border),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

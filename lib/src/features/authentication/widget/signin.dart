@@ -1,17 +1,12 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:dorm_fix/src/app/widget/dependencies_scope.dart';
+import 'package:dorm_fix/src/features/authentication/widget/signin_form.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../app/model/application_config.dart';
 import '../../home/widget/home.dart';
 import '../state_management/auth_button/auth_button_bloc.dart';
-import 'auth_button.dart';
-import 'signin_form.dart';
 import '../state_management/authentication/authentication_bloc.dart';
 import 'signin_social.dart';
-part 'auth_validate.dart';
 
-@RoutePage()
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
 
@@ -19,104 +14,33 @@ class SignIn extends StatefulWidget {
   State<SignIn> createState() => _SignInState();
 }
 
-class _SignInState extends State<SignIn>
-    with _EmailPasswordPhoneNumberFormStateMixin {
-  final _emailFocusNode = FocusNode();
-  final _phoneFocusNode = FocusNode();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _pinCodeController = TextEditingController();
+class _SignInState extends State<SignIn> {
   bool _isLoading = false;
-  bool _isValidatePassword = false;
-  bool _isValidateEmail = false;
-  bool _isValidatePhone = false;
-  bool _isPinValidate = false;
   bool _isSmsCode = false;
   late AuthButtonBloc _authButtonBloc;
-  late AuthBloc _authBloc;
 
   @override
   void initState() {
     super.initState();
     _authButtonBloc = DependeciesScope.of(context).authButton;
-    _authBloc = DependeciesScope.of(context).authenticationBloc;
-    _emailController.addListener(_onEmailChanged);
-    _passwordController.addListener(_onPasswordChanged);
-    _phoneController.addListener(_onPhoneChanged);
-    _pinCodeController.addListener(_onPinChanged);
-  }
-
-  void _onEmailChanged() {
-    if (_validateEmail(_emailController.text) && !_isValidateEmail) {
-      _isValidateEmail = true;
-      _authButtonBloc.add(AuthButtonEvent.addIsEmail(isEmail: true));
-    } else if (!_validateEmail(_emailController.text) && _isValidateEmail) {
-      _isValidateEmail = false;
-      _authButtonBloc.add(AuthButtonEvent.addIsEmail(isEmail: false));
-    }
-  }
-
-  void _onPasswordChanged() {
-    if (_validatePassword(_passwordController.text) && !_isValidatePassword) {
-      _isValidatePassword = true;
-      _authButtonBloc.add(AuthButtonEvent.addIsPassword(isPassword: true));
-    } else if (!_validatePassword(_passwordController.text) &&
-        _isValidatePassword) {
-      _isValidatePassword = false;
-      _authButtonBloc.add(AuthButtonEvent.addIsPassword(isPassword: false));
-    }
-  }
-
-  void _onPhoneChanged() {
-    if (_validatePhoneNumber(_phoneController.text) && !_isValidatePhone) {
-      _isValidatePhone = true;
-      _authButtonBloc.add(
-        AuthButtonEvent.addIsPhoneNumber(isPhoneNumber: true),
-      );
-    } else if (!_validatePhoneNumber(_phoneController.text) &&
-        _isValidatePhone) {
-      _isValidatePhone = false;
-      _authButtonBloc.add(
-        AuthButtonEvent.addIsPhoneNumber(isPhoneNumber: false),
-      );
-    }
-  }
-
-  void _onPinChanged() {
-    if (_validatePinCode(_pinCodeController.text) && !_isPinValidate) {
-      _isPinValidate = true;
-      _authBloc.state.mapOrNull(
-        smsCodeSent: (state) => _authBloc.add(
-          AuthEvent.signInWithPhoneNumber(
-            verificationId: state.verificationId,
-            smsCode: _pinCodeController.text,
-          ),
-        ),
-      );
-      _authButtonBloc.add(AuthButtonEvent.addIsPin(isPin: true));
-    } else if (!_validatePinCode(_pinCodeController.text) && _isPinValidate) {
-      _isPinValidate = false;
-      _authButtonBloc.add(AuthButtonEvent.addIsPin(isPin: false));
-    }
   }
 
   void _addLoading(bool state) {
     if (!_isLoading && state) {
-      _authButtonBloc.add(AuthButtonEvent.addIsLoaded(isLoading: true));
+      _authButtonBloc.add(AuthButtonEvent.changeState(isLoading: true));
       _isLoading = true;
     } else if (_isLoading && !state) {
-      _authButtonBloc.add(AuthButtonEvent.addIsLoaded(isLoading: false));
+      _authButtonBloc.add(AuthButtonEvent.changeState(isLoading: false));
       _isLoading = false;
     }
   }
 
   void _addSmsCodeSent(bool state) {
     if (!_isSmsCode && state) {
-      _authButtonBloc.add(AuthButtonEvent.addIsCodeSent(isCodeSent: true));
+      _authButtonBloc.add(AuthButtonEvent.changeState(isCodeSent: true));
       _isSmsCode = true;
     } else if (_isSmsCode && !state) {
-      _authButtonBloc.add(AuthButtonEvent.addIsCodeSent(isCodeSent: false));
+      _authButtonBloc.add(AuthButtonEvent.changeState(isCodeSent: false));
       _isSmsCode = false;
     }
   }
@@ -124,15 +48,6 @@ class _SignInState extends State<SignIn>
   @override
   void dispose() {
     super.dispose();
-    _emailController.removeListener(_onEmailChanged);
-    _passwordController.removeListener(_onPasswordChanged);
-    _phoneController.removeListener(_onPhoneChanged);
-    _pinCodeController.removeListener(_onPinChanged);
-    _emailFocusNode.dispose();
-    _phoneFocusNode.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _phoneController.dispose();
     _authButtonBloc.close();
   }
 
@@ -181,51 +96,29 @@ class _SignInState extends State<SignIn>
             child: SingleChildScrollView(
               child: WindowSizeScope.of(context).maybeMap(
                 orElse: () => Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 48,
+                  padding: AppPadding.symmetricIncrement(
+                    vertical: 6,
+                    horizontal: 2,
                   ),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        UiText.displayLarge(
-                          'Dorm Fix',
-                          style: TextStyle(fontWeight: FontWeight.w900),
-                        ),
-                        const SizedBox(height: 92),
-                        SignInForm(
-                          emailFocusNode: _emailFocusNode,
-                          phoneFocusNode: _phoneFocusNode,
-                          emailController: _emailController,
-                          passwordController: _passwordController,
-                          phoneController: _phoneController,
-                          pinCodeController: _pinCodeController,
-                        ),
-                        const SizedBox(height: 32),
-                        AuthButton(
-                          signInWithEmailAndPassword: () =>
-                              _signInWithEmailAndPassword(
-                                _emailController.text,
-                                _passwordController.text,
-                              ),
-                          signInWithPhoneNumber: () =>
-                              _signInWithPhoneNumber(_pinCodeController.text),
-                          verifyPhoneNumber: () =>
-                              _verifyPhoneNumber(_phoneController.text),
-                        ),
-                        const SizedBox(height: 32),
-                        const AuthWithSocial(),
-                      ],
-                    ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      UiText.displayLarge(
+                        'Dorm Fix',
+                        style: TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                      const SizedBox(height: 96),
+                      const SignInForm(),
+                      const SizedBox(height: 32),
+                      const AuthWithSocial(),
+                    ],
                   ),
                 ),
                 large: (_) => Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 48,
-                    vertical: 176,
-                  ),
+                  padding: AppPadding.symmetricIncrement(
+                    horizontal: 6,
+                    vertical: 22,
+                  ), // const EdgeInsets.symmetric(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -236,38 +129,18 @@ class _SignInState extends State<SignIn>
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: SizedBox(
-                          width: 400,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SignInForm(
-                                emailFocusNode: _emailFocusNode,
-                                phoneFocusNode: _phoneFocusNode,
-                                emailController: _emailController,
-                                passwordController: _passwordController,
-                                phoneController: _phoneController,
-                                pinCodeController: _pinCodeController,
-                              ),
-                              const SizedBox(height: 32),
-                              AuthButton(
-                                signInWithEmailAndPassword: () =>
-                                    _signInWithEmailAndPassword(
-                                      _emailController.text,
-                                      _passwordController.text,
-                                    ),
-                                signInWithPhoneNumber: () =>
-                                    _signInWithPhoneNumber(
-                                      _pinCodeController.text,
-                                    ),
-                                verifyPhoneNumber: () =>
-                                    _verifyPhoneNumber(_phoneController.text),
-                              ),
-                              const SizedBox(height: 32),
-                              const AuthWithSocial(),
-                            ],
-                          ),
+                        padding: AppPadding.symmetricIncrement(
+                          horizontal: 5,
+                          vertical: 5,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SignInForm(),
+                            const SizedBox(height: 32),
+                            const SizedBox(height: 32),
+                            const AuthWithSocial(),
+                          ],
                         ),
                       ),
                     ],

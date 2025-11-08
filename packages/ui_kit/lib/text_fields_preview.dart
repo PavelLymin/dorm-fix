@@ -11,7 +11,7 @@ class _TextFieldsPreviewState extends State<TextFieldsPreview> {
   @override
   Widget build(BuildContext context) => const UiCard(
     child: Padding(
-      padding: EdgeInsets.all(16),
+      padding: AppPadding.allSmall,
       child: SizedBox(
         width: 200,
         child: Column(

@@ -1,65 +1,49 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../app/widget/dependencies_scope.dart';
 import '../state_management/auth_button/auth_button_bloc.dart';
+import '../state_management/authentication/authentication_bloc.dart';
+import 'auth_button.dart';
+import 'email_password_form.dart';
+import 'phone_number_form.dart';
 
 class SignInForm extends StatefulWidget {
-  const SignInForm({
-    required this.emailFocusNode,
-    required this.phoneFocusNode,
-    required this.emailController,
-    required this.passwordController,
-    required this.phoneController,
-    required this.pinCodeController,
-    super.key,
-  });
-
-  final FocusNode emailFocusNode;
-  final FocusNode phoneFocusNode;
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final TextEditingController phoneController;
-  final TextEditingController pinCodeController;
+  const SignInForm({super.key});
 
   @override
   State<SignInForm> createState() => _SignInFormState();
 }
 
-class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
+class _SignInFormState extends State<SignInForm> with _FormStateMixin {
   @override
-  void initState() {
-    super.initState();
-    widget.emailController.addListener(_emailListener);
-    widget.phoneController.addListener(_phonelistener);
-  }
-
-  @override
-  void dispose() {
-    widget.emailController.removeListener(_emailListener);
-    widget.phoneController.removeListener(_phonelistener);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var color = Theme.of(context).colorPalette;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(height: 16),
-        WindowSizeScope.of(context).isMediumOrLarger
-            ? UiText.titleLarge(
-                'Начните использовать приложение',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              )
-            : UiText.titleMedium(
-                'Начните использовать приложение',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-        const SizedBox(height: 32),
-        ValueListenableBuilder(
-          valueListenable: _isPhoneNumber,
-          builder: (context, value, child) => value
-              ? BlocBuilder<AuthButtonBloc, AuthButtonState>(
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      const SizedBox(height: 16),
+      WindowSizeScope.of(context).isMediumOrLarger
+          ? UiText.titleLarge(
+              'Начните использовать приложение',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            )
+          : UiText.titleMedium(
+              'Начните использовать приложение',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+      const SizedBox(height: 32),
+      ValueListenableBuilder(
+        valueListenable: _isPhoneNumber,
+        builder: (context, value, _) => AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          switchInCurve: Curves.easeInOut,
+          child: !value
+              ? EmailPasswordForm(
+                  emailController: _emailController,
+                  passwordController: _passwordController,
+                  emailFocusNode: _emailFocusNode,
+                  passwordFocusNode: _passwordFocusNode,
+                  onTap: () {},
+                )
+              : BlocBuilder<AuthButtonBloc, AuthButtonState>(
                   buildWhen: (previous, current) {
                     bool wasPin = previous.maybeMap(
                       isPin: () => true,
@@ -72,190 +56,96 @@ class _SignInFormState extends State<SignInForm> with _SignInFormStateMixin {
                     return wasPin != isPin;
                   },
                   builder: (context, state) => state.maybeMap(
-                    orElse: () => _PhoneNumberForm(
-                      color: color,
-                      phoneFocusNode: widget.phoneFocusNode,
-                      phoneController: widget.phoneController,
-                      pinCodeController: widget.pinCodeController,
+                    orElse: () => PhoneNumberForm(
+                      phoneController: _phoneController,
+                      pinCodeController: _pinCodeController,
+                      phoneFocusNode: _phoneFocusNode,
                       isEnabledTextField: true,
                       isEnabledPinCode: false,
-                      clearSuffixIcon: _clearSuffixIcon(widget.phoneController),
                     ),
-                    isPin: () => _PhoneNumberForm(
-                      color: color,
-                      phoneFocusNode: widget.phoneFocusNode,
-                      phoneController: widget.phoneController,
-                      pinCodeController: widget.pinCodeController,
+                    isPin: () => PhoneNumberForm(
+                      phoneFocusNode: _phoneFocusNode,
+                      phoneController: _phoneController,
+                      pinCodeController: _pinCodeController,
                       isEnabledTextField: false,
                       isEnabledPinCode: true,
                       onTap: () {},
                     ),
                   ),
-                )
-              : Column(
-                  children: [
-                    UiTextField.standard(
-                      focusNode: widget.emailFocusNode,
-                      controller: widget.emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      style: UiTextFieldStyle(
-                        filled: true,
-                        fillColor: color.primary,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 18,
-                        ),
-                        hintText: 'name@mail.ru или +71234567890',
-                        prefixIcon: Icon(Icons.email_outlined),
-                        suffixIcon: _clearSuffixIcon(widget.emailController),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      switchInCurve: Curves.easeInOutBack,
-                      child: UiTextField.standard(
-                        controller: widget.passwordController,
-                        obscureText: _obscureText,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.done,
-                        style: UiTextFieldStyle(
-                          filled: true,
-                          fillColor: color.primary,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 18,
-                          ),
-                          hintText: 'Пароль',
-                          prefixIcon: Icon(Icons.password_outlined),
-                          suffixIcon: _visibilitySuffixIcon(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {},
-                        child: Padding(
-                          padding: EdgeInsets.all(1.5),
-                          child: UiText.bodyLarge('Забыли пароль?'),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
                 ),
         ),
-      ],
-    );
-  }
+      ),
+      const SizedBox(height: 32),
+      AuthButton(
+        signInWithEmailAndPassword: () => _signInWithEmailAndPassword(
+          _emailController.text,
+          _passwordController.text,
+        ),
+        signInWithPhoneNumber: () =>
+            _signInWithPhoneNumber(_pinCodeController.text),
+        verifyPhoneNumber: () => _verifyPhoneNumber(_phoneController.text),
+      ),
+    ],
+  );
 }
 
-class _PhoneNumberForm extends StatelessWidget {
-  const _PhoneNumberForm({
-    required this.color,
-    required this.isEnabledTextField,
-    required this.isEnabledPinCode,
-    required this.phoneController,
-    required this.pinCodeController,
-    required this.phoneFocusNode,
-    this.clearSuffixIcon,
-    this.onTap,
-  });
+mixin _FormStateMixin on State<SignInForm> {
+  late AuthBloc _authBloc;
+  bool _clearText = false;
+  final _isPhoneNumber = ValueNotifier<bool>(false);
 
-  final ColorPalette color;
-  final TextEditingController phoneController;
-  final TextEditingController pinCodeController;
-  final FocusNode phoneFocusNode;
-  final bool isEnabledTextField;
-  final bool isEnabledPinCode;
-  final Widget? clearSuffixIcon;
-  final Function()? onTap;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+
+  final _phoneController = TextEditingController();
+  final _pinCodeController = TextEditingController();
+  final _phoneFocusNode = FocusNode();
 
   @override
-  Widget build(BuildContext context) {
-    context.findAncestorWidgetOfExactType<SignInForm>()?.emailController;
-    return Column(
-      children: [
-        UiTextField.standard(
-          enabled: isEnabledTextField,
-          focusNode: phoneFocusNode,
-          controller: phoneController,
-          keyboardType: TextInputType.phone,
-          style: UiTextFieldStyle(
-            filled: true,
-            fillColor: color.primary,
-            prefixIcon: Icon(Icons.phone_enabled_outlined),
-            suffixIcon: clearSuffixIcon,
-          ),
-        ),
-        const SizedBox(height: 12),
-        PinCode(
-          height: 60,
-          length: 6,
-          isEnable: isEnabledPinCode,
-          isFocus: isEnabledPinCode,
-          controller: pinCodeController,
-        ),
-        const SizedBox(height: 8),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(8),
-            onTap: onTap,
-            child: Padding(
-              padding: EdgeInsets.all(1.5),
-              child: UiText.bodyLarge(
-                'Изменить номер?',
-                style: TextStyle(
-                  color: isEnabledPinCode
-                      ? color.foreground
-                      : color.mutedForeground,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-      ],
-    );
+  void initState() {
+    super.initState();
+    _authBloc = DependeciesScope.of(context).authenticationBloc;
+    _emailController.addListener(_emailToPhoneNumber);
+    _phoneController.addListener(_phoneNumberToEmail);
   }
-}
 
-mixin _SignInFormStateMixin on State<SignInForm> {
-  final _isPhoneNumber = ValueNotifier<bool>(false);
-  bool _obscureText = true;
-  bool _clearText = false;
+  @override
+  void dispose() {
+    _emailController.removeListener(_emailToPhoneNumber);
+    _phoneController.removeListener(_phoneNumberToEmail);
+    super.dispose();
+  }
 
-  void _emailListener() {
-    _onChanged(widget.emailController.text);
-    if (widget.emailController.text.startsWith('+')) {
+  void _emailToPhoneNumber() {
+    _onChanged(_emailController.text);
+    if (_emailController.text.startsWith('+')) {
       Future.delayed(Duration(milliseconds: 100)).then((_) {
         setState(() {
-          widget.phoneController.text = widget.emailController.text;
-          widget.emailController.clear();
+          _phoneController.text = _emailController.text;
+          _emailController.clear();
           _isPhoneNumber.value = true;
-          widget.emailFocusNode.unfocus();
-          widget.phoneFocusNode.requestFocus();
+          _emailFocusNode.unfocus();
+          _phoneFocusNode.requestFocus();
         });
       });
     }
   }
 
-  void _phonelistener() {
-    _onChanged(widget.phoneController.text);
-    if (!widget.phoneController.text.startsWith('+')) {
-      Future.delayed(Duration(milliseconds: 100)).then((_) {
-        setState(() {
-          widget.emailController.text = widget.phoneController.text;
-          widget.pinCodeController.clear();
-          widget.phoneController.clear();
+  void _phoneNumberToEmail() {
+    _onChanged(_phoneController.text);
+    if (!_phoneController.text.startsWith('+')) {
+      Future.delayed(Duration(milliseconds: 100)).then(
+        (_) => setState(() {
+          _emailController.text = _phoneController.text;
+          _pinCodeController.clear();
+          _phoneController.clear();
           _isPhoneNumber.value = false;
-          widget.phoneFocusNode.unfocus();
-          widget.emailFocusNode.requestFocus();
-        });
-      });
+          _phoneFocusNode.unfocus();
+          _emailFocusNode.requestFocus();
+        }),
+      );
     }
   }
 
@@ -271,26 +161,24 @@ mixin _SignInFormStateMixin on State<SignInForm> {
     }
   }
 
-  Widget? _clearSuffixIcon(TextEditingController controller) =>
-      controller.text.isEmpty
-      ? null
-      : IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            setState(() {
-              controller.clear();
-            });
-          },
-        );
+  void _signInWithEmailAndPassword(String email, String password) {
+    _authBloc.add(
+      AuthEvent.signInWithEmailAndPassword(email: email, password: password),
+    );
+  }
 
-  Widget? _visibilitySuffixIcon() => IconButton(
-    icon: _obscureText
-        ? const Icon(Icons.visibility_off)
-        : const Icon(Icons.visibility),
-    onPressed: () {
-      setState(() {
-        _obscureText = !_obscureText;
-      });
-    },
-  );
+  void _verifyPhoneNumber(String phoneNumber) {
+    _authBloc.add(AuthEvent.verifyPhoneNumber(phoneNumber: phoneNumber));
+  }
+
+  void _signInWithPhoneNumber(String smsCode) {
+    _authBloc.state.mapOrNull(
+      smsCodeSent: (state) => context.read<AuthBloc>().add(
+        AuthEvent.signInWithPhoneNumber(
+          verificationId: state.verificationId,
+          smsCode: smsCode,
+        ),
+      ),
+    );
+  }
 }

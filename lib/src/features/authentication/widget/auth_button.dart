@@ -15,19 +15,18 @@ class AuthButton extends StatelessWidget {
   final Function signInWithPhoneNumber;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    width: 305,
-    height: 45,
-    child: BlocBuilder<AuthButtonBloc, AuthButtonState>(
-      builder: (context, state) {
-        return UiButton.filledGradient(
-          onPressed: () {
-            state.mapOrNull(
-              isEmailPassword: () => signInWithEmailAndPassword(),
-              isPhoneNumber: () => verifyPhoneNumber(),
-              isPin: () => signInWithPhoneNumber(),
-            );
-          },
+  Widget build(BuildContext context) => Padding(
+    padding: AppPadding.symmetricIncrement(horizontal: 3),
+    child: SizedBox(
+      height: 48,
+      width: double.infinity,
+      child: BlocBuilder<AuthButtonBloc, AuthButtonState>(
+        builder: (context, state) => UiButton.filledGradient(
+          onPressed: () => state.mapOrNull(
+            isEmailPassword: () => signInWithEmailAndPassword(),
+            isPhoneNumber: () => verifyPhoneNumber(),
+            isPin: () => signInWithPhoneNumber(),
+          ),
           enabled: state.isEnabled,
           label: state.isLoading
               ? SizedBox.square(
@@ -40,8 +39,8 @@ class AuthButton extends StatelessWidget {
                   ),
                 )
               : const Text('Далее'),
-        );
-      },
+        ),
+      ),
     ),
   );
 }

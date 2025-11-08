@@ -6,7 +6,7 @@ class ColorPalettePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) => UiCard(
     child: Padding(
-      padding: const EdgeInsets.all(16),
+      padding: AppPadding.allSmall,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

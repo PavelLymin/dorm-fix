@@ -36,22 +36,6 @@ class AuthButtonState {
     return false;
   }
 
-  AuthButtonState copyWith({
-    bool? isLoading,
-    bool? isEmail,
-    bool? isPassword,
-    bool? isPhoneNumber,
-    bool? isPin,
-    bool? isCodeSent,
-  }) => AuthButtonState(
-    isLoading: isLoading ?? _isLoading,
-    isEmail: isEmail ?? _isEmail,
-    isPassword: isPassword ?? _isPassword,
-    isPhoneNumber: isPhoneNumber ?? _isPhoneNumber,
-    isPin: isPin ?? _isPin,
-    isCodeSent: isCodeSent ?? _isCodeSent,
-  );
-
   T map<T>({
     required T Function() isLoading,
     required T Function() isEmailPassword,
@@ -96,5 +80,33 @@ class AuthButtonState {
 
   @override
   String toString() =>
-      'AuthButtonState(isLoading: $_isLoading, isEmail: $_isEmail, isPassword: $_isPassword, isPhoneNumber: $_isPhoneNumber, isPin: $_isPin, isCodeSent: $_isCodeSent)';
+      'AuthButtonState(isLoading: $_isLoading, '
+      'isEmail: $_isEmail, '
+      'isPassword: $_isPassword, '
+      'isPhoneNumber: $_isPhoneNumber, '
+      'isPin: $_isPin, '
+      'isCodeSent: $_isCodeSent)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+    return other is AuthButtonState &&
+        other._isLoading == _isLoading &&
+        other._isEmail == _isEmail &&
+        other._isPassword == _isPassword &&
+        other._isPhoneNumber == _isPhoneNumber &&
+        other._isPin == _isPin &&
+        other._isCodeSent == _isCodeSent;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    _isLoading,
+    _isEmail,
+    _isPassword,
+    _isPhoneNumber,
+    _isPin,
+    _isCodeSent,
+  );
 }
