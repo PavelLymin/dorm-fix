@@ -67,6 +67,7 @@ class CompositionRoot {
     );
     final specializationBloc = SpecializationBloc(
       specializationRepository: specializationRepository,
+      logger: logger,
     );
 
     return _DependencyFactory(

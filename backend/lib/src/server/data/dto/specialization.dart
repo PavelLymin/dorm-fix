@@ -5,56 +5,68 @@ import '../../model/specialization.dart';
 class SpecializationDto {
   const SpecializationDto({
     required this.id,
-    required this.name,
+    required this.title,
     required this.description,
+    required this.photoUrl,
   });
 
   final int id;
-  final String name;
+  final String title;
   final String description;
+  final String photoUrl;
 
-  SpecializationEntity toEntity() =>
-      SpecializationEntity(id: id, name: name, description: description);
+  SpecializationEntity toEntity() => SpecializationEntity(
+    id: id,
+    title: title,
+    description: description,
+    photoUrl: photoUrl,
+  );
 
   static SpecializationDto fromEntity(SpecializationEntity entity) =>
       SpecializationDto(
         id: entity.id,
-        name: entity.name,
+        title: entity.title,
         description: entity.description,
+        photoUrl: entity.photoUrl,
       );
 
   SpecializationsCompanion toCompanion() => SpecializationsCompanion(
     id: Value(id),
-    name: Value(name),
+    title: Value(title),
     description: Value(description),
+    photoUrl: Value(photoUrl),
   );
 
   factory SpecializationDto.fromData(Specialization specialization) =>
       SpecializationDto(
         id: specialization.id,
-        name: specialization.name,
+        title: specialization.title,
         description: specialization.description,
+        photoUrl: specialization.photoUrl,
       );
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'name': name,
+    'title': title,
     'description': description,
+    'photo_url': photoUrl,
   };
 
   static SpecializationDto fromJson(Map<String, dynamic> json) =>
       SpecializationDto(
         id: json['id'],
-        name: json['name'],
+        title: json['title'],
         description: json['description'],
+        photoUrl: json['photo_url'],
       );
 
   @override
   String toString() {
     return 'SpeciaizationDto('
         'id: $id, '
-        'name: $name, '
-        'description: $description)';
+        'title: $title, '
+        'description: $description, '
+        'photoUrl: $photoUrl)';
   }
 
   @override

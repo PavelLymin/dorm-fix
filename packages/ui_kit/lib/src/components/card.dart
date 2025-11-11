@@ -1,27 +1,20 @@
 import 'package:ui_kit/ui.dart';
 
 class UiCard extends StatelessWidget {
-  const UiCard({required this.child, super.key, this.color, this.margin});
+  const UiCard({required this.child, super.key, this.color, this.padding});
   final Color? color;
-  final EdgeInsetsGeometry? margin;
+  final EdgeInsets? padding;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Container(
-    margin: margin ?? const EdgeInsets.all(8),
-    child: Surface(
-      color: color,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorPalette.primary,
-          border: Border.all(
-            color: Theme.of(context).colorPalette.border,
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(27),
-        ),
-        child: child,
-      ),
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      color: color ?? Theme.of(context).colorPalette.secondary,
+      borderRadius: BorderRadius.circular(24),
+    ),
+    child: Padding(
+      padding: padding ?? const EdgeInsets.all(24.0),
+      child: child,
     ),
   );
 }

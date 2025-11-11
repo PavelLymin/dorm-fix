@@ -16,6 +16,8 @@ class SpecializationRepositoryImpl implements ISpecializationRepository {
   Future<List<SpecializationEntity>> getSpecializations() async {
     final data = await _database.select(_database.specializations).get();
 
+    if (data.isEmpty) return [];
+
     final specializations = data
         .map((row) => SpecializationDto.fromData(row).toEntity())
         .toList();

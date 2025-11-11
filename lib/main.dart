@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dorm_fix/src/features/authentication/widget/signin.dart';
+import 'package:dorm_fix/src/features/home/widget/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'src/app/bloc/app_bloc_observer.dart';
@@ -60,7 +60,7 @@ class _MainAppState extends State<MainApp> {
       title: 'Dorm Fix',
       debugShowCheckedModeBanner: false,
       theme: darkTheme,
-      home: const SignIn(),
+      home: const Home(),
     ),
   );
 }

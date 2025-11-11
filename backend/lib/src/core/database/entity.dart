@@ -2,11 +2,13 @@ part of 'database.dart';
 
 class Users extends Table {
   TextColumn get uid => text().named('uid')();
-  TextColumn get name => text().named('name')();
+  TextColumn get displayName => text().named('display_name')();
   TextColumn get email => text().named('email')();
   TextColumn get phoneNumber => text().named('phone_number')();
   TextColumn get photoURL => text().named('photo_url')();
   TextColumn get role => text().named('role')();
+  DateTimeColumn get createdAt =>
+      dateTime().named('created_at').withDefault(currentDateAndTime)();
 }
 
 class Students extends Table {
@@ -25,9 +27,6 @@ class Masters extends Table {
   IntColumn get dormitoryId =>
       integer().named('dormitory_id').references(Dormitories, #id)();
   RealColumn get rating => real().named('rating').withDefault(Constant(0.0))();
-  IntColumn get completedCount =>
-      integer().named('completed_count').withDefault(Constant(0))();
-  DateTimeColumn get createdAt => dateTime().named('created_at')();
 }
 
 class Dormitories extends Table {
@@ -50,12 +49,12 @@ class Rooms extends Table {
 
 class Requests extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
-  IntColumn get studentId =>
-      integer().named('student_id').references(Students, #id)();
+  IntColumn get uid => integer().named('uid').references(Users, #uid)();
   TextColumn get category => text().named('category')();
   TextColumn get description => text().named('description')();
   TextColumn get priority => text().named('priority')();
   TextColumn get status => text().named('status')();
+  BoolColumn get studentAbsent => boolean().named('student_absent')();
   DateTimeColumn get scheduleTime => dateTime().named('schedule_time')();
   DateTimeColumn get createdAt =>
       dateTime().named('created_at').withDefault(currentDateAndTime)();
@@ -63,16 +62,16 @@ class Requests extends Table {
 
 class Assignments extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
+  IntColumn get uid => integer().named('uid').references(Users, #uid)();
   IntColumn get requestId =>
       integer().named('request_id').references(Requests, #id)();
-  IntColumn get masterId =>
-      integer().named('master_id').references(Masters, #id)();
   DateTimeColumn get createdAt =>
       dateTime().named('created_at').withDefault(currentDateAndTime)();
 }
 
 class Specializations extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
-  TextColumn get name => text().named('name')();
+  TextColumn get title => text().named('title')();
   TextColumn get description => text().named('description')();
+  TextColumn get photoUrl => text().named('photo_url')();
 }

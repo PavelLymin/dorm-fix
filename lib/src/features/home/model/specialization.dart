@@ -1,27 +1,35 @@
 class SpecializationEntity {
   const SpecializationEntity({
     required this.id,
-    required this.name,
+    required this.title,
     required this.description,
+    required this.photoUrl,
   });
 
   final int id;
-  final String name;
+  final String title;
   final String description;
+  final String photoUrl;
 
-  SpecializationEntity copyWith({int? id, String? name, String? description}) =>
-      SpecializationEntity(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        description: description ?? this.description,
-      );
+  SpecializationEntity copyWith({
+    int? id,
+    String? title,
+    String? description,
+    String? photoUrl,
+  }) => SpecializationEntity(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    description: description ?? this.description,
+    photoUrl: photoUrl ?? this.photoUrl,
+  );
 
   @override
   String toString() =>
       'SpecializationEntity('
       'id: $id, '
-      'name: $name, '
-      'description: $description)';
+      'title: $title, '
+      'description: $description, '
+      'photoUrl: $photoUrl)';
 
   @override
   bool operator ==(Object other) =>

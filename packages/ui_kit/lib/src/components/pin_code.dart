@@ -140,17 +140,9 @@ class PinInput extends StatelessWidget {
       width: isCurrentFocus ? 45 : 40,
       height: isCurrentFocus ? 60 : 50,
       decoration: BoxDecoration(
-        color: palette.primary,
+        color: palette.secondary,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: color),
-        boxShadow: [
-          const BoxShadow(
-            color: Colors.white,
-            offset: Offset(0.0, 0.0),
-            blurRadius: 2.0,
-            spreadRadius: 0.0,
-          ),
-        ],
       ),
       child: Center(
         child: number.isEmpty && isCurrentFocus

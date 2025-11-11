@@ -169,15 +169,14 @@ class _FilledButtonGradientStyle extends _UiBaseButtonStyle {
     return OutlineFocusButtonBorder(
       showBorder: states.contains(WidgetState.focused),
       border: RoundedRectangleBorder(
-        side: BorderSide(color: colorPalette.secondary, width: 2),
+        side: BorderSide(color: colorPalette.destructive, width: 5),
       ),
       child: Ink(
         decoration: BoxDecoration(
           gradient: states.contains(WidgetState.disabled)
               ? gradient.muted
               : gradient.primary,
-          borderRadius: BorderRadius.circular(27),
-          border: BoxBorder.all(color: colorPalette.buttonBorder),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: child,
       ),
@@ -228,21 +227,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<double>? get elevation =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
-          return 0.0;
-        }
-        if (states.contains(WidgetState.pressed)) {
-          return 1.0;
-        }
-        if (states.contains(WidgetState.hovered)) {
-          return 1.0;
-        }
-        if (states.contains(WidgetState.focused)) {
-          return 0.0;
-        }
-        return 2.0;
-      });
+      WidgetStatePropertyAll<double>(0.0);
 
   @override
   WidgetStateProperty<Color>? get shadowColor => WidgetStatePropertyAll<Color>(
@@ -269,7 +254,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
   WidgetStateProperty<OutlinedBorder?>? get shape =>
       const WidgetStatePropertyAll(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(27)),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
       );
 
@@ -307,7 +292,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
 
   @override
   WidgetStateProperty<double?>? get elevation =>
-      const WidgetStatePropertyAll(1);
+      const WidgetStatePropertyAll(0.0);
 
   @override
   WidgetStateProperty<MouseCursor?>? get mouseCursor =>
@@ -335,8 +320,8 @@ class _UiBaseButtonStyle extends ButtonStyle {
     return OutlineFocusButtonBorder(
       showBorder: states.contains(WidgetState.focused),
       border: RoundedRectangleBorder(
-        side: BorderSide(color: colorPalette.secondary, width: 2),
-        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: colorPalette.destructive, width: 2),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: child,
     );

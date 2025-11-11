@@ -61,6 +61,7 @@ class CompositionRoot {
     );
     final specializationRouter = SpecializationRouter(
       specializationRepository: specializationRepository,
+      logger: logger,
     );
 
     return _DependencyFactory(

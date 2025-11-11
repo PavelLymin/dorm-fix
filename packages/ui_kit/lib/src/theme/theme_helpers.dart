@@ -30,27 +30,21 @@ ThemeData createThemeData({
 }) => ThemeData(brightness: brightness, extensions: {palette, typography});
 
 ColorPalette generatePaletteForBrightness(Brightness brightness) {
-  final materialPalette = ColorScheme.fromSeed(
-    seedColor: Colors.transparent,
-    dynamicSchemeVariant: DynamicSchemeVariant.monochrome,
-    brightness: brightness,
-  );
-
   return ColorPalette(
-    background: materialPalette.surface,
-    foreground: materialPalette.onSurface,
-    muted: materialPalette.onSurface.withValues(alpha: .12),
-    mutedForeground: materialPalette.onSurface.withValues(alpha: .38),
+    background: Color(0xFF000000),
+    foreground: Color(0xFFFFFFFF),
+    muted: Color(0xFF50ACF9).withValues(alpha: 0.5),
+    mutedForeground: Color(0xFF949494),
     border: Color(0xFF3B3B3B),
     buttonBorder: Color(0xFF7DB3FC),
-    primary: Color(0xFF212121),
+    primary: Color(0xFF50ACF9),
     primaryForeground: Color(0xFFFFFFFF),
-    secondary: Color(0xFF292828),
+    secondary: Color(0xFF232325),
     secondaryForeground: Color(0xFF8A8888),
-    accent: materialPalette.tertiary,
-    accentForeground: materialPalette.onTertiary,
-    destructive: materialPalette.error,
-    destructiveForeground: materialPalette.onError,
+    accent: Color(0xFFFFFFFF),
+    accentForeground: Color(0xFFFFFFFF),
+    destructive: Color(0xFFFD273E),
+    destructiveForeground: Color(0xFFFD273E),
     ring: const Color.fromARGB(255, 60, 139, 250),
   );
 }

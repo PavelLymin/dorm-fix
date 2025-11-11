@@ -120,6 +120,12 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   final AppTypography typography;
 
   @override
+  bool? get filled => true;
+
+  @override
+  Color? get fillColor => palette.secondary;
+
+  @override
   TextStyle? get textStyle => typography.bodyMedium.copyWith(
     color: palette.foreground,
     fontFamily: 'Proximanova',
@@ -154,31 +160,31 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
 
   @override
   InputBorder? get focusedBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(27),
+    borderRadius: BorderRadius.circular(16),
     borderSide: BorderSide(color: palette.accent, width: 1),
   );
 
   @override
   InputBorder? get focusedErrorBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(27),
+    borderRadius: BorderRadius.circular(16),
     borderSide: BorderSide(color: palette.destructive, width: 1),
   );
 
   @override
   InputBorder? get errorBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(27),
+    borderRadius: BorderRadius.circular(16),
     borderSide: BorderSide(color: palette.destructive),
   );
 
   @override
   InputBorder? get enabledBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(27),
+    borderRadius: BorderRadius.circular(16),
     borderSide: BorderSide(color: palette.border),
   );
 
   @override
   InputBorder? get disabledBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(27),
+    borderRadius: BorderRadius.circular(16),
     borderSide: BorderSide(color: palette.foreground.withValues(alpha: .08)),
   );
 

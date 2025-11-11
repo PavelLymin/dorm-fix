@@ -85,66 +85,61 @@ class _SignInState extends State<SignIn> {
           },
         );
       },
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: Theme.of(context).appGradient.background,
-        ),
-        child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          backgroundColor: Colors.transparent,
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: WindowSizeScope.of(context).maybeMap(
-                orElse: () => Padding(
-                  padding: AppPadding.symmetricIncrement(
-                    vertical: 6,
-                    horizontal: 2,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      UiText.displayLarge(
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: WindowSizeScope.of(context).maybeMap(
+              orElse: () => Padding(
+                padding: AppPadding.symmetricIncrement(
+                  vertical: 6,
+                  horizontal: 2,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    UiText.displayLarge(
+                      'Dorm Fix',
+                      style: TextStyle(fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 96),
+                    const SignInForm(),
+                    const SizedBox(height: 32),
+                    const AuthWithSocial(),
+                  ],
+                ),
+              ),
+              large: (_) => Padding(
+                padding: AppPadding.symmetricIncrement(
+                  horizontal: 6,
+                  vertical: 22,
+                ), // const EdgeInsets.symmetric(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: UiText.displayLarge(
                         'Dorm Fix',
                         style: TextStyle(fontWeight: FontWeight.w900),
                       ),
-                      const SizedBox(height: 96),
-                      const SignInForm(),
-                      const SizedBox(height: 32),
-                      const AuthWithSocial(),
-                    ],
-                  ),
-                ),
-                large: (_) => Padding(
-                  padding: AppPadding.symmetricIncrement(
-                    horizontal: 6,
-                    vertical: 22,
-                  ), // const EdgeInsets.symmetric(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: UiText.displayLarge(
-                          'Dorm Fix',
-                          style: TextStyle(fontWeight: FontWeight.w900),
-                        ),
+                    ),
+                    Padding(
+                      padding: AppPadding.symmetricIncrement(
+                        horizontal: 5,
+                        vertical: 5,
                       ),
-                      Padding(
-                        padding: AppPadding.symmetricIncrement(
-                          horizontal: 5,
-                          vertical: 5,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SignInForm(),
-                            const SizedBox(height: 32),
-                            const SizedBox(height: 32),
-                            const AuthWithSocial(),
-                          ],
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SignInForm(),
+                          const SizedBox(height: 32),
+                          const SizedBox(height: 32),
+                          const AuthWithSocial(),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

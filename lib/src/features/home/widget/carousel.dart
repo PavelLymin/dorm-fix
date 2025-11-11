@@ -35,69 +35,66 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _itemWeight = WindowSizeScope.of(context).width - 32;
+    _itemWeight =
+        WindowSizeScope.of(context).width - AppPadding.defaultPadding * 3 * 2;
   }
 
   @override
   Widget build(BuildContext context) => BlocProvider.value(
     value: _specializationBloc,
     child: BlocBuilder<SpecializationBloc, SpecializationState>(
-      builder: (context, state) {
-        return Column(
-          children: [
-            SizedBox(
-              height: 182,
-              child: CarouselView(
-                enableSplash: false,
-                padding: const EdgeInsets.all(0),
-                itemExtent: _itemWeight,
-                itemSnapping: true,
-                controller: _controller,
-                children: state.map(
-                  loading: (_) => <Widget>[
-                    UiCard(
-                      child: SizedBox.square(
-                        dimension: 20,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  ],
-                  loaded: (state) {
-                    return List.generate(
-                      state.specializations.length,
-                      (index) => _CarouselWrapper(
-                        width: _itemWeight,
-                        child: _CarouselItem(
-                          spec: state.specializations[index],
-                          onPressed: () => _controller.animateToItem(
-                            (index + 1) % state.specializations.length,
-                            duration: const Duration(milliseconds: 500),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  error: (state) => <Widget>[
-                    UiCard(
-                      child: Center(
-                        child: UiText.bodyLarge(state.message, softWrap: false),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            _CarouselIndicators(
-              countChildren: state.maybeMap(
-                orElse: () => 1,
-                loaded: (state) => state.specializations.length,
-              ),
+      builder: (context, state) => Column(
+        children: [
+          SizedBox(
+            height: 164,
+            child: CarouselView(
+              enableSplash: false,
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              itemExtent: _itemWeight,
+              itemSnapping: true,
               controller: _controller,
-              itemWeight: _itemWeight,
+              children: state.map(
+                loading: (_) => <Widget>[
+                  UiCard(
+                    child: const SizedBox.square(
+                      dimension: 20,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ],
+                loaded: (state) => List.generate(
+                  state.specializations.length,
+                  (index) => _CarouselWrapper(
+                    itemWidth: _itemWeight,
+                    child: _CarouselItem(
+                      spec: state.specializations[index],
+                      onPressed: () => _controller.animateToItem(
+                        (index + 1) % state.specializations.length,
+                        duration: const Duration(milliseconds: 500),
+                      ),
+                    ),
+                  ),
+                ),
+                error: (state) => <Widget>[
+                  UiCard(
+                    child: Center(
+                      child: UiText.bodyLarge(state.message, softWrap: false),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        );
-      },
+          ),
+          _CarouselIndicators(
+            countChildren: state.maybeMap(
+              orElse: () => 1,
+              loaded: (state) => state.specializations.length,
+            ),
+            controller: _controller,
+            itemWeight: _itemWeight,
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -154,15 +151,19 @@ class _CarouselIndicatorsState extends State<_CarouselIndicators> {
                 index,
                 duration: const Duration(milliseconds: 300),
               ),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                width: value == index ? 12 : 10,
-                height: value == index ? 12 : 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: value == index
-                      ? color.accent.withValues(alpha: 0.7)
-                      : color.accent.withValues(alpha: 0.3),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                child: SizedBox(
+                  width: value == index ? 12 : 10,
+                  height: value == index ? 12 : 10,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: value == index
+                          ? color.accent.withValues(alpha: 0.7)
+                          : color.accent.withValues(alpha: 0.3),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -180,38 +181,50 @@ class _CarouselItem extends StatelessWidget {
   final Function()? onPressed;
 
   @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(BuildContext context) => Row(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      UiText.titleLarge(spec.name),
-      const SizedBox(height: 8),
-      UiText.bodyLarge(spec.description),
+      Flexible(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            UiText.titleLarge(spec.title),
+            const SizedBox(height: 16),
+            UiText.bodyLarge(spec.description),
+          ],
+        ),
+      ),
+      const SizedBox(width: 24),
+      Image.asset('packages/ui_kit/assets/icons/${spec.photoUrl}', height: 84),
     ],
   );
 }
 
 class _CarouselWrapper extends StatelessWidget {
-  const _CarouselWrapper({required this.width, required this.child});
+  const _CarouselWrapper({required this.itemWidth, required this.child});
 
-  final double width;
+  final double itemWidth;
   final Widget child;
 
   static const _fadeOutThreshold = 100.0;
-  static const _padding = EdgeInsets.symmetric(horizontal: 24, vertical: 16);
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) {
+    builder: (_, constraints) {
       final opacity =
-          max(0, constraints.maxWidth + _fadeOutThreshold - width) /
+          max(0, constraints.maxWidth + _fadeOutThreshold - itemWidth) /
           _fadeOutThreshold;
       return UiCard(
+        padding: AppPadding.symmetricIncrement(horizontal: 3, vertical: 3),
         child: Opacity(
           opacity: opacity,
           child: OverflowBox(
-            maxWidth: width,
+            maxWidth: itemWidth - (3 * AppPadding.defaultPadding) * 2,
+            maxHeight: constraints.maxHeight,
             alignment: Alignment.topCenter,
-            child: Padding(padding: _padding, child: child),
+            child: child,
           ),
         ),
       );

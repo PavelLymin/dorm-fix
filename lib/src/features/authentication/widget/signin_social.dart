@@ -45,8 +45,13 @@ class AuthWithSocial extends StatelessWidget {
                     AuthEvent.signInWithGoogle(),
                   ),
                   style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll<Color>(
+                      Colors.transparent,
+                    ),
                     side: WidgetStatePropertyAll<BorderSide>(
-                      BorderSide(color: Theme.of(context).colorPalette.border),
+                      BorderSide(
+                        color: Theme.of(context).colorPalette.buttonBorder,
+                      ),
                     ),
                   ),
                 ),
@@ -55,7 +60,7 @@ class AuthWithSocial extends StatelessWidget {
               Expanded(
                 child: UiButton.icon(
                   icon: Image.asset(
-                    'packages/ui_kit/assets/icons/apple.png',
+                    'packages/ui_kit/assets/icons/google.png',
                     height: 32,
                     width: 32,
                   ),
@@ -63,8 +68,13 @@ class AuthWithSocial extends StatelessWidget {
                     AuthEvent.signInWithGoogle(),
                   ),
                   style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll<Color>(
+                      Colors.transparent,
+                    ),
                     side: WidgetStatePropertyAll<BorderSide>(
-                      BorderSide(color: Theme.of(context).colorPalette.border),
+                      BorderSide(
+                        color: Theme.of(context).colorPalette.buttonBorder,
+                      ),
                     ),
                   ),
                 ),

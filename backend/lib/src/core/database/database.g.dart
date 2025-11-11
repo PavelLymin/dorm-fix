@@ -17,10 +17,12 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  static const VerificationMeta _displayNameMeta = const VerificationMeta(
+    'displayName',
+  );
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-    'name',
+  late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
+    'display_name',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -66,14 +68,27 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     uid,
-    name,
+    displayName,
     email,
     phoneNumber,
     photoURL,
     role,
+    createdAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -95,13 +110,16 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     } else if (isInserting) {
       context.missing(_uidMeta);
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('display_name')) {
       context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+        _displayNameMeta,
+        displayName.isAcceptableOrUnknown(
+          data['display_name']!,
+          _displayNameMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_displayNameMeta);
     }
     if (data.containsKey('email')) {
       context.handle(
@@ -138,6 +156,12 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     } else if (isInserting) {
       context.missing(_roleMeta);
     }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
     return context;
   }
 
@@ -151,9 +175,9 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
         DriftSqlType.string,
         data['${effectivePrefix}uid'],
       )!,
-      name: attachedDatabase.typeMapping.read(
+      displayName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}name'],
+        data['${effectivePrefix}display_name'],
       )!,
       email: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -171,6 +195,10 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
         DriftSqlType.string,
         data['${effectivePrefix}role'],
       )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
     );
   }
 
@@ -182,39 +210,43 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
 
 class User extends DataClass implements Insertable<User> {
   final String uid;
-  final String name;
+  final String displayName;
   final String email;
   final String phoneNumber;
   final String photoURL;
   final String role;
+  final DateTime createdAt;
   const User({
     required this.uid,
-    required this.name,
+    required this.displayName,
     required this.email,
     required this.phoneNumber,
     required this.photoURL,
     required this.role,
+    required this.createdAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['uid'] = Variable<String>(uid);
-    map['name'] = Variable<String>(name);
+    map['display_name'] = Variable<String>(displayName);
     map['email'] = Variable<String>(email);
     map['phone_number'] = Variable<String>(phoneNumber);
     map['photo_url'] = Variable<String>(photoURL);
     map['role'] = Variable<String>(role);
+    map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
   UsersCompanion toCompanion(bool nullToAbsent) {
     return UsersCompanion(
       uid: Value(uid),
-      name: Value(name),
+      displayName: Value(displayName),
       email: Value(email),
       phoneNumber: Value(phoneNumber),
       photoURL: Value(photoURL),
       role: Value(role),
+      createdAt: Value(createdAt),
     );
   }
 
@@ -225,11 +257,12 @@ class User extends DataClass implements Insertable<User> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return User(
       uid: serializer.fromJson<String>(json['uid']),
-      name: serializer.fromJson<String>(json['name']),
+      displayName: serializer.fromJson<String>(json['displayName']),
       email: serializer.fromJson<String>(json['email']),
       phoneNumber: serializer.fromJson<String>(json['phoneNumber']),
       photoURL: serializer.fromJson<String>(json['photoURL']),
       role: serializer.fromJson<String>(json['role']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -237,39 +270,45 @@ class User extends DataClass implements Insertable<User> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'uid': serializer.toJson<String>(uid),
-      'name': serializer.toJson<String>(name),
+      'displayName': serializer.toJson<String>(displayName),
       'email': serializer.toJson<String>(email),
       'phoneNumber': serializer.toJson<String>(phoneNumber),
       'photoURL': serializer.toJson<String>(photoURL),
       'role': serializer.toJson<String>(role),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
   User copyWith({
     String? uid,
-    String? name,
+    String? displayName,
     String? email,
     String? phoneNumber,
     String? photoURL,
     String? role,
+    DateTime? createdAt,
   }) => User(
     uid: uid ?? this.uid,
-    name: name ?? this.name,
+    displayName: displayName ?? this.displayName,
     email: email ?? this.email,
     phoneNumber: phoneNumber ?? this.phoneNumber,
     photoURL: photoURL ?? this.photoURL,
     role: role ?? this.role,
+    createdAt: createdAt ?? this.createdAt,
   );
   User copyWithCompanion(UsersCompanion data) {
     return User(
       uid: data.uid.present ? data.uid.value : this.uid,
-      name: data.name.present ? data.name.value : this.name,
+      displayName: data.displayName.present
+          ? data.displayName.value
+          : this.displayName,
       email: data.email.present ? data.email.value : this.email,
       phoneNumber: data.phoneNumber.present
           ? data.phoneNumber.value
           : this.phoneNumber,
       photoURL: data.photoURL.present ? data.photoURL.value : this.photoURL,
       role: data.role.present ? data.role.value : this.role,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
 
@@ -277,97 +316,113 @@ class User extends DataClass implements Insertable<User> {
   String toString() {
     return (StringBuffer('User(')
           ..write('uid: $uid, ')
-          ..write('name: $name, ')
+          ..write('displayName: $displayName, ')
           ..write('email: $email, ')
           ..write('phoneNumber: $phoneNumber, ')
           ..write('photoURL: $photoURL, ')
-          ..write('role: $role')
+          ..write('role: $role, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(uid, name, email, phoneNumber, photoURL, role);
+  int get hashCode => Object.hash(
+    uid,
+    displayName,
+    email,
+    phoneNumber,
+    photoURL,
+    role,
+    createdAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is User &&
           other.uid == this.uid &&
-          other.name == this.name &&
+          other.displayName == this.displayName &&
           other.email == this.email &&
           other.phoneNumber == this.phoneNumber &&
           other.photoURL == this.photoURL &&
-          other.role == this.role);
+          other.role == this.role &&
+          other.createdAt == this.createdAt);
 }
 
 class UsersCompanion extends UpdateCompanion<User> {
   final Value<String> uid;
-  final Value<String> name;
+  final Value<String> displayName;
   final Value<String> email;
   final Value<String> phoneNumber;
   final Value<String> photoURL;
   final Value<String> role;
+  final Value<DateTime> createdAt;
   final Value<int> rowid;
   const UsersCompanion({
     this.uid = const Value.absent(),
-    this.name = const Value.absent(),
+    this.displayName = const Value.absent(),
     this.email = const Value.absent(),
     this.phoneNumber = const Value.absent(),
     this.photoURL = const Value.absent(),
     this.role = const Value.absent(),
+    this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   UsersCompanion.insert({
     required String uid,
-    required String name,
+    required String displayName,
     required String email,
     required String phoneNumber,
     required String photoURL,
     required String role,
+    this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : uid = Value(uid),
-       name = Value(name),
+       displayName = Value(displayName),
        email = Value(email),
        phoneNumber = Value(phoneNumber),
        photoURL = Value(photoURL),
        role = Value(role);
   static Insertable<User> custom({
     Expression<String>? uid,
-    Expression<String>? name,
+    Expression<String>? displayName,
     Expression<String>? email,
     Expression<String>? phoneNumber,
     Expression<String>? photoURL,
     Expression<String>? role,
+    Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (uid != null) 'uid': uid,
-      if (name != null) 'name': name,
+      if (displayName != null) 'display_name': displayName,
       if (email != null) 'email': email,
       if (phoneNumber != null) 'phone_number': phoneNumber,
       if (photoURL != null) 'photo_url': photoURL,
       if (role != null) 'role': role,
+      if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   UsersCompanion copyWith({
     Value<String>? uid,
-    Value<String>? name,
+    Value<String>? displayName,
     Value<String>? email,
     Value<String>? phoneNumber,
     Value<String>? photoURL,
     Value<String>? role,
+    Value<DateTime>? createdAt,
     Value<int>? rowid,
   }) {
     return UsersCompanion(
       uid: uid ?? this.uid,
-      name: name ?? this.name,
+      displayName: displayName ?? this.displayName,
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photoURL: photoURL ?? this.photoURL,
       role: role ?? this.role,
+      createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -378,8 +433,8 @@ class UsersCompanion extends UpdateCompanion<User> {
     if (uid.present) {
       map['uid'] = Variable<String>(uid.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
+    if (displayName.present) {
+      map['display_name'] = Variable<String>(displayName.value);
     }
     if (email.present) {
       map['email'] = Variable<String>(email.value);
@@ -393,6 +448,9 @@ class UsersCompanion extends UpdateCompanion<User> {
     if (role.present) {
       map['role'] = Variable<String>(role.value);
     }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -403,11 +461,12 @@ class UsersCompanion extends UpdateCompanion<User> {
   String toString() {
     return (StringBuffer('UsersCompanion(')
           ..write('uid: $uid, ')
-          ..write('name: $name, ')
+          ..write('displayName: $displayName, ')
           ..write('email: $email, ')
           ..write('phoneNumber: $phoneNumber, ')
           ..write('photoURL: $photoURL, ')
           ..write('role: $role, ')
+          ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1482,10 +1541,10 @@ class $SpecializationsTable extends Specializations
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-    'name',
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -1502,8 +1561,19 @@ class $SpecializationsTable extends Specializations
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _photoUrlMeta = const VerificationMeta(
+    'photoUrl',
+  );
   @override
-  List<GeneratedColumn> get $columns => [id, name, description];
+  late final GeneratedColumn<String> photoUrl = GeneratedColumn<String>(
+    'photo_url',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, title, description, photoUrl];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1519,13 +1589,13 @@ class $SpecializationsTable extends Specializations
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('title')) {
       context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
       );
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_titleMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
@@ -1537,6 +1607,14 @@ class $SpecializationsTable extends Specializations
       );
     } else if (isInserting) {
       context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('photo_url')) {
+      context.handle(
+        _photoUrlMeta,
+        photoUrl.isAcceptableOrUnknown(data['photo_url']!, _photoUrlMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_photoUrlMeta);
     }
     return context;
   }
@@ -1551,13 +1629,17 @@ class $SpecializationsTable extends Specializations
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      name: attachedDatabase.typeMapping.read(
+      title: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}name'],
+        data['${effectivePrefix}title'],
       )!,
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}description'],
+      )!,
+      photoUrl: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}photo_url'],
       )!,
     );
   }
@@ -1570,27 +1652,31 @@ class $SpecializationsTable extends Specializations
 
 class Specialization extends DataClass implements Insertable<Specialization> {
   final int id;
-  final String name;
+  final String title;
   final String description;
+  final String photoUrl;
   const Specialization({
     required this.id,
-    required this.name,
+    required this.title,
     required this.description,
+    required this.photoUrl,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
+    map['title'] = Variable<String>(title);
     map['description'] = Variable<String>(description);
+    map['photo_url'] = Variable<String>(photoUrl);
     return map;
   }
 
   SpecializationsCompanion toCompanion(bool nullToAbsent) {
     return SpecializationsCompanion(
       id: Value(id),
-      name: Value(name),
+      title: Value(title),
       description: Value(description),
+      photoUrl: Value(photoUrl),
     );
   }
 
@@ -1601,8 +1687,9 @@ class Specialization extends DataClass implements Insertable<Specialization> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Specialization(
       id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
+      title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
+      photoUrl: serializer.fromJson<String>(json['photoUrl']),
     );
   }
   @override
@@ -1610,24 +1697,31 @@ class Specialization extends DataClass implements Insertable<Specialization> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
+      'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String>(description),
+      'photoUrl': serializer.toJson<String>(photoUrl),
     };
   }
 
-  Specialization copyWith({int? id, String? name, String? description}) =>
-      Specialization(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        description: description ?? this.description,
-      );
+  Specialization copyWith({
+    int? id,
+    String? title,
+    String? description,
+    String? photoUrl,
+  }) => Specialization(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    description: description ?? this.description,
+    photoUrl: photoUrl ?? this.photoUrl,
+  );
   Specialization copyWithCompanion(SpecializationsCompanion data) {
     return Specialization(
       id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
+      title: data.title.present ? data.title.value : this.title,
       description: data.description.present
           ? data.description.value
           : this.description,
+      photoUrl: data.photoUrl.present ? data.photoUrl.value : this.photoUrl,
     );
   }
 
@@ -1635,59 +1729,69 @@ class Specialization extends DataClass implements Insertable<Specialization> {
   String toString() {
     return (StringBuffer('Specialization(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('description: $description')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('photoUrl: $photoUrl')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, description);
+  int get hashCode => Object.hash(id, title, description, photoUrl);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Specialization &&
           other.id == this.id &&
-          other.name == this.name &&
-          other.description == this.description);
+          other.title == this.title &&
+          other.description == this.description &&
+          other.photoUrl == this.photoUrl);
 }
 
 class SpecializationsCompanion extends UpdateCompanion<Specialization> {
   final Value<int> id;
-  final Value<String> name;
+  final Value<String> title;
   final Value<String> description;
+  final Value<String> photoUrl;
   const SpecializationsCompanion({
     this.id = const Value.absent(),
-    this.name = const Value.absent(),
+    this.title = const Value.absent(),
     this.description = const Value.absent(),
+    this.photoUrl = const Value.absent(),
   });
   SpecializationsCompanion.insert({
     this.id = const Value.absent(),
-    required String name,
+    required String title,
     required String description,
-  }) : name = Value(name),
-       description = Value(description);
+    required String photoUrl,
+  }) : title = Value(title),
+       description = Value(description),
+       photoUrl = Value(photoUrl);
   static Insertable<Specialization> custom({
     Expression<int>? id,
-    Expression<String>? name,
+    Expression<String>? title,
     Expression<String>? description,
+    Expression<String>? photoUrl,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (name != null) 'name': name,
+      if (title != null) 'title': title,
       if (description != null) 'description': description,
+      if (photoUrl != null) 'photo_url': photoUrl,
     });
   }
 
   SpecializationsCompanion copyWith({
     Value<int>? id,
-    Value<String>? name,
+    Value<String>? title,
     Value<String>? description,
+    Value<String>? photoUrl,
   }) {
     return SpecializationsCompanion(
       id: id ?? this.id,
-      name: name ?? this.name,
+      title: title ?? this.title,
       description: description ?? this.description,
+      photoUrl: photoUrl ?? this.photoUrl,
     );
   }
 
@@ -1697,11 +1801,14 @@ class SpecializationsCompanion extends UpdateCompanion<Specialization> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
+    }
+    if (photoUrl.present) {
+      map['photo_url'] = Variable<String>(photoUrl.value);
     }
     return map;
   }
@@ -1710,8 +1817,9 @@ class SpecializationsCompanion extends UpdateCompanion<Specialization> {
   String toString() {
     return (StringBuffer('SpecializationsCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('description: $description')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('photoUrl: $photoUrl')
           ..write(')'))
         .toString();
   }
@@ -1785,29 +1893,6 @@ class $MastersTable extends Masters with TableInfo<$MastersTable, Master> {
     requiredDuringInsert: false,
     defaultValue: Constant(0.0),
   );
-  static const VerificationMeta _completedCountMeta = const VerificationMeta(
-    'completedCount',
-  );
-  @override
-  late final GeneratedColumn<int> completedCount = GeneratedColumn<int>(
-    'completed_count',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: Constant(0),
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1815,8 +1900,6 @@ class $MastersTable extends Masters with TableInfo<$MastersTable, Master> {
     specializationId,
     dormitoryId,
     rating,
-    completedCount,
-    createdAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1869,23 +1952,6 @@ class $MastersTable extends Masters with TableInfo<$MastersTable, Master> {
         rating.isAcceptableOrUnknown(data['rating']!, _ratingMeta),
       );
     }
-    if (data.containsKey('completed_count')) {
-      context.handle(
-        _completedCountMeta,
-        completedCount.isAcceptableOrUnknown(
-          data['completed_count']!,
-          _completedCountMeta,
-        ),
-      );
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
     return context;
   }
 
@@ -1915,14 +1981,6 @@ class $MastersTable extends Masters with TableInfo<$MastersTable, Master> {
         DriftSqlType.double,
         data['${effectivePrefix}rating'],
       )!,
-      completedCount: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}completed_count'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
     );
   }
 
@@ -1938,16 +1996,12 @@ class Master extends DataClass implements Insertable<Master> {
   final int specializationId;
   final int dormitoryId;
   final double rating;
-  final int completedCount;
-  final DateTime createdAt;
   const Master({
     required this.id,
     required this.uid,
     required this.specializationId,
     required this.dormitoryId,
     required this.rating,
-    required this.completedCount,
-    required this.createdAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1957,8 +2011,6 @@ class Master extends DataClass implements Insertable<Master> {
     map['specialization_id'] = Variable<int>(specializationId);
     map['dormitory_id'] = Variable<int>(dormitoryId);
     map['rating'] = Variable<double>(rating);
-    map['completed_count'] = Variable<int>(completedCount);
-    map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
@@ -1969,8 +2021,6 @@ class Master extends DataClass implements Insertable<Master> {
       specializationId: Value(specializationId),
       dormitoryId: Value(dormitoryId),
       rating: Value(rating),
-      completedCount: Value(completedCount),
-      createdAt: Value(createdAt),
     );
   }
 
@@ -1985,8 +2035,6 @@ class Master extends DataClass implements Insertable<Master> {
       specializationId: serializer.fromJson<int>(json['specializationId']),
       dormitoryId: serializer.fromJson<int>(json['dormitoryId']),
       rating: serializer.fromJson<double>(json['rating']),
-      completedCount: serializer.fromJson<int>(json['completedCount']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -1998,8 +2046,6 @@ class Master extends DataClass implements Insertable<Master> {
       'specializationId': serializer.toJson<int>(specializationId),
       'dormitoryId': serializer.toJson<int>(dormitoryId),
       'rating': serializer.toJson<double>(rating),
-      'completedCount': serializer.toJson<int>(completedCount),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
@@ -2009,16 +2055,12 @@ class Master extends DataClass implements Insertable<Master> {
     int? specializationId,
     int? dormitoryId,
     double? rating,
-    int? completedCount,
-    DateTime? createdAt,
   }) => Master(
     id: id ?? this.id,
     uid: uid ?? this.uid,
     specializationId: specializationId ?? this.specializationId,
     dormitoryId: dormitoryId ?? this.dormitoryId,
     rating: rating ?? this.rating,
-    completedCount: completedCount ?? this.completedCount,
-    createdAt: createdAt ?? this.createdAt,
   );
   Master copyWithCompanion(MastersCompanion data) {
     return Master(
@@ -2031,10 +2073,6 @@ class Master extends DataClass implements Insertable<Master> {
           ? data.dormitoryId.value
           : this.dormitoryId,
       rating: data.rating.present ? data.rating.value : this.rating,
-      completedCount: data.completedCount.present
-          ? data.completedCount.value
-          : this.completedCount,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
 
@@ -2045,23 +2083,14 @@ class Master extends DataClass implements Insertable<Master> {
           ..write('uid: $uid, ')
           ..write('specializationId: $specializationId, ')
           ..write('dormitoryId: $dormitoryId, ')
-          ..write('rating: $rating, ')
-          ..write('completedCount: $completedCount, ')
-          ..write('createdAt: $createdAt')
+          ..write('rating: $rating')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    uid,
-    specializationId,
-    dormitoryId,
-    rating,
-    completedCount,
-    createdAt,
-  );
+  int get hashCode =>
+      Object.hash(id, uid, specializationId, dormitoryId, rating);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2070,9 +2099,7 @@ class Master extends DataClass implements Insertable<Master> {
           other.uid == this.uid &&
           other.specializationId == this.specializationId &&
           other.dormitoryId == this.dormitoryId &&
-          other.rating == this.rating &&
-          other.completedCount == this.completedCount &&
-          other.createdAt == this.createdAt);
+          other.rating == this.rating);
 }
 
 class MastersCompanion extends UpdateCompanion<Master> {
@@ -2081,16 +2108,12 @@ class MastersCompanion extends UpdateCompanion<Master> {
   final Value<int> specializationId;
   final Value<int> dormitoryId;
   final Value<double> rating;
-  final Value<int> completedCount;
-  final Value<DateTime> createdAt;
   const MastersCompanion({
     this.id = const Value.absent(),
     this.uid = const Value.absent(),
     this.specializationId = const Value.absent(),
     this.dormitoryId = const Value.absent(),
     this.rating = const Value.absent(),
-    this.completedCount = const Value.absent(),
-    this.createdAt = const Value.absent(),
   });
   MastersCompanion.insert({
     this.id = const Value.absent(),
@@ -2098,20 +2121,15 @@ class MastersCompanion extends UpdateCompanion<Master> {
     required int specializationId,
     required int dormitoryId,
     this.rating = const Value.absent(),
-    this.completedCount = const Value.absent(),
-    required DateTime createdAt,
   }) : uid = Value(uid),
        specializationId = Value(specializationId),
-       dormitoryId = Value(dormitoryId),
-       createdAt = Value(createdAt);
+       dormitoryId = Value(dormitoryId);
   static Insertable<Master> custom({
     Expression<int>? id,
     Expression<String>? uid,
     Expression<int>? specializationId,
     Expression<int>? dormitoryId,
     Expression<double>? rating,
-    Expression<int>? completedCount,
-    Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2119,8 +2137,6 @@ class MastersCompanion extends UpdateCompanion<Master> {
       if (specializationId != null) 'specialization_id': specializationId,
       if (dormitoryId != null) 'dormitory_id': dormitoryId,
       if (rating != null) 'rating': rating,
-      if (completedCount != null) 'completed_count': completedCount,
-      if (createdAt != null) 'created_at': createdAt,
     });
   }
 
@@ -2130,8 +2146,6 @@ class MastersCompanion extends UpdateCompanion<Master> {
     Value<int>? specializationId,
     Value<int>? dormitoryId,
     Value<double>? rating,
-    Value<int>? completedCount,
-    Value<DateTime>? createdAt,
   }) {
     return MastersCompanion(
       id: id ?? this.id,
@@ -2139,8 +2153,6 @@ class MastersCompanion extends UpdateCompanion<Master> {
       specializationId: specializationId ?? this.specializationId,
       dormitoryId: dormitoryId ?? this.dormitoryId,
       rating: rating ?? this.rating,
-      completedCount: completedCount ?? this.completedCount,
-      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -2162,12 +2174,6 @@ class MastersCompanion extends UpdateCompanion<Master> {
     if (rating.present) {
       map['rating'] = Variable<double>(rating.value);
     }
-    if (completedCount.present) {
-      map['completed_count'] = Variable<int>(completedCount.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
     return map;
   }
 
@@ -2178,9 +2184,7 @@ class MastersCompanion extends UpdateCompanion<Master> {
           ..write('uid: $uid, ')
           ..write('specializationId: $specializationId, ')
           ..write('dormitoryId: $dormitoryId, ')
-          ..write('rating: $rating, ')
-          ..write('completedCount: $completedCount, ')
-          ..write('createdAt: $createdAt')
+          ..write('rating: $rating')
           ..write(')'))
         .toString();
   }
@@ -2214,21 +2218,23 @@ abstract class _$Database extends GeneratedDatabase {
 typedef $$UsersTableCreateCompanionBuilder =
     UsersCompanion Function({
       required String uid,
-      required String name,
+      required String displayName,
       required String email,
       required String phoneNumber,
       required String photoURL,
       required String role,
+      Value<DateTime> createdAt,
       Value<int> rowid,
     });
 typedef $$UsersTableUpdateCompanionBuilder =
     UsersCompanion Function({
       Value<String> uid,
-      Value<String> name,
+      Value<String> displayName,
       Value<String> email,
       Value<String> phoneNumber,
       Value<String> photoURL,
       Value<String> role,
+      Value<DateTime> createdAt,
       Value<int> rowid,
     });
 
@@ -2288,8 +2294,8 @@ class $$UsersTableFilterComposer extends Composer<_$Database, $UsersTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnFilters<String> get displayName => $composableBuilder(
+    column: $table.displayName,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2310,6 +2316,11 @@ class $$UsersTableFilterComposer extends Composer<_$Database, $UsersTable> {
 
   ColumnFilters<String> get role => $composableBuilder(
     column: $table.role,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2377,8 +2388,8 @@ class $$UsersTableOrderingComposer extends Composer<_$Database, $UsersTable> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnOrderings<String> get displayName => $composableBuilder(
+    column: $table.displayName,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -2401,6 +2412,11 @@ class $$UsersTableOrderingComposer extends Composer<_$Database, $UsersTable> {
     column: $table.role,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$UsersTableAnnotationComposer extends Composer<_$Database, $UsersTable> {
@@ -2414,8 +2430,10 @@ class $$UsersTableAnnotationComposer extends Composer<_$Database, $UsersTable> {
   GeneratedColumn<String> get uid =>
       $composableBuilder(column: $table.uid, builder: (column) => column);
 
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
+  GeneratedColumn<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get email =>
       $composableBuilder(column: $table.email, builder: (column) => column);
@@ -2430,6 +2448,9 @@ class $$UsersTableAnnotationComposer extends Composer<_$Database, $UsersTable> {
 
   GeneratedColumn<String> get role =>
       $composableBuilder(column: $table.role, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   Expression<T> studentsRefs<T extends Object>(
     Expression<T> Function($$StudentsTableAnnotationComposer a) f,
@@ -2511,37 +2532,41 @@ class $$UsersTableTableManager
           updateCompanionCallback:
               ({
                 Value<String> uid = const Value.absent(),
-                Value<String> name = const Value.absent(),
+                Value<String> displayName = const Value.absent(),
                 Value<String> email = const Value.absent(),
                 Value<String> phoneNumber = const Value.absent(),
                 Value<String> photoURL = const Value.absent(),
                 Value<String> role = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => UsersCompanion(
                 uid: uid,
-                name: name,
+                displayName: displayName,
                 email: email,
                 phoneNumber: phoneNumber,
                 photoURL: photoURL,
                 role: role,
+                createdAt: createdAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
                 required String uid,
-                required String name,
+                required String displayName,
                 required String email,
                 required String phoneNumber,
                 required String photoURL,
                 required String role,
+                Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => UsersCompanion.insert(
                 uid: uid,
-                name: name,
+                displayName: displayName,
                 email: email,
                 phoneNumber: phoneNumber,
                 photoURL: photoURL,
                 role: role,
+                createdAt: createdAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -3977,14 +4002,16 @@ typedef $$StudentsTableProcessedTableManager =
 typedef $$SpecializationsTableCreateCompanionBuilder =
     SpecializationsCompanion Function({
       Value<int> id,
-      required String name,
+      required String title,
       required String description,
+      required String photoUrl,
     });
 typedef $$SpecializationsTableUpdateCompanionBuilder =
     SpecializationsCompanion Function({
       Value<int> id,
-      Value<String> name,
+      Value<String> title,
       Value<String> description,
+      Value<String> photoUrl,
     });
 
 final class $$SpecializationsTableReferences
@@ -4032,13 +4059,18 @@ class $$SpecializationsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
     builder: (column) => ColumnFilters(column),
   );
 
   ColumnFilters<String> get description => $composableBuilder(
     column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get photoUrl => $composableBuilder(
+    column: $table.photoUrl,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4082,13 +4114,18 @@ class $$SpecializationsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
     builder: (column) => ColumnOrderings(column),
   );
 
   ColumnOrderings<String> get description => $composableBuilder(
     column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get photoUrl => $composableBuilder(
+    column: $table.photoUrl,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -4105,13 +4142,16 @@ class $$SpecializationsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
 
   GeneratedColumn<String> get description => $composableBuilder(
     column: $table.description,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get photoUrl =>
+      $composableBuilder(column: $table.photoUrl, builder: (column) => column);
 
   Expression<T> mastersRefs<T extends Object>(
     Expression<T> Function($$MastersTableAnnotationComposer a) f,
@@ -4168,22 +4208,26 @@ class $$SpecializationsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
+                Value<String> title = const Value.absent(),
                 Value<String> description = const Value.absent(),
+                Value<String> photoUrl = const Value.absent(),
               }) => SpecializationsCompanion(
                 id: id,
-                name: name,
+                title: title,
                 description: description,
+                photoUrl: photoUrl,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required String name,
+                required String title,
                 required String description,
+                required String photoUrl,
               }) => SpecializationsCompanion.insert(
                 id: id,
-                name: name,
+                title: title,
                 description: description,
+                photoUrl: photoUrl,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -4250,8 +4294,6 @@ typedef $$MastersTableCreateCompanionBuilder =
       required int specializationId,
       required int dormitoryId,
       Value<double> rating,
-      Value<int> completedCount,
-      required DateTime createdAt,
     });
 typedef $$MastersTableUpdateCompanionBuilder =
     MastersCompanion Function({
@@ -4260,8 +4302,6 @@ typedef $$MastersTableUpdateCompanionBuilder =
       Value<int> specializationId,
       Value<int> dormitoryId,
       Value<double> rating,
-      Value<int> completedCount,
-      Value<DateTime> createdAt,
     });
 
 final class $$MastersTableReferences
@@ -4342,16 +4382,6 @@ class $$MastersTableFilterComposer extends Composer<_$Database, $MastersTable> {
 
   ColumnFilters<double> get rating => $composableBuilder(
     column: $table.rating,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get completedCount => $composableBuilder(
-    column: $table.completedCount,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4444,16 +4474,6 @@ class $$MastersTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get completedCount => $composableBuilder(
-    column: $table.completedCount,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   $$UsersTableOrderingComposer get uid {
     final $$UsersTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -4538,14 +4558,6 @@ class $$MastersTableAnnotationComposer
 
   GeneratedColumn<double> get rating =>
       $composableBuilder(column: $table.rating, builder: (column) => column);
-
-  GeneratedColumn<int> get completedCount => $composableBuilder(
-    column: $table.completedCount,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   $$UsersTableAnnotationComposer get uid {
     final $$UsersTableAnnotationComposer composer = $composerBuilder(
@@ -4654,16 +4666,12 @@ class $$MastersTableTableManager
                 Value<int> specializationId = const Value.absent(),
                 Value<int> dormitoryId = const Value.absent(),
                 Value<double> rating = const Value.absent(),
-                Value<int> completedCount = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
               }) => MastersCompanion(
                 id: id,
                 uid: uid,
                 specializationId: specializationId,
                 dormitoryId: dormitoryId,
                 rating: rating,
-                completedCount: completedCount,
-                createdAt: createdAt,
               ),
           createCompanionCallback:
               ({
@@ -4672,16 +4680,12 @@ class $$MastersTableTableManager
                 required int specializationId,
                 required int dormitoryId,
                 Value<double> rating = const Value.absent(),
-                Value<int> completedCount = const Value.absent(),
-                required DateTime createdAt,
               }) => MastersCompanion.insert(
                 id: id,
                 uid: uid,
                 specializationId: specializationId,
                 dormitoryId: dormitoryId,
                 rating: rating,
-                completedCount: completedCount,
-                createdAt: createdAt,
               ),
           withReferenceMapper: (p0) => p0
               .map(

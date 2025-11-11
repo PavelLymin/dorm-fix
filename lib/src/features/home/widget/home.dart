@@ -15,10 +15,12 @@ class _HomeState extends State<Home> {
     body: SafeArea(
       child: WindowSizeScope.of(context).maybeMap(
         orElse: () => Padding(
-          padding: const EdgeInsets.only(bottom: 128, left: 16, right: 16),
+          padding: AppPadding.symmetricIncrement(horizontal: 3),
           child: Column(children: [const SpecializationsCarousel()]),
         ),
       ),
     ),
   );
 }
+
+// const EdgeInsets.only(bottom: 128, left: 16, right: 16)

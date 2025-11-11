@@ -21,7 +21,7 @@ class AuthButton extends StatelessWidget {
       height: 48,
       width: double.infinity,
       child: BlocBuilder<AuthButtonBloc, AuthButtonState>(
-        builder: (context, state) => UiButton.filledGradient(
+        builder: (context, state) => UiButton.filledPrimary(
           onPressed: () => state.mapOrNull(
             isEmailPassword: () => signInWithEmailAndPassword(),
             isPhoneNumber: () => verifyPhoneNumber(),

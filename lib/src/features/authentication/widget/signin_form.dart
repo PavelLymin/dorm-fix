@@ -32,48 +32,44 @@ class _SignInFormState extends State<SignInForm> with _FormStateMixin {
       const SizedBox(height: 32),
       ValueListenableBuilder(
         valueListenable: _isPhoneNumber,
-        builder: (context, value, _) => AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          switchInCurve: Curves.easeInOut,
-          child: !value
-              ? EmailPasswordForm(
-                  emailController: _emailController,
-                  passwordController: _passwordController,
-                  emailFocusNode: _emailFocusNode,
-                  passwordFocusNode: _passwordFocusNode,
-                  onTap: () {},
-                )
-              : BlocBuilder<AuthButtonBloc, AuthButtonState>(
-                  buildWhen: (previous, current) {
-                    bool wasPin = previous.maybeMap(
-                      isPin: () => true,
-                      orElse: () => false,
-                    );
-                    bool isPin = current.maybeMap(
-                      isPin: () => true,
-                      orElse: () => false,
-                    );
-                    return wasPin != isPin;
-                  },
-                  builder: (context, state) => state.maybeMap(
-                    orElse: () => PhoneNumberForm(
-                      phoneController: _phoneController,
-                      pinCodeController: _pinCodeController,
-                      phoneFocusNode: _phoneFocusNode,
-                      isEnabledTextField: true,
-                      isEnabledPinCode: false,
-                    ),
-                    isPin: () => PhoneNumberForm(
-                      phoneFocusNode: _phoneFocusNode,
-                      phoneController: _phoneController,
-                      pinCodeController: _pinCodeController,
-                      isEnabledTextField: false,
-                      isEnabledPinCode: true,
-                      onTap: () {},
-                    ),
+        builder: (context, value, _) => !value
+            ? EmailPasswordForm(
+                emailController: _emailController,
+                passwordController: _passwordController,
+                emailFocusNode: _emailFocusNode,
+                passwordFocusNode: _passwordFocusNode,
+                onTap: () {},
+              )
+            : BlocBuilder<AuthButtonBloc, AuthButtonState>(
+                buildWhen: (previous, current) {
+                  bool wasPin = previous.maybeMap(
+                    isPin: () => true,
+                    orElse: () => false,
+                  );
+                  bool isPin = current.maybeMap(
+                    isPin: () => true,
+                    orElse: () => false,
+                  );
+                  return wasPin != isPin;
+                },
+                builder: (context, state) => state.maybeMap(
+                  orElse: () => PhoneNumberForm(
+                    phoneController: _phoneController,
+                    pinCodeController: _pinCodeController,
+                    phoneFocusNode: _phoneFocusNode,
+                    isEnabledTextField: true,
+                    isEnabledPinCode: false,
+                  ),
+                  isPin: () => PhoneNumberForm(
+                    phoneFocusNode: _phoneFocusNode,
+                    phoneController: _phoneController,
+                    pinCodeController: _pinCodeController,
+                    isEnabledTextField: false,
+                    isEnabledPinCode: true,
+                    onTap: () {},
                   ),
                 ),
-        ),
+              ),
       ),
       const SizedBox(height: 32),
       AuthButton(
