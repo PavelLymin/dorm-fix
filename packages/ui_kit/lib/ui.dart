@@ -19,3 +19,6 @@ export 'package:ui_kit/src/layout/window_size.dart';
 export 'package:ui_kit/src/theme/theme_extension.dart';
 export 'package:ui_kit/src/theme/theme_helpers.dart';
 export 'package:ui_kit/src/theme/create_theme.dart';
+
+// Images
+export 'package:ui_kit/src/images/images_helper.dart';

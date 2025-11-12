@@ -11,7 +11,7 @@ class _ButtonsPreview extends State<ButtonsPreview> {
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      child: UiCard(
+      child: UiCard.standart(
         child: const Padding(
           padding: AppPadding.allSmall,
           child: Wrap(

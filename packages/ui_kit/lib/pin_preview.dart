@@ -4,7 +4,7 @@ class PinCodePreview extends StatelessWidget {
   const PinCodePreview({super.key});
 
   @override
-  Widget build(BuildContext context) => UiCard(
+  Widget build(BuildContext context) => UiCard.standart(
     child: Padding(
       padding: AppPadding.allSmall,
       child: PinCode(

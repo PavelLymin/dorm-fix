@@ -4,7 +4,7 @@ class ColorPalettePreview extends StatelessWidget {
   const ColorPalettePreview({super.key});
 
   @override
-  Widget build(BuildContext context) => UiCard(
+  Widget build(BuildContext context) => UiCard.standart(
     child: Padding(
       padding: AppPadding.allSmall,
       child: Column(

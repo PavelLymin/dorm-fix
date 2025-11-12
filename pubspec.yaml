@@ -52,9 +52,9 @@ flutter:
   fonts:
     - family: Proximanova
       fonts:
-        - asset: fonts/proximanova_regular.ttf
-        - asset: fonts/proximanova_boldit.otf
+        - asset: packages/ui_kit/fonts/proximanova_regular.ttf
+        - asset: packages/ui_kit/fonts/proximanova_boldit.otf
           style: italic
           weight: 700
-        - asset: fonts/proximanova_bold.otf
+        - asset: packages/ui_kit/fonts/proximanova_bold.otf
           weight: 700

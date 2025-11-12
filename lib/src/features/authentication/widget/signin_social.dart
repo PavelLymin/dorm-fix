@@ -37,7 +37,7 @@ class AuthWithSocial extends StatelessWidget {
               Expanded(
                 child: UiButton.icon(
                   icon: Image.asset(
-                    'packages/ui_kit/assets/icons/google.png',
+                    ImagesHelper.googleLogo,
                     height: 32,
                     width: 32,
                   ),
@@ -60,7 +60,7 @@ class AuthWithSocial extends StatelessWidget {
               Expanded(
                 child: UiButton.icon(
                   icon: Image.asset(
-                    'packages/ui_kit/assets/icons/google.png',
+                    ImagesHelper.googleLogo,
                     height: 32,
                     width: 32,
                   ),

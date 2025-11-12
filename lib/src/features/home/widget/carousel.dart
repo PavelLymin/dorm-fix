@@ -55,7 +55,7 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
               controller: _controller,
               children: state.map(
                 loading: (_) => <Widget>[
-                  UiCard(
+                  UiCard.standart(
                     child: const SizedBox.square(
                       dimension: 20,
                       child: CircularProgressIndicator(),
@@ -76,7 +76,7 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
                   ),
                 ),
                 error: (state) => <Widget>[
-                  UiCard(
+                  UiCard.standart(
                     child: Center(
                       child: UiText.bodyLarge(state.message, softWrap: false),
                     ),
@@ -85,6 +85,7 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
               ),
             ),
           ),
+          const SizedBox(height: 8),
           _CarouselIndicators(
             countChildren: state.maybeMap(
               orElse: () => 1,
@@ -154,14 +155,14 @@ class _CarouselIndicatorsState extends State<_CarouselIndicators> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                 child: SizedBox(
-                  width: value == index ? 12 : 10,
-                  height: value == index ? 12 : 10,
+                  width: 8,
+                  height: 8,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: value == index
-                          ? color.accent.withValues(alpha: 0.7)
-                          : color.accent.withValues(alpha: 0.3),
+                          ? color.accent
+                          : color.mutedForeground,
                     ),
                   ),
                 ),
@@ -197,7 +198,7 @@ class _CarouselItem extends StatelessWidget {
         ),
       ),
       const SizedBox(width: 24),
-      Image.asset('packages/ui_kit/assets/icons/${spec.photoUrl}', height: 84),
+      Image.asset(ImagesHelper.specializations + spec.photoUrl, height: 84),
     ],
   );
 }
@@ -216,8 +217,13 @@ class _CarouselWrapper extends StatelessWidget {
       final opacity =
           max(0, constraints.maxWidth + _fadeOutThreshold - itemWidth) /
           _fadeOutThreshold;
-      return UiCard(
+      return UiCard.standart(
         padding: AppPadding.symmetricIncrement(horizontal: 3, vertical: 3),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFF50ACF9), Color(0xFF0064B7)],
+        ),
         child: Opacity(
           opacity: opacity,
           child: OverflowBox(

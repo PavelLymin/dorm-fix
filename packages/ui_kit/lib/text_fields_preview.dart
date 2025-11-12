@@ -9,7 +9,7 @@ class TextFieldsPreview extends StatefulWidget {
 
 class _TextFieldsPreviewState extends State<TextFieldsPreview> {
   @override
-  Widget build(BuildContext context) => const UiCard(
+  Widget build(BuildContext context) => const UiCard.standart(
     child: Padding(
       padding: AppPadding.allSmall,
       child: SizedBox(
