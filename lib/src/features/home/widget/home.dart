@@ -1,5 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 
+import '../../../app/widget/dependencies_scope.dart';
+import '../../profile/student/state_management/bloc/student_bloc.dart';
 import 'carousel.dart';
 import 'home_card.dart';
 
@@ -21,10 +24,7 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              AppBar(
-                title: UiText.headlineLarge('Пользователь'),
-                centerTitle: false,
-              ),
+              AppBar(title: const _UserDisplayProfile(), centerTitle: false),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -68,4 +68,43 @@ class _HomeState extends State<Home> {
   }
 }
 
-// const EdgeInsets.only(bottom: 128, left: 16, right: 16)
+class _UserDisplayProfile extends StatefulWidget {
+  const _UserDisplayProfile();
+
+  @override
+  State<_UserDisplayProfile> createState() => __UserDisplayProfileState();
+}
+
+class __UserDisplayProfileState extends State<_UserDisplayProfile> {
+  late StudentBloc _studentBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    final authUser = DependeciesScope.of(
+      context,
+    ).authenticationBloc.state.authenticatedOrNull;
+    if (authUser != null) {
+      _studentBloc = DependeciesScope.of(context).studentBloc
+        ..add(StudentEvent.get(uid: authUser.uid));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => BlocProvider.value(
+    value: _studentBloc,
+    child: BlocBuilder<StudentBloc, StudentState>(
+      builder: (context, state) {
+        return state.map(
+          loading: (_) => const SizedBox.square(
+            dimension: 20,
+            child: CircularProgressIndicator(),
+          ),
+          loaded: (state) =>
+              UiText.headlineLarge(state.student.user.displayName!),
+          error: (state) => UiText.headlineLarge(state.message),
+        );
+      },
+    ),
+  );
+}

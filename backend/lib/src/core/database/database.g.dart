@@ -24,18 +24,18 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
     'display_name',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _emailMeta = const VerificationMeta('email');
   @override
   late final GeneratedColumn<String> email = GeneratedColumn<String>(
     'email',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _phoneNumberMeta = const VerificationMeta(
     'phoneNumber',
@@ -44,9 +44,9 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   late final GeneratedColumn<String> phoneNumber = GeneratedColumn<String>(
     'phone_number',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _photoURLMeta = const VerificationMeta(
     'photoURL',
@@ -55,9 +55,9 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   late final GeneratedColumn<String> photoURL = GeneratedColumn<String>(
     'photo_url',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _roleMeta = const VerificationMeta('role');
   @override
@@ -118,16 +118,12 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
           _displayNameMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_displayNameMeta);
     }
     if (data.containsKey('email')) {
       context.handle(
         _emailMeta,
         email.isAcceptableOrUnknown(data['email']!, _emailMeta),
       );
-    } else if (isInserting) {
-      context.missing(_emailMeta);
     }
     if (data.containsKey('phone_number')) {
       context.handle(
@@ -137,16 +133,12 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
           _phoneNumberMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_phoneNumberMeta);
     }
     if (data.containsKey('photo_url')) {
       context.handle(
         _photoURLMeta,
         photoURL.isAcceptableOrUnknown(data['photo_url']!, _photoURLMeta),
       );
-    } else if (isInserting) {
-      context.missing(_photoURLMeta);
     }
     if (data.containsKey('role')) {
       context.handle(
@@ -178,19 +170,19 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
       displayName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}display_name'],
-      )!,
+      ),
       email: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}email'],
-      )!,
+      ),
       phoneNumber: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}phone_number'],
-      )!,
+      ),
       photoURL: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}photo_url'],
-      )!,
+      ),
       role: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}role'],
@@ -210,18 +202,18 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
 
 class User extends DataClass implements Insertable<User> {
   final String uid;
-  final String displayName;
-  final String email;
-  final String phoneNumber;
-  final String photoURL;
+  final String? displayName;
+  final String? email;
+  final String? phoneNumber;
+  final String? photoURL;
   final String role;
   final DateTime createdAt;
   const User({
     required this.uid,
-    required this.displayName,
-    required this.email,
-    required this.phoneNumber,
-    required this.photoURL,
+    this.displayName,
+    this.email,
+    this.phoneNumber,
+    this.photoURL,
     required this.role,
     required this.createdAt,
   });
@@ -229,10 +221,18 @@ class User extends DataClass implements Insertable<User> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['uid'] = Variable<String>(uid);
-    map['display_name'] = Variable<String>(displayName);
-    map['email'] = Variable<String>(email);
-    map['phone_number'] = Variable<String>(phoneNumber);
-    map['photo_url'] = Variable<String>(photoURL);
+    if (!nullToAbsent || displayName != null) {
+      map['display_name'] = Variable<String>(displayName);
+    }
+    if (!nullToAbsent || email != null) {
+      map['email'] = Variable<String>(email);
+    }
+    if (!nullToAbsent || phoneNumber != null) {
+      map['phone_number'] = Variable<String>(phoneNumber);
+    }
+    if (!nullToAbsent || photoURL != null) {
+      map['photo_url'] = Variable<String>(photoURL);
+    }
     map['role'] = Variable<String>(role);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
@@ -241,10 +241,18 @@ class User extends DataClass implements Insertable<User> {
   UsersCompanion toCompanion(bool nullToAbsent) {
     return UsersCompanion(
       uid: Value(uid),
-      displayName: Value(displayName),
-      email: Value(email),
-      phoneNumber: Value(phoneNumber),
-      photoURL: Value(photoURL),
+      displayName: displayName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(displayName),
+      email: email == null && nullToAbsent
+          ? const Value.absent()
+          : Value(email),
+      phoneNumber: phoneNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phoneNumber),
+      photoURL: photoURL == null && nullToAbsent
+          ? const Value.absent()
+          : Value(photoURL),
       role: Value(role),
       createdAt: Value(createdAt),
     );
@@ -257,10 +265,10 @@ class User extends DataClass implements Insertable<User> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return User(
       uid: serializer.fromJson<String>(json['uid']),
-      displayName: serializer.fromJson<String>(json['displayName']),
-      email: serializer.fromJson<String>(json['email']),
-      phoneNumber: serializer.fromJson<String>(json['phoneNumber']),
-      photoURL: serializer.fromJson<String>(json['photoURL']),
+      displayName: serializer.fromJson<String?>(json['displayName']),
+      email: serializer.fromJson<String?>(json['email']),
+      phoneNumber: serializer.fromJson<String?>(json['phoneNumber']),
+      photoURL: serializer.fromJson<String?>(json['photoURL']),
       role: serializer.fromJson<String>(json['role']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
@@ -270,10 +278,10 @@ class User extends DataClass implements Insertable<User> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'uid': serializer.toJson<String>(uid),
-      'displayName': serializer.toJson<String>(displayName),
-      'email': serializer.toJson<String>(email),
-      'phoneNumber': serializer.toJson<String>(phoneNumber),
-      'photoURL': serializer.toJson<String>(photoURL),
+      'displayName': serializer.toJson<String?>(displayName),
+      'email': serializer.toJson<String?>(email),
+      'phoneNumber': serializer.toJson<String?>(phoneNumber),
+      'photoURL': serializer.toJson<String?>(photoURL),
       'role': serializer.toJson<String>(role),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
@@ -281,18 +289,18 @@ class User extends DataClass implements Insertable<User> {
 
   User copyWith({
     String? uid,
-    String? displayName,
-    String? email,
-    String? phoneNumber,
-    String? photoURL,
+    Value<String?> displayName = const Value.absent(),
+    Value<String?> email = const Value.absent(),
+    Value<String?> phoneNumber = const Value.absent(),
+    Value<String?> photoURL = const Value.absent(),
     String? role,
     DateTime? createdAt,
   }) => User(
     uid: uid ?? this.uid,
-    displayName: displayName ?? this.displayName,
-    email: email ?? this.email,
-    phoneNumber: phoneNumber ?? this.phoneNumber,
-    photoURL: photoURL ?? this.photoURL,
+    displayName: displayName.present ? displayName.value : this.displayName,
+    email: email.present ? email.value : this.email,
+    phoneNumber: phoneNumber.present ? phoneNumber.value : this.phoneNumber,
+    photoURL: photoURL.present ? photoURL.value : this.photoURL,
     role: role ?? this.role,
     createdAt: createdAt ?? this.createdAt,
   );
@@ -351,10 +359,10 @@ class User extends DataClass implements Insertable<User> {
 
 class UsersCompanion extends UpdateCompanion<User> {
   final Value<String> uid;
-  final Value<String> displayName;
-  final Value<String> email;
-  final Value<String> phoneNumber;
-  final Value<String> photoURL;
+  final Value<String?> displayName;
+  final Value<String?> email;
+  final Value<String?> phoneNumber;
+  final Value<String?> photoURL;
   final Value<String> role;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
@@ -370,18 +378,14 @@ class UsersCompanion extends UpdateCompanion<User> {
   });
   UsersCompanion.insert({
     required String uid,
-    required String displayName,
-    required String email,
-    required String phoneNumber,
-    required String photoURL,
+    this.displayName = const Value.absent(),
+    this.email = const Value.absent(),
+    this.phoneNumber = const Value.absent(),
+    this.photoURL = const Value.absent(),
     required String role,
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : uid = Value(uid),
-       displayName = Value(displayName),
-       email = Value(email),
-       phoneNumber = Value(phoneNumber),
-       photoURL = Value(photoURL),
        role = Value(role);
   static Insertable<User> custom({
     Expression<String>? uid,
@@ -407,10 +411,10 @@ class UsersCompanion extends UpdateCompanion<User> {
 
   UsersCompanion copyWith({
     Value<String>? uid,
-    Value<String>? displayName,
-    Value<String>? email,
-    Value<String>? phoneNumber,
-    Value<String>? photoURL,
+    Value<String?>? displayName,
+    Value<String?>? email,
+    Value<String?>? phoneNumber,
+    Value<String?>? photoURL,
     Value<String>? role,
     Value<DateTime>? createdAt,
     Value<int>? rowid,
@@ -2218,10 +2222,10 @@ abstract class _$Database extends GeneratedDatabase {
 typedef $$UsersTableCreateCompanionBuilder =
     UsersCompanion Function({
       required String uid,
-      required String displayName,
-      required String email,
-      required String phoneNumber,
-      required String photoURL,
+      Value<String?> displayName,
+      Value<String?> email,
+      Value<String?> phoneNumber,
+      Value<String?> photoURL,
       required String role,
       Value<DateTime> createdAt,
       Value<int> rowid,
@@ -2229,10 +2233,10 @@ typedef $$UsersTableCreateCompanionBuilder =
 typedef $$UsersTableUpdateCompanionBuilder =
     UsersCompanion Function({
       Value<String> uid,
-      Value<String> displayName,
-      Value<String> email,
-      Value<String> phoneNumber,
-      Value<String> photoURL,
+      Value<String?> displayName,
+      Value<String?> email,
+      Value<String?> phoneNumber,
+      Value<String?> photoURL,
       Value<String> role,
       Value<DateTime> createdAt,
       Value<int> rowid,
@@ -2532,10 +2536,10 @@ class $$UsersTableTableManager
           updateCompanionCallback:
               ({
                 Value<String> uid = const Value.absent(),
-                Value<String> displayName = const Value.absent(),
-                Value<String> email = const Value.absent(),
-                Value<String> phoneNumber = const Value.absent(),
-                Value<String> photoURL = const Value.absent(),
+                Value<String?> displayName = const Value.absent(),
+                Value<String?> email = const Value.absent(),
+                Value<String?> phoneNumber = const Value.absent(),
+                Value<String?> photoURL = const Value.absent(),
                 Value<String> role = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -2552,10 +2556,10 @@ class $$UsersTableTableManager
           createCompanionCallback:
               ({
                 required String uid,
-                required String displayName,
-                required String email,
-                required String phoneNumber,
-                required String photoURL,
+                Value<String?> displayName = const Value.absent(),
+                Value<String?> email = const Value.absent(),
+                Value<String?> phoneNumber = const Value.absent(),
+                Value<String?> photoURL = const Value.absent(),
                 required String role,
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),

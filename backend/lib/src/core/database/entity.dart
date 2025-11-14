@@ -2,10 +2,10 @@ part of 'database.dart';
 
 class Users extends Table {
   TextColumn get uid => text().named('uid')();
-  TextColumn get displayName => text().named('display_name')();
-  TextColumn get email => text().named('email')();
-  TextColumn get phoneNumber => text().named('phone_number')();
-  TextColumn get photoURL => text().named('photo_url')();
+  TextColumn get displayName => text().nullable().named('display_name')();
+  TextColumn get email => text().nullable().named('email')();
+  TextColumn get phoneNumber => text().nullable().named('phone_number')();
+  TextColumn get photoURL => text().nullable().named('photo_url')();
   TextColumn get role => text().named('role')();
   DateTimeColumn get createdAt =>
       dateTime().named('created_at').withDefault(currentDateAndTime)();

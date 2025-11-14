@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'package:logger/web.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
+import '../../core/rest_api/src/rest_api.dart';
 import '../data/dto/specialization.dart';
 import '../data/repository/specialization_repository.dart';
 
@@ -28,19 +28,21 @@ class SpecializationRouter {
           .getSpecializations();
 
       final json = specializations
-          .map(
-            (specialization) =>
-                SpecializationDto.fromEntity(specialization).toJson(),
-          )
+          .map((spec) => SpecializationDto.fromEntity(spec).toJson())
           .toList();
 
-      return Response.ok(jsonEncode({'data': json}));
-    } on FormatException catch (e) {
-      return Response.badRequest(body: 'Invalid JSON format: ${e.toString()}');
-    } catch (e, stackTrace) {
+      return RestApi.createResponse({
+        'data': {
+          'message': {'specializations': json},
+        },
+      }, 200);
+    } on FormatException catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      return Response.internalServerError(
-        body: 'Error processing request: ${e.toString()}',
+      return RestApi.createInvalidJsonResponse();
+    } on Object catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      return RestApi.createInternalServerResponse(
+        details: {'error_type': e.runtimeType.toString()},
       );
     }
   }

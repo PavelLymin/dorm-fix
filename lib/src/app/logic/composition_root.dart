@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:yandex_maps_mapkit/init.dart' as init;
 import '../../core/rest_client/src/http/rest_client_http.dart';
 import '../../features/authentication/data/repository/auth_repository.dart';
+import '../../features/authentication/data/repository/user_repository.dart';
 import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
 import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
 import '../../features/home/data/repository/specialization_repository.dart';
@@ -52,14 +53,23 @@ class CompositionRoot {
     // Firebase
     final firebaseAuth = await _CreateFirebaseAuth().create();
 
+    final userPerository = UserRepositoryImpl(client: client);
+
     // Authentication
-    final repository = AuthRepository(firebaseAuth: firebaseAuth);
-    final authenticationBloc = AuthBloc(repository: repository);
+    final authRepository = AuthRepository(firebaseAuth: firebaseAuth);
+    final authenticationBloc = AuthBloc(
+      authRepository: authRepository,
+      userRepository: userPerository,
+      logger: logger,
+    );
     final authButton = AuthButtonBloc();
 
     // Student
     final studentRepository = StudentRepositoryImpl(client: client);
-    final studentBloc = StudentBloc(studentRepository: studentRepository);
+    final studentBloc = StudentBloc(
+      studentRepository: studentRepository,
+      logger: logger,
+    );
 
     // Specialization
     final specializationRepository = SpecializationRepositoryImpl(

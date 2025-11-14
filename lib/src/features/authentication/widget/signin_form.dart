@@ -73,7 +73,7 @@ class _SignInFormState extends State<SignInForm> with _FormStateMixin {
       ),
       const SizedBox(height: 32),
       AuthButton(
-        signInWithEmailAndPassword: () => _signInWithEmailAndPassword(
+        signInWithEmailAndPassword: () => _logInWithEmailAndPassword(
           _emailController.text,
           _passwordController.text,
         ),
@@ -157,10 +157,8 @@ mixin _FormStateMixin on State<SignInForm> {
     }
   }
 
-  void _signInWithEmailAndPassword(String email, String password) {
-    _authBloc.add(
-      AuthEvent.signInWithEmailAndPassword(email: email, password: password),
-    );
+  void _logInWithEmailAndPassword(String email, String password) {
+    _authBloc.add(AuthEvent.logIn(email: email, password: password));
   }
 
   void _verifyPhoneNumber(String phoneNumber) {

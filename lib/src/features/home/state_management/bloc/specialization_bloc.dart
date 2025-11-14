@@ -33,7 +33,7 @@ class SpecializationBloc
 
       emit(SpecializationState.loaded(specializations: specializations));
     } on RestClientException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
+      _logger.e(e.message, stackTrace: stackTrace);
       emit(
         SpecializationState.error(
           specializations: state.specializations,

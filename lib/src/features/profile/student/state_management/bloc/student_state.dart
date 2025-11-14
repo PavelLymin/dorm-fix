@@ -9,8 +9,10 @@ sealed class StudentState {
 
   const factory StudentState.loading({StudentEntity? student}) =
       _StudentLoadingState;
+
   const factory StudentState.loaded({required StudentEntity student}) =
       _StudentLoadedState;
+
   const factory StudentState.error({
     StudentEntity? student,
     required String message,
@@ -64,7 +66,11 @@ final class _StudentLoadingState extends StudentState {
 }
 
 final class _StudentLoadedState extends StudentState {
-  const _StudentLoadedState({required super.student});
+  const _StudentLoadedState({required this.student}) : super(student: student);
+
+  @override
+  // ignore: overridden_fields
+  final StudentEntity student;
 }
 
 final class _StudentErrorState extends StudentState {

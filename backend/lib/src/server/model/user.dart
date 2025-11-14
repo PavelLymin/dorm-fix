@@ -21,18 +21,18 @@ enum Role {
 class UserEntity {
   const UserEntity({
     required this.uid,
-    required this.displayName,
-    required this.email,
-    required this.phoneNumber,
-    required this.photoURL,
+    this.displayName,
+    this.email,
+    this.phoneNumber,
+    this.photoURL,
     required this.role,
   });
 
   final String uid;
-  final String displayName;
-  final String email;
-  final String phoneNumber;
-  final String photoURL;
+  final String? email;
+  final String? displayName;
+  final String? phoneNumber;
+  final String? photoURL;
   final Role role;
 
   UserEntity copyWith({

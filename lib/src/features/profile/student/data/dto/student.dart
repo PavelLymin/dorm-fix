@@ -30,7 +30,7 @@ class StudentDto {
     user: UserDto.fromEntity(entity.user),
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, Object> toJson() => {
     'id': id,
     'dormitory_id': dormitoryId,
     'room_id': roomId,

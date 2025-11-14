@@ -354,6 +354,7 @@ class UiText extends StatelessWidget {
           .copyWith(
             color: color ?? palette.foreground,
             fontFamily: 'Proximanova',
+            height: 0.8,
           )
           .merge(style),
     );

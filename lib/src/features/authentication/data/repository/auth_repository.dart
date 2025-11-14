@@ -82,8 +82,6 @@ abstract interface class IAuthRepository {
 
   Future<AuthenticatedUser> signUpWithEmailAndPassword({
     required String email,
-    required String displayName,
-    required String photoURL,
     required String password,
   });
 
@@ -100,8 +98,6 @@ abstract interface class IAuthRepository {
     required String verificationId,
     required String smsCode,
   });
-
-  Future<void> updateEmail({required String email});
 
   Future<void> signOut();
 }
@@ -153,18 +149,13 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<AuthenticatedUser> signUpWithEmailAndPassword({
     required String email,
-    required String displayName,
-    required String photoURL,
     required String password,
   }) async {
     try {
-      final data = await _firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((result) {
-            result.user?.updateDisplayName(displayName);
-            result.user?.updatePhotoURL(photoURL);
-          })
-          .catchError((error) {});
+      final data = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       final user = data.user;
       if (user == null) throw AuthException(code: 'user-null');
@@ -223,18 +214,30 @@ class AuthRepository implements IAuthRepository {
     required String verificationId,
     required String smsCode,
   }) async {
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: smsCode,
-    );
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
 
-    final userCredential = await _firebaseAuth.signInWithCredential(credential);
+      final userCredential = await _firebaseAuth.signInWithCredential(
+        credential,
+      );
 
-    final authenticatedUser = UserDto.fromFirebase(
-      userCredential.user!,
-    ).toEntity();
+      final user = userCredential.user;
+      if (user == null) throw AuthException(code: 'user-null');
 
-    return authenticatedUser;
+      final authenticatedUser = UserDto.fromFirebase(user).toEntity();
+
+      return authenticatedUser;
+    } on AuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(e.message, stackTrace);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(
+        AuthException(code: e.code).message,
+        stackTrace,
+      );
+    }
   }
 
   @override
@@ -276,12 +279,8 @@ class AuthRepository implements IAuthRepository {
       verificationId: verificationId,
       smsCode: smsCode,
     );
-    await _firebaseAuth.currentUser?.updatePhoneNumber(phoneCredential);
-  }
 
-  @override
-  Future<void> updateEmail({required email}) async {
-    await _firebaseAuth.currentUser?.verifyBeforeUpdateEmail(email);
+    await _firebaseAuth.currentUser?.updatePhoneNumber(phoneCredential);
   }
 
   @override

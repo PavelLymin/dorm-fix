@@ -3,6 +3,8 @@ import '../../model/student.dart';
 import '../dto/student.dart';
 
 abstract interface class IStudentRepository {
+  Future<void> createStudent({required StudentEntity student});
+
   Future<StudentEntity> getStudent({required String uid});
 }
 
@@ -13,11 +15,18 @@ class StudentRepositoryImpl implements IStudentRepository {
   final RestClientHttp _client;
 
   @override
+  Future<void> createStudent({required StudentEntity student}) async {
+    final body = StudentDto.fromEntity(student).toJson();
+
+    await _client.send(path: '/students', method: 'POST', body: body);
+  }
+
+  @override
   Future<StudentEntity> getStudent({required String uid}) async {
     final response = await _client.send(path: '/students/$uid', method: 'GET');
 
-    return StudentDto.fromJson(
-      response!['data'] as Map<String, dynamic>,
-    ).toEntity();
+    print(response);
+
+    return StudentDto.fromJson(response!).toEntity();
   }
 }

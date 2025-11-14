@@ -6,9 +6,11 @@ import '../../core/database/database.dart';
 import '../../server/data/repository/dormitory_repository.dart';
 import '../../server/data/repository/specialization_repository.dart';
 import '../../server/data/repository/student_repository.dart';
+import '../../server/data/repository/user_repository.dart';
 import '../../server/router/dormitory.dart';
 import '../../server/router/specialization.dart';
 import '../../server/router/student.dart';
+import '../../server/router/user.dart';
 import '../model/application_config.dart';
 import '../model/dependencies_container.dart';
 
@@ -45,14 +47,25 @@ class CompositionRoot {
     // Database
     final database = Database.lazy(file: File(config.databasePath));
 
+    // User
+    final userRepository = UserRepositoryImpl(database: database);
+    final userRouter = UserRouter(
+      userRepository: userRepository,
+      logger: logger,
+    );
+
     // Student
     final studentRepository = StudentRepositoryImpl(database: database);
-    final studentRouter = StudentRouter(studentRepository: studentRepository);
+    final studentRouter = StudentRouter(
+      studentRepository: studentRepository,
+      logger: logger,
+    );
 
     // Dormitory
     final dormitoryRepository = DormitoryRepositoryImpl(database: database);
     final dormitoryRouter = DormitoryRouter(
       dormitoryRepository: dormitoryRepository,
+      logger: logger,
     );
 
     // Specialization
@@ -68,6 +81,7 @@ class CompositionRoot {
       firebaseAdmin: app,
       config: config,
       database: database,
+      userRouter: userRouter,
       studentRouter: studentRouter,
       dormitoryRouter: dormitoryRouter,
       specializationRouter: specializationRouter,
@@ -80,6 +94,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.firebaseAdmin,
     required this.config,
     required this.database,
+    required this.userRouter,
     required this.studentRouter,
     required this.dormitoryRouter,
     required this.specializationRouter,
@@ -90,6 +105,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final Config config;
 
   final Database database;
+
+  final UserRouter userRouter;
 
   final StudentRouter studentRouter;
 
@@ -102,6 +119,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     firebaseAdmin: firebaseAdmin,
     config: config,
     database: database,
+    userRouter: userRouter,
     studentRouter: studentRouter,
     dormitoryRouter: dormitoryRouter,
     specializationRouter: specializationRouter,

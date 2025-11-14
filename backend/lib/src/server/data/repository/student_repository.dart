@@ -11,7 +11,10 @@ abstract interface class IStudentRepository {
 
   Future<StudentEntity?> getStudent({required String uid});
 
-  Future<void> updateStudent({required StudentEntity student});
+  Future<void> updateStudent({
+    required String uid,
+    required StudentEntity student,
+  });
 }
 
 class StudentRepositoryImpl implements IStudentRepository {
@@ -65,9 +68,12 @@ class StudentRepositoryImpl implements IStudentRepository {
   }
 
   @override
-  Future<void> updateStudent({required StudentEntity student}) async {
-    await _database
-        .update(_database.students)
+  Future<void> updateStudent({
+    required String uid,
+    required StudentEntity student,
+  }) async {
+    await (_database.update(_database.students)
+          ..where((row) => row.uid.equals(uid)))
         .replace(StudentDto.fromEntity(student).toCompanion());
   }
 }

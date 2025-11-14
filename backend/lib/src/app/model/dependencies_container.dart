@@ -4,21 +4,26 @@ import '../../core/database/database.dart';
 import '../../server/router/dormitory.dart';
 import '../../server/router/specialization.dart';
 import '../../server/router/student.dart';
+import '../../server/router/user.dart';
 
 class DependencyContainer {
   const DependencyContainer({
     required this.firebaseAdmin,
     required this.config,
     required this.database,
+    required this.userRouter,
     required this.studentRouter,
     required this.dormitoryRouter,
     required this.specializationRouter,
   });
+
   final App firebaseAdmin;
 
   final Config config;
 
   final Database database;
+
+  final UserRouter userRouter;
 
   final StudentRouter studentRouter;
 
