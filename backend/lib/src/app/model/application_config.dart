@@ -23,6 +23,10 @@ class Config {
     defaultValue:
         '/Users/pavellyamin/Development/dorm_fix/backend/bin/service-account.json',
   );
+
+  // --- REGEX --- //
+  RegExp get email =>
+      RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 }
 
 /// Environment flavor.

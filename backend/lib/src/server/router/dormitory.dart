@@ -1,5 +1,4 @@
 import 'package:backend/src/core/rest_api/src/rest_api.dart';
-import 'package:logger/web.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../data/dto/dormitory.dart';
@@ -7,13 +6,13 @@ import '../data/repository/dormitory_repository.dart';
 
 class DormitoryRouter {
   DormitoryRouter({
+    required RestApi restApi,
     required IDormitoryRepository dormitoryRepository,
-    required Logger logger,
-  }) : _dormitoryRepository = dormitoryRepository,
-       _logger = logger;
+  }) : _restApi = restApi,
+       _dormitoryRepository = dormitoryRepository;
 
+  final RestApi _restApi;
   final IDormitoryRepository _dormitoryRepository;
-  final Logger _logger;
 
   Handler get handler {
     final router = Router();
@@ -26,9 +25,9 @@ class DormitoryRouter {
     final query = request.url.queryParameters['query'];
 
     if (query == null || query.isEmpty) {
-      throw ValidateException(
+      throw BadRequestException(
         message: 'Missing query parameter "query".',
-        details: {'field': 'query'},
+        error: {'field': 'query'},
       );
     }
 
@@ -36,31 +35,19 @@ class DormitoryRouter {
   }
 
   Future<Response> _search(Request request) async {
-    try {
-      final query = _checkQuery(request);
+    final query = _checkQuery(request);
 
-      final dormitories = await _dormitoryRepository.search(query: query);
+    final dormitories = await _dormitoryRepository.search(query: query);
 
-      final json = dormitories
-          .map((dormitory) => DormitoryDto.fromEntity(dormitory).toJson())
-          .toList();
+    final json = dormitories
+        .map((dormitory) => DormitoryDto.fromEntity(dormitory).toJson())
+        .toList();
 
-      return RestApi.createResponse({
-        'data': {
-          'message': {'specializations': json},
-        },
-      }, 200);
-    } on RestApiException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createResponse(e.toJson(), e.statusCode);
-    } on FormatException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createInvalidJsonResponse();
-    } catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createInternalServerResponse(
-        details: {'error_type': e.runtimeType.toString()},
-      );
-    }
+    return _restApi.send(
+      statusCode: 200,
+      responseBody: {
+        'data': {'dormitories': json},
+      },
+    );
   }
 }

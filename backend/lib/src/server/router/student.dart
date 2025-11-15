@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-import 'package:logger/web.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
+import '../../core/auth/src/require_user.dart';
 import '../../core/rest_api/src/rest_api.dart';
 import '../data/dto/student.dart';
 import '../data/repository/student_repository.dart';
 
 class StudentRouter {
   const StudentRouter({
+    required RestApi restApi,
     required IStudentRepository studentRepository,
-    required Logger logger,
-  }) : _studentRepository = studentRepository,
-       _logger = logger;
+  }) : _restApi = restApi,
+       _studentRepository = studentRepository;
 
+  final RestApi _restApi;
   final IStudentRepository _studentRepository;
-  final Logger _logger;
 
   Handler get handler {
     final router = Router();
@@ -24,16 +24,17 @@ class StudentRouter {
     router.post('/students/me', _createStudent);
     router.put('/students/me', _updateStudent);
     router.delete('/students/me', _deleteStudent);
+
     return router.call;
   }
 
-  Future<Map<String, dynamic>> _readJson(Request request) async {
+  Future<Map<String, Object>> _readJson(Request request) async {
     final body = await request.readAsString();
 
     if (body.trim().isEmpty) {
-      throw ValidateException(
+      throw BadRequestException(
         message: 'Request body is empty.',
-        details: {'field': 'body'},
+        error: {'field': 'body'},
       );
     }
 
@@ -42,98 +43,64 @@ class StudentRouter {
   }
 
   Future<Response> _createStudent(Request request) async {
-    try {
-      final json = await _readJson(request);
-      final student = StudentDto.fromJson(json).toEntity();
-      await _studentRepository.createStudent(student: student);
+    final json = await _readJson(request);
+    final student = StudentDto.fromJson(json).toEntity();
+    await _studentRepository.createStudent(student: student);
 
-      return RestApi.createResponse({
+    return _restApi.send(
+      statusCode: 201,
+      responseBody: {
         'data': {'message': 'The student was successfully created.'},
-      }, 201);
-    } on RestApiException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createResponse(e.toJson(), e.statusCode);
-    } on FormatException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createInvalidJsonResponse();
-    } catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createInternalServerResponse(
-        details: {'error_type': e.runtimeType.toString()},
-      );
-    }
+      },
+    );
   }
 
   Future<Response> _deleteStudent(Request request) async {
-    try {
-      final uid = request.context['user_id'] as String;
+    final uid = RequireUser.getUserId(request);
 
-      await _studentRepository.deleteStudent(uid: uid);
+    await _studentRepository.deleteStudent(uid: uid);
 
-      return RestApi.createResponse({
+    return _restApi.send(
+      statusCode: 201,
+      responseBody: {
         'data': {'message': 'The student was successfully deleted.'},
-      });
-    } on Object catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createInternalServerResponse(
-        details: {'error_type': e.runtimeType.toString()},
-      );
-    }
+      },
+    );
   }
 
   Future<Response> _getStudent(Request request) async {
-    try {
-      final uid = request.context['user_id'] as String;
+    final uid = RequireUser.getUserId(request);
 
-      final student = await _studentRepository.getStudent(uid: uid);
-      if (student == null) {
-        throw NotFoundException(
-          message: 'Student not found.',
-          details: {'uid': uid},
-        );
-      }
-
-      final json = StudentDto.fromEntity(student).toJson();
-
-      return RestApi.createResponse({
-        'data': {'student': json},
-      });
-    } on RestApiException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createResponse(e.toJson(), e.statusCode);
-    } on FormatException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createInvalidJsonResponse();
-    } on Object catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createInternalServerResponse(
-        details: {'error_type': e.runtimeType.toString()},
+    final student = await _studentRepository.getStudent(uid: uid);
+    if (student == null) {
+      throw NotFoundException(
+        message: 'Student not found.',
+        error: {'uid': uid},
       );
     }
+
+    final json = StudentDto.fromEntity(student).toJson();
+
+    return _restApi.send(
+      statusCode: 200,
+      responseBody: {
+        'data': {'student': json},
+      },
+    );
   }
 
   Future<Response> _updateStudent(Request request) async {
-    try {
-      final uid = request.context['user_id'] as String;
+    final uid = RequireUser.getUserId(request);
 
-      final json = await _readJson(request);
-      final student = StudentDto.fromJson(json).toEntity();
-      await _studentRepository.updateStudent(uid: uid, student: student);
+    final json = await _readJson(request);
+    final student = StudentDto.fromJson(json).toEntity();
+    await _studentRepository.updateStudent(uid: uid, student: student);
 
-      return RestApi.createResponse({
+    return _restApi.send(
+      statusCode: 201,
+      responseBody: {
         'data': {'message': 'The student was successfully updated.'},
-      }, 201);
-    } on RestApiException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createResponse(e.toJson(), e.statusCode);
-    } on FormatException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createInvalidJsonResponse();
-    } on Object catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      return RestApi.createInternalServerResponse(
-        details: {'error_type': e.runtimeType.toString()},
-      );
-    }
+      },
+    );
   }
 }

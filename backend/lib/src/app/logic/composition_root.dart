@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
 import '../../core/database/database.dart';
+import '../../core/rest_api/src/rest_api.dart';
 import '../../server/data/repository/dormitory_repository.dart';
 import '../../server/data/repository/specialization_repository.dart';
 import '../../server/data/repository/student_repository.dart';
@@ -47,25 +48,27 @@ class CompositionRoot {
     // Database
     final database = Database.lazy(file: File(config.databasePath));
 
+    final restApi = RestApiBase();
+
     // User
     final userRepository = UserRepositoryImpl(database: database);
     final userRouter = UserRouter(
       userRepository: userRepository,
-      logger: logger,
+      restApi: restApi,
     );
 
     // Student
     final studentRepository = StudentRepositoryImpl(database: database);
     final studentRouter = StudentRouter(
       studentRepository: studentRepository,
-      logger: logger,
+      restApi: restApi,
     );
 
     // Dormitory
     final dormitoryRepository = DormitoryRepositoryImpl(database: database);
     final dormitoryRouter = DormitoryRouter(
       dormitoryRepository: dormitoryRepository,
-      logger: logger,
+      restApi: restApi,
     );
 
     // Specialization
@@ -74,12 +77,13 @@ class CompositionRoot {
     );
     final specializationRouter = SpecializationRouter(
       specializationRepository: specializationRepository,
-      logger: logger,
+      restApi: restApi,
     );
 
     return _DependencyFactory(
       firebaseAdmin: app,
       config: config,
+      restApi: restApi,
       database: database,
       userRouter: userRouter,
       studentRouter: studentRouter,
@@ -93,6 +97,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   const _DependencyFactory({
     required this.firebaseAdmin,
     required this.config,
+    required this.restApi,
     required this.database,
     required this.userRouter,
     required this.studentRouter,
@@ -103,6 +108,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final App firebaseAdmin;
 
   final Config config;
+
+  final RestApi restApi;
 
   final Database database;
 
@@ -118,6 +125,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   DependencyContainer create() => DependencyContainer(
     firebaseAdmin: firebaseAdmin,
     config: config,
+    restApi: restApi,
     database: database,
     userRouter: userRouter,
     studentRouter: studentRouter,

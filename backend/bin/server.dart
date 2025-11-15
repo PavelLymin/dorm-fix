@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:backend/src/app/logic/composition_root.dart';
+import 'package:backend/src/server/middleware/error.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
@@ -20,14 +21,11 @@ void main(List<String> args) async {
 
       final ip = InternetAddress.anyIPv4;
 
-      final publicRoutes = Pipeline()
-          .addMiddleware(logRequests())
-          .addHandler(
-            Cascade().add(dependency.userRouter.publicHandler).handler,
-          );
+      final publicRoutes = Pipeline().addHandler(
+        Cascade().add(dependency.userRouter.publicHandler).handler,
+      );
 
       final protectedRoutes = Pipeline()
-          .addMiddleware(logRequests())
           .addMiddleware(corsHeaders())
           // .addMiddleware(
           //   AuthenticationMiddleware.check(
@@ -43,7 +41,10 @@ void main(List<String> args) async {
                 .handler,
           );
 
-      final handlers = Cascade().add(publicRoutes).add(protectedRoutes).handler;
+      final handlers = Pipeline()
+          .addMiddleware(logRequests())
+          .addMiddleware(ErrorMiddleware.call(logger, dependency.restApi))
+          .addHandler(Cascade().add(publicRoutes).add(protectedRoutes).handler);
 
       final port = int.parse(dependency.config.port);
       await serve(handlers, ip, port);
