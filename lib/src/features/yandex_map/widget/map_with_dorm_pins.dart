@@ -1,11 +1,14 @@
 import 'dart:math' as math;
+
+import 'package:dorm_fix/src/features/yandex_map/widget/search_modal_sheet.dart';
 import 'package:ui_kit/ui.dart';
-import 'package:dorm_fix/src/features/yandex_map/listeners/map_object_tap_listener.dart';
-import 'package:dorm_fix/src/features/yandex_map/utils/extension_utils.dart';
-import 'package:dorm_fix/src/features/yandex_map/data/geometry_provider.dart';
-import 'package:dorm_fix/src/features/yandex_map/widget/yandex_map_kit.dart';
 import 'package:yandex_maps_mapkit/mapkit.dart' as mapkit;
 import 'package:yandex_maps_mapkit/image.dart' as image_provider;
+
+import '../data/geometry_provider.dart';
+import '../listeners/map_object_tap_listener.dart';
+import '../utils/extension_utils.dart';
+import 'yandex_map_kit.dart';
 
 class MapWithDormPins extends StatefulWidget {
   const MapWithDormPins({super.key, this.onMapDispose});
@@ -16,6 +19,16 @@ class MapWithDormPins extends StatefulWidget {
 }
 
 class _MapWithDormPins extends State<MapWithDormPins> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   late final mapkit.MapObjectCollection _pinsCollection;
 
   late final _placemarkTapListener = MapObjectTapListenerImpl(
@@ -38,7 +51,24 @@ class _MapWithDormPins extends State<MapWithDormPins> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: [YandexMapKit(onMapCreated: _createMapObjects)]),
+      body: Stack(
+        children: [
+          YandexMapKit(onMapCreated: _createMapObjects),
+          Positioned(
+            bottom: 0.0,
+            right: 0.0,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () => _showSearchModalSheet(context),
+                  child: const Text('Search'),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -66,6 +96,15 @@ class _MapWithDormPins extends State<MapWithDormPins> {
       context: context,
       builder: (builder) {
         return UiModalBottomSheet(text: text, child: Text(''));
+      },
+    );
+  }
+
+  void _showSearchModalSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return const SearchModalSheet();
       },
     );
   }

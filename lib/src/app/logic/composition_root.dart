@@ -13,6 +13,8 @@ import '../../features/home/data/repository/specialization_repository.dart';
 import '../../features/home/state_management/bloc/specialization_bloc.dart';
 import '../../features/profile/student/data/repository/student_repository.dart';
 import '../../features/profile/student/state_management/bloc/student_bloc.dart';
+import '../../features/yandex_map/data/repositories/search_repository.dart';
+import '../../features/yandex_map/state_management/bloc/search_bloc.dart';
 import '../model/dependencies.dart';
 
 abstract class Factory<T> {
@@ -80,12 +82,17 @@ class CompositionRoot {
       logger: logger,
     );
 
+    // Search Dormitory
+    final searchRepository = SearchRepository(client: client);
+    final searchBloc = SearchBloc(searchRepository: searchRepository);
+
     return _DependencyFactory(
       client: client,
       authenticationBloc: authenticationBloc,
       authButton: authButton,
       studentBloc: studentBloc,
       specializationBloc: specializationBloc,
+      searchBloc: searchBloc,
     ).create();
   }
 }
@@ -97,6 +104,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.authButton,
     required this.studentBloc,
     required this.specializationBloc,
+    required this.searchBloc,
   });
 
   final RestClientHttp client;
@@ -109,6 +117,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final SpecializationBloc specializationBloc;
 
+  final SearchBloc searchBloc;
+
   @override
   DependencyContainer create() => DependencyContainer(
     client: client,
@@ -116,6 +126,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     authButton: authButton,
     studentBloc: studentBloc,
     specializationBloc: specializationBloc,
+    searchBloc: searchBloc,
   );
 }
 

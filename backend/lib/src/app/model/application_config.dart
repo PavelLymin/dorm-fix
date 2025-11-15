@@ -21,7 +21,7 @@ class Config {
   String get serviceAccount => const String.fromEnvironment(
     'SERVICE_ACCOUNT',
     defaultValue:
-        '/Users/pavellyamin/Development/dorm_fix/backend/bin/service-account.json',
+        '/Users/vadimlyamin/Development/dorm_fix/backend/bin/service-account.json',
   );
 
   // --- REGEX --- //
