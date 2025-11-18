@@ -1,19 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../app/widget/dependencies_scope.dart';
-import '../../profile/student/state_management/bloc/student_bloc.dart';
+import '../../profile/bloc/student_bloc.dart';
 import '../state_management/bloc/specialization_bloc.dart';
 import 'carousel.dart';
 import 'home_card.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeScreenState extends State<HomeScreen> {
   late StudentBloc _studentBloc;
   late SpecializationBloc _specializationBloc;
 
@@ -53,37 +53,44 @@ class _HomeBody extends StatelessWidget {
   const _HomeBody();
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    width: MediaQuery.sizeOf(context).width * 0.9,
-    child: Column(
-      children: [
-        AppBar(title: const _UserDisplayProfile(), centerTitle: false),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SpecializationsCarousel(),
-              const SizedBox(height: 8),
-              WindowSizeScope.of(context).isExpandedOrLarger
-                  ? const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 8,
-                      children: [
-                        Expanded(child: HomeCard.request()),
-                        Expanded(child: HomeCard.history()),
-                      ],
-                    )
-                  : const Column(
-                      spacing: 8,
-                      children: [HomeCard.request(), HomeCard.history()],
-                    ),
-            ],
+  Widget build(BuildContext context) {
+    final window = WindowSizeScope.of(context);
+    final windowWidth = MediaQuery.sizeOf(context).width;
+    return SizedBox(
+      width: window.maybeMap(
+        orElse: () => windowWidth * 0.7,
+        compact: (_) => windowWidth * 0.9,
+      ),
+      child: Column(
+        children: [
+          AppBar(title: const _UserDisplayProfile(), centerTitle: false),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SpecializationsCarousel(),
+                const SizedBox(height: 8),
+                window.isLarge
+                    ? const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 8,
+                        children: [
+                          Expanded(child: HomeCard.request()),
+                          Expanded(child: HomeCard.history()),
+                        ],
+                      )
+                    : const Column(
+                        spacing: 8,
+                        children: [HomeCard.request(), HomeCard.history()],
+                      ),
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
+  }
 }
 
 class _UserDisplayProfile extends StatelessWidget {

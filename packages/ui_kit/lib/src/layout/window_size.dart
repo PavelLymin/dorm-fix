@@ -98,6 +98,20 @@ sealed class WindowSize extends Size {
     final WindowSizeLarge size => large?.call(size) ?? orElse(),
     final WindowSizeExtraLarge size => extraLarge?.call(size) ?? orElse(),
   };
+
+  T? mapOrNull<T>({
+    T Function(WindowSizeCompact)? compact,
+    T Function(WindowSizeMedium)? medium,
+    T Function(WindowSizeExpanded)? expanded,
+    T Function(WindowSizeLarge)? large,
+    T Function(WindowSizeExtraLarge)? extraLarge,
+  }) => switch (this) {
+    final WindowSizeCompact size => compact?.call(size),
+    final WindowSizeMedium size => medium?.call(size),
+    final WindowSizeExpanded size => expanded?.call(size),
+    final WindowSizeLarge size => large?.call(size),
+    final WindowSizeExtraLarge size => extraLarge?.call(size),
+  };
 }
 
 final class WindowSizeCompact extends WindowSize {

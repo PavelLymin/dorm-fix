@@ -1,4 +1,4 @@
-import '../../../authentication/model/user.dart';
+import '../../authentication/model/user.dart';
 
 class StudentEntity {
   const StudentEntity({

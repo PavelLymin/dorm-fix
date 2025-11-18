@@ -7,14 +7,14 @@ import '../state_management/auth_button/auth_button_bloc.dart';
 import '../state_management/authentication/authentication_bloc.dart';
 import 'signin_social.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignInScreenState extends State<SignInScreen> {
   bool _isLoading = false;
   bool _isSmsCode = false;
   late AuthButtonBloc _authButtonBloc;
@@ -69,7 +69,7 @@ class _SignInState extends State<SignIn> {
             _addLoading(false);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Home()),
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           },
           smsCodeSent: (_) {

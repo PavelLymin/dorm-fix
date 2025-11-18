@@ -1,4 +1,4 @@
-import '../../../../../core/rest_client/rest_client.dart';
+import '../../../../core/rest_client/rest_client.dart';
 import '../../model/student.dart';
 import '../dto/student.dart';
 

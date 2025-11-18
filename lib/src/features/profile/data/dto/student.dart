@@ -1,4 +1,4 @@
-import '../../../../authentication/data/dto/user.dart';
+import '../../../authentication/data/dto/user.dart';
 import '../../model/student.dart';
 
 class StudentDto {

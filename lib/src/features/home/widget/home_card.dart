@@ -22,27 +22,42 @@ sealed class HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
-    return UiCard.clickable(
-      onTap: () {},
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Image.asset(nameImage, height: 32, width: 32),
-          const SizedBox(width: 16),
-          Flexible(
-            child: ListTile(
-              title: UiText.titleMedium(title),
-              subtitle: Padding(
-                padding: AppPadding.onlyIncrement(top: 1),
-                child: UiText.bodyLarge(
-                  subtitle,
-                  style: TextStyle(color: colorPalette.mutedForeground),
+    final isLarge = WindowSizeScope.of(context).isLarge;
+    return SizedBox(
+      height: isLarge ? 208 : null,
+      child: UiCard.clickable(
+        onTap: () {},
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(
+              nameImage,
+              height: isLarge ? 64 : 32,
+              width: isLarge ? 64 : 32,
+            ),
+            const SizedBox(width: 16),
+            Flexible(
+              child: ListTile(
+                title: isLarge
+                    ? UiText.headlineLarge(title)
+                    : UiText.titleMedium(title),
+                subtitle: Padding(
+                  padding: AppPadding.onlyIncrement(top: isLarge ? 2 : 1),
+                  child: isLarge
+                      ? UiText.headlineSmall(
+                          subtitle,
+                          style: TextStyle(color: colorPalette.mutedForeground),
+                        )
+                      : UiText.bodyLarge(
+                          subtitle,
+                          style: TextStyle(color: colorPalette.mutedForeground),
+                        ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
