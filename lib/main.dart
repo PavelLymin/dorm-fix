@@ -6,7 +6,6 @@ import 'src/app/bloc/app_bloc_observer.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
 import 'src/features/authentication/state_management/authentication/authentication_bloc.dart';
-import 'src/features/profile/student/state_management/bloc/student_bloc.dart';
 
 void main() async {
   final logger = CreateAppLogger().create();
@@ -21,7 +20,10 @@ void main() async {
       runApp(
         DependeciesScope(
           dependencyContainer: dependency,
-          child: WindowSizeScope(child: const MainApp()),
+          child: WindowSizeScope(
+            updateMode: WindowSizeUpdateMode.categoriesOnly,
+            child: const MainApp(),
+          ),
         ),
       );
     },
@@ -40,23 +42,18 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   late AuthBloc _authenticationBloc;
-  late StudentBloc _studentBloc;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = DependeciesScope.of(context).authenticationBloc;
-    _studentBloc = DependeciesScope.of(context).studentBloc;
   }
 
   @override
   Widget build(BuildContext context) {
     final router = DependeciesScope.of(context).router;
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => _authenticationBloc),
-        BlocProvider(create: (context) => _studentBloc),
-      ],
+      providers: [BlocProvider(create: (context) => _authenticationBloc)],
       child: MaterialApp.router(
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,

@@ -15,8 +15,8 @@ base class RestApiBase implements RestApi {
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
         BadRequestException(
-          message: 'Error occurred during encoding',
           error: {
+            'description': 'Error occured during encoding.',
             'details': {'body': 'Invalid JSON format.'},
           },
         ),
@@ -50,8 +50,8 @@ base class RestApiBase implements RestApi {
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
         InternalServerException(
-          message: 'Error occured during decoding.',
           error: {
+            'description': 'Error occured during decoding.',
             'details': {'response': 'Invalid JSON format.'},
           },
         ),

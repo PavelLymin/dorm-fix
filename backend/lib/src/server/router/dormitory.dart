@@ -26,8 +26,10 @@ class DormitoryRouter {
 
     if (query == null || query.isEmpty) {
       throw BadRequestException(
-        message: 'Missing query parameter "query".',
-        error: {'field': 'query'},
+        error: {
+          'description': 'Missing query parameter "query',
+          'field': 'query',
+        },
       );
     }
 

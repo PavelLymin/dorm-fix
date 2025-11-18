@@ -9,8 +9,10 @@ abstract class RequireUser {
 
     if (uid is! String || uid.isEmpty) {
       throw BadRequestException(
-        message: 'Missing or invalid user id in request context.',
-        error: {'context': 'user_id'},
+        error: {
+          'description': 'Missing or invalid user id in request context.',
+          'context': 'user_id',
+        },
       );
     }
 
@@ -22,15 +24,16 @@ abstract class RequireUser {
 
     if (email is! String || email.isEmpty) {
       throw BadRequestException(
-        message: 'Missing path parameter "email".',
-        error: {'param': 'email'},
+        error: {
+          'description': 'Missing path parameter "email".',
+          'param': 'email',
+        },
       );
     }
 
     if (Config().email.matchAsPrefix(email) == null) {
       throw BadRequestException(
-        message: 'Invalid email format.',
-        error: {'field': 'email'},
+        error: {'description': 'Invalid email format.', 'field': 'email'},
       );
     }
 

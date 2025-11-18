@@ -33,8 +33,7 @@ class StudentRouter {
 
     if (body.trim().isEmpty) {
       throw BadRequestException(
-        message: 'Request body is empty.',
-        error: {'field': 'body'},
+        error: {'description': 'Request body is empty.', 'field': 'body'},
       );
     }
 
@@ -74,8 +73,7 @@ class StudentRouter {
     final student = await _studentRepository.getStudent(uid: uid);
     if (student == null) {
       throw NotFoundException(
-        message: 'Student not found.',
-        error: {'uid': uid},
+        error: {'description': 'The student was not found.', 'uid': uid},
       );
     }
 

@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-
 import '../../../app/widget/dependencies_scope.dart';
 import '../../profile/student/state_management/bloc/student_bloc.dart';
+import '../state_management/bloc/specialization_bloc.dart';
 import 'carousel.dart';
 import 'home_card.dart';
 
@@ -14,97 +14,93 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  @override
-  Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
-    return Scaffold(
-      body: WindowSizeScope.of(context).maybeMap(
-        orElse: () => Padding(
-          padding: AppPadding.symmetricIncrement(horizontal: 3),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              AppBar(title: const _UserDisplayProfile(), centerTitle: false),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SpecializationsCarousel(),
-                    const SizedBox(height: 8),
-                    HomeCard(
-                      icon: Image.asset(
-                        ImagesHelper.request,
-                        height: 32,
-                        width: 32,
-                      ),
-                      title: UiText.titleMedium('Создать заявку'),
-                      subtitle: UiText.bodyLarge(
-                        'Данный поиск осуществляется по тексту, вводимый пользователем ',
-                        style: TextStyle(color: colorPalette.mutedForeground),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    HomeCard(
-                      icon: Image.asset(
-                        ImagesHelper.history,
-                        height: 32,
-                        width: 32,
-                      ),
-                      title: UiText.titleMedium('История завок'),
-                      subtitle: UiText.bodyLarge(
-                        'Данный поиск осуществляется по тексту, вводимый пользователем ',
-                        style: TextStyle(color: colorPalette.mutedForeground),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _UserDisplayProfile extends StatefulWidget {
-  const _UserDisplayProfile();
-
-  @override
-  State<_UserDisplayProfile> createState() => __UserDisplayProfileState();
-}
-
-class __UserDisplayProfileState extends State<_UserDisplayProfile> {
   late StudentBloc _studentBloc;
+  late SpecializationBloc _specializationBloc;
 
   @override
   void initState() {
     super.initState();
-    final authUser = DependeciesScope.of(
+    _studentBloc = DependeciesScope.of(context).studentBloc
+      ..add(StudentEvent.get());
+    final specializationRepository = DependeciesScope.of(
       context,
-    ).authenticationBloc.state.authenticatedOrNull;
-    if (authUser != null) {
-      _studentBloc = DependeciesScope.of(context).studentBloc
-        ..add(StudentEvent.get(uid: authUser.uid));
-    }
+    ).specializationRepository;
+    final logger = DependeciesScope.of(context).logger;
+    _specializationBloc = SpecializationBloc(
+      specializationRepository: specializationRepository,
+      logger: logger,
+    )..add(SpecializationEvent.getSpecializations());
   }
 
   @override
-  Widget build(BuildContext context) => BlocProvider.value(
-    value: _studentBloc,
-    child: BlocBuilder<StudentBloc, StudentState>(
-      builder: (context, state) {
-        return state.map(
-          loading: (_) => const SizedBox.square(
-            dimension: 20,
-            child: CircularProgressIndicator(),
+  void dispose() {
+    _studentBloc.close();
+    _specializationBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => MultiBlocProvider(
+    providers: [
+      BlocProvider.value(value: _studentBloc),
+      BlocProvider.value(value: _specializationBloc),
+    ],
+    child: Scaffold(body: const Center(child: _HomeBody())),
+  );
+}
+
+class _HomeBody extends StatelessWidget {
+  const _HomeBody();
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: MediaQuery.sizeOf(context).width * 0.9,
+    child: Column(
+      children: [
+        AppBar(title: const _UserDisplayProfile(), centerTitle: false),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SpecializationsCarousel(),
+              const SizedBox(height: 8),
+              WindowSizeScope.of(context).isExpandedOrLarger
+                  ? const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 8,
+                      children: [
+                        Expanded(child: HomeCard.request()),
+                        Expanded(child: HomeCard.history()),
+                      ],
+                    )
+                  : const Column(
+                      spacing: 8,
+                      children: [HomeCard.request(), HomeCard.history()],
+                    ),
+            ],
           ),
-          loaded: (state) =>
-              UiText.headlineLarge(state.student.user.displayName!),
-          error: (state) => UiText.headlineLarge(state.message),
-        );
-      },
+        ),
+      ],
     ),
+  );
+}
+
+class _UserDisplayProfile extends StatelessWidget {
+  const _UserDisplayProfile();
+
+  @override
+  Widget build(BuildContext context) => BlocBuilder<StudentBloc, StudentState>(
+    builder: (context, state) {
+      return state.map(
+        loading: (_) => const SizedBox.square(
+          dimension: 20,
+          child: CircularProgressIndicator(),
+        ),
+        loaded: (state) =>
+            UiText.headlineLarge(state.student.user.displayName!),
+        error: (state) => UiText.headlineLarge(state.message),
+      );
+    },
   );
 }

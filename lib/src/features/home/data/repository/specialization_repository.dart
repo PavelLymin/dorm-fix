@@ -14,28 +14,24 @@ class SpecializationRepositoryImpl implements ISpecializationRepository {
 
   @override
   Future<List<SpecializationEntity>> getSpecializations() async {
-    try {
-      final response = await _client.send(
-        path: '/specializations',
-        method: 'GET',
+    final response = await _client.send(
+      path: '/specializations',
+      method: 'GET',
+    );
+
+    final data = response?['specializations'];
+
+    if (data is! List) {
+      throw StructuredBackendException(
+        error: {'description': 'Invalid JSON format'},
+        statusCode: response?['statusCode'] as int?,
       );
-
-      final data = response?['specializations'];
-
-      if (data is! List) {
-        throw StructuredBackendException(
-          error: {'message': 'Invalid JSON format'},
-          statusCode: response?['statusCode'] as int?,
-        );
-      }
-
-      final specializations = data
-          .map((json) => SpecializationDto.fromJson(json).toEntity())
-          .toList();
-
-      return specializations;
-    } on StructuredBackendException catch (e, stackTrace) {
-      Error.throwWithStackTrace(e, stackTrace);
     }
+
+    final specializations = data
+        .map((json) => SpecializationDto.fromJson(json).toEntity())
+        .toList();
+
+    return specializations;
   }
 }

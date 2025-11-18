@@ -24,9 +24,12 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
 
   Future<void> _getSudent(_StudentGet e, Emitter<StudentState> emit) async {
     try {
-      final student = await _studentRepository.getStudent(uid: e.uid);
+      final student = await _studentRepository.getStudent();
 
       emit(StudentState.loaded(student: student));
+    } on StructuredBackendException catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      emit(StudentState.error(student: state.student, message: e.message));
     } on RestClientException catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(StudentState.error(student: state.student, message: e.message));

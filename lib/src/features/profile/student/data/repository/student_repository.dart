@@ -5,7 +5,7 @@ import '../dto/student.dart';
 abstract interface class IStudentRepository {
   Future<void> createStudent({required StudentEntity student});
 
-  Future<StudentEntity> getStudent({required String uid});
+  Future<StudentEntity> getStudent();
 }
 
 class StudentRepositoryImpl implements IStudentRepository {
@@ -22,11 +22,17 @@ class StudentRepositoryImpl implements IStudentRepository {
   }
 
   @override
-  Future<StudentEntity> getStudent({required String uid}) async {
-    final response = await _client.send(path: '/students/$uid', method: 'GET');
+  Future<StudentEntity> getStudent() async {
+    final response = await _client.send(path: '/students/me', method: 'GET');
 
-    print(response);
+    if (response == null) {
+      throw StructuredBackendException(
+        error: {'description': 'The student was not found.'},
+        statusCode: 404,
+      );
+    }
 
-    return StudentDto.fromJson(response!).toEntity();
+    final student = StudentDto.fromJson(response).toEntity();
+    return student;
   }
 }

@@ -4,14 +4,13 @@ import 'package:dorm_fix/src/app/router/router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:logger/logger.dart';
-import 'package:yandex_maps_mapkit/init.dart' as init;
+// import 'package:yandex_maps_mapkit/init.dart' as init;
 import '../../core/rest_client/src/http/rest_client_http.dart';
 import '../../features/authentication/data/repository/auth_repository.dart';
 import '../../features/authentication/data/repository/user_repository.dart';
 import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
 import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
 import '../../features/home/data/repository/specialization_repository.dart';
-import '../../features/home/state_management/bloc/specialization_bloc.dart';
 import '../../features/profile/student/data/repository/student_repository.dart';
 import '../../features/profile/student/state_management/bloc/student_bloc.dart';
 import '../../features/yandex_map/data/repositories/search_repository.dart';
@@ -44,8 +43,8 @@ class CompositionRoot {
     );
 
     // Mapkit
-    final mapkitApiKey = Config.mapKitApiKey;
-    await init.initMapkit(apiKey: mapkitApiKey);
+    // final mapkitApiKey = Config.mapKitApiKey;
+    // await init.initMapkit(apiKey: mapkitApiKey);
 
     // Http
     final RestClientHttp client = RestClientHttp(
@@ -81,10 +80,6 @@ class CompositionRoot {
     final specializationRepository = SpecializationRepositoryImpl(
       client: client,
     );
-    final specializationBloc = SpecializationBloc(
-      specializationRepository: specializationRepository,
-      logger: logger,
-    );
 
     // Search Dormitory
     final searchRepository = SearchRepository(client: client);
@@ -93,11 +88,12 @@ class CompositionRoot {
     return _DependencyFactory(
       client: client,
       router: router,
+      searchBloc: searchBloc,
+      logger: logger,
       authenticationBloc: authenticationBloc,
       authButton: authButton,
       studentBloc: studentBloc,
-      specializationBloc: specializationBloc,
-      searchBloc: searchBloc,
+      specializationRepository: specializationRepository,
     ).create();
   }
 }
@@ -106,16 +102,19 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   const _DependencyFactory({
     required this.client,
     required this.router,
+    required this.searchBloc,
+    required this.logger,
     required this.authenticationBloc,
     required this.authButton,
     required this.studentBloc,
-    required this.specializationBloc,
-    required this.searchBloc,
+    required this.specializationRepository,
   });
 
   final RestClientHttp client;
 
   final AppRouter router;
+
+  final Logger logger;
 
   final AuthBloc authenticationBloc;
 
@@ -123,7 +122,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final StudentBloc studentBloc;
 
-  final SpecializationBloc specializationBloc;
+  final ISpecializationRepository specializationRepository;
 
   final SearchBloc searchBloc;
 
@@ -131,11 +130,12 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   DependencyContainer create() => DependencyContainer(
     client: client,
     router: router,
+    searchBloc: searchBloc,
+    logger: logger,
     authenticationBloc: authenticationBloc,
     authButton: authButton,
     studentBloc: studentBloc,
-    specializationBloc: specializationBloc,
-    searchBloc: searchBloc,
+    specializationRepository: specializationRepository,
   );
 }
 

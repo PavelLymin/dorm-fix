@@ -6,7 +6,6 @@ import 'package:shelf_router/shelf_router.dart';
 import '../../core/auth/src/require_user.dart';
 import '../data/dto/user.dart';
 import '../data/repository/user_repository.dart';
-import '../model/user.dart';
 
 class UserRouter {
   UserRouter({
@@ -40,24 +39,12 @@ class UserRouter {
 
     if (body.trim().isEmpty) {
       throw BadRequestException(
-        message: 'Request body is empty.',
-        error: {'field': 'body'},
+        error: {'description': 'Request body is empty.', 'field': 'body'},
       );
     }
 
     final json = jsonDecode(body);
     return json;
-  }
-
-  Response _getUser(UserEntity? user) {
-    final userOrNull = user == null ? null : UserDto.fromEntity(user).toJson();
-
-    return _restApi.send(
-      statusCode: 200,
-      responseBody: {
-        'data': {'user': userOrNull},
-      },
-    );
   }
 
   Future<Response> _updateUser(Request request) async {
@@ -80,7 +67,20 @@ class UserRouter {
 
     final user = await _userRepository.getUserByEmail(email: email);
 
-    return _getUser(user);
+    if (user == null) {
+      throw ConflictException(
+        error: {'description': 'Email already exists.', 'param': 'email'},
+      );
+    }
+
+    final json = UserDto.fromEntity(user).toJson();
+
+    return _restApi.send(
+      statusCode: 200,
+      responseBody: {
+        'data': {'user': json},
+      },
+    );
   }
 
   Future<Response> _getUserByUid(Request request) async {
@@ -88,6 +88,19 @@ class UserRouter {
 
     final user = await _userRepository.getUserByUid(uid: uid);
 
-    return _getUser(user);
+    if (user == null) {
+      throw NotFoundException(
+        error: {'description': 'User not found.', 'context': 'user_id'},
+      );
+    }
+
+    final json = UserDto.fromEntity(user).toJson();
+
+    return _restApi.send(
+      statusCode: 200,
+      responseBody: {
+        'data': {'user': json},
+      },
+    );
   }
 }

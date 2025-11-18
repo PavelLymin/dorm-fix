@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:ui_kit/ui.dart';
 
+enum WindowSizeUpdateMode { categoriesOnly, continuous }
+
 sealed class WindowSize extends Size {
   WindowSize({
     required this.minWidth,
@@ -229,9 +231,14 @@ final class WindowSizeExtraLarge extends WindowSize {
 }
 
 class WindowSizeScope extends StatefulWidget {
-  const WindowSizeScope({required this.child, super.key});
+  const WindowSizeScope({
+    required this.child,
+    this.updateMode = WindowSizeUpdateMode.categoriesOnly,
+    super.key,
+  });
 
   final Widget child;
+  final WindowSizeUpdateMode updateMode;
 
   static WindowSize of(BuildContext context, {bool listen = true}) {
     final inheritedWindowSize = listen
@@ -267,9 +274,15 @@ class _WindowSizeScopeState extends State<WindowSizeScope>
   void didChangeMetrics() {
     final windowSize = _getWindowSize();
 
-    if (_windowSize != windowSize) {
-      setState(() => _windowSize = windowSize);
+    switch (widget.updateMode) {
+      case WindowSizeUpdateMode.continuous:
+        setState(() => _windowSize = windowSize);
+      case WindowSizeUpdateMode.categoriesOnly:
+        if (_windowSize.runtimeType != windowSize.runtimeType) {
+          setState(() => _windowSize = windowSize);
+        }
     }
+
     super.didChangeMetrics();
   }
 
