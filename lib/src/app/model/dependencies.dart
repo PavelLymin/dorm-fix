@@ -1,3 +1,5 @@
+import 'package:dorm_fix/src/app/router/router.dart';
+
 import '../../core/rest_client/src/http/rest_client_http.dart';
 import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
 import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
@@ -8,6 +10,7 @@ import '../../features/yandex_map/state_management/bloc/search_bloc.dart';
 class DependencyContainer {
   const DependencyContainer({
     required this.client,
+    required this.router,
     required this.authenticationBloc,
     required this.authButton,
     required this.studentBloc,
@@ -16,6 +19,8 @@ class DependencyContainer {
   });
 
   final RestClientHttp client;
+
+  final AppRouter router;
 
   final AuthBloc authenticationBloc;
 

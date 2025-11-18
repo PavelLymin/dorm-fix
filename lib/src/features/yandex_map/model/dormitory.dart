@@ -1,92 +1,68 @@
-sealed class Dormitory {
-  const Dormitory();
-
-  const factory Dormitory.full({
-    required String id,
-    required String number,
-    required String name,
-    required String address,
-    required String latitude,
-    required String longitude,
-  }) = FullDormitory;
-}
-
-class FullDormitory extends Dormitory {
-  const FullDormitory({
+class Dormitory {
+  Dormitory({
     required this.id,
     required this.number,
     required this.name,
     required this.address,
-    required this.latitude,
     required this.longitude,
+    required this.latitude,
   });
 
-  final String id;
-  final String number;
+  final int id;
+  final int number;
   final String name;
   final String address;
-  final String latitude;
-  final String longitude;
+  final double longitude;
+  final double latitude;
 
-  factory FullDormitory.fromJson(Map<String, dynamic> json) {
-    return FullDormitory(
-      id: json['id'] as String,
-      number: json['number'] as String,
+  factory Dormitory.fromJson(Map<String, dynamic> json) {
+    return Dormitory(
+      id: json['id'] as int,
+      number: json['number'] as int,
       name: json['name'] as String,
       address: json['address'] as String,
-      latitude: json['latitude'] as String,
-      longitude: json['longitude'] as String,
+      longitude: json['long'] as double,
+      latitude: json['lat'] as double,
     );
   }
 
   Map<dynamic, String> toJson() {
     return {
-      'id': id,
-      'number': number,
+      'id': id.toString(),
+      'number': number.toString(),
       'name': name,
       'address': address,
-      'latitude': latitude,
-      'longitude': longitude,
+      'long': longitude.toString(),
+      'lat': latitude.toString(),
     };
   }
 
   @override
   String toString() {
-    return 'FullBuilding($id, $number, $name, $address, $latitude, $longitude)';
+    return 'FullBuilding($id, $number, $name, $address, $longitude, $latitude)';
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    return other is FullDormitory &&
-        other.id == id &&
-        other.number == number &&
-        other.name == name &&
-        other.latitude == latitude &&
-        other.longitude == longitude;
-  }
+  bool operator ==(Object other) => other is Dormitory && other.id == id;
 
   @override
-  int get hashCode {
-    return Object.hash(id, number, name, latitude, longitude);
-  }
+  int get hashCode => Object.hash(id, number, name, longitude, latitude);
 
-  FullDormitory copyWith({
-    String? id,
-    String? number,
+  Dormitory copyWith({
+    int? id,
+    int? number,
     String? name,
     String? address,
-    String? latitude,
-    String? longitude,
+    double? longitude,
+    double? latitude,
   }) {
-    return FullDormitory(
+    return Dormitory(
       id: id ?? this.id,
       number: number ?? this.number,
       name: name ?? this.name,
       address: address ?? this.address,
-      latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      latitude: latitude ?? this.latitude,
     );
   }
 }

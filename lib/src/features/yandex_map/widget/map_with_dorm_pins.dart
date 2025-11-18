@@ -95,7 +95,7 @@ class _MapWithDormPins extends State<MapWithDormPins> {
     showModalBottomSheet(
       context: context,
       builder: (builder) {
-        return UiModalBottomSheet(text: text, child: Text(''));
+        return UiModalBottomSheet(child: Text(''));
       },
     );
   }

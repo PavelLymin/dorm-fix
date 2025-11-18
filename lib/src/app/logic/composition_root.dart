@@ -1,5 +1,6 @@
 import 'package:dorm_fix/firebase_options.dart';
 import 'package:dorm_fix/src/app/model/application_config.dart';
+import 'package:dorm_fix/src/app/router/router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:logger/logger.dart';
@@ -57,6 +58,9 @@ class CompositionRoot {
 
     final userPerository = UserRepositoryImpl(client: client);
 
+    // auto_route
+    final router = AppRouter();
+
     // Authentication
     final authRepository = AuthRepository(firebaseAuth: firebaseAuth);
     final authenticationBloc = AuthBloc(
@@ -88,6 +92,7 @@ class CompositionRoot {
 
     return _DependencyFactory(
       client: client,
+      router: router,
       authenticationBloc: authenticationBloc,
       authButton: authButton,
       studentBloc: studentBloc,
@@ -100,6 +105,7 @@ class CompositionRoot {
 class _DependencyFactory extends Factory<DependencyContainer> {
   const _DependencyFactory({
     required this.client,
+    required this.router,
     required this.authenticationBloc,
     required this.authButton,
     required this.studentBloc,
@@ -108,6 +114,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   });
 
   final RestClientHttp client;
+
+  final AppRouter router;
 
   final AuthBloc authenticationBloc;
 
@@ -122,6 +130,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   @override
   DependencyContainer create() => DependencyContainer(
     client: client,
+    router: router,
     authenticationBloc: authenticationBloc,
     authButton: authButton,
     studentBloc: studentBloc,

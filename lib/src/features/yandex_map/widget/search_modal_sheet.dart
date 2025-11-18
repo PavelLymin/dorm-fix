@@ -1,3 +1,4 @@
+import 'package:dorm_fix/src/features/yandex_map/widget/suggest_tem.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:ui_kit/ui.dart';
@@ -34,34 +35,38 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
     return BlocProvider.value(
       value: _searchBloc,
       child: UiModalBottomSheet(
-        text: 'text',
         child: Column(
           children: [
             UiTextField.standard(
               controller: _searchController,
               style: UiTextFieldStyle(hintText: 'Text input'),
-              onChanged: _searchBloc.onTextChanged?.add,
+              onChanged: _searchBloc.onTextChanged.add,
             ),
-            BlocBuilder<SearchBloc, SearchState>(
-              builder: (context, state) {
-                return state.map(
-                  loading: (_) => CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Theme.of(
-                      context,
-                    ).colorPalette.primary.withValues(alpha: .38),
-                  ),
-                  error: (_) => Text('error'),
-                  noTerm: (_) => Text('enter'),
-                  searchPopulated: (state) => ListView.builder(
-                    itemCount: state.dormitories.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Text(state.dormitories[index].name);
+            Expanded(
+              child: BlocBuilder<SearchBloc, SearchState>(
+                builder: (context, state) {
+                  return state.map(
+                    loading: (_) => CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Theme.of(
+                        context,
+                      ).colorPalette.primary.withValues(alpha: .38),
+                    ),
+                    error: (_) => Text('error'),
+                    noTerm: (_) => Text('enter'),
+                    searchPopulated: (state) {
+                      final dormitories = state.dormitories;
+                      return ListView.builder(
+                        itemCount: dormitories.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return SuggestTem(dormitory: dormitories[index]);
+                        },
+                      );
                     },
-                  ),
-                  searchEmpty: (_) => Text('empty'),
-                );
-              },
+                    searchEmpty: (_) => Text('empty'),
+                  );
+                },
+              ),
             ),
           ],
         ),

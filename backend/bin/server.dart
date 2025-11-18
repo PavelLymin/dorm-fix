@@ -3,9 +3,6 @@ import 'dart:io';
 
 import 'package:backend/src/app/logic/composition_root.dart';
 import 'package:backend/src/server/middleware/error.dart';
-import 'package:backend/src/core/database/database.dart';
-import 'package:backend/src/server/middleware/authentication.dart';
-import 'package:drift/drift.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 

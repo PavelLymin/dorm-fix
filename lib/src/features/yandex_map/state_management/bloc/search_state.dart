@@ -5,24 +5,23 @@ typedef SearchStateMatch<R, S extends SearchState> = R Function(S state);
 sealed class SearchState {
   const SearchState({required this.dormitories});
 
-  final List<FullDormitory> dormitories;
+  final List<Dormitory> dormitories;
 
-  const factory SearchState.loading({
-    required List<FullDormitory> dormitories,
-  }) = _SearchStateLoading;
+  const factory SearchState.loading({required List<Dormitory> dormitories}) =
+      _SearchStateLoading;
 
-  const factory SearchState.error({required List<FullDormitory> dormitories}) =
+  const factory SearchState.error({required List<Dormitory> dormitories}) =
       _SearchStateError;
 
-  const factory SearchState.noTerm({required List<FullDormitory> dormitories}) =
+  const factory SearchState.noTerm({required List<Dormitory> dormitories}) =
       _SearchStateNoTerm;
 
   const factory SearchState.searchPopulated({
-    required List<FullDormitory> dormitories,
+    required List<Dormitory> dormitories,
   }) = _SearchStateSearchPopulated;
 
   const factory SearchState.searchEmpty({
-    required List<FullDormitory> dormitories,
+    required List<Dormitory> dormitories,
   }) = _SearchStateSearchEmpty;
 
   R map<R>({

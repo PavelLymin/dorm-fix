@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dorm_fix/src/features/yandex_map/widget/map_with_dorm_pins.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'src/app/bloc/app_bloc_observer.dart';
@@ -51,16 +50,19 @@ class _MainAppState extends State<MainApp> {
   }
 
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-    providers: [
-      BlocProvider(create: (context) => _authenticationBloc),
-      BlocProvider(create: (context) => _studentBloc),
-    ],
-    child: MaterialApp(
-      title: 'Dorm Fix',
-      debugShowCheckedModeBanner: false,
-      theme: darkTheme,
-      home: const MapWithDormPins(),
-    ),
-  );
+  Widget build(BuildContext context) {
+    final router = DependeciesScope.of(context).router;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => _authenticationBloc),
+        BlocProvider(create: (context) => _studentBloc),
+      ],
+      child: MaterialApp.router(
+        title: 'Dorm Fix',
+        debugShowCheckedModeBanner: false,
+        theme: darkTheme,
+        routerConfig: router.config(),
+      ),
+    );
+  }
 }

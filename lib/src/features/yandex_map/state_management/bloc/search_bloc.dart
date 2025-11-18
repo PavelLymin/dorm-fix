@@ -16,7 +16,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     _subscription = onTextChanged.stream
         .distinct()
-        .debounceTime(const Duration(milliseconds: 300))
+        .debounceTime(const Duration(milliseconds: 500))
         .listen((text) {
           add(SearchEvent.textChanged(text: text));
         });

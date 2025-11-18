@@ -1,12 +1,7 @@
 import 'package:ui_kit/ui.dart';
 
 class UiModalBottomSheet extends StatelessWidget {
-  const UiModalBottomSheet({
-    super.key,
-    required this.text,
-    required this.child,
-  });
-  final String text;
+  const UiModalBottomSheet({super.key, required this.child});
   final Widget child;
 
   @override
@@ -26,7 +21,7 @@ class UiModalBottomSheet extends StatelessWidget {
       //   border: Border.all(color: Color(0XFF3B3B3B), width: 2),
       // ),
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 22),
-      child: Column(children: [Text(text), child]),
+      child: child,
     );
   }
 }
