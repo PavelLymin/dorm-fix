@@ -20,8 +20,7 @@ class Config {
   // --- FIREBASE --- //
   String get serviceAccount => const String.fromEnvironment(
     'SERVICE_ACCOUNT',
-    defaultValue:
-        '/Users/vadimlyamin/Development/dorm_fix/backend/bin/service-account.json',
+    defaultValue: 'bin/service-account.json',
   );
 
   // --- REGEX --- //

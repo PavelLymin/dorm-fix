@@ -1,0 +1,55 @@
+import '../../model/dormitory.dart';
+
+class DormitoryDto {
+  DormitoryDto({
+    required this.id,
+    required this.number,
+    required this.name,
+    required this.address,
+    required this.long,
+    required this.lat,
+  });
+
+  final int id;
+  final int number;
+  final String name;
+  final String address;
+  final double long;
+  final double lat;
+
+  factory DormitoryDto.fromEntity(DormitoryEntity entity) => DormitoryDto(
+    id: entity.id,
+    number: entity.number,
+    name: entity.name,
+    address: entity.address,
+    long: entity.long,
+    lat: entity.lat,
+  );
+
+  DormitoryEntity toEntity() => DormitoryEntity(
+    id: id,
+    number: number,
+    name: name,
+    address: address,
+    long: long,
+    lat: lat,
+  );
+
+  factory DormitoryDto.fromJson(Map<String, Object?> json) => DormitoryDto(
+    id: json['id'] as int,
+    number: json['number'] as int,
+    name: json['name'] as String,
+    address: json['address'] as String,
+    long: json['long'] as double,
+    lat: json['lat'] as double,
+  );
+
+  Map<String, Object?> toJson() => {
+    'id': id,
+    'number': number,
+    'name': name,
+    'address': address,
+    'long': long,
+    'lat': lat,
+  };
+}

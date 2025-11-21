@@ -12,12 +12,11 @@ class BottomNavigation extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 16,
         children: List.generate(3, (index) {
           final page = AppPage.pages[index];
           return TabItem(
             index: index,
-            title: page.name,
+            title: page.title,
             icon: page.icon,
             activeIcon: page.activeIcon,
           );
@@ -58,7 +57,7 @@ class _TabItemState extends State<TabItem> {
   @override
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         AutoTabsRouter.of(context).setActiveIndex(widget.index);
       },

@@ -50,7 +50,7 @@ class UserDto {
     };
   }
 
-  factory UserDto.fromJson(Map<String, dynamic> json) {
+  factory UserDto.fromJson(Map<String, Object?> json) {
     return UserDto(
       uid: json['uid'] as String,
       displayName: json['display_name'] as String?,

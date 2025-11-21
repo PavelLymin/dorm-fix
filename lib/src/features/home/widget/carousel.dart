@@ -69,14 +69,14 @@ class _CarouselItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisSize: .min,
+    crossAxisAlignment: .center,
     children: [
       Expanded(
         flex: 3,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: .min,
+          crossAxisAlignment: .start,
           children: [
             UiText.titleLarge(spec.title),
             const SizedBox(height: 16),
@@ -97,7 +97,7 @@ class _CarouselWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(2.0),
+    padding: const .symmetric(horizontal: 2),
     child: UiCard.standart(
       padding: AppPadding.symmetricIncrement(horizontal: 3, vertical: 3),
       gradient: const LinearGradient(

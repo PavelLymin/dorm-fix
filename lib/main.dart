@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import 'src/app/bloc/app_bloc_observer.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
 import 'src/features/authentication/state_management/authentication/authentication_bloc.dart';
@@ -15,14 +14,12 @@ void main() async {
 
       final dependency = await CompositionRoot(logger: logger).compose();
 
-      Bloc.observer = AppBlocObserver(logger: logger);
-
       runApp(
         DependeciesScope(
           dependencyContainer: dependency,
-          child: WindowSizeScope(
+          child: const WindowSizeScope(
             updateMode: WindowSizeUpdateMode.categoriesOnly,
-            child: const MainApp(),
+            child: MainApp(),
           ),
         ),
       );

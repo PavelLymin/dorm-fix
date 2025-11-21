@@ -25,41 +25,6 @@ base class RestApiBase implements RestApi {
     }
   }
 
-  Future<Map<String, Object?>?> decodeResponse(
-    ResponseBody<Object>? body, {
-    int? statusCode,
-  }) async {
-    if (body == null) return null;
-
-    try {
-      final decodedBody = switch (body) {
-        MapResponseBody(:final data) => data,
-        StringResponseBody(:final data) =>
-          json.decode(data) as Map<String, Object?>,
-        BytesResponseBody(:final data) =>
-          _jsonUTF8.decode(data)! as Map<String, Object?>,
-      };
-
-      if (decodedBody case {'data': final Map<String, Object?> data}) {
-        return data;
-      }
-
-      return decodedBody;
-    } on RestApiException {
-      rethrow;
-    } on Object catch (e, stackTrace) {
-      Error.throwWithStackTrace(
-        InternalServerException(
-          error: {
-            'description': 'Error occured during decoding.',
-            'details': {'response': 'Invalid JSON format.'},
-          },
-        ),
-        stackTrace,
-      );
-    }
-  }
-
   @override
   Response send({
     required int statusCode,
@@ -78,22 +43,4 @@ base class RestApiBase implements RestApi {
 
     return response;
   }
-}
-
-sealed class ResponseBody<T> {
-  const ResponseBody(this.data);
-
-  final T data;
-}
-
-class StringResponseBody extends ResponseBody<String> {
-  const StringResponseBody(super.data);
-}
-
-class MapResponseBody extends ResponseBody<Map<String, Object?>> {
-  const MapResponseBody(super.data);
-}
-
-class BytesResponseBody extends ResponseBody<List<int>> {
-  const BytesResponseBody(super.data);
 }

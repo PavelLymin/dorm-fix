@@ -31,33 +31,34 @@ ThemeData createThemeData({
 
 ColorPalette generatePaletteForBrightness(Brightness brightness) {
   return ColorPalette(
-    background: Color(0xFF000000),
-    foreground: Color(0xFFFFFFFF),
-    muted: Color(0xFF50ACF9).withValues(alpha: 0.5),
-    mutedForeground: Color(0xFF949494),
-    border: Color(0xFF3B3B3B),
+    background: const Color(0xFF000000),
+    foreground: const Color(0xFFFFFFFF),
+    muted: const Color(0xFF50ACF9).withValues(alpha: 0.5),
+    mutedForeground: const Color(0xFF949494),
+    border: const Color(0xFF3B3B3B),
     buttonBorder: Color(0xFF7DB3FC),
-    primary: Color(0xFF50ACF9),
-    primaryForeground: Color(0xFFFFFFFF),
-    secondary: Color(0xFF232325),
-    secondaryForeground: Color(0xFF8A8888),
-    accent: Color(0xFFFFFFFF),
-    accentForeground: Color(0xFFFFFFFF),
-    destructive: Color(0xFFFD273E),
-    destructiveForeground: Color(0xFFFD273E),
-    ring: const Color.fromARGB(255, 60, 139, 250),
+    primary: const Color(0xFF50ACF9),
+    primaryForeground: const Color(0xFFFFFFFF),
+    secondary: const Color(0xFF232325),
+    secondaryButton: const Color(0xFF38383A),
+    secondaryForeground: const Color(0xFF8A8888),
+    accent: const Color(0xFFFFFFFF),
+    accentForeground: const Color(0xFFFFFFFF),
+    destructive: const Color(0xFFFD273E),
+    destructiveForeground: const Color(0xFFFD273E),
+    ring: const Color(0xFF3C8BFA),
   );
 }
 
 AppGradient generateGradientForBrightness(Brightness brightness) {
-  final background = LinearGradient(
+  final background = const LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     stops: [0, 0.66],
     colors: [Color(0xFF2E55BB), Color(0xFF0E0E0E)],
   );
 
-  final primary = LinearGradient(
+  final primary = const LinearGradient(
     stops: [0, 0.5, 1],
     colors: [Color(0xFF1E60F7), Color(0xFF7DB3FC), Color(0xFF1E60F7)],
   );

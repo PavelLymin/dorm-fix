@@ -20,15 +20,10 @@ class _SignInFormState extends State<SignInForm> with _FormStateMixin {
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       const SizedBox(height: 16),
-      WindowSizeScope.of(context).isMediumOrLarger
-          ? UiText.titleLarge(
-              'Начните использовать приложение',
-              style: TextStyle(fontWeight: FontWeight.w700),
-            )
-          : UiText.titleMedium(
-              'Начните использовать приложение',
-              style: TextStyle(fontWeight: FontWeight.w700),
-            ),
+      UiText.titleLarge(
+        'Начните использовать приложение',
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
       const SizedBox(height: 32),
       ValueListenableBuilder(
         valueListenable: _isPhoneNumber,

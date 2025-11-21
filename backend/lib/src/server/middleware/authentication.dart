@@ -6,8 +6,10 @@ abstract class AuthenticationMiddleware {
     return (Handler innerHandler) {
       return (Request request) async {
         try {
-          if (request.headers.containsKey('jwt')) {
-            final token = request.headers['jwt'];
+          if (request.headers.containsKey('Authorization')) {
+            final token = request.headers['Authorization']
+                ?.split('Bearer ')
+                .last;
             if (token == null || token.isEmpty) {
               return _getUnauthorizedResponse(request);
             } else {

@@ -55,7 +55,7 @@ class DormitoryDto {
     lat: data.lat,
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'id': id,
     'number': number,
     'name': name,
@@ -64,28 +64,12 @@ class DormitoryDto {
     'lat': lat,
   };
 
-  static DormitoryDto fromJson(Map<String, dynamic> json) => DormitoryDto(
-    id: json['id'],
-    number: json['number'],
-    name: json['name'],
-    address: json['address'],
-    long: json['long'],
-    lat: json['lat'],
+  static DormitoryDto fromJson(Map<String, Object?> json) => DormitoryDto(
+    id: json['id'] as int,
+    number: json['number'] as int,
+    name: json['name'] as String,
+    address: json['address'] as String,
+    long: json['long'] as double,
+    lat: json['lat'] as double,
   );
-
-  @override
-  String toString() =>
-      'DormitoryDto('
-      'id: $id, '
-      'number: $number, '
-      'name: $name, '
-      'address: $address, '
-      'long: $long, '
-      'lat: $lat)';
-
-  @override
-  bool operator ==(Object other) => other is DormitoryDto && id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
 }

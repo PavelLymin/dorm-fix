@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
-import '../../../core/rest_client/rest_client.dart';
-import '../data/repository/student_repository.dart';
-import '../model/student.dart';
+import '../../../../core/rest_client/rest_client.dart';
+import '../../data/repository/student_repository.dart';
+import '../../model/student.dart';
 
 part 'student_event.dart';
 part 'student_state.dart';
@@ -13,7 +13,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     required Logger logger,
   }) : _studentRepository = studentRepository,
        _logger = logger,
-       super(StudentState.loading()) {
+       super(StudentState.loading(student: StudentEntity.empty())) {
     on<StudentEvent>((event, emit) async {
       await event.match(get: (e) => _getSudent(e, emit));
     });
@@ -29,13 +29,16 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
       emit(StudentState.loaded(student: student));
     } on StructuredBackendException catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(StudentState.error(student: state.student, message: e.message));
+      _emitError(emit, e.message);
     } on RestClientException catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(StudentState.error(student: state.student, message: e.message));
+      _emitError(emit, e.message);
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(StudentState.error(student: state.student, message: e.toString()));
+      _emitError(emit, e.toString());
     }
   }
+
+  void _emitError(Emitter<StudentState> emit, String e) =>
+      emit(StudentState.error(student: state.currentStudent, message: e));
 }

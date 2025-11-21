@@ -19,19 +19,19 @@ class CarouselIndicators extends StatelessWidget {
       valueListenable: currentPage,
       builder: (context, value, _) {
         return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: .center,
           children: List.generate(
             countPages,
             (index) => GestureDetector(
               onTap: () => _animateToPage(index),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                padding: AppPadding.symmetric,
                 child: SizedBox(
                   width: 8,
                   height: 8,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+                      shape: .circle,
                       color: value == index
                           ? color.accent
                           : color.mutedForeground,

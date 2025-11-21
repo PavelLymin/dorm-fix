@@ -1,6 +1,6 @@
 import 'package:ui_kit/ui.dart';
 
-enum ButtonVariant { filledPrimary, filledGradient, icon }
+enum ButtonVariant { filledPrimary, icon }
 
 class UiButton extends ButtonStyleButton {
   UiButton.filledPrimary({
@@ -20,33 +20,6 @@ class UiButton extends ButtonStyleButton {
     super.isSemanticButton,
     super.key,
   }) : variant = ButtonVariant.filledPrimary,
-       super(
-         child: _ButtonIconAndLabel(
-           icon: icon,
-           label: label,
-           iconAlignment: iconAlignment,
-         ),
-         onPressed: enabled ? onPressed : null,
-         onLongPress: enabled ? onLongPress : null,
-       );
-
-  UiButton.filledGradient({
-    required VoidCallback? onPressed,
-    bool enabled = true,
-    IconAlignment iconAlignment = IconAlignment.start,
-    Widget? label,
-    Widget? icon,
-    VoidCallback? onLongPress,
-    super.autofocus = false,
-    super.onHover,
-    super.onFocusChange,
-    super.style,
-    super.focusNode,
-    super.clipBehavior,
-    super.statesController,
-    super.isSemanticButton,
-    super.key,
-  }) : variant = ButtonVariant.filledGradient,
        super(
          child: _ButtonIconAndLabel(
            icon: icon,
@@ -86,18 +59,13 @@ class UiButton extends ButtonStyleButton {
     final theme = Theme.of(context);
     final colors = theme.colorPalette;
     final typography = theme.appTypography;
-    final gradient = theme.appGradient;
 
     return switch (variant) {
       ButtonVariant.filledPrimary => _FilledButtonPrimaryStyle(
         colorPalette: colors,
         typography: typography,
       ),
-      ButtonVariant.filledGradient => _FilledButtonGradientStyle(
-        colorPalette: colors,
-        typography: typography,
-        gradient: gradient,
-      ),
+
       ButtonVariant.icon => _IconButtonStandardStyle(
         colorPalette: colors,
         typography: typography,
@@ -135,53 +103,6 @@ class _ButtonIconAndLabel extends StatelessWidget {
             if (icon != null) icon!,
           ],
   );
-}
-
-class _FilledButtonGradientStyle extends _UiBaseButtonStyle {
-  const _FilledButtonGradientStyle({
-    required super.colorPalette,
-    required super.typography,
-    required this.gradient,
-  });
-
-  final AppGradient gradient;
-
-  @override
-  WidgetStateProperty<Color?>? get backgroundColor =>
-      WidgetStatePropertyAll<Color>(Colors.transparent);
-
-  @override
-  WidgetStateProperty<Color?>? get foregroundColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        return states.contains(WidgetState.disabled)
-            ? colorPalette.mutedForeground
-            : colorPalette.primaryForeground;
-      });
-
-  @override
-  Widget _backgroundBuilder(
-    BuildContext context,
-    Set<WidgetState> states,
-    Widget? child,
-  ) {
-    if (child == null) return const SizedBox.shrink();
-
-    return OutlineFocusButtonBorder(
-      showBorder: states.contains(WidgetState.focused),
-      border: RoundedRectangleBorder(
-        side: BorderSide(color: colorPalette.destructive, width: 5),
-      ),
-      child: Ink(
-        decoration: BoxDecoration(
-          gradient: states.contains(WidgetState.disabled)
-              ? gradient.muted
-              : gradient.primary,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: child,
-      ),
-    );
-  }
 }
 
 class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {

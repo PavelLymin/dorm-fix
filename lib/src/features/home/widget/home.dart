@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../app/widget/dependencies_scope.dart';
-import '../../profile/bloc/student_bloc.dart';
+import '../../profile/state_management/student_bloc/student_bloc.dart';
 import '../state_management/bloc/specialization_bloc.dart';
 import 'carousel.dart';
 import 'home_card.dart';
@@ -13,32 +13,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  late StudentBloc _studentBloc;
-  late SpecializationBloc _specializationBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _studentBloc = DependeciesScope.of(context).studentBloc
-      ..add(StudentEvent.get());
-    final specializationRepository = DependeciesScope.of(
-      context,
-    ).specializationRepository;
-    final logger = DependeciesScope.of(context).logger;
-    _specializationBloc = SpecializationBloc(
-      specializationRepository: specializationRepository,
-      logger: logger,
-    )..add(SpecializationEvent.getSpecializations());
-  }
-
-  @override
-  void dispose() {
-    _studentBloc.close();
-    _specializationBloc.close();
-    super.dispose();
-  }
-
+class _HomeScreenState extends State<HomeScreen> with _HomeScreenStateMixin {
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
     providers: [
@@ -56,38 +31,45 @@ class _HomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final window = WindowSizeScope.of(context);
     final windowWidth = MediaQuery.sizeOf(context).width;
-    return SizedBox(
-      width: window.maybeMap(
-        orElse: () => windowWidth * 0.7,
-        compact: (_) => windowWidth * 0.9,
-      ),
-      child: Column(
-        children: [
-          AppBar(title: const _UserDisplayProfile(), centerTitle: false),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SpecializationsCarousel(),
-                const SizedBox(height: 8),
-                window.isLarge
-                    ? const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 8,
-                        children: [
-                          Expanded(child: HomeCard.request()),
-                          Expanded(child: HomeCard.history()),
-                        ],
-                      )
-                    : const Column(
-                        spacing: 8,
-                        children: [HomeCard.request(), HomeCard.history()],
-                      ),
-              ],
+    return SafeArea(
+      child: SizedBox(
+        width: window.maybeMap(
+          orElse: () => windowWidth * 0.6,
+          medium: (_) => windowWidth * 0.8,
+          compact: (_) => windowWidth * 0.9,
+        ),
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            Padding(
+              padding: AppPadding.onlyIncrement(top: 2),
+              child: const _UserDisplayProfile(),
             ),
-          ),
-        ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: .center,
+                crossAxisAlignment: .center,
+                children: [
+                  const SpecializationsCarousel(),
+                  const SizedBox(height: 8),
+                  window.isLarge
+                      ? const Row(
+                          mainAxisSize: .min,
+                          spacing: 8,
+                          children: [
+                            Expanded(child: HomeCard.request()),
+                            Expanded(child: HomeCard.history()),
+                          ],
+                        )
+                      : const Column(
+                          spacing: 8,
+                          children: [HomeCard.request(), HomeCard.history()],
+                        ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -104,10 +86,51 @@ class _UserDisplayProfile extends StatelessWidget {
           dimension: 20,
           child: CircularProgressIndicator(),
         ),
-        loaded: (state) =>
-            UiText.headlineLarge(state.student.user.displayName!),
+        loaded: (state) => Column(
+          spacing: 4,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            UiText.headlineLarge(
+              state.student.user.displayName!,
+              style: TextStyle(color: Theme.of(context).colorPalette.primary),
+            ),
+            UiText.headlineLarge(state.student.dormitory.name),
+            UiText.headlineLarge(state.student.room.room),
+          ],
+        ),
         error: (state) => UiText.headlineLarge(state.message),
       );
     },
   );
+}
+
+mixin _HomeScreenStateMixin on State<HomeScreen> {
+  late StudentBloc _studentBloc;
+  late SpecializationBloc _specializationBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _studentBloc = DependeciesScope.of(context).studentBloc
+      ..add(StudentEvent.get());
+    _specializationBlocInit();
+  }
+
+  void _specializationBlocInit() {
+    final specializationRepository = DependeciesScope.of(
+      context,
+    ).specializationRepository;
+    final logger = DependeciesScope.of(context).logger;
+    _specializationBloc = SpecializationBloc(
+      specializationRepository: specializationRepository,
+      logger: logger,
+    )..add(SpecializationEvent.getSpecializations());
+  }
+
+  @override
+  void dispose() {
+    _studentBloc.close();
+    _specializationBloc.close();
+    super.dispose();
+  }
 }

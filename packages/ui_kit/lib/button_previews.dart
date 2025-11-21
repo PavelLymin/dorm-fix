@@ -37,16 +37,6 @@ class _FilledPrimaryButton extends StatelessWidget {
         children: [
           UiText.titleSmall('Filled Primary Button'),
           const SizedBox(height: 16),
-          UiButton.filledGradient(
-            onPressed: () {},
-            label: const Text('Gradient'),
-          ),
-          const SizedBox(height: 8),
-          UiButton.filledGradient(
-            icon: const Icon(Icons.add_rounded),
-            onPressed: () {},
-            label: const Text('Gradient'),
-          ),
           const SizedBox(height: 8),
           UiButton.filledPrimary(
             onPressed: () {},
@@ -59,18 +49,6 @@ class _FilledPrimaryButton extends StatelessWidget {
             label: const Text('Primary'),
           ),
           const SizedBox(height: 8),
-          UiButton.filledGradient(
-            onPressed: () {},
-            enabled: false,
-            label: const Text('Gradient'),
-          ),
-          const SizedBox(height: 8),
-          UiButton.filledGradient(
-            icon: const Icon(Icons.add_rounded),
-            onPressed: () {},
-            enabled: false,
-            label: const Text('Gradient'),
-          ),
           const SizedBox(height: 8),
           UiButton.filledPrimary(
             onPressed: () {},

@@ -43,7 +43,7 @@ class StudentRouter {
 
   Future<Response> _createStudent(Request request) async {
     final json = await _readJson(request);
-    final student = StudentDto.fromJson(json).toEntity();
+    final student = CreatedStudentDto.fromJson(json).toEntity();
     await _studentRepository.createStudent(student: student);
 
     return _restApi.send(
@@ -77,21 +77,16 @@ class StudentRouter {
       );
     }
 
-    final json = StudentDto.fromEntity(student).toJson();
+    final json = FullStudentDto.fromEntity(student).toJson();
 
-    return _restApi.send(
-      statusCode: 200,
-      responseBody: {
-        'data': {'student': json},
-      },
-    );
+    return _restApi.send(statusCode: 200, responseBody: {'data': json});
   }
 
   Future<Response> _updateStudent(Request request) async {
     final uid = RequireUser.getUserId(request);
 
     final json = await _readJson(request);
-    final student = StudentDto.fromJson(json).toEntity();
+    final student = CreatedStudentDto.fromJson(json).toEntity();
     await _studentRepository.updateStudent(uid: uid, student: student);
 
     return _restApi.send(

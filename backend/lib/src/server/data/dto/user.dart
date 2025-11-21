@@ -28,13 +28,13 @@ class UserDto {
     'role': role.name,
   };
 
-  factory UserDto.fromJson(Map<String, dynamic> json) => UserDto(
-    uid: json['uid'],
-    displayName: json['display_name'],
-    photoURL: json['photo_url'],
-    email: json['email'],
-    phoneNumber: json['phone_number'],
-    role: Role.fromString(json['role']),
+  factory UserDto.fromJson(Map<String, Object?> json) => UserDto(
+    uid: json['uid'] as String,
+    displayName: json['display_name'] as String?,
+    photoURL: json['photo_url'] as String?,
+    email: json['email'] as String?,
+    phoneNumber: json['phone_number'] as String?,
+    role: Role.fromString(json['role'] as String),
   );
 
   UsersCompanion toCompanion() => UsersCompanion(
@@ -72,19 +72,4 @@ class UserDto {
     phoneNumber: entity.phoneNumber,
     role: entity.role,
   );
-
-  @override
-  String toString() =>
-      'UserDto('
-      'uid: $uid, '
-      'displayName: $displayName, '
-      'photoURL: $photoURL, '
-      'email: $email, '
-      'phoneNumber: $phoneNumber)';
-
-  @override
-  bool operator ==(Object other) => other is UserDto && uid == other.uid;
-
-  @override
-  int get hashCode => uid.hashCode;
 }

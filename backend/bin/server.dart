@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:backend/src/app/logic/composition_root.dart';
+import 'package:backend/src/server/middleware/authentication.dart';
 import 'package:backend/src/server/middleware/error.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
+import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 
 void main(List<String> args) async {
   final logger = CreateAppLogger().create();
@@ -18,18 +20,6 @@ void main(List<String> args) async {
         exit(0);
       });
 
-      // dependency.database
-      //     .into(dependency.database.dormitories)
-      //     .insert(
-      //       DormitoriesCompanion(
-      //         name: Value('name'),
-      //         address: Value('address'),
-      //         number: Value(30),
-      //         lat: Value(59.939638),
-      //         long: Value(30.339916),
-      //       ),
-      //     );
-
       final ip = InternetAddress.anyIPv4;
 
       final publicRoutes = Pipeline().addHandler(
@@ -37,12 +27,12 @@ void main(List<String> args) async {
       );
 
       final protectedRoutes = Pipeline()
-          // .addMiddleware(corsHeaders())
-          // .addMiddleware(
-          //   AuthenticationMiddleware.check(
-          //     firebaseAdmin: dependency.firebaseAdmin,
-          //   ),
-          // )
+          .addMiddleware(corsHeaders())
+          .addMiddleware(
+            AuthenticationMiddleware.check(
+              firebaseAdmin: dependency.firebaseAdmin,
+            ),
+          )
           .addHandler(
             Cascade()
                 .add(dependency.userRouter.protectedHandler)

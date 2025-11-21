@@ -28,34 +28,18 @@ class SpecializationDto {
         photoUrl: entity.photoUrl,
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
     'id': id,
     'title': title,
     'description': description,
     'photo_url': photoUrl,
   };
 
-  static SpecializationDto fromJson(Map<String, dynamic> json) =>
+  static SpecializationDto fromJson(Map<String, Object?> json) =>
       SpecializationDto(
-        id: json['id'],
-        title: json['title'],
-        description: json['description'],
-        photoUrl: json['photo_url'],
+        id: json['id'] as int,
+        title: json['title'] as String,
+        description: json['description'] as String,
+        photoUrl: json['photo_url'] as String,
       );
-
-  @override
-  String toString() {
-    return 'SpeciaizationDto('
-        'id: $id, '
-        'title: $title, '
-        'description: $description, '
-        'photoUrl: $photoUrl)';
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      other is SpecializationDto && other.id == id;
-
-  @override
-  int get hashCode => id.hashCode;
 }

@@ -5,15 +5,15 @@ import '../../model/student.dart';
 import '../dto/user.dart';
 
 abstract interface class IStudentRepository {
-  Future<void> createStudent({required StudentEntity student});
+  Future<void> createStudent({required CreatedStudentEntity student});
 
   Future<void> deleteStudent({required String uid});
 
-  Future<StudentEntity?> getStudent({required String uid});
+  Future<FullStudentEntity?> getStudent({required String uid});
 
   Future<void> updateStudent({
     required String uid,
-    required StudentEntity student,
+    required CreatedStudentEntity student,
   });
 }
 
@@ -23,7 +23,7 @@ class StudentRepositoryImpl implements IStudentRepository {
   final Database _database;
 
   @override
-  Future<void> createStudent({required StudentEntity student}) async {
+  Future<void> createStudent({required CreatedStudentEntity student}) async {
     await _database.transaction(() async {
       await _database
           .into(_database.users)
@@ -31,7 +31,7 @@ class StudentRepositoryImpl implements IStudentRepository {
 
       await _database
           .into(_database.students)
-          .insert(StudentDto.fromEntity(student).toCompanion());
+          .insert(CreatedStudentDto.fromEntity(student).toCompanion());
     });
   }
 
@@ -49,19 +49,29 @@ class StudentRepositoryImpl implements IStudentRepository {
   }
 
   @override
-  Future<StudentEntity?> getStudent({required String uid}) async {
+  Future<FullStudentEntity?> getStudent({required String uid}) async {
     final data = await (_database.select(_database.students).join([
       innerJoin(
         _database.users,
         _database.users.uid.equalsExp(_database.students.uid),
       ),
+      innerJoin(
+        _database.dormitories,
+        _database.dormitories.id.equalsExp(_database.students.dormitoryId),
+      ),
+      innerJoin(
+        _database.rooms,
+        _database.rooms.id.equalsExp(_database.students.roomId),
+      ),
     ])..where(_database.students.uid.equals(uid))).getSingleOrNull();
 
     if (data == null) return null;
 
-    final student = StudentDto.fromData(
+    final student = FullStudentDto.fromData(
       data.readTable(_database.students),
       data.readTable(_database.users),
+      data.readTable(_database.dormitories),
+      data.readTable(_database.rooms),
     ).toEntity();
 
     return student;
@@ -70,10 +80,10 @@ class StudentRepositoryImpl implements IStudentRepository {
   @override
   Future<void> updateStudent({
     required String uid,
-    required StudentEntity student,
+    required CreatedStudentEntity student,
   }) async {
     await (_database.update(_database.students)
           ..where((row) => row.uid.equals(uid)))
-        .replace(StudentDto.fromEntity(student).toCompanion());
+        .replace(CreatedStudentDto.fromEntity(student).toCompanion());
   }
 }

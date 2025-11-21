@@ -11,6 +11,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     required this.primary,
     required this.primaryForeground,
     required this.secondary,
+    required this.secondaryButton,
     required this.secondaryForeground,
     required this.accent,
     required this.accentForeground,
@@ -28,6 +29,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
   final Color primary;
   final Color primaryForeground;
   final Color secondary;
+  final Color secondaryButton;
   final Color secondaryForeground;
   final Color accent;
   final Color accentForeground;
@@ -46,6 +48,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     Color? primary,
     Color? primaryForeground,
     Color? secondary,
+    Color? secondaryButton,
     Color? secondaryForeground,
     Color? accent,
     Color? accentForeground,
@@ -62,6 +65,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     primary: primary ?? this.primary,
     primaryForeground: primaryForeground ?? this.primaryForeground,
     secondary: secondary ?? this.secondary,
+    secondaryButton: secondaryButton ?? this.secondaryButton,
     secondaryForeground: secondaryForeground ?? this.secondaryForeground,
     accent: accent ?? this.accent,
     accentForeground: accentForeground ?? this.accentForeground,
@@ -93,6 +97,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
         t,
       )!,
       secondary: Color.lerp(secondary, other.secondary, t)!,
+      secondaryButton: Color.lerp(secondaryButton, other.secondaryButton, t)!,
       secondaryForeground: Color.lerp(
         secondaryForeground,
         other.secondaryForeground,
@@ -124,6 +129,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     'Primary': primary,
     'Primary Foreground': primaryForeground,
     'Secondary': secondary,
+    'Secondary Button': secondaryButton,
     'Secondary Foreground': secondaryForeground,
     'Accent': accent,
     'Accent Foreground': accentForeground,

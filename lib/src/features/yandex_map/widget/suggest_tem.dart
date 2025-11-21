@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 class SuggestTem extends StatelessWidget {
   const SuggestTem({super.key, required this.dormitory});
-  final Dormitory dormitory;
+  final DormitoryEntity dormitory;
 
   @override
   Widget build(BuildContext context) {

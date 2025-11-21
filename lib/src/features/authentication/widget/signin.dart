@@ -96,18 +96,25 @@ class _SignInScreenState extends State<SignInScreen> {
                   vertical: 6,
                   horizontal: 2,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    UiText.displayLarge(
-                      'Dorm Fix',
-                      style: TextStyle(fontWeight: FontWeight.w900),
+                child: Center(
+                  child: SizedBox(
+                    width: 400,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        UiText.displayLarge(
+                          'Dorm Fix',
+                          style: TextStyle(fontWeight: FontWeight.w900),
+                        ),
+                        const SizedBox(height: 96),
+                        const SignInForm(),
+                        const SizedBox(height: 32),
+                        const AuthWithSocial(),
+                      ],
                     ),
-                    const SizedBox(height: 96),
-                    const SignInForm(),
-                    const SizedBox(height: 32),
-                    const AuthWithSocial(),
-                  ],
+                  ),
                 ),
               ),
               large: (_) => Padding(
@@ -117,26 +124,30 @@ class _SignInScreenState extends State<SignInScreen> {
                 ), // const EdgeInsets.symmetric(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: UiText.displayLarge(
-                        'Dorm Fix',
-                        style: TextStyle(fontWeight: FontWeight.w900),
-                      ),
+                    const Spacer(),
+                    UiText.displayLarge(
+                      'Dorm Fix',
+                      style: TextStyle(fontWeight: FontWeight.w900),
                     ),
+                    const Spacer(),
                     Padding(
                       padding: AppPadding.symmetricIncrement(
                         horizontal: 5,
                         vertical: 5,
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SignInForm(),
-                          const SizedBox(height: 32),
-                          const SizedBox(height: 32),
-                          const AuthWithSocial(),
-                        ],
+                      child: SizedBox(
+                        width: 400,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SignInForm(),
+                            const SizedBox(height: 32),
+                            const SizedBox(height: 32),
+                            const AuthWithSocial(),
+                          ],
+                        ),
                       ),
                     ),
                   ],
