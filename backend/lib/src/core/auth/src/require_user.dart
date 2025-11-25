@@ -1,6 +1,6 @@
 import 'package:backend/src/app/model/application_config.dart';
+import 'package:backend/src/server/model/user.dart';
 import 'package:shelf/shelf.dart';
-import 'package:shelf_router/shelf_router.dart';
 import '../../rest_api/src/rest_api.dart';
 
 abstract class RequireUser {
@@ -19,8 +19,23 @@ abstract class RequireUser {
     return uid;
   }
 
+  static String getUserRole(Request request) {
+    final uid = request.context['role'];
+
+    if (uid is! String || uid.isEmpty) {
+      throw BadRequestException(
+        error: {
+          'description': 'Missing or invalid user role in request context.',
+          'context': 'user_id',
+        },
+      );
+    }
+
+    return Role.fromString(uid).name;
+  }
+
   static String getUserEmail(Request request) {
-    final email = request.params['email'];
+    final email = request.url.queryParameters['email'];
 
     if (email is! String || email.isEmpty) {
       throw BadRequestException(

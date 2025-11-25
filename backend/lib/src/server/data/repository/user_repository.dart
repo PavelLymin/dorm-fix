@@ -5,9 +5,9 @@ import '../dto/user.dart';
 abstract interface class IUserRepository {
   Future<void> updateUser({required String uid, required UserEntity user});
 
-  Future<UserEntity?> getUserByUid({required String uid});
+  Future<bool> checkUserByUid({required String uid});
 
-  Future<UserEntity?> getUserByEmail({required String email});
+  Future<bool> checkUserByEmail({required String email});
 }
 
 class UserRepositoryImpl implements IUserRepository {
@@ -26,28 +26,20 @@ class UserRepositoryImpl implements IUserRepository {
   }
 
   @override
-  Future<UserEntity?> getUserByUid({required String uid}) async {
+  Future<bool> checkUserByUid({required String uid}) async {
     final data = await (_database.select(
       _database.users,
     )..where((row) => row.uid.equals(uid))).getSingleOrNull();
 
-    if (data == null) return null;
-
-    final user = UserDto.fromData(data).toEntity();
-
-    return user;
+    return data == null ? false : true;
   }
 
   @override
-  Future<UserEntity?> getUserByEmail({required String email}) async {
+  Future<bool> checkUserByEmail({required String email}) async {
     final data = await (_database.select(
       _database.users,
     )..where((row) => row.email.equals(email))).getSingleOrNull();
 
-    if (data == null) return null;
-
-    final user = UserDto.fromData(data).toEntity();
-
-    return user;
+    return data == null ? false : true;
   }
 }

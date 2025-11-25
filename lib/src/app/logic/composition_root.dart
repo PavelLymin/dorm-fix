@@ -55,7 +55,10 @@ class CompositionRoot {
 
     Bloc.observer = AppBlocObserver(logger: logger);
 
-    final userPerository = UserRepositoryImpl(client: client);
+    final userPerository = UserRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
 
     // auto_route
     final router = AppRouter();

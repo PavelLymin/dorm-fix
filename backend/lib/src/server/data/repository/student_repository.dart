@@ -1,11 +1,16 @@
 import 'package:backend/src/server/data/dto/student.dart';
 import 'package:drift/drift.dart';
+import 'package:firebase_admin/firebase_admin.dart';
 import '../../../core/database/database.dart';
 import '../../model/student.dart';
+import '../../model/user.dart';
 import '../dto/user.dart';
 
 abstract interface class IStudentRepository {
-  Future<void> createStudent({required CreatedStudentEntity student});
+  Future<void> createStudent({
+    required String uid,
+    required CreatedStudentEntity student,
+  });
 
   Future<void> deleteStudent({required String uid});
 
@@ -18,20 +23,31 @@ abstract interface class IStudentRepository {
 }
 
 class StudentRepositoryImpl implements IStudentRepository {
-  StudentRepositoryImpl({required Database database}) : _database = database;
+  StudentRepositoryImpl({
+    required Database database,
+    required App firebaseAdmin,
+  }) : _database = database,
+       _firebaseApp = firebaseAdmin;
 
   final Database _database;
+  final App _firebaseApp;
 
   @override
-  Future<void> createStudent({required CreatedStudentEntity student}) async {
+  Future<void> createStudent({
+    required String uid,
+    required CreatedStudentEntity student,
+  }) async {
     await _database.transaction(() async {
       await _database
           .into(_database.users)
           .insert(UserDto.fromEntity(student.user).toCompanion());
-
       await _database
           .into(_database.students)
           .insert(CreatedStudentDto.fromEntity(student).toCompanion());
+    });
+
+    await _firebaseApp.auth().setCustomUserClaims(uid, {
+      'role': Role.student.name,
     });
   }
 

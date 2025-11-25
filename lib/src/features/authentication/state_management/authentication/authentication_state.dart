@@ -10,6 +10,12 @@ sealed class AuthState {
   const factory AuthState.authenticated({required AuthenticatedUser user}) =
       _Authenticated;
 
+  const factory AuthState.loggedIn({required AuthenticatedUser user}) =
+      _LoggedIn;
+
+  const factory AuthState.signedUp({required AuthenticatedUser user}) =
+      _SignedUp;
+
   const factory AuthState.smsCodeSent({required String verificationId}) =
       _SmsCodeSent;
 
@@ -26,6 +32,8 @@ sealed class AuthState {
 
   UserEntity get currentUser => map(
     authenticated: (state) => state.user,
+    loggedIn: (state) => state.user,
+    signedUp: (state) => state.user,
     notAuthenticated: (state) => state.user,
     smsCodeSent: (state) => state.user,
     loading: (state) => state.user,
@@ -40,18 +48,17 @@ sealed class AuthState {
   bool get isLoading => maybeMap(loading: (_) => true, orElse: () => false);
 
   R map<R>({
-    // ignore: library_private_types_in_public_api
     required AuthStateMatch<R, _Authenticated> authenticated,
-    // ignore: library_private_types_in_public_api
+    required AuthStateMatch<R, _LoggedIn> loggedIn,
+    required AuthStateMatch<R, _SignedUp> signedUp,
     required AuthStateMatch<R, _SmsCodeSent> smsCodeSent,
-    // ignore: library_private_types_in_public_api
     required AuthStateMatch<R, _NotAuthenticated> notAuthenticated,
-    // ignore: library_private_types_in_public_api
     required AuthStateMatch<R, _Loading> loading,
-    // ignore: library_private_types_in_public_api
     required AuthStateMatch<R, _Error> error,
   }) => switch (this) {
     _Authenticated s => authenticated(s),
+    _LoggedIn s => loggedIn(s),
+    _SignedUp s => signedUp(s),
     _SmsCodeSent s => smsCodeSent(s),
     _NotAuthenticated s => notAuthenticated(s),
     _Loading s => loading(s),
@@ -60,18 +67,17 @@ sealed class AuthState {
 
   R maybeMap<R>({
     required R Function() orElse,
-    // ignore: library_private_types_in_public_api
     AuthStateMatch<R, _Authenticated>? authenticated,
-    // ignore: library_private_types_in_public_api
+    AuthStateMatch<R, _LoggedIn>? loggedIn,
+    AuthStateMatch<R, _SignedUp>? signedUp,
     AuthStateMatch<R, _SmsCodeSent>? smsCodeSent,
-    // ignore: library_private_types_in_public_api
     AuthStateMatch<R, _NotAuthenticated>? notAuthenticated,
-    // ignore: library_private_types_in_public_api
     AuthStateMatch<R, _Loading>? loading,
-    // ignore: library_private_types_in_public_api
     AuthStateMatch<R, _Error>? error,
   }) => map<R>(
     authenticated: authenticated ?? (_) => orElse(),
+    loggedIn: loggedIn ?? (_) => orElse(),
+    signedUp: signedUp ?? (_) => orElse(),
     smsCodeSent: smsCodeSent ?? (_) => orElse(),
     notAuthenticated: notAuthenticated ?? (_) => orElse(),
     loading: loading ?? (_) => orElse(),
@@ -79,18 +85,17 @@ sealed class AuthState {
   );
 
   R? mapOrNull<R>({
-    // ignore: library_private_types_in_public_api
     AuthStateMatch<R, _Authenticated>? authenticated,
-    // ignore: library_private_types_in_public_api
+    AuthStateMatch<R, _LoggedIn>? loggedIn,
+    AuthStateMatch<R, _SignedUp>? signedUp,
     AuthStateMatch<R, _SmsCodeSent>? smsCodeSent,
-    // ignore: library_private_types_in_public_api
     AuthStateMatch<R, _NotAuthenticated>? notAuthenticated,
-    // ignore: library_private_types_in_public_api
     AuthStateMatch<R, _Loading>? loading,
-    // ignore: library_private_types_in_public_api
     AuthStateMatch<R, _Error>? error,
   }) => map<R?>(
     authenticated: authenticated ?? (_) => null,
+    loggedIn: loggedIn ?? (_) => null,
+    signedUp: signedUp ?? (_) => null,
     smsCodeSent: smsCodeSent ?? (_) => null,
     notAuthenticated: notAuthenticated ?? (_) => null,
     loading: loading ?? (_) => null,
@@ -100,6 +105,14 @@ sealed class AuthState {
 
 final class _Authenticated extends AuthState {
   const _Authenticated({required super.user});
+}
+
+final class _LoggedIn extends AuthState {
+  const _LoggedIn({required super.user});
+}
+
+final class _SignedUp extends AuthState {
+  const _SignedUp({required super.user});
 }
 
 final class _SmsCodeSent extends AuthState {

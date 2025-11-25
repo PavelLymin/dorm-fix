@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:ui_kit/button_previews.dart';
 import 'package:ui_kit/color_palette_preview.dart';
+import 'package:ui_kit/grouped_list_preview.dart';
 import 'package:ui_kit/pin_preview.dart';
 import 'package:ui_kit/text_fields_preview.dart';
 import 'package:ui_kit/typography_preview.dart';
@@ -97,6 +98,8 @@ class UiPreview extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const PinCodePreview(),
+                const SizedBox(height: 24),
+                const GroupedListPreview(),
               ],
             ),
           ),

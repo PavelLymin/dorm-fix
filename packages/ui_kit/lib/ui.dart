@@ -11,6 +11,7 @@ export 'package:ui_kit/src/components/text_field.dart';
 export 'package:ui_kit/src/components/pin_code.dart';
 export 'package:ui_kit/src/components/modal_bottom_sheet.dart';
 export 'package:ui_kit/src/components/app_padding.dart';
+export 'package:ui_kit/src/components/grouped_list.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

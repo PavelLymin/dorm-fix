@@ -42,9 +42,10 @@ class StudentRouter {
   }
 
   Future<Response> _createStudent(Request request) async {
+    final uid = RequireUser.getUserId(request);
     final json = await _readJson(request);
     final student = CreatedStudentDto.fromJson(json).toEntity();
-    await _studentRepository.createStudent(student: student);
+    await _studentRepository.createStudent(student: student, uid: uid);
 
     return _restApi.send(
       statusCode: 201,

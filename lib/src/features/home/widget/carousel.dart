@@ -69,13 +69,13 @@ class _CarouselItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-    mainAxisSize: .min,
+    mainAxisSize: .max,
     crossAxisAlignment: .center,
     children: [
       Expanded(
         flex: 3,
         child: Column(
-          mainAxisSize: .min,
+          mainAxisSize: .max,
           crossAxisAlignment: .start,
           children: [
             UiText.titleLarge(spec.title),

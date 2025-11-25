@@ -50,16 +50,20 @@ class CompositionRoot {
 
     final restApi = RestApiBase();
 
+    // Student
+    final studentRepository = StudentRepositoryImpl(
+      database: database,
+      firebaseAdmin: app,
+    );
+    final studentRouter = StudentRouter(
+      studentRepository: studentRepository,
+      restApi: restApi,
+    );
+
     // User
     final userRepository = UserRepositoryImpl(database: database);
     final userRouter = UserRouter(
       userRepository: userRepository,
-      restApi: restApi,
-    );
-
-    // Student
-    final studentRepository = StudentRepositoryImpl(database: database);
-    final studentRouter = StudentRouter(
       studentRepository: studentRepository,
       restApi: restApi,
     );

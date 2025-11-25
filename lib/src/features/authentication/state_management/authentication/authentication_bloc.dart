@@ -20,12 +20,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
        _logger = logger,
        super(const _NotAuthenticated(user: NotAuthenticatedUser())) {
     _streamSubscription = _authRepository.userChanges.listen(
-      (user) {
-        user.map(
-          notAuthenticatedUser: (notAuthenticatedUser) =>
-              setState(_NotAuthenticated(user: notAuthenticatedUser)),
-          authenticatedUser: (authenticatedUser) =>
-              setState(_Authenticated(user: authenticatedUser)),
+      (data) {
+        data.map(
+          notAuthenticatedUser: (user) =>
+              setState(_NotAuthenticated(user: user)),
+          authenticatedUser: (_) {},
         );
       },
       onError: (e) =>
@@ -34,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
 
     on<AuthEvent>((event, emit) async {
       await event.map(
-        logIn: (s) => _logIn(s, emit),
+        logIn: (s) => _logInWithEmailAndPassword(s, emit),
         verifyPhoneNumber: (s) => _verifyPhoneNumber(s, emit),
         signInWithPhoneNumber: (s) => _signInWithPhoneNumber(s, emit),
         signInWithGoogle: (_) => _signInWithGoogle(emit),
@@ -48,24 +47,60 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
   final Logger _logger;
   StreamSubscription? _streamSubscription;
 
-  Future<void> _logIn(_LogIn s, Emitter<AuthState> emit) async {
+  Future<void> _logInWithEmailAndPassword(
+    _LogIn s,
+    Emitter<AuthState> emit,
+  ) async {
     try {
       emit(AuthState.loading(user: state.currentUser));
-      final ecxistUser = await _userRepository.checkUserByEmail(email: s.email);
+      final existUser = await _userRepository.checkUserByEmail(email: s.email);
+      existUser
+          ? await _signInWithEmailAndPassword(s, emit)
+          : await _signUpWithEmailAndPassword(s, emit);
+    } on RestClientException catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      emit(AuthState.error(user: state.currentUser, message: e.message));
+    } on AuthException catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      emit(AuthState.error(user: state.currentUser, message: e.message));
+    } on Object catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      emit(AuthState.error(user: state.currentUser, message: e.toString()));
+    }
+  }
 
-      if (!ecxistUser) {
-        await Future.wait([
-          _authRepository.signUpWithEmailAndPassword(
-            email: s.email,
-            password: s.password,
-          ),
-        ]);
-      } else {
-        await _authRepository.signInWithEmailAndPassword(
-          email: s.email,
-          password: s.password,
-        );
-      }
+  Future<void> _signInWithEmailAndPassword(
+    _LogIn s,
+    Emitter<AuthState> emit,
+  ) async {
+    final user = await _authRepository.signInWithEmailAndPassword(
+      email: s.email,
+      password: s.password,
+    );
+    emit(AuthState.signedUp(user: user));
+  }
+
+  Future<void> _signUpWithEmailAndPassword(
+    _LogIn s,
+    Emitter<AuthState> emit,
+  ) async {
+    final user = await _authRepository.signUpWithEmailAndPassword(
+      email: s.email,
+      password: s.password,
+    );
+    emit(AuthState.loggedIn(user: user));
+  }
+
+  Future<void> _logInByUid({
+    required Future<AuthenticatedUser> Function() logIn,
+    required Emitter<AuthState> emit,
+  }) async {
+    try {
+      final user = await logIn();
+      final ecxistUser = await _userRepository.checkUserByUid(uid: user.uid);
+      ecxistUser
+          ? emit(AuthState.signedUp(user: user))
+          : emit(AuthState.loggedIn(user: user));
     } on RestClientException catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(AuthState.error(user: state.currentUser, message: e.message));
@@ -82,19 +117,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
     _SignInWithPhoneNumber s,
     Emitter<AuthState> emit,
   ) async {
-    try {
-      emit(AuthState.loading(user: state.currentUser));
-      await _authRepository.signInWithPhoneNumber(
+    emit(AuthState.loading(user: state.currentUser));
+    await _logInByUid(
+      logIn: () => _authRepository.signInWithPhoneNumber(
         verificationId: s.verificationId,
         smsCode: s.smsCode,
-      );
-    } on AuthException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.message));
-    } on Object catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.toString()));
-    }
+      ),
+      emit: emit,
+    );
   }
 
   Future<void> _verifyPhoneNumber(
@@ -106,7 +136,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
       final result = await _authRepository.verifyPhoneNumber(
         phoneNumber: s.phoneNumber,
       );
-
       result.maybeMap(
         orElse: () => null,
         smsCodeSent: (verificationId) =>
@@ -122,13 +151,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
   }
 
   Future<void> _signInWithGoogle(Emitter<AuthState> emit) async {
-    try {
-      emit(AuthState.loading(user: state.currentUser));
-      await _authRepository.signInWithGoogle();
-    } on Object catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.toString()));
-    }
+    emit(AuthState.loading(user: state.currentUser));
+    await _logInByUid(
+      logIn: () => _authRepository.signInWithGoogle(),
+      emit: emit,
+    );
   }
 
   Future<void> _signOut(Emitter<AuthState> emit) async {
