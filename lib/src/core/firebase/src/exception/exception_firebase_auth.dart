@@ -1,7 +1,7 @@
 class AuthException implements Exception {
   AuthException({required String code}) {
     switch (code) {
-      case 'user-null':
+      case 'no-current-user':
         message = 'Такого пользователя нет';
       case 'email-already-in-use':
         message = 'Указанный email уже занят другим пользователем.';

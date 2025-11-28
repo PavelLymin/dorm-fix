@@ -2,7 +2,7 @@ import 'dormitory.dart';
 import 'room.dart';
 import 'user.dart';
 
-abstract class StudentEntity {
+sealed class StudentEntity {
   const StudentEntity();
 
   factory StudentEntity.created({
@@ -33,7 +33,7 @@ abstract class StudentEntity {
   int get hashCode => uid.hashCode;
 }
 
-class CreatedStudentEntity extends StudentEntity {
+final class CreatedStudentEntity extends StudentEntity {
   const CreatedStudentEntity({
     required this.user,
     required this.dormitoryId,
@@ -66,7 +66,7 @@ class CreatedStudentEntity extends StudentEntity {
       'user: $user)';
 }
 
-class FullStudentEntity extends StudentEntity {
+final class FullStudentEntity extends StudentEntity {
   const FullStudentEntity({
     required this.id,
     required this.user,

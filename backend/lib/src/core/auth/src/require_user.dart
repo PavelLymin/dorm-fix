@@ -6,7 +6,6 @@ import '../../rest_api/src/rest_api.dart';
 abstract class RequireUser {
   static String getUserId(Request request) {
     final uid = request.context['user_id'];
-
     if (uid is! String || uid.isEmpty) {
       throw BadRequestException(
         error: {
@@ -20,23 +19,21 @@ abstract class RequireUser {
   }
 
   static String getUserRole(Request request) {
-    final uid = request.context['role'];
-
-    if (uid is! String || uid.isEmpty) {
+    final role = request.context['role'];
+    if (role is! String || role.isEmpty) {
       throw BadRequestException(
         error: {
           'description': 'Missing or invalid user role in request context.',
-          'context': 'user_id',
+          'context': 'role',
         },
       );
     }
 
-    return Role.fromString(uid).name;
+    return Role.fromString(role).name;
   }
 
   static String getUserEmail(Request request) {
     final email = request.url.queryParameters['email'];
-
     if (email is! String || email.isEmpty) {
       throw BadRequestException(
         error: {

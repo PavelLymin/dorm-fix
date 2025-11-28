@@ -5,10 +5,12 @@ import 'package:logger/web.dart';
 import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
 import '../../server/data/repository/dormitory_repository.dart';
+import '../../server/data/repository/master_repository.dart';
 import '../../server/data/repository/specialization_repository.dart';
 import '../../server/data/repository/student_repository.dart';
 import '../../server/data/repository/user_repository.dart';
 import '../../server/router/dormitory.dart';
+import '../../server/router/profile.dart';
 import '../../server/router/specialization.dart';
 import '../../server/router/student.dart';
 import '../../server/router/user.dart';
@@ -50,6 +52,13 @@ class CompositionRoot {
 
     final restApi = RestApiBase();
 
+    // User
+    final userRepository = UserRepositoryImpl(database: database);
+    final userRouter = UserRouter(
+      userRepository: userRepository,
+      restApi: restApi,
+    );
+
     // Student
     final studentRepository = StudentRepositoryImpl(
       database: database,
@@ -60,12 +69,14 @@ class CompositionRoot {
       restApi: restApi,
     );
 
-    // User
-    final userRepository = UserRepositoryImpl(database: database);
-    final userRouter = UserRouter(
-      userRepository: userRepository,
-      studentRepository: studentRepository,
+    // Master
+    final masterRepository = MasterRepository(database: database);
+
+    // Profile
+    final profileRouter = ProfileRouter(
       restApi: restApi,
+      studentRepository: studentRepository,
+      masterRepository: masterRepository,
     );
 
     // Dormitory
@@ -90,6 +101,7 @@ class CompositionRoot {
       restApi: restApi,
       database: database,
       userRouter: userRouter,
+      profileRouter: profileRouter,
       studentRouter: studentRouter,
       dormitoryRouter: dormitoryRouter,
       specializationRouter: specializationRouter,
@@ -104,6 +116,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.restApi,
     required this.database,
     required this.userRouter,
+    required this.profileRouter,
     required this.studentRouter,
     required this.dormitoryRouter,
     required this.specializationRouter,
@@ -119,6 +132,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final UserRouter userRouter;
 
+  final ProfileRouter profileRouter;
+
   final StudentRouter studentRouter;
 
   final DormitoryRouter dormitoryRouter;
@@ -132,6 +147,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     restApi: restApi,
     database: database,
     userRouter: userRouter,
+    profileRouter: profileRouter,
     studentRouter: studentRouter,
     dormitoryRouter: dormitoryRouter,
     specializationRouter: specializationRouter,

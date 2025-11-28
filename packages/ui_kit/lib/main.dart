@@ -1,12 +1,14 @@
 import 'dart:math' as math;
 
-import 'package:ui_kit/button_previews.dart';
-import 'package:ui_kit/color_palette_preview.dart';
-import 'package:ui_kit/grouped_list_preview.dart';
-import 'package:ui_kit/pin_preview.dart';
-import 'package:ui_kit/text_fields_preview.dart';
-import 'package:ui_kit/typography_preview.dart';
 import 'package:ui_kit/ui.dart';
+import 'button_previews.dart';
+import 'color_palette_preview.dart';
+import 'grouped_list_preview.dart';
+import 'pin_preview.dart';
+import 'switch_preview.dart';
+import 'text_fields_preview.dart';
+import 'typography_preview.dart';
+import 'bottom_sheet_preview.dart';
 
 final themeModeSwitcher = ValueNotifier(ThemeMode.system);
 
@@ -99,7 +101,26 @@ class UiPreview extends StatelessWidget {
                 const SizedBox(height: 8),
                 const PinCodePreview(),
                 const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.center,
+                  child: UiText.titleLarge('Grouped List'),
+                ),
+                const SizedBox(height: 8),
                 const GroupedListPreview(),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.center,
+                  child: UiText.titleLarge('Switch'),
+                ),
+                const SizedBox(height: 8),
+                const SwitchPreview(),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.center,
+                  child: UiText.titleLarge('Bottom sheet'),
+                ),
+                const SizedBox(height: 8),
+                const BottomSheetPreview(),
               ],
             ),
           ),

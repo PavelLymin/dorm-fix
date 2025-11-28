@@ -69,12 +69,21 @@ class CreatedStudentDto extends StudentDto {
     'user': user.toJson(),
   };
 
-  factory CreatedStudentDto.fromJson(Map<String, Object?> json) =>
-      CreatedStudentDto(
-        dormitoryId: json['dormitory_id'] as int,
-        roomId: json['room_id'] as int,
-        user: UserDto.fromJson(json['user'] as Map<String, Object?>),
+  factory CreatedStudentDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'dormitory_id': final int dormitoryId,
+      'room_id': final int roomId,
+      'user': final Map<String, Object?> userJson,
+    }) {
+      return CreatedStudentDto(
+        dormitoryId: dormitoryId,
+        roomId: roomId,
+        user: UserDto.fromJson(userJson),
       );
+    } else {
+      throw ArgumentError('Invalid JSON format for CreatedStudent: $json');
+    }
+  }
 }
 
 class FullStudentDto extends StudentDto {
@@ -128,10 +137,21 @@ class FullStudentDto extends StudentDto {
     'room': room.toJson(),
   };
 
-  factory FullStudentDto.fromJson(Map<String, Object?> json) => FullStudentDto(
-    id: json['id'] as int,
-    user: UserDto.fromJson(json['user'] as Map<String, Object?>),
-    dormitory: DormitoryDto.fromJson(json['dormitory'] as Map<String, Object?>),
-    room: RoomDto.fromJson(json['room'] as Map<String, Object?>),
-  );
+  factory FullStudentDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'id': final int id,
+      'user': final Map<String, Object?> userJson,
+      'dormitory': final Map<String, Object?> dormitoryJson,
+      'room': final Map<String, Object?> roomJson,
+    }) {
+      return FullStudentDto(
+        id: id,
+        user: UserDto.fromJson(userJson),
+        dormitory: DormitoryDto.fromJson(dormitoryJson),
+        room: RoomDto.fromJson(roomJson),
+      );
+    } else {
+      throw ArgumentError('Invalid JSON format for FullStudent: $json');
+    }
+  }
 }

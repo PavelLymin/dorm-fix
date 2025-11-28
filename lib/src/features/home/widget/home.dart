@@ -1,7 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+
 import '../../../app/widget/dependencies_scope.dart';
-import '../../profile/state_management/student_bloc/student_bloc.dart';
+import '../../profile/state_management/profile_bloc/profile_bloc.dart';
 import '../state_management/bloc/specialization_bloc.dart';
 import 'carousel.dart';
 import 'home_card.dart';
@@ -15,11 +16,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with _HomeScreenStateMixin {
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-    providers: [
-      BlocProvider.value(value: _studentBloc),
-      BlocProvider.value(value: _specializationBloc),
-    ],
+  Widget build(BuildContext context) => BlocProvider.value(
+    value: _specializationBloc,
     child: Scaffold(body: const Center(child: _HomeBody())),
   );
 }
@@ -79,25 +77,29 @@ class _UserDisplayProfile extends StatelessWidget {
   const _UserDisplayProfile();
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<StudentBloc, StudentState>(
+  Widget build(BuildContext context) => BlocBuilder<ProfileBloc, ProfileState>(
     builder: (context, state) {
-      return state.map(
+      return state.maybeMap(
+        orElse: () => const SizedBox.shrink(),
         loading: (_) => const SizedBox.square(
           dimension: 20,
           child: CircularProgressIndicator(),
         ),
-        loaded: (state) => Column(
-          spacing: 4,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            UiText.headlineLarge(
-              state.student.user.displayName!,
-              style: TextStyle(color: Theme.of(context).colorPalette.primary),
-            ),
-            UiText.headlineLarge(state.student.dormitory.name),
-            UiText.headlineLarge(state.student.room.room),
-          ],
-        ),
+        loadedStudent: (state) {
+          final student = state.student;
+          return Column(
+            spacing: 4,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              UiText.headlineLarge(
+                student.user.displayName!,
+                style: TextStyle(color: Theme.of(context).colorPalette.primary),
+              ),
+              UiText.headlineLarge(student.dormitory.name),
+              UiText.headlineLarge(student.room.roomNumber),
+            ],
+          );
+        },
         error: (state) => UiText.headlineLarge(state.message),
       );
     },
@@ -105,14 +107,11 @@ class _UserDisplayProfile extends StatelessWidget {
 }
 
 mixin _HomeScreenStateMixin on State<HomeScreen> {
-  late StudentBloc _studentBloc;
   late SpecializationBloc _specializationBloc;
 
   @override
   void initState() {
     super.initState();
-    _studentBloc = DependeciesScope.of(context).studentBloc
-      ..add(StudentEvent.get());
     _specializationBlocInit();
   }
 
@@ -129,7 +128,6 @@ mixin _HomeScreenStateMixin on State<HomeScreen> {
 
   @override
   void dispose() {
-    _studentBloc.close();
     _specializationBloc.close();
     super.dispose();
   }

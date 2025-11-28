@@ -1,7 +1,7 @@
 import '../../../authentication/data/dto/user.dart';
 import '../../../room/data/dto/room.dart';
 import '../../../yandex_mapkit/data/dto/dormitory.dart';
-import '../../model/student.dart';
+import '../../model/profile.dart';
 
 abstract class StudentDto {
   const StudentDto();

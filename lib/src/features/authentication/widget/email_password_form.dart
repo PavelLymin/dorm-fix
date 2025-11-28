@@ -39,7 +39,7 @@ class _EmailPasswordFormState extends State<EmailPasswordForm>
           style: UiTextFieldStyle(
             contentPadding: AppPadding.allMedium,
             hintText: 'name@mail.ru или +71234567890',
-            prefixIcon: Icon(Icons.email_outlined),
+            prefixIcon: const Icon(Icons.email_outlined),
             suffixIcon: widget.emailController.text.isEmpty
                 ? null
                 : IconButton(
@@ -58,7 +58,7 @@ class _EmailPasswordFormState extends State<EmailPasswordForm>
           style: UiTextFieldStyle(
             contentPadding: AppPadding.allMedium,
             hintText: 'Пароль',
-            prefixIcon: Icon(Icons.password_outlined),
+            prefixIcon: const Icon(Icons.password_outlined),
             suffixIcon: IconButton(
               icon: _obscureText
                   ? const Icon(Icons.visibility_off)

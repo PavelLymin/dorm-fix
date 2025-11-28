@@ -6,7 +6,7 @@ class GroupedListPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) => UiCard.standart(
     child: Padding(
-      padding: AppPadding.allSmall,
+      padding: AppPadding.allIncrement(increment: 0),
       child: GroupedList(
         items: [
           GroupedListItem(

@@ -14,16 +14,19 @@ class GroupedList extends StatelessWidget {
     required this.items,
     this.itemPadding = AppPadding.allMedium,
     this.borderRadius = const Radius.circular(16),
+    this.color,
   });
 
   final List<GroupedListItem> items;
   final EdgeInsets itemPadding;
   final Radius borderRadius;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => ListView.separated(
     physics: const NeverScrollableScrollPhysics(),
     shrinkWrap: true,
+    padding: const EdgeInsets.all(0),
     itemBuilder: (_, index) {
       final item = items[index];
       final isFirst = index == 0;
@@ -32,6 +35,7 @@ class GroupedList extends StatelessWidget {
         title: item.title,
         data: item.data,
         itemPadding: itemPadding,
+        color: color,
         borderRadius: BorderRadius.vertical(
           top: isFirst ? borderRadius : Radius.zero,
           bottom: isLast ? borderRadius : Radius.zero,
@@ -49,6 +53,7 @@ class _PersonalDataCard extends StatelessWidget {
     required this.title,
     required this.data,
     required this.itemPadding,
+    required this.color,
     this.borderRadius = const BorderRadius.all(Radius.zero),
     this.onTap,
   });
@@ -58,10 +63,11 @@ class _PersonalDataCard extends StatelessWidget {
   final EdgeInsets itemPadding;
   final BorderRadius borderRadius;
   final Function()? onTap;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => Material(
-    color: Colors.transparent,
+    color: color,
     borderRadius: borderRadius,
     child: InkWell(
       borderRadius: borderRadius,

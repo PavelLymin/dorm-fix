@@ -6,72 +6,6 @@ import '../../../../core/firebase/firebase.dart';
 import '../../model/user.dart';
 import '../dto/user.dart';
 
-sealed class PhoneNumberHelper {
-  const PhoneNumberHelper({required this.user});
-
-  const factory PhoneNumberHelper.smsCodeSent({
-    required String verificationId,
-  }) = CodeSent;
-
-  const factory PhoneNumberHelper.codeAutoRetrievalTimeout() =
-      CodeAutoRetrievalTimeout;
-
-  const factory PhoneNumberHelper.verificationCompleted({
-    required AuthenticatedUser user,
-  }) = VerificationCompleted;
-
-  final UserEntity user;
-
-  T map<T>({
-    required T Function(VerificationCompleted user) verificationCompleted,
-    required T Function(String verificationId) smsCodeSent,
-    required T Function(CodeAutoRetrievalTimeout user) codeAutoRetrievalTimeout,
-  }) => switch (this) {
-    final VerificationCompleted v => verificationCompleted(v),
-    final CodeSent c => smsCodeSent(c.verificationId),
-    final CodeAutoRetrievalTimeout c => codeAutoRetrievalTimeout(c),
-  };
-
-  T maybeMap<T>({
-    required T Function() orElse,
-    T Function(VerificationCompleted user)? verificationCompleted,
-    T Function(String verificationId)? smsCodeSent,
-    T Function(CodeAutoRetrievalTimeout user)? codeAutoRetrievalTimeout,
-  }) => map(
-    verificationCompleted: verificationCompleted ?? (_) => orElse(),
-    smsCodeSent: smsCodeSent ?? (_) => orElse(),
-    codeAutoRetrievalTimeout: codeAutoRetrievalTimeout ?? (_) => orElse(),
-  );
-
-  T? mapOrNull<T>({
-    T Function(VerificationCompleted user)? verificationCompleted,
-    T Function(String error)? verificationFailed,
-    T Function(String verificationId)? smsCodeSent,
-    T Function(CodeAutoRetrievalTimeout user)? codeAutoRetrievalTimeout,
-  }) => map<T?>(
-    verificationCompleted: verificationCompleted ?? (_) => null,
-    smsCodeSent: smsCodeSent ?? (_) => null,
-    codeAutoRetrievalTimeout: codeAutoRetrievalTimeout ?? (_) => null,
-  );
-}
-
-final class VerificationCompleted extends PhoneNumberHelper {
-  const VerificationCompleted({required super.user});
-}
-
-final class CodeSent extends PhoneNumberHelper {
-  const CodeSent({
-    super.user = const NotAuthenticatedUser(),
-    required this.verificationId,
-  });
-
-  final String verificationId;
-}
-
-final class CodeAutoRetrievalTimeout extends PhoneNumberHelper {
-  const CodeAutoRetrievalTimeout({super.user = const NotAuthenticatedUser()});
-}
-
 abstract interface class IAuthRepository {
   Stream<UserEntity> get userChanges;
 
@@ -85,19 +19,12 @@ abstract interface class IAuthRepository {
     required String password,
   });
 
-  Future<PhoneNumberHelper> verifyPhoneNumber({required String phoneNumber});
-
-  Future<AuthenticatedUser> signInWithPhoneNumber({
+  Future<({AuthenticatedUser user, bool isNewUser})> signInWithPhoneNumber({
     required String verificationId,
     required String smsCode,
   });
 
-  Future<AuthenticatedUser> signInWithGoogle();
-
-  Future<void> updatePhoneNumber({
-    required String verificationId,
-    required String smsCode,
-  });
+  Future<({AuthenticatedUser user, bool isNewUser})> signInWithGoogle();
 
   Future<void> signOut();
 }
@@ -123,15 +50,13 @@ class AuthRepository implements IAuthRepository {
     required String password,
   }) async {
     try {
-      final data = await _firebaseAuth.signInWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      final user = data.user;
-      if (user == null) throw AuthException(code: 'user-null');
-
-      await user.sendEmailVerification();
+      final user = userCredential.user;
+      if (user == null) throw AuthException(code: 'no-current-user');
 
       final authenticatedUser = UserDto.fromFirebase(user).toEntity();
 
@@ -152,13 +77,13 @@ class AuthRepository implements IAuthRepository {
     required String password,
   }) async {
     try {
-      final data = await _firebaseAuth.createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      final user = data.user;
-      if (user == null) throw AuthException(code: 'user-null');
+      final user = userCredential.user;
+      if (user == null) throw AuthException(code: 'no-current-user');
 
       final authenticatedUser = UserDto.fromFirebase(user).toEntity();
 
@@ -174,43 +99,7 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<PhoneNumberHelper> verifyPhoneNumber({
-    required String phoneNumber,
-  }) async {
-    Completer<PhoneNumberHelper> completer = Completer<PhoneNumberHelper>();
-
-    await _firebaseAuth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        final userCredential = await _firebaseAuth.signInWithCredential(
-          credential,
-        );
-        final authenticatedUser = UserDto.fromFirebase(
-          userCredential.user!,
-        ).toEntity();
-        completer.complete(
-          PhoneNumberHelper.verificationCompleted(user: authenticatedUser),
-        );
-      },
-      verificationFailed: (error) =>
-          completer.complete(throw AuthException(code: error.code)),
-
-      codeSent: (String verificationId, int? resendToken) async =>
-          completer.complete(
-            PhoneNumberHelper.smsCodeSent(verificationId: verificationId),
-          ),
-      codeAutoRetrievalTimeout: (String verificationId) {
-        completer.complete(PhoneNumberHelper.codeAutoRetrievalTimeout());
-      },
-    );
-
-    final result = await completer.future;
-
-    return result;
-  }
-
-  @override
-  Future<AuthenticatedUser> signInWithPhoneNumber({
+  Future<({AuthenticatedUser user, bool isNewUser})> signInWithPhoneNumber({
     required String verificationId,
     required String smsCode,
   }) async {
@@ -225,11 +114,12 @@ class AuthRepository implements IAuthRepository {
       );
 
       final user = userCredential.user;
-      if (user == null) throw AuthException(code: 'user-null');
+      final isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+      if (user == null) throw AuthException(code: 'no-current-user');
 
       final authenticatedUser = UserDto.fromFirebase(user).toEntity();
 
-      return authenticatedUser;
+      return (user: authenticatedUser, isNewUser: isNewUser);
     } on AuthException catch (e, stackTrace) {
       Error.throwWithStackTrace(e.message, stackTrace);
     } on FirebaseAuthException catch (e, stackTrace) {
@@ -241,7 +131,7 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<AuthenticatedUser> signInWithGoogle() async {
+  Future<({AuthenticatedUser user, bool isNewUser})> signInWithGoogle() async {
     try {
       final GoogleSignInAccount googleUser = await GoogleSignIn.instance
           .authenticate();
@@ -253,13 +143,13 @@ class AuthRepository implements IAuthRepository {
         credential,
       );
 
-      if (userCredential.user == null) throw AuthException(code: 'user-null');
+      final user = userCredential.user;
+      final isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+      if (user == null) throw AuthException(code: 'no-current-user');
 
-      final authenticatedUser = UserDto.fromFirebase(
-        userCredential.user!,
-      ).toEntity();
+      final authenticatedUser = UserDto.fromFirebase(user).toEntity();
 
-      return authenticatedUser;
+      return (user: authenticatedUser, isNewUser: isNewUser);
     } on AuthException catch (e, stackTrace) {
       Error.throwWithStackTrace(e.message, stackTrace);
     } on FirebaseAuthException catch (e, stackTrace) {
@@ -268,19 +158,6 @@ class AuthRepository implements IAuthRepository {
         stackTrace,
       );
     }
-  }
-
-  @override
-  Future<void> updatePhoneNumber({
-    required String verificationId,
-    required String smsCode,
-  }) async {
-    final phoneCredential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: smsCode,
-    );
-
-    await _firebaseAuth.currentUser?.updatePhoneNumber(phoneCredential);
   }
 
   @override

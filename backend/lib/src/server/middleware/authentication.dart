@@ -2,7 +2,7 @@ import 'package:firebase_admin/firebase_admin.dart';
 import 'package:shelf/shelf.dart';
 
 abstract class AuthenticationMiddleware {
-  static Middleware check({required App firebaseAdmin}) {
+  static Middleware call({required App firebaseAdmin}) {
     return (Handler innerHandler) {
       return (Request request) async {
         try {
@@ -20,8 +20,9 @@ abstract class AuthenticationMiddleware {
               }
 
               final id = idToken.claims['user_id'];
+              final role = idToken.claims['role'];
               request = request.change(
-                context: {...request.context, 'user_id': id},
+                context: {...request.context, 'user_id': id, 'role': role},
               );
             }
 

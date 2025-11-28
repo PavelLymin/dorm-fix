@@ -12,16 +12,17 @@ class AppRouter extends RootStackRouter {
     NamedRouteDef(name: 'SignIn', builder: (context, data) => SignInScreen()),
     NamedRouteDef(
       name: 'Map',
-      initial: true,
+      initial: false,
       builder: (context, data) => MapWithDormitories(),
     ),
     NamedRouteDef(
       name: 'Root',
+      initial: true,
       builder: (_, _) => const RootScreen(),
       children: [
         NamedRouteDef(
           name: 'Home',
-          initial: false,
+          initial: true,
           builder: (_, _) => const HomeScreen(),
         ),
         NamedRouteDef(

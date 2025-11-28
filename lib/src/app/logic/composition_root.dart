@@ -3,20 +3,23 @@ import 'package:dorm_fix/src/app/model/application_config.dart';
 import 'package:dorm_fix/src/app/router/router.dart';
 import 'package:dorm_fix/src/features/yandex_mapkit/data/repository/dormitory_repository.dart';
 import 'package:dorm_fix/src/features/yandex_mapkit/state_management/pins/bloc/pins_bloc.dart';
+import 'package:dorm_fix/src/features/settings/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/rest_client/src/http/rest_client_http.dart';
 import '../../features/authentication/data/repository/auth_repository.dart';
-import '../../features/authentication/data/repository/user_repository.dart';
+import '../../features/profile/data/repository/firebase_user_repository.dart';
+import '../../features/profile/data/repository/user_repository.dart';
 import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
 import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
 import '../../features/home/data/repository/specialization_repository.dart';
+import '../../features/profile/data/repository/profile_repository.dart';
 import '../../features/profile/data/repository/student_repository.dart';
-import '../../features/profile/state_management/student_bloc/student_bloc.dart';
 import '../../features/yandex_mapkit/state_management/search/search_bloc.dart';
+import '../../features/profile/state_management/profile_bloc/profile_bloc.dart';
 import '../bloc/app_bloc_observer.dart';
 import '../model/dependencies.dart';
 
@@ -45,6 +48,12 @@ class CompositionRoot {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
+    // auto_route
+    final router = AppRouter();
+
+    // Settings
+    final settingsContainer = await _CreateSettings().create();
+
     // Http
     final RestClientHttp client = RestClientHttp(
       baseUrl: Config.apiBaseUrl,
@@ -56,19 +65,23 @@ class CompositionRoot {
 
     Bloc.observer = AppBlocObserver(logger: logger);
 
+    // User
     final userPerository = UserRepositoryImpl(
       client: client,
       firebaseAuth: firebaseAuth,
     );
 
-    // auto_route
-    final router = AppRouter();
+    // Firebase User
+    final firebaseUserRepository = FirebaseUserRepositoryImpl(
+      firebaseAuth: firebaseAuth,
+    );
 
     // Authentication
     final authRepository = AuthRepository(firebaseAuth: firebaseAuth);
     final authenticationBloc = AuthBloc(
       authRepository: authRepository,
       userRepository: userPerository,
+      firebaseUserRepository: firebaseUserRepository,
       logger: logger,
     );
     final authButton = AuthButtonBloc();
@@ -78,9 +91,17 @@ class CompositionRoot {
       client: client,
       firebaseAuth: firebaseAuth,
     );
-    final studentBloc = StudentBloc(
-      studentRepository: studentRepository,
+
+    // Profile
+    final profileRepository = ProfileRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+    final profileBloc = ProfileBloc(
       logger: logger,
+      profileRepository: profileRepository,
+      studentRepository: studentRepository,
+      userRepository: userPerository,
     );
 
     // Specialization
@@ -105,9 +126,10 @@ class CompositionRoot {
       router: router,
       searchBloc: searchBloc,
       logger: logger,
+      settingsContainer: settingsContainer,
       authenticationBloc: authenticationBloc,
+      profileBloc: profileBloc,
       authButton: authButton,
-      studentBloc: studentBloc,
       specializationRepository: specializationRepository,
       pinsBloc: pinsBloc,
     ).create();
@@ -120,9 +142,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.router,
     required this.searchBloc,
     required this.logger,
+    required this.settingsContainer,
     required this.authenticationBloc,
+    required this.profileBloc,
     required this.authButton,
-    required this.studentBloc,
     required this.specializationRepository,
     required this.pinsBloc,
   });
@@ -133,11 +156,13 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final Logger logger;
 
+  final SettingsContainer settingsContainer;
+
   final AuthBloc authenticationBloc;
 
-  final AuthButtonBloc authButton;
+  final ProfileBloc profileBloc;
 
-  final StudentBloc studentBloc;
+  final AuthButtonBloc authButton;
 
   final SearchBloc searchBloc;
 
@@ -151,9 +176,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     router: router,
     searchBloc: searchBloc,
     logger: logger,
+    settingsContainer: settingsContainer,
     authenticationBloc: authenticationBloc,
+    profileBloc: profileBloc,
     authButton: authButton,
-    studentBloc: studentBloc,
     pinsBloc: pinsBloc,
     specializationRepository: specializationRepository,
   );
@@ -169,6 +195,20 @@ class _CreateFirebaseAuth extends AsyncFactory<FirebaseAuth> {
     );
 
     return FirebaseAuth.instance;
+  }
+}
+
+class _CreateSettings extends AsyncFactory<SettingsContainer> {
+  const _CreateSettings();
+
+  @override
+  Future<SettingsContainer> create() async {
+    final sharedPreferences = SharedPreferencesAsync();
+    final settingsContainer = await SettingsContainer.create(
+      sharedPreferences: sharedPreferences,
+    );
+
+    return settingsContainer;
   }
 }
 

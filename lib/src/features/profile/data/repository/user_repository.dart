@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/rest_client/rest_client.dart';
-import '../../../profile/data/dto/student.dart';
-import '../../model/user.dart';
+import '../../../authentication/data/dto/user.dart';
+import '../../../authentication/model/user.dart';
 
 abstract interface class IUserRepository {
   Future<bool> checkUserByUid({required String uid});
 
   Future<bool> checkUserByEmail({required String email});
 
-  Future<UserEntity> getUser();
+  Future<void> updateUser({required AuthenticatedUser user});
 }
 
 class UserRepositoryImpl implements IUserRepository {
@@ -53,33 +53,21 @@ class UserRepositoryImpl implements IUserRepository {
   }
 
   @override
-  Future<UserEntity> getUser() async {
+  Future<void> updateUser({required AuthenticatedUser user}) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
+
+    final body = UserDto.fromEntity(user).toJson();
     final response = await _client.send(
-      path: '/users',
-      method: 'GET',
+      path: '/users/me',
+      method: 'PUT',
       headers: {'Authorization': 'Bearer $token'},
+      body: body,
     );
-    if (response case <String, Object?>{
-      'user': final Map<String, Object?> user,
-      'role': final String roleString,
-    }) {
-      final role = Role.fromString(roleString);
-      return _getUserByRole(role, user);
+
+    if (response?['status_code'] != 201) {
+      throw StructuredBackendException(
+        error: {'description': 'Failed to update user profile.'},
+      );
     }
-
-    throw StructuredBackendException(
-      error: {'message': 'Invalid response format'},
-    );
-  }
-
-  UserEntity _getUserByRole(Role role, Map<String, Object?> data) {
-    final user = switch (role) {
-      Role.student => FullStudentDto.fromJson(data).toEntity(),
-      //TODO: add master dto
-      Role.master => FullStudentDto.fromJson(data).toEntity(),
-    };
-
-    return user;
   }
 }

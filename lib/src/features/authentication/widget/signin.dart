@@ -56,33 +56,18 @@ class _SignInScreenState extends State<SignInScreen> {
     value: _authButtonBloc,
     child: BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        state.maybeMap(
-          orElse: () {
-            _addLoading(false);
-            _addSmsCodeSent(false);
-          },
-          loading: (_) {
-            _addLoading(true);
-            _addSmsCodeSent(false);
-          },
-          authenticated: (_) {
-            _addLoading(false);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
-          },
-          smsCodeSent: (_) {
-            _addLoading(false);
-            _addSmsCodeSent(true);
-          },
-          error: (error) {
-            _addLoading(false);
-            _addSmsCodeSent(false);
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(error.message)));
-          },
+        if (!state.isLoading) _addLoading(false);
+        if (!state.isSmsCodeSent) _addSmsCodeSent(false);
+        state.mapOrNull(
+          loading: (_) => _addLoading(true),
+          loggedIn: (_) => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          ),
+          smsCodeSent: (_) => _addSmsCodeSent(true),
+          error: (error) => ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(error.message))),
         );
       },
       child: Scaffold(

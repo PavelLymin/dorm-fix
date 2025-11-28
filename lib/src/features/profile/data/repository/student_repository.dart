@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/rest_client/rest_client.dart';
-import '../../model/student.dart';
+import '../../model/profile.dart';
 import '../dto/student.dart';
 
 abstract interface class IStudentRepository {
   Future<void> createStudent({required CreatedStudentEntity student});
 
-  Future<FullStudentEntity> getStudent();
+  Future<void> updateUserProfile({required FullStudentEntity student});
 }
 
 class StudentRepositoryImpl implements IStudentRepository {
@@ -27,23 +27,21 @@ class StudentRepositoryImpl implements IStudentRepository {
   }
 
   @override
-  Future<FullStudentEntity> getStudent() async {
+  Future<void> updateUserProfile({required FullStudentEntity student}) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
 
+    final body = FullStudentDto.fromEntity(student).toJson();
     final response = await _client.send(
       path: '/students/me',
-      method: 'GET',
+      method: 'PUT',
       headers: {'Authorization': 'Bearer $token'},
+      body: body,
     );
 
-    if (response is! Map<String, Object?>) {
+    if (response?['status_code'] != 201) {
       throw StructuredBackendException(
-        error: {'description': 'The student was not found.'},
-        statusCode: 404,
+        error: {'description': 'Failed to update student profile.'},
       );
     }
-
-    final student = FullStudentDto.fromJson(response).toEntity();
-    return student;
   }
 }

@@ -5,6 +5,8 @@ import 'package:ui_kit/ui.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
 import 'src/features/authentication/state_management/authentication/authentication_bloc.dart';
+import 'src/features/profile/state_management/profile_bloc/profile_bloc.dart';
+import 'src/features/settings/settings.dart';
 
 void main() async {
   final logger = CreateAppLogger().create();
@@ -17,9 +19,14 @@ void main() async {
       runApp(
         DependeciesScope(
           dependencyContainer: dependency,
-          child: const WindowSizeScope(
-            updateMode: WindowSizeUpdateMode.categoriesOnly,
-            child: MainApp(),
+          child: SettingsScope(
+            settingsContainer: dependency.settingsContainer,
+            child: WindowSizeScope(
+              updateMode: WindowSizeUpdateMode.categoriesOnly,
+              child: SettingsBuilder(
+                builder: (context, settings) => MainApp(settings: settings),
+              ),
+            ),
           ),
         ),
       );
@@ -31,7 +38,9 @@ void main() async {
 }
 
 class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+  const MainApp({super.key, required this.settings});
+
+  final SettingsEntity settings;
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -39,22 +48,40 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   late AuthBloc _authenticationBloc;
+  late ProfileBloc _profileBloc;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = DependeciesScope.of(context).authenticationBloc;
+    _profileBloc = DependeciesScope.of(context).profileBloc
+      ..add(ProfileEvent.get());
+  }
+
+  ThemeData get _themeData {
+    switch (widget.settings.themeMode) {
+      case ThemeModeVO.light:
+        return lightTheme;
+      case ThemeModeVO.dark:
+        return darkTheme;
+      case ThemeModeVO.system:
+        final brightness = MediaQuery.platformBrightnessOf(context);
+        return brightness == Brightness.dark ? darkTheme : lightTheme;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final router = DependeciesScope.of(context).router;
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => _authenticationBloc)],
+      providers: [
+        BlocProvider(create: (context) => _authenticationBloc),
+        BlocProvider(create: (context) => _profileBloc),
+      ],
       child: MaterialApp.router(
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,
-        theme: darkTheme,
+        theme: _themeData,
         routerConfig: router.config(),
       ),
     );

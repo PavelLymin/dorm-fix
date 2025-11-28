@@ -1,8 +1,6 @@
-import '../../authentication/model/user.dart';
-import '../../room/model/room.dart';
-import '../../yandex_mapkit/model/dormitory.dart';
+part of 'profile.dart';
 
-abstract class StudentEntity extends UserEntity {
+sealed class StudentEntity extends ProfileEntity {
   const StudentEntity();
 
   factory StudentEntity.empty() => StudentEmpty();
@@ -35,7 +33,7 @@ abstract class StudentEntity extends UserEntity {
   int get hashCode => uid.hashCode;
 }
 
-class CreatedStudentEntity extends StudentEntity {
+final class CreatedStudentEntity extends StudentEntity {
   const CreatedStudentEntity({
     required this.user,
     required this.dormitoryId,
@@ -66,25 +64,9 @@ class CreatedStudentEntity extends StudentEntity {
       'dormitoryId: $dormitoryId, '
       'roomId: $roomId, '
       'user: $user)';
-
-  @override
-  bool get isAuthenticated => !isNotAuthenticated;
-
-  @override
-  bool get isNotAuthenticated => uid.isEmpty;
-
-  @override
-  AuthenticatedUser? get authenticatedOrNull =>
-      isNotAuthenticated ? null : user;
-
-  @override
-  T map<T>({
-    required T Function(NotAuthenticatedUser user) notAuthenticatedUser,
-    required T Function(AuthenticatedUser user) authenticatedUser,
-  }) => authenticatedUser(user);
 }
 
-class FullStudentEntity extends StudentEntity {
+final class FullStudentEntity extends StudentEntity {
   const FullStudentEntity({
     required this.id,
     required this.user,
@@ -120,22 +102,6 @@ class FullStudentEntity extends StudentEntity {
       'user: $user, '
       'dormitory: $dormitory, '
       'room: $room)';
-
-  @override
-  bool get isAuthenticated => !isNotAuthenticated;
-
-  @override
-  bool get isNotAuthenticated => uid.isEmpty;
-
-  @override
-  AuthenticatedUser? get authenticatedOrNull =>
-      isNotAuthenticated ? null : user;
-
-  @override
-  T map<T>({
-    required T Function(NotAuthenticatedUser user) notAuthenticatedUser,
-    required T Function(AuthenticatedUser user) authenticatedUser,
-  }) => authenticatedUser(user);
 }
 
 class StudentEmpty extends StudentEntity {
@@ -146,19 +112,4 @@ class StudentEmpty extends StudentEntity {
 
   @override
   StudentEmpty copyWith() => const StudentEmpty();
-
-  @override
-  bool get isAuthenticated => false;
-
-  @override
-  bool get isNotAuthenticated => true;
-
-  @override
-  AuthenticatedUser? get authenticatedOrNull => null;
-
-  @override
-  T map<T>({
-    required T Function(NotAuthenticatedUser user) notAuthenticatedUser,
-    required T Function(AuthenticatedUser user) authenticatedUser,
-  }) => notAuthenticatedUser(const NotAuthenticatedUser());
 }
