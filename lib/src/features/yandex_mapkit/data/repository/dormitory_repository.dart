@@ -6,7 +6,7 @@ import '../../model/dormitory.dart';
 
 abstract class IDormitoryRepository {
   Future<List<DormitoryEntity>> searchDormitories({required String query});
-  List<DormitoryEntity> getDormitories();
+  Future<List<DormitoryEntity>> getDormitories();
 }
 
 class DormitoryRepository implements IDormitoryRepository {
@@ -43,7 +43,8 @@ class DormitoryRepository implements IDormitoryRepository {
   }
 
   @override
-  List<DormitoryEntity> getDormitories() {
+  Future<List<DormitoryEntity>> getDormitories() async {
+    await Future.delayed(const Duration(seconds: 1));
     return [
       DormitoryEntity(
         id: 1,

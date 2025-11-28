@@ -15,17 +15,18 @@ class PinsBloc extends Bloc<PinsEvent, PinsState> {
        _logger = logger,
        super(PinsState.loading(dormitories: [])) {
     on<PinsEvent>(
-      (event, emit) => event.map(get: (e) => _getDormitories(e, emit)),
+      (event, emit) async =>
+          await event.map(get: (e) => _getDormitories(e, emit)),
     );
   }
 
   final IDormitoryRepository _dormitoryRepository;
   final Logger _logger;
 
-  void _getDormitories(PinsEvent event, Emitter<PinsState> emit) {
+  Future<void> _getDormitories(PinsEvent event, Emitter<PinsState> emit) async {
     emit(PinsState.loading(dormitories: []));
     try {
-      final dormitories = _dormitoryRepository.getDormitories();
+      final dormitories = await _dormitoryRepository.getDormitories();
       emit(PinsState.loaded(dormitories: dormitories));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);

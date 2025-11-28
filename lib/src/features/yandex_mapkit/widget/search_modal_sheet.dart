@@ -1,10 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 import '../../../app/widget/dependencies_scope.dart';
 import '../state_management/search/search_bloc.dart';
 
 class SearchModalSheet extends StatefulWidget {
-  const SearchModalSheet({super.key});
+  const SearchModalSheet({super.key, required this.onMoveCamera});
+  final Future<void> Function(Point target, MapAnimation animation, double zoom)
+  onMoveCamera;
 
   @override
   State<SearchModalSheet> createState() => _SearchModalSheetState();
@@ -13,6 +16,11 @@ class SearchModalSheet extends StatefulWidget {
 class _SearchModalSheetState extends State<SearchModalSheet> {
   late final TextEditingController _searchController;
   late SearchBloc _searchBloc;
+
+  final animation = const MapAnimation(
+    type: MapAnimationType.smooth,
+    duration: 1.0,
+  );
 
   @override
   void initState() {
@@ -23,9 +31,8 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
 
   @override
   void dispose() {
+    _searchController.dispose();
     super.dispose();
-    _searchController.clear();
-    _searchBloc.close();
   }
 
   @override
@@ -51,16 +58,28 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
                       ).colorPalette.primary.withValues(alpha: .38),
                     ),
                     error: (state) => Text(state.message),
-                    noTerm: (_) => Text('enter'),
+                    noTerm: (_) => Text('Введите текст'),
                     searchPopulated: (state) {
                       final dormitories = state.dormitories;
                       return ListView.builder(
                         itemCount: dormitories.length,
-                        itemBuilder: (context, index) =>
-                            Text(dormitories[index].name),
+                        itemBuilder: (context, index) {
+                          final dormitory = dormitories[index];
+                          return TextButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              final point = Point(
+                                latitude: dormitory.long,
+                                longitude: dormitory.lat,
+                              );
+                              await widget.onMoveCamera(point, animation, 17);
+                            },
+                            child: Text(dormitories[index].name),
+                          );
+                        },
                       );
                     },
-                    searchEmpty: (_) => Text('empty'),
+                    searchEmpty: (_) => Text('Такого общежития не существует'),
                   );
                 },
               ),
