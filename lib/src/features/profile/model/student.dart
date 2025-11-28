@@ -1,6 +1,6 @@
 import '../../authentication/model/user.dart';
 import '../../room/model/room.dart';
-import '../../yandex_map/model/dormitory.dart';
+import '../../yandex_mapkit/model/dormitory.dart';
 
 abstract class StudentEntity extends UserEntity {
   const StudentEntity();

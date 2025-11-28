@@ -1,24 +1,28 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/web.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../data/repositories/search_repository.dart';
+import '../../data/repository/dormitory_repository.dart';
 import '../../model/dormitory.dart';
 
 part 'search_state.dart';
 part 'search_event.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({required ISearchRepository searchRepository})
-    : _searchRepository = searchRepository,
-      super(const SearchState.noTerm(dormitories: [])) {
+  SearchBloc({
+    required IDormitoryRepository dormitoryRepository,
+    required Logger logger,
+  }) : _dormitoryRepository = dormitoryRepository,
+       _logger = logger,
+       super(const SearchState.noTerm(dormitories: [])) {
     onTextChanged = BehaviorSubject<String>();
 
     _subscription = onTextChanged.stream
         .distinct()
         .debounceTime(const Duration(milliseconds: 500))
         .listen((text) {
-          add(SearchEvent.textChanged(text: text));
+          add(_SearchEventTextChanged(text: text));
         });
 
     on<_SearchEventTextChanged>(
@@ -26,7 +30,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
   }
 
-  final ISearchRepository _searchRepository;
+  final IDormitoryRepository _dormitoryRepository;
+  final Logger _logger;
   late StreamSubscription _subscription;
   late BehaviorSubject<String> onTextChanged;
 
@@ -48,7 +53,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     emit(SearchState.loading(dormitories: state.dormitories));
 
     try {
-      final results = await _searchRepository.searchDormitories(
+      final results = await _dormitoryRepository.searchDormitories(
         query: searchTerm,
       );
 
@@ -57,8 +62,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       } else {
         emit(SearchState.searchPopulated(dormitories: results));
       }
-    } catch (_) {
-      emit(SearchState.error(dormitories: state.dormitories));
+    } on Object catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      emit(
+        SearchState.error(
+          dormitories: state.dormitories,
+          message: e.toString(),
+        ),
+      );
     }
   }
 }

@@ -13,6 +13,7 @@ sealed class SearchState {
 
   const factory SearchState.error({
     required List<DormitoryEntity> dormitories,
+    required String message,
   }) = _SearchStateError;
 
   const factory SearchState.noTerm({
@@ -76,7 +77,8 @@ final class _SearchStateLoading extends SearchState {
 }
 
 final class _SearchStateError extends SearchState {
-  const _SearchStateError({required super.dormitories});
+  const _SearchStateError({required super.dormitories, required this.message});
+  final String message;
 }
 
 final class _SearchStateNoTerm extends SearchState {

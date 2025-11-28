@@ -22,14 +22,16 @@ class DormitoryEntity {
     String? address,
     double? long,
     double? lat,
-  }) => DormitoryEntity(
-    id: id ?? this.id,
-    number: number ?? this.number,
-    name: name ?? this.name,
-    address: address ?? this.address,
-    long: long ?? this.long,
-    lat: lat ?? this.lat,
-  );
+  }) {
+    return DormitoryEntity(
+      id: id ?? this.id,
+      number: number ?? this.number,
+      name: name ?? this.name,
+      address: address ?? this.address,
+      long: long ?? this.long,
+      lat: lat ?? this.lat,
+    );
+  }
 
   @override
   String toString() =>
@@ -38,12 +40,12 @@ class DormitoryEntity {
       'number: $number, '
       'name: $name, '
       'address: $address, '
-      'long: $long, '
-      'lat: $lat)';
+      'longitude: $long, '
+      'latitude: $lat)';
 
   @override
   bool operator ==(Object other) => other is DormitoryEntity && other.id == id;
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => Object.hash(id, number, name, long, lat);
 }

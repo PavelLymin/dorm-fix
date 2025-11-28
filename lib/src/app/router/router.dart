@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dorm_fix/src/features/yandex_mapkit/widget/map_with_dormitories.dart';
 import '../../features/authentication/widget/signin.dart';
 import '../../features/home/widget/home.dart';
 import '../../features/profile/widget/profile_screen.dart';
@@ -8,12 +9,12 @@ import '../../features/root/widget/root_screen.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<NamedRouteDef> get routes => [
+    NamedRouteDef(name: 'SignIn', builder: (context, data) => SignInScreen()),
     NamedRouteDef(
-      name: 'SignIn',
+      name: 'Map',
       initial: true,
-      builder: (context, data) => SignInScreen(),
+      builder: (context, data) => MapWithDormitories(),
     ),
-    // NamedRouteDef(name: 'Map', builder: (context, data) => MapWithDormPins()),
     NamedRouteDef(
       name: 'Root',
       builder: (_, _) => const RootScreen(),

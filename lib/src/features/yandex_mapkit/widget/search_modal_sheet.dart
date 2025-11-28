@@ -1,9 +1,7 @@
-import 'package:dorm_fix/src/features/yandex_map/widget/suggest_tem.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:ui_kit/ui.dart';
 import '../../../app/widget/dependencies_scope.dart';
-import '../state_management/bloc/search_bloc.dart';
+import '../state_management/search/search_bloc.dart';
 
 class SearchModalSheet extends StatefulWidget {
   const SearchModalSheet({super.key});
@@ -52,15 +50,14 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
                         context,
                       ).colorPalette.primary.withValues(alpha: .38),
                     ),
-                    error: (_) => Text('error'),
+                    error: (state) => Text(state.message),
                     noTerm: (_) => Text('enter'),
                     searchPopulated: (state) {
                       final dormitories = state.dormitories;
                       return ListView.builder(
                         itemCount: dormitories.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return SuggestTem(dormitory: dormitories[index]);
-                        },
+                        itemBuilder: (context, index) =>
+                            Text(dormitories[index].name),
                       );
                     },
                     searchEmpty: (_) => Text('empty'),

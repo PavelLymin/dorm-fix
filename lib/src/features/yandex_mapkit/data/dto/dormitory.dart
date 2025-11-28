@@ -1,4 +1,4 @@
-import '../../model/dormitory.dart';
+import 'package:dorm_fix/src/features/yandex_mapkit/model/dormitory.dart';
 
 class DormitoryDto {
   DormitoryDto({
@@ -9,22 +9,12 @@ class DormitoryDto {
     required this.long,
     required this.lat,
   });
-
   final int id;
   final int number;
   final String name;
   final String address;
   final double long;
   final double lat;
-
-  factory DormitoryDto.fromEntity(DormitoryEntity entity) => DormitoryDto(
-    id: entity.id,
-    number: entity.number,
-    name: entity.name,
-    address: entity.address,
-    long: entity.long,
-    lat: entity.lat,
-  );
 
   DormitoryEntity toEntity() => DormitoryEntity(
     id: id,
@@ -35,6 +25,24 @@ class DormitoryDto {
     lat: lat,
   );
 
+  factory DormitoryDto.fromEntity(DormitoryEntity entity) => DormitoryDto(
+    id: entity.id,
+    number: entity.number,
+    name: entity.name,
+    address: entity.address,
+    long: entity.long,
+    lat: entity.lat,
+  );
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'number': number,
+    'name': name,
+    'address': address,
+    'long': long,
+    'lat': lat,
+  };
+
   factory DormitoryDto.fromJson(Map<String, Object?> json) => DormitoryDto(
     id: json['id'] as int,
     number: json['number'] as int,
@@ -44,12 +52,13 @@ class DormitoryDto {
     lat: json['lat'] as double,
   );
 
-  Map<String, Object?> toJson() => {
-    'id': id,
-    'number': number,
-    'name': name,
-    'address': address,
-    'long': long,
-    'lat': lat,
-  };
+  @override
+  String toString() =>
+      'DormitoryDto('
+      'id: $id, '
+      'number: $number, '
+      'name: $name, '
+      'address: $address, '
+      'long: $long, '
+      'lat: $lat)';
 }

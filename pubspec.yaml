@@ -20,7 +20,7 @@ dependencies:
   dio: ^5.9.0
   # Firebase
   firebase_auth: ^6.1.1
-  firebase_core: ^4.2.0
+  firebase_core: ^4.2.1
   # Google sign in
   google_sign_in: ^7.2.0
   # Logs
@@ -30,7 +30,7 @@ dependencies:
   # WS
   web_socket_channel: ^3.0.3
   # MapKit that allows you to use the features of Yandex.Maps
-  # yandex_maps_mapkit: ^4.25.0-beta
+  yandex_mapkit: ^4.2.1
 
   ui_kit:
     path: packages/ui_kit

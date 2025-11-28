@@ -1,6 +1,8 @@
 import 'package:dorm_fix/firebase_options.dart';
 import 'package:dorm_fix/src/app/model/application_config.dart';
 import 'package:dorm_fix/src/app/router/router.dart';
+import 'package:dorm_fix/src/features/yandex_mapkit/data/repository/dormitory_repository.dart';
+import 'package:dorm_fix/src/features/yandex_mapkit/state_management/pins/bloc/pins_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,8 +16,7 @@ import '../../features/authentication/state_management/authentication/authentica
 import '../../features/home/data/repository/specialization_repository.dart';
 import '../../features/profile/data/repository/student_repository.dart';
 import '../../features/profile/state_management/student_bloc/student_bloc.dart';
-import '../../features/yandex_map/data/repositories/search_repository.dart';
-import '../../features/yandex_map/state_management/bloc/search_bloc.dart';
+import '../../features/yandex_mapkit/state_management/search/search_bloc.dart';
 import '../bloc/app_bloc_observer.dart';
 import '../model/dependencies.dart';
 
@@ -89,8 +90,15 @@ class CompositionRoot {
     );
 
     // Search Dormitory
-    final searchRepository = SearchRepository(client: client);
-    final searchBloc = SearchBloc(searchRepository: searchRepository);
+    final searchRepository = DormitoryRepository(client: client);
+    final searchBloc = SearchBloc(
+      dormitoryRepository: searchRepository,
+      logger: logger,
+    );
+    final pinsBloc = PinsBloc(
+      dormitoryRepository: searchRepository,
+      logger: logger,
+    );
 
     return _DependencyFactory(
       client: client,
@@ -101,6 +109,7 @@ class CompositionRoot {
       authButton: authButton,
       studentBloc: studentBloc,
       specializationRepository: specializationRepository,
+      pinsBloc: pinsBloc,
     ).create();
   }
 }
@@ -115,6 +124,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.authButton,
     required this.studentBloc,
     required this.specializationRepository,
+    required this.pinsBloc,
   });
 
   final RestClientHttp client;
@@ -129,9 +139,11 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final StudentBloc studentBloc;
 
-  final ISpecializationRepository specializationRepository;
-
   final SearchBloc searchBloc;
+
+  final PinsBloc pinsBloc;
+
+  final ISpecializationRepository specializationRepository;
 
   @override
   DependencyContainer create() => DependencyContainer(
@@ -142,6 +154,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     authenticationBloc: authenticationBloc,
     authButton: authButton,
     studentBloc: studentBloc,
+    pinsBloc: pinsBloc,
     specializationRepository: specializationRepository,
   );
 }
