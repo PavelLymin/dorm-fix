@@ -13,7 +13,7 @@ class GroupedList extends StatelessWidget {
     super.key,
     required this.items,
     this.itemPadding = AppPadding.allMedium,
-    this.borderRadius = const Radius.circular(16),
+    this.borderRadius = const .circular(16),
     this.color,
   });
 
@@ -24,9 +24,9 @@ class GroupedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListView.separated(
-    physics: const NeverScrollableScrollPhysics(),
     shrinkWrap: true,
-    padding: const EdgeInsets.all(0),
+    physics: const NeverScrollableScrollPhysics(),
+    padding: const .all(0),
     itemBuilder: (_, index) {
       final item = items[index];
       final isFirst = index == 0;
@@ -36,9 +36,9 @@ class GroupedList extends StatelessWidget {
         data: item.data,
         itemPadding: itemPadding,
         color: color,
-        borderRadius: BorderRadius.vertical(
-          top: isFirst ? borderRadius : Radius.zero,
-          bottom: isLast ? borderRadius : Radius.zero,
+        borderRadius: .vertical(
+          top: isFirst ? borderRadius : .zero,
+          bottom: isLast ? borderRadius : .zero,
         ),
         onTap: item.onTap,
       );

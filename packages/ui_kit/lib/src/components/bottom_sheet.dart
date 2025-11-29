@@ -4,23 +4,23 @@ void showUiBottomSheet(
   BuildContext context,
   Widget widget, {
   AnimationStyle style = const AnimationStyle(
-    duration: Duration(seconds: 1),
-    reverseDuration: Duration(milliseconds: 500),
+    duration: Duration(milliseconds: 300),
+    reverseDuration: Duration(milliseconds: 100),
   ),
   Color? backgroundColor,
   double minWidth = 0.0,
-  double maxWidth = double.infinity,
+  double maxWidth = .infinity,
   double minHeight = 0.0,
-  double maxHeight = double.infinity,
-  bool isScrollControlled = false,
+  double maxHeight = .infinity,
+  bool isScrollControlled = true,
 }) {
   final colorPalette = Theme.of(context).colorPalette;
   showModalBottomSheet<void>(
     context: context,
     sheetAnimationStyle: style,
     backgroundColor: backgroundColor ?? colorPalette.secondary,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadiusGeometry.circular(24),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: .circular(24)),
     ),
     constraints: BoxConstraints(
       minWidth: minWidth,
@@ -29,24 +29,35 @@ void showUiBottomSheet(
       maxHeight: maxHeight,
     ),
     isScrollControlled: isScrollControlled,
-    builder: (BuildContext context) => Column(
-      crossAxisAlignment: .center,
-      mainAxisAlignment: .start,
-      mainAxisSize: .min,
-      children: [
-        const SizedBox(height: 16),
-        SizedBox(
-          width: 128,
-          height: 5,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: colorPalette.accent,
-            ),
-          ),
-        ),
-        widget,
-      ],
+    builder: (BuildContext context) => Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Column(
+        crossAxisAlignment: .center,
+        mainAxisAlignment: .start,
+        mainAxisSize: .min,
+        children: [const SizedBox(height: 16), const _SheetHandle(), widget],
+      ),
     ),
   );
+}
+
+class _SheetHandle extends StatelessWidget {
+  const _SheetHandle();
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorPalette.accent;
+
+    return Container(
+      width: 128,
+      height: 5,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: color,
+      ),
+      margin: const EdgeInsets.only(top: 16),
+    );
+  }
 }

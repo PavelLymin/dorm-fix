@@ -1,27 +1,21 @@
-import 'package:dorm_fix/firebase_options.dart';
-import 'package:dorm_fix/src/app/model/application_config.dart';
-import 'package:dorm_fix/src/app/router/router.dart';
-import 'package:dorm_fix/src/features/yandex_mapkit/data/repository/dormitory_repository.dart';
-import 'package:dorm_fix/src/features/yandex_mapkit/state_management/pins/bloc/pins_bloc.dart';
-import 'package:dorm_fix/src/features/settings/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../core/rest_client/src/http/rest_client_http.dart';
-import '../../features/authentication/data/repository/auth_repository.dart';
-import '../../features/profile/data/repository/firebase_user_repository.dart';
-import '../../features/profile/data/repository/user_repository.dart';
-import '../../features/authentication/state_management/auth_button/auth_button_bloc.dart';
-import '../../features/authentication/state_management/authentication/authentication_bloc.dart';
-import '../../features/home/data/repository/specialization_repository.dart';
-import '../../features/profile/data/repository/profile_repository.dart';
-import '../../features/profile/data/repository/student_repository.dart';
+import '../../../firebase_options.dart';
+import '../../core/rest_client/rest_client.dart';
+import '../../features/authentication/authentication.dart';
+import '../../features/home/home.dart';
+import '../../features/profile/profile.dart';
+import '../../features/settings/settings.dart';
+import '../../features/yandex_mapkit/data/repository/dormitory_repository.dart';
+import '../../features/yandex_mapkit/state_management/pins/bloc/pins_bloc.dart';
 import '../../features/yandex_mapkit/state_management/search/search_bloc.dart';
-import '../../features/profile/state_management/profile_bloc/profile_bloc.dart';
 import '../bloc/app_bloc_observer.dart';
+import '../model/application_config.dart';
 import '../model/dependencies.dart';
+import '../router/router.dart';
 
 abstract class Factory<T> {
   const Factory();
@@ -101,7 +95,11 @@ class CompositionRoot {
       logger: logger,
       profileRepository: profileRepository,
       studentRepository: studentRepository,
-      userRepository: userPerository,
+    );
+
+    final userRepository = UserRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
     );
 
     // Specialization
@@ -129,6 +127,8 @@ class CompositionRoot {
       settingsContainer: settingsContainer,
       authenticationBloc: authenticationBloc,
       profileBloc: profileBloc,
+      userRepository: userRepository,
+      firebaseUserRepository: firebaseUserRepository,
       authButton: authButton,
       specializationRepository: specializationRepository,
       pinsBloc: pinsBloc,
@@ -145,6 +145,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.settingsContainer,
     required this.authenticationBloc,
     required this.profileBloc,
+    required this.userRepository,
+    required this.firebaseUserRepository,
     required this.authButton,
     required this.specializationRepository,
     required this.pinsBloc,
@@ -161,6 +163,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final AuthBloc authenticationBloc;
 
   final ProfileBloc profileBloc;
+
+  final IUserRepository userRepository;
+
+  final IFirebaseUserRepository firebaseUserRepository;
 
   final AuthButtonBloc authButton;
 
@@ -179,6 +185,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     settingsContainer: settingsContainer,
     authenticationBloc: authenticationBloc,
     profileBloc: profileBloc,
+    userRepository: userRepository,
+    firebaseUserRepository: firebaseUserRepository,
     authButton: authButton,
     pinsBloc: pinsBloc,
     specializationRepository: specializationRepository,

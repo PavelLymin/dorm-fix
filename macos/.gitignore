@@ -5,6 +5,3 @@
 # Xcode-related
 **/dgph
 **/xcuserdata/
-
-macos/Flutter/Flutter-Debug.xcconfig
-macos/Flutter/Flutter-Release.xcconfig

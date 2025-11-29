@@ -1,28 +1,35 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:dorm_fix/src/features/yandex_mapkit/widget/map_with_dormitories.dart';
-import '../../features/authentication/widget/signin.dart';
-import '../../features/home/widget/home.dart';
-import '../../features/profile/widget/profile_screen.dart';
+
+import '../../features/authentication/authentication.dart';
+import '../../features/home/home.dart';
+import '../../features/profile/profile.dart';
 import '../../features/request/widget/request_screen.dart';
 import '../../features/root/widget/root_screen.dart';
+import '../../features/yandex_mapkit/widget/map_with_dormitories.dart';
 
 class AppRouter extends RootStackRouter {
   @override
   List<NamedRouteDef> get routes => [
-    NamedRouteDef(name: 'SignIn', builder: (context, data) => SignInScreen()),
+    NamedRouteDef(
+      name: 'SignIn',
+      builder: (context, data) => const SignInScreen(),
+    ),
+    NamedRouteDef(
+      name: 'UpdatePhonScreen',
+      builder: (context, data) => const UpdatePhoneScreen(),
+    ),
     NamedRouteDef(
       name: 'Map',
-      initial: false,
       builder: (context, data) => MapWithDormitories(),
     ),
     NamedRouteDef(
-      name: 'Root',
       initial: true,
+      name: 'Root',
       builder: (_, _) => const RootScreen(),
       children: [
         NamedRouteDef(
-          name: 'Home',
           initial: true,
+          name: 'Home',
           builder: (_, _) => const HomeScreen(),
         ),
         NamedRouteDef(

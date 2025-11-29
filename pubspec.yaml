@@ -38,6 +38,7 @@ dependencies:
   cronet_http: ^1.6.0
   cupertino_http: ^2.3.0
   shared_preferences: ^2.5.3
+  google_sign_in_android: ^7.2.6
 
 dev_dependencies:
   flutter_test:

@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
-import 'src/features/authentication/state_management/authentication/authentication_bloc.dart';
-import 'src/features/profile/state_management/profile_bloc/profile_bloc.dart';
+import 'src/features/authentication/authentication.dart';
+import 'src/features/profile/profile.dart';
 import 'src/features/settings/settings.dart';
 
 void main() async {
@@ -13,9 +13,7 @@ void main() async {
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-
       final dependency = await CompositionRoot(logger: logger).compose();
-
       runApp(
         DependeciesScope(
           dependencyContainer: dependency,
