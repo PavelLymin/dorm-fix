@@ -96,8 +96,8 @@ PODS:
     - FlutterMacOS
   - yandex_mapkit (0.0.1):
     - Flutter
-    - YandexMapsMobile (= 4.22.0-lite)
-  - YandexMapsMobile (4.22.0-lite)
+    - YandexMapsMobile (= 4.22.0-full)
+  - YandexMapsMobile (4.22.0-full)
 
 DEPENDENCIES:
   - cupertino_http (from `.symlinks/plugins/cupertino_http/darwin`)
@@ -169,9 +169,9 @@ SPEC CHECKSUMS:
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
-  yandex_mapkit: bac34ca1bdf97e87252a8c6d09a95b1fe39ba103
-  YandexMapsMobile: c73844c6096bbb240d1491adc511c2ef4a88d88d
+  yandex_mapkit: b0468cf6fdc2e5ef315e08c081cb48763db1edee
+  YandexMapsMobile: 27e6e45425bb61f0be2dbc2bf02d4e64926691a9
 
-PODFILE CHECKSUM: 4e3d500109cf1c9437b41588d4581c6d443f40cb
+PODFILE CHECKSUM: 37c4a488450e6479189f84cdd9bfd949ade1aaa7
 
 COCOAPODS: 1.16.2

@@ -132,11 +132,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<({AuthenticatedUser user, bool isNewUser})> signInWithGoogle() async {
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn.instance
-        ..initialize(
-          clientId:
-              '889571705211-vjevcio27bsqsvhglco5qglepu12juk2.apps.googleusercontent.com',
-        );
+      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
       final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
