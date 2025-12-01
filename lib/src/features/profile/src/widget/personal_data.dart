@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../model/profile.dart';
-import '../state_management/profile_bloc/profile_bloc.dart';
+import '../../profile.dart';
 import 'email_phone_edit.dart';
 
 class PersonalData extends StatefulWidget {

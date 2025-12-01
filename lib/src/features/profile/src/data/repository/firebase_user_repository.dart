@@ -65,7 +65,7 @@ class FirebaseUserRepositoryImpl implements IFirebaseUserRepository {
   }
 
   void _verificationFailed(FirebaseAuthException error, Completer completer) =>
-      completer.complete(AuthException(code: error.code));
+      throw AuthException(code: error.code);
 
   void codeSent(String verificationId, Completer completer) => completer
       .complete(PhoneNumberHelper.smsCodeSent(verificationId: verificationId));

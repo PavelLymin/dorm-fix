@@ -38,9 +38,9 @@ class CompositionRoot {
     logger.i('Initializing dependencies...');
 
     // Firebase
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    // await Firebase.initializeApp(
+    //   options: DefaultFirebaseOptions.currentPlatform,
+    // );
 
     // auto_route
     final router = AppRouter();

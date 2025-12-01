@@ -64,7 +64,12 @@ class PhoneNumberBloc extends Bloc<PhoneNumberEvent, PhoneNumberState> {
       result.maybeMap(
         orElse: () => null,
         smsCodeSent: (verificationId) {
-          emit(PhoneNumberState.smsCodeSent(verificationId: verificationId));
+          emit(
+            PhoneNumberState.smsCodeSent(
+              verificationId: verificationId,
+              phoneNumber: event.phoneNumber,
+            ),
+          );
         },
       );
     });

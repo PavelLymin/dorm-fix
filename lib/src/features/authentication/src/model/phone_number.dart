@@ -16,7 +16,7 @@ abstract class PhoneNumberValidator {
   static String? pinCodeValidator(String pinCode) {
     if (pinCode.isEmpty) {
       return 'Please enter pin code';
-    } else if (pinCode.length != 6) {
+    } else if (pinCode.length != Config.pinCodeLength) {
       return 'Please enter valid pin code';
     }
 

@@ -11,6 +11,7 @@ class AppRouter extends RootStackRouter {
   @override
   List<NamedRouteDef> get routes => [
     NamedRouteDef(
+      initial: true,
       name: 'SignIn',
       builder: (context, data) => const SignInScreen(),
     ),
@@ -23,15 +24,10 @@ class AppRouter extends RootStackRouter {
       builder: (context, data) => MapWithDormitories(),
     ),
     NamedRouteDef(
-      initial: true,
       name: 'Root',
       builder: (_, _) => const RootScreen(),
       children: [
-        NamedRouteDef(
-          initial: true,
-          name: 'Home',
-          builder: (_, _) => const HomeScreen(),
-        ),
+        NamedRouteDef(name: 'Home', builder: (_, _) => const HomeScreen()),
         NamedRouteDef(
           name: 'Request',
           builder: (_, _) => const RequestScreen(),

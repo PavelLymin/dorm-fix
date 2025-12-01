@@ -8,8 +8,13 @@ sealed class PhoneNumberState {
 
   factory PhoneNumberState.initial() => PhoneInitialState();
   factory PhoneNumberState.loading() => PhoneLoadingState();
-  factory PhoneNumberState.smsCodeSent({required String verificationId}) =>
-      PhoneSmsCodeSentState(verificationId: verificationId);
+  factory PhoneNumberState.smsCodeSent({
+    required String verificationId,
+    required String phoneNumber,
+  }) => PhoneSmsCodeSentState(
+    verificationId: verificationId,
+    phoneNumber: phoneNumber,
+  );
   factory PhoneNumberState.success() => PhoneSuccessState();
   factory PhoneNumberState.error({required String message}) =>
       PhoneErrorState(message: message);
@@ -63,9 +68,13 @@ final class PhoneInitialState extends PhoneNumberState {}
 final class PhoneLoadingState extends PhoneNumberState {}
 
 final class PhoneSmsCodeSentState extends PhoneNumberState {
-  const PhoneSmsCodeSentState({required this.verificationId});
+  const PhoneSmsCodeSentState({
+    required this.verificationId,
+    required this.phoneNumber,
+  });
 
   final String verificationId;
+  final String phoneNumber;
 }
 
 final class PhoneSuccessState extends PhoneNumberState {}

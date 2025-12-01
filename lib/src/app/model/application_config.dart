@@ -57,11 +57,11 @@ abstract final class Config {
 
   // --- AUTHENTICATION --- //
 
-  static const String serverClientId = String.fromEnvironment(
-    'SERVER_CLIENT_ID',
-    defaultValue:
-        '742549062350-340i26mhbip8f29k33t150g8luahejhq.apps.googleusercontent.com',
-  );
+  // static const String serverClientId = String.fromEnvironment(
+  //   'SERVER_CLIENT_ID',
+  //   defaultValue:
+  //       '742549062350-340i26mhbip8f29k33t150g8luahejhq.apps.googleusercontent.com',
+  // );
 
   /// Minimum length of password.
   /// e.g. 8
@@ -77,6 +77,13 @@ abstract final class Config {
     defaultValue: 32,
   );
 
+  /// Length of pincode.
+  /// e.g. 6
+  static const int pinCodeLength = int.fromEnvironment(
+    'PINCODE_LENGTH',
+    defaultValue: 6,
+  );
+
   // --- REGEX --- //
   static RegExp email = RegExp(
     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -84,14 +91,6 @@ abstract final class Config {
 
   static RegExp phoneNumber = RegExp(
     r'^\+7\s?\(?\d{3}\)?\s?\d{3}\s?\d{2}\s?\d{2}$',
-  );
-
-  // --- LAYOUT --- //
-
-  /// Maximum screen layout width for screen with list view.
-  static const int maxScreenLayoutWidth = int.fromEnvironment(
-    'MAX_LAYOUT_WIDTH',
-    defaultValue: 768,
   );
 }
 

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../app/model/application_config.dart';
 import '../../../../app/widget/dependencies_scope.dart';
+import '../../../authentication/authentication.dart';
 import '../../profile.dart';
 
 class EmailAddressEdit extends StatefulWidget {
@@ -98,11 +99,29 @@ class PhoneNumberEdit extends StatefulWidget {
   State<PhoneNumberEdit> createState() => _PhoneNumberEditState();
 }
 
-class _PhoneNumberEditState extends State<PhoneNumberEdit>
-    with _PhoneNumberEditStateMixin {
+class _PhoneNumberEditState extends State<PhoneNumberEdit> {
+  late TextEditingController _controller;
+  late PhoneNumberBloc _phoneNumberBloc;
+
   @override
-  Widget build(BuildContext context) => BlocProvider.value(
-    value: _phoneNumberBloc,
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialText);
+    final firebaseUserRepository = DependeciesScope.of(
+      context,
+    ).firebaseUserRepository;
+    final userRepository = DependeciesScope.of(context).userRepository;
+    final logger = DependeciesScope.of(context).logger;
+    _phoneNumberBloc = PhoneNumberBloc(
+      firebaseUserRepository: firebaseUserRepository,
+      userRepository: userRepository,
+      logger: logger,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => BlocProvider(
+    create: (context) => _phoneNumberBloc,
     child: Column(
       spacing: 64,
       crossAxisAlignment: .center,
@@ -128,76 +147,80 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit>
             ),
           ),
         ),
-        ValueListenableBuilder(
-          valueListenable: _isEnabled,
-          builder: (_, value, _) => SizedBox(
-            height: 48,
-            width: .infinity,
-            child: UiButton.filledPrimary(
-              onPressed: () => _phoneNumberBloc.add(
-                PhoneNumberEvent.verifyPhone(phoneNumber: _controller.text),
-              ),
-              enabled: value,
-              label: BlocConsumer<PhoneNumberBloc, PhoneNumberState>(
-                listener: (context, state) => state.mapOrNull(
-                  smsCodeSent: (_) => context.router.replace(
-                    const NamedRoute('UpdatePhonScreen'),
-                  ),
-                ),
-                builder: (context, state) => state.maybeMap(
-                  orElse: () => UiText.titleMedium('Изменить'),
-                  loading: (_) => const SizedBox.square(
-                    dimension: 20,
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
+        _ButtonPhoneUpdate(controller: _controller),
       ],
     ),
   );
 }
 
-mixin _PhoneNumberEditStateMixin on State<PhoneNumberEdit> {
+class _ButtonPhoneUpdate extends StatefulWidget {
+  const _ButtonPhoneUpdate({required this.controller});
+
+  final TextEditingController controller;
+
+  @override
+  State<_ButtonPhoneUpdate> createState() => _ButtonPhoneUpdateState();
+}
+
+class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
+    with _PhoneNumberEditStateMixin {
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder(
+    valueListenable: _isEnabled,
+    builder: (_, value, _) => SizedBox(
+      height: 48,
+      width: .infinity,
+      child: UiButton.filledPrimary(
+        enabled: value,
+        onPressed: _verifyPhone,
+        label: BlocConsumer<PhoneNumberBloc, PhoneNumberState>(
+          listener: (context, state) => state.mapOrNull(
+            smsCodeSent: (_) =>
+                context.router.push(const NamedRoute('UpdatePhonScreen')),
+          ),
+          builder: (context, state) => state.maybeMap(
+            orElse: () => UiText.titleMedium('Изменить'),
+            loading: (_) => SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Theme.of(context).colorPalette.mutedForeground,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+mixin _PhoneNumberEditStateMixin on State<_ButtonPhoneUpdate> {
   final ValueNotifier<bool> _isEnabled = ValueNotifier<bool>(false);
-  late PhoneNumberBloc _phoneNumberBloc;
-  late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
-    final firebaseUserRepository = DependeciesScope.of(
-      context,
-    ).firebaseUserRepository;
-    final userRepository = DependeciesScope.of(context).userRepository;
-    final logger = DependeciesScope.of(context).logger;
-    _phoneNumberBloc = PhoneNumberBloc(
-      firebaseUserRepository: firebaseUserRepository,
-      userRepository: userRepository,
-      logger: logger,
-    );
-    _controller = TextEditingController(text: widget.initialText);
-    _controller.addListener(_isValidPhoneNumber);
+    widget.controller.addListener(_isValidPhoneNumber);
   }
 
   @override
   void dispose() {
-    _phoneNumberBloc.close();
-    _controller.removeListener(_isValidPhoneNumber);
     _isEnabled.dispose();
-    _controller.dispose();
+    widget.controller.dispose();
     super.dispose();
   }
 
   void _isValidPhoneNumber() {
     if (!_isEnabled.value &&
-        Config.phoneNumber.matchAsPrefix(_controller.text) != null) {
+        PhoneNumberValidator.validatePhoneNumber(widget.controller.text)) {
       _isEnabled.value = true;
     } else if (_isEnabled.value &&
-        Config.phoneNumber.matchAsPrefix(_controller.text) == null) {
+        !PhoneNumberValidator.validatePhoneNumber(widget.controller.text)) {
       _isEnabled.value = false;
     }
   }
+
+  void _verifyPhone() => context.read<PhoneNumberBloc>().add(
+    PhoneNumberEvent.verifyPhone(phoneNumber: widget.controller.text),
+  );
 }
