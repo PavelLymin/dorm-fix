@@ -14,6 +14,7 @@ export 'package:ui_kit/src/components/app_padding.dart';
 export 'package:ui_kit/src/components/grouped_list.dart';
 export 'package:ui_kit/src/components/switch.dart';
 export 'package:ui_kit/src/components/bottom_sheet.dart';
+export 'package:ui_kit/src/components/choice_options.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

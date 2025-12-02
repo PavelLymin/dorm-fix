@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-
 import '../../home.dart';
 import 'carousel_indecator.dart';
 

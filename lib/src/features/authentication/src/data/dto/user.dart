@@ -51,12 +51,21 @@ class UserDto {
   }
 
   factory UserDto.fromJson(Map<String, Object?> json) {
-    return UserDto(
-      uid: json['uid'] as String,
-      displayName: json['display_name'] as String?,
-      photoURL: json['photo_url'] as String?,
-      email: json['email'] as String?,
-      phoneNumber: json['phone_number'] as String?,
-    );
+    if (json case <String, Object?>{
+      'uid': final String uid,
+      'display_name': final String? displayName,
+      'photo_url': final String? photoURL,
+      'email': final String? email,
+      'phone_number': final String? phoneNumber,
+    }) {
+      return UserDto(
+        uid: uid,
+        displayName: displayName,
+        photoURL: photoURL,
+        email: email,
+        phoneNumber: phoneNumber,
+      );
+    }
+    throw ArgumentError('Invalid JSON data for User: $json');
   }
 }

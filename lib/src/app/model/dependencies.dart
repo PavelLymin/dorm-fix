@@ -1,5 +1,4 @@
 import 'package:logger/logger.dart';
-
 import '../../core/rest_client/rest_client.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/home/home.dart';
@@ -22,7 +21,7 @@ class DependencyContainer {
     required this.firebaseUserRepository,
     required this.authButton,
     required this.pinsBloc,
-    required this.specializationRepository,
+    required this.specializationBloc,
   });
 
   final RestClientHttp client;
@@ -47,5 +46,5 @@ class DependencyContainer {
 
   final PinsBloc pinsBloc;
 
-  final ISpecializationRepository specializationRepository;
+  final SpecializationBloc specializationBloc;
 }

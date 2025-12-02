@@ -106,23 +106,13 @@ class _UserDisplayProfile extends StatelessWidget {
 }
 
 mixin _HomeScreenStateMixin on State<HomeScreen> {
-  late SpecializationBloc _specializationBloc;
+  late final SpecializationBloc _specializationBloc;
 
   @override
   void initState() {
     super.initState();
-    _specializationBlocInit();
-  }
-
-  void _specializationBlocInit() {
-    final specializationRepository = DependeciesScope.of(
-      context,
-    ).specializationRepository;
-    final logger = DependeciesScope.of(context).logger;
-    _specializationBloc = SpecializationBloc(
-      specializationRepository: specializationRepository,
-      logger: logger,
-    )..add(SpecializationEvent.getSpecializations());
+    _specializationBloc = DependeciesScope.of(context).specializationBloc
+      ..add(SpecializationEvent.getSpecializations());
   }
 
   @override

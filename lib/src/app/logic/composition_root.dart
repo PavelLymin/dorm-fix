@@ -108,6 +108,11 @@ class CompositionRoot {
       firebaseAuth: firebaseAuth,
     );
 
+    final specializationBloc = SpecializationBloc(
+      specializationRepository: specializationRepository,
+      logger: logger,
+    );
+
     // Search Dormitory
     final searchRepository = DormitoryRepository(client: client);
     final searchBloc = SearchBloc(
@@ -130,7 +135,7 @@ class CompositionRoot {
       userRepository: userRepository,
       firebaseUserRepository: firebaseUserRepository,
       authButton: authButton,
-      specializationRepository: specializationRepository,
+      specializationBloc: specializationBloc,
       pinsBloc: pinsBloc,
     ).create();
   }
@@ -148,7 +153,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.userRepository,
     required this.firebaseUserRepository,
     required this.authButton,
-    required this.specializationRepository,
+    required this.specializationBloc,
     required this.pinsBloc,
   });
 
@@ -174,7 +179,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final PinsBloc pinsBloc;
 
-  final ISpecializationRepository specializationRepository;
+  final SpecializationBloc specializationBloc;
 
   @override
   DependencyContainer create() => DependencyContainer(
@@ -189,7 +194,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     firebaseUserRepository: firebaseUserRepository,
     authButton: authButton,
     pinsBloc: pinsBloc,
-    specializationRepository: specializationRepository,
+    specializationBloc: specializationBloc,
   );
 }
 
