@@ -107,7 +107,6 @@ class AuthRepository implements IAuthRepository {
         verificationId: verificationId,
         smsCode: smsCode,
       );
-
       final userCredential = await _firebaseAuth.signInWithCredential(
         credential,
       );
@@ -132,9 +131,8 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<({AuthenticatedUser user, bool isNewUser})> signInWithGoogle() async {
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
-      final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final googleUser = await GoogleSignIn.instance.authenticate();
+      final googleAuth = googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );

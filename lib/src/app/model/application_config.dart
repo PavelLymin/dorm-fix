@@ -14,7 +14,7 @@ abstract final class Config {
   /// e.g. https://api.domain.tld
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:8080',
+    defaultValue: 'http://localhost:8080',
   );
 
   /// Base url for ws.
@@ -56,12 +56,6 @@ abstract final class Config {
   static const Duration cacheLifetime = Duration(hours: 1);
 
   // --- AUTHENTICATION --- //
-
-  // static const String serverClientId = String.fromEnvironment(
-  //   'SERVER_CLIENT_ID',
-  //   defaultValue:
-  //       '742549062350-340i26mhbip8f29k33t150g8luahejhq.apps.googleusercontent.com',
-  // );
 
   /// Minimum length of password.
   /// e.g. 8

@@ -28,7 +28,7 @@ class DormitoryDto {
     lat: lat,
   );
 
-  static DormitoryDto fromEntity(DormitoryEntity entity) => DormitoryDto(
+  factory DormitoryDto.fromEntity(DormitoryEntity entity) => DormitoryDto(
     id: entity.id,
     number: entity.number,
     name: entity.name,
@@ -46,7 +46,7 @@ class DormitoryDto {
     lat: Value(lat),
   );
 
-  static DormitoryDto fromData(Dormitory data) => DormitoryDto(
+  factory DormitoryDto.fromData(Dormitory data) => DormitoryDto(
     id: data.id,
     number: data.number,
     name: data.name,
@@ -64,12 +64,25 @@ class DormitoryDto {
     'lat': lat,
   };
 
-  static DormitoryDto fromJson(Map<String, Object?> json) => DormitoryDto(
-    id: json['id'] as int,
-    number: json['number'] as int,
-    name: json['name'] as String,
-    address: json['address'] as String,
-    long: json['long'] as double,
-    lat: json['lat'] as double,
-  );
+  factory DormitoryDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'id': int id,
+      'number': int number,
+      'name': String name,
+      'address': String address,
+      'long': double long,
+      'lat': double lat,
+    }) {
+      return DormitoryDto(
+        id: id,
+        number: number,
+        name: name,
+        address: address,
+        long: long,
+        lat: lat,
+      );
+    }
+
+    throw FormatException('Invalid JSON format for DormitoryDto', json);
+  }
 }
