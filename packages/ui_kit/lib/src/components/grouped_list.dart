@@ -1,11 +1,17 @@
 import 'package:ui_kit/ui.dart';
 
 class GroupedListItem {
-  const GroupedListItem({required this.title, required this.data, this.onTap});
+  const GroupedListItem({
+    required this.title,
+    this.data,
+    this.content,
+    this.onTap,
+  });
 
   final UiText title;
-  final UiText data;
-  final Function()? onTap;
+  final UiText? data;
+  final Widget? content;
+  final void Function()? onTap;
 }
 
 class GroupedList extends StatelessWidget {
@@ -32,15 +38,13 @@ class GroupedList extends StatelessWidget {
       final isFirst = index == 0;
       final isLast = index == items.length - 1;
       return _PersonalDataCard(
-        title: item.title,
-        data: item.data,
+        item: item,
         itemPadding: itemPadding,
         color: color,
         borderRadius: .vertical(
           top: isFirst ? borderRadius : .zero,
           bottom: isLast ? borderRadius : .zero,
         ),
-        onTap: item.onTap,
       );
     },
     separatorBuilder: (_, _) => const Divider(height: 0),
@@ -50,19 +54,15 @@ class GroupedList extends StatelessWidget {
 
 class _PersonalDataCard extends StatelessWidget {
   const _PersonalDataCard({
-    required this.title,
-    required this.data,
+    required this.item,
     required this.itemPadding,
     required this.color,
     this.borderRadius = const BorderRadius.all(Radius.zero),
-    this.onTap,
   });
 
-  final UiText title;
-  final UiText data;
+  final GroupedListItem item;
   final EdgeInsets itemPadding;
   final BorderRadius borderRadius;
-  final Function()? onTap;
   final Color? color;
 
   @override
@@ -71,15 +71,25 @@ class _PersonalDataCard extends StatelessWidget {
     borderRadius: borderRadius,
     child: InkWell(
       borderRadius: borderRadius,
-      onTap: onTap,
-      child: Padding(
-        padding: itemPadding,
-        child: Column(
-          spacing: 4,
-          crossAxisAlignment: .start,
-          mainAxisAlignment: .center,
-          children: [title, data],
-        ),
+      onTap: item.onTap,
+      child: Row(
+        crossAxisAlignment: .center,
+        mainAxisAlignment: .spaceBetween,
+        children: [
+          Padding(
+            padding: itemPadding,
+            child: Column(
+              spacing: 4,
+              crossAxisAlignment: .start,
+              mainAxisAlignment: .center,
+              children: [item.title, item.data ?? const SizedBox.shrink()],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: itemPadding.right),
+            child: item.content ?? const SizedBox.shrink(),
+          ),
+        ],
       ),
     ),
   );

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:ui_kit/ui.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
@@ -13,6 +15,7 @@ void main() async {
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      Intl.defaultLocale = 'ru_RU';
       final dependency = await CompositionRoot(logger: logger).compose();
       runApp(
         DependeciesScope(
@@ -77,6 +80,11 @@ class _MainAppState extends State<MainApp> {
         BlocProvider(create: (context) => _profileBloc),
       ],
       child: MaterialApp.router(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,
         theme: darkTheme,

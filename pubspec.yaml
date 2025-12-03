@@ -11,6 +11,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  # UI Kit
+  ui_kit:
+    path: packages/ui_kit
   # BLoC
   flutter_bloc: ^9.1.1
   bloc_concurrency: ^0.3.0
@@ -31,14 +36,14 @@ dependencies:
   web_socket_channel: ^3.0.3
   # MapKit that allows you to use the features of Yandex.Maps
   yandex_mapkit: ^4.2.1
-
-  ui_kit:
-    path: packages/ui_kit
+  # http clients  
   http: ^1.5.0
   cronet_http: ^1.6.0
   cupertino_http: ^2.3.0
+  # local storage
   shared_preferences: ^2.5.3
-  google_sign_in_android: ^7.2.6
+  # Internationalization and localization support
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
