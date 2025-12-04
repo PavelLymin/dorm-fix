@@ -2,11 +2,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../app/widget/dependencies_scope.dart';
 import '../../../home/home.dart';
+import '../../request.dart';
 
 class ChoosingService extends StatefulWidget {
-  const ChoosingService({super.key, this.onTap});
-
-  final void Function(int id)? onTap;
+  const ChoosingService({super.key});
 
   @override
   State<ChoosingService> createState() => _ChoosingServiceState();
@@ -52,10 +51,17 @@ class _SpecializationOptions extends StatefulWidget {
 class _SpecializationOptionsState extends State<_SpecializationOptions> {
   final ValueNotifier<int> _selectedIndex = ValueNotifier<int>(0);
   late final List<ChoiceItem> options;
+  late RequestFormBloc _requestFormBloc;
 
   @override
   void initState() {
     super.initState();
+    _requestFormBloc = context.read<RequestFormBloc>();
+    _requestFormBloc.add(
+      RequestFormEvent.setRequestFormValue(
+        masterId: widget.specialization.first.id,
+      ),
+    );
     options = widget.specialization
         .map((specialization) => ChoiceItem(title: specialization.title))
         .toList();
@@ -78,6 +84,11 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
         barColor: colorPalette.secondary,
         selectedColor: colorPalette.primary,
         onChange: (index) {
+          _requestFormBloc.add(
+            RequestFormEvent.setRequestFormValue(
+              masterId: widget.specialization.first.id,
+            ),
+          );
           setState(() {
             _selectedIndex.value = index;
           });

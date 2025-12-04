@@ -1,8 +1,10 @@
-import 'package:dorm_fix/src/features/request/src/widget/photo_picker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../request.dart';
 import 'choosing_service.dart';
 import 'date_time_picker.dart';
 import 'description_text.dart';
+import 'photo_picker.dart';
 
 class RequestScreen extends StatefulWidget {
   const RequestScreen({super.key});
@@ -13,17 +15,30 @@ class RequestScreen extends StatefulWidget {
 
 class _RequestScreenState extends State<RequestScreen> {
   final _descriptionController = TextEditingController();
-  // int _choosenMasterId = -1;
+  late RequestFormBloc _requestFormBloc;
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-    child: Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
+  void initState() {
+    super.initState();
+    _requestFormBloc = RequestFormBloc();
+  }
+
+  @override
+  void dispose() {
+    _requestFormBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => BlocProvider(
+    create: (context) => _requestFormBloc,
+    child: SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           child: Padding(
             padding: AppPadding.symmetricIncrement(horizontal: 3, vertical: 2),
             child: Column(
-              crossAxisAlignment: .start,
+              crossAxisAlignment: .stretch,
               children: [
                 UiText.headlineLarge(
                   'Создание заявки',
@@ -34,7 +49,7 @@ class _RequestScreenState extends State<RequestScreen> {
                 const SizedBox(height: 80),
                 UiText.titleMedium('Выберите мастера'),
                 const SizedBox(height: 8),
-                ChoosingService(onTap: (id) => {}),
+                const ChoosingService(),
                 const SizedBox(height: 16),
                 UiText.titleMedium('Укажите дату и время'),
                 const SizedBox(height: 8),
@@ -50,7 +65,6 @@ class _RequestScreenState extends State<RequestScreen> {
                 const SizedBox(height: 24),
                 SizedBox(
                   height: 48,
-                  width: .infinity,
                   child: UiButton.filledPrimary(
                     onPressed: () {},
                     label: UiText.titleMedium('Создать заявку'),
