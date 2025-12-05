@@ -21,8 +21,6 @@ dependencies:
   bloc_concurrency: ^0.3.0
   # Route
   auto_route: ^10.1.2
-  # Api
-  dio: ^5.9.0
   # Firebase
   firebase_auth: ^6.1.1
   firebase_core: ^4.2.1
@@ -32,9 +30,7 @@ dependencies:
   logger: ^2.6.2
   # RX
   rxdart: ^0.28.0
-  # WS
-  web_socket_channel: ^3.0.3
-  # MapKit that allows you to use the features of Yandex.Maps
+  # Yandex MapKit
   yandex_mapkit: ^4.2.1
   # http clients  
   http: ^1.5.0
@@ -44,6 +40,10 @@ dependencies:
   shared_preferences: ^2.5.3
   # Internationalization and localization support
   intl: ^0.20.2
+  # image picker
+  image_picker: ^1.2.1
+  video_player: ^2.10.1
+  mime: ^2.0.0
 
 dev_dependencies:
   flutter_test:

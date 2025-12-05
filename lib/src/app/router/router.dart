@@ -27,9 +27,12 @@ class AppRouter extends RootStackRouter {
       name: 'Root',
       builder: (_, _) => const RootScreen(),
       children: [
-        NamedRouteDef(name: 'Home', builder: (_, _) => const HomeScreen()),
         NamedRouteDef(
           initial: true,
+          name: 'Home',
+          builder: (_, _) => const HomeScreen(),
+        ),
+        NamedRouteDef(
           name: 'Request',
           builder: (_, _) => const RequestScreen(),
         ),

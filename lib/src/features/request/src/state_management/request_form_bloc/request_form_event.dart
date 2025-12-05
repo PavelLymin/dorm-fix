@@ -9,6 +9,7 @@ sealed class RequestFormEvent {
     int? startTime,
     int? endTime,
     String description,
+    List<XFile>? imageFileList,
   }) = _SetRequestFormValue;
 }
 
@@ -19,6 +20,7 @@ final class _SetRequestFormValue extends RequestFormEvent {
     this.startTime,
     this.endTime,
     this.description = '',
+    this.imageFileList,
   });
 
   final int? masterId;
@@ -26,4 +28,5 @@ final class _SetRequestFormValue extends RequestFormEvent {
   final int? startTime;
   final int? endTime;
   final String description;
+  final List<XFile>? imageFileList;
 }
