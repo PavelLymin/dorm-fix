@@ -34,15 +34,16 @@ class _DateTimePickerState extends State<DateTimePicker> {
               lastDate: DateTime.now().add(const Duration(days: 365)),
               locale: const Locale('ru'),
             );
-            _requestFormBloc.add(
-              RequestFormEvent.setRequestFormValue(date: date),
-            );
+            _requestFormBloc.add(.upadteRequestForm(date: date));
           },
           content: _ContentDateTime(
             color: colorPalette.secondaryButton,
             dateOrTime: BlocBuilder<RequestFormBloc, RequestFormState>(
-              buildWhen: (previous, current) => previous.date != current.date,
-              builder: (context, state) => UiText.bodyMedium(state.date),
+              buildWhen: (previous, current) =>
+                  previous.currentFormModel.displayDate !=
+                  current.currentFormModel.displayDate,
+              builder: (context, state) =>
+                  UiText.bodyMedium(state.currentFormModel.displayDate),
             ),
           ),
         ),
@@ -58,7 +59,12 @@ class _DateTimePickerState extends State<DateTimePicker> {
           content: _ContentDateTime(
             color: colorPalette.secondaryButton,
             dateOrTime: BlocBuilder<RequestFormBloc, RequestFormState>(
-              builder: (context, state) => UiText.bodyMedium(state.time),
+              buildWhen: (previous, current) =>
+                  previous.currentFormModel.displayTime !=
+                  current.currentFormModel.displayTime,
+              builder: (context, state) {
+                return UiText.bodyMedium(state.currentFormModel.displayTime);
+              },
             ),
           ),
         ),

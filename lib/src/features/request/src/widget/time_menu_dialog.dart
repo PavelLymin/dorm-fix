@@ -23,9 +23,15 @@ class _TimeMenuDialogState extends State<TimeMenuDialog>
           onPressed: () => context.pop(),
           label: UiText.bodyMedium('Отмена'),
         ),
-        UiButton.filledPrimary(
-          onPressed: _onPressedButton,
-          label: UiText.bodyMedium('Далее'),
+        ValueListenableBuilder(
+          valueListenable: _enabledButton,
+          builder: (_, value, _) {
+            return UiButton.filledPrimary(
+              enabled: value,
+              onPressed: _onPressedButton,
+              label: UiText.bodyMedium('Далее'),
+            );
+          },
         ),
       ],
       content: Row(
@@ -35,23 +41,24 @@ class _TimeMenuDialogState extends State<TimeMenuDialog>
           Expanded(
             child: _TimeDropdownMenu(
               controller: _startTimeController,
-              onSelected: (value) => setState(() {
-                _onStartSelected(value);
-              }),
-              menuEntries: menuEntriesFrom,
+              onSelected: _onStartSelected,
+              menuEntries: _startTimes,
             ),
           ),
           const SizedBox(width: 8),
           UiText.bodyLarge('до'),
           const SizedBox(width: 8),
           Expanded(
-            child: _TimeDropdownMenu(
-              enabled: _isEnabled,
-              controller: _endTimeController,
-              onSelected: (value) {
-                _endTimeController.text = value.toString();
+            child: ValueListenableBuilder(
+              valueListenable: _enabledTimeMenu,
+              builder: (_, value, _) {
+                return _TimeDropdownMenu(
+                  enabled: value,
+                  controller: _endTimeController,
+                  onSelected: _onEndSelected,
+                  menuEntries: _endTimes,
+                );
               },
-              menuEntries: menuEntriesTo,
             ),
           ),
         ],
@@ -61,18 +68,17 @@ class _TimeMenuDialogState extends State<TimeMenuDialog>
 }
 
 mixin _TimeMenuDialogStateMixin on State<TimeMenuDialog> {
-  List<DropdownMenuEntry<int>> menuEntriesTo = [];
-  late final List<DropdownMenuEntry<int>> menuEntriesFrom;
-  late final RequestFormBloc _requestFormBloc;
   final _startTimeController = TextEditingController();
   final _endTimeController = TextEditingController();
-  bool _isEnabled = false;
+  final ValueNotifier<bool> _enabledTimeMenu = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _enabledButton = ValueNotifier<bool>(false);
+  List<DropdownMenuEntry<int>> _endTimes = [];
+  late final List<DropdownMenuEntry<int>> _startTimes;
 
   @override
   void initState() {
     super.initState();
-    _requestFormBloc = context.read<RequestFormBloc>();
-    menuEntriesFrom = _createMenuEntries();
+    _startTimes = _createMenuEntries();
   }
 
   @override
@@ -84,40 +90,33 @@ mixin _TimeMenuDialogStateMixin on State<TimeMenuDialog> {
 
   List<DropdownMenuEntry<int>> _createMenuEntries([
     int start = WorkingTime.startWorkHour,
-  ]) {
-    final entries = WorkingTime.createWorkingHours(start)
-        .map(
-          (hour) => DropdownMenuEntry<int>(label: hour.toString(), value: hour),
-        )
-        .toList();
-    return entries;
-  }
+  ]) => WorkingTime.createWorkingHours(start)
+      .map((hour) => DropdownMenuEntry(label: hour.toString(), value: hour))
+      .toList();
 
   void _onStartSelected(int? value) {
-    _endTimeController.clear();
     if (value != null) {
-      _isEnabled = true;
-      menuEntriesTo = _createMenuEntries(value + 1);
-      _startTimeController.text = value.toString();
-    } else {
-      _isEnabled = false;
-      menuEntriesTo = [];
+      _endTimeController.clear();
+      _endTimes = _createMenuEntries(value + 1);
+      _enabledTimeMenu.value = true;
+      _enabledButton.value = false;
+    }
+  }
+
+  void _onEndSelected(int? value) {
+    if (value != null) {
+      _enabledButton.value = true;
     }
   }
 
   void _onPressedButton() {
-    if (WorkingTime.isValidate(
-      _startTimeController.text,
-      _endTimeController.text,
-    )) {
-      _requestFormBloc.add(
-        RequestFormEvent.setRequestFormValue(
-          startTime: int.parse(_startTimeController.text),
-          endTime: int.parse(_endTimeController.text),
-        ),
-      );
-      context.pop();
-    }
+    context.read<RequestFormBloc>().add(
+      .upadteRequestForm(
+        startTime: _startTimeController.text,
+        endTime: _endTimeController.text,
+      ),
+    );
+    context.pop();
   }
 }
 
@@ -142,7 +141,7 @@ class _TimeDropdownMenu extends StatelessWidget {
       controller: controller,
       enabled: enabled,
       onSelected: onSelected,
-      expandedInsets: const EdgeInsets.all(0),
+      expandedInsets: const .all(0),
       dropdownMenuEntries: menuEntries,
       textAlign: .center,
       textStyle: appTypography.bodyLarge,

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:ui_kit/ui.dart';
 import 'button_previews.dart';
+import 'check_box_preview.dart';
 import 'choice_options_preview.dart';
 import 'color_palette_preview.dart';
 import 'grouped_list_preview.dart';
@@ -129,6 +130,13 @@ class UiPreview extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const ChoiceOptionsPreview(),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.center,
+                  child: UiText.titleLarge('CheckBox'),
+                ),
+                const SizedBox(height: 8),
+                const CheckBoxPreview(),
               ],
             ),
           ),

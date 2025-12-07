@@ -15,6 +15,7 @@ export 'package:ui_kit/src/components/grouped_list.dart';
 export 'package:ui_kit/src/components/switch.dart';
 export 'package:ui_kit/src/components/bottom_sheet.dart';
 export 'package:ui_kit/src/components/choice_options.dart';
+export 'package:ui_kit/src/components/check_box.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

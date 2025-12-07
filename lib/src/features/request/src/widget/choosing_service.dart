@@ -57,11 +57,8 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
   void initState() {
     super.initState();
     _requestFormBloc = context.read<RequestFormBloc>();
-    _requestFormBloc.add(
-      RequestFormEvent.setRequestFormValue(
-        masterId: widget.specialization.first.id,
-      ),
-    );
+    final id = widget.specialization.first.id;
+    _requestFormBloc.add(.upadteRequestForm(specializationId: id));
     options = widget.specialization
         .map((specialization) => ChoiceItem(title: specialization.title))
         .toList();
@@ -85,13 +82,11 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
         selectedColor: colorPalette.primary,
         onChange: (index) {
           _requestFormBloc.add(
-            RequestFormEvent.setRequestFormValue(
-              masterId: widget.specialization.first.id,
+            .upadteRequestForm(
+              specializationId: widget.specialization[index].id,
             ),
           );
-          setState(() {
-            _selectedIndex.value = index;
-          });
+          _selectedIndex.value = index;
         },
       ),
     );

@@ -1,20 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui.dart';
-
 import '../../request.dart';
 
-class PhotoPicker extends StatefulWidget {
+class PhotoPicker extends StatelessWidget {
   const PhotoPicker({super.key});
 
-  @override
-  State<PhotoPicker> createState() => _PhotoPickerState();
-}
-
-class _PhotoPickerState extends State<PhotoPicker>
-    with _CameraPickerStateMixin {
   @override
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
@@ -24,41 +16,18 @@ class _PhotoPickerState extends State<PhotoPicker>
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: colorPalette.secondary,
-          borderRadius: .circular(16),
+          borderRadius: const .all(.circular(16)),
         ),
         child: BlocBuilder<RequestFormBloc, RequestFormState>(
           buildWhen: (previous, current) =>
-              previous.imageFileList.length != current.imageFileList.length,
+              previous.currentFormModel.imagePaths.length !=
+              current.currentFormModel.imagePaths.length,
           builder: (context, state) {
-            final images = state.imageFileList;
+            final images = state.currentFormModel.imagePaths;
             if (images.isEmpty) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  UiButton.icon(
-                    onPressed: _loadMedia,
-                    icon: const Icon(Icons.photo, size: 32),
-                    style: ButtonStyle(
-                      backgroundColor: .all(colorPalette.secondary),
-                    ),
-                  ),
-                  UiText.labelMedium('Фото'),
-                ],
-              );
+              return const _EmptyListImages();
             } else {
-              return Padding(
-                padding: AppPadding.verticalIncrement(increment: 2),
-                child: ListView.builder(
-                  scrollDirection: .horizontal,
-                  itemCount: images.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: AppPadding.horizontal,
-                      child: Image.file(File(images[index].path)),
-                    );
-                  },
-                ),
-              );
+              return _ListImages(imagePaths: images);
             }
           },
         ),
@@ -67,27 +36,73 @@ class _PhotoPickerState extends State<PhotoPicker>
   }
 }
 
-mixin _CameraPickerStateMixin on State<PhotoPicker> {
-  late final RequestFormBloc _requestFormBloc;
-  late final ImagePicker _picker;
-  late final IImageRepository<XFile> _imageRepository;
+class _EmptyListImages extends StatelessWidget {
+  const _EmptyListImages();
 
   @override
-  void initState() {
-    super.initState();
-    _requestFormBloc = context.read<RequestFormBloc>();
-    _picker = ImagePicker();
-    _imageRepository = ImageRepositoryImpl(picker: _picker);
+  Widget build(BuildContext context) {
+    final colorPalette = Theme.of(context).colorPalette;
+    return Column(
+      mainAxisAlignment: .center,
+      children: [
+        UiButton.icon(
+          onPressed: () => context.read<RequestFormBloc>().add(.addImages()),
+          icon: const Icon(Icons.photo, size: 32),
+          style: ButtonStyle(backgroundColor: .all(colorPalette.secondary)),
+        ),
+        UiText.labelMedium('Фото'),
+      ],
+    );
   }
+}
 
-  Future<void> _loadMedia() async {
-    if (context.mounted) {
-      try {
-        final images = await _imageRepository.loadImages();
-        _requestFormBloc.add(
-          RequestFormEvent.setRequestFormValue(imageFileList: images),
-        );
-      } catch (_) {}
-    }
-  }
+class _ListImages extends StatelessWidget {
+  const _ListImages({required this.imagePaths});
+
+  final List<String> imagePaths;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: AppPadding.verticalIncrement(increment: 2),
+    child: ListView.builder(
+      scrollDirection: .horizontal,
+      itemCount: imagePaths.length,
+      itemBuilder: (context, index) {
+        final path = imagePaths[index];
+        return _ImageWrapper(path: path, index: index);
+      },
+    ),
+  );
+}
+
+class _ImageWrapper extends StatelessWidget {
+  const _ImageWrapper({required this.path, required this.index});
+
+  final String path;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: AppPadding.horizontal,
+    child: Stack(
+      children: [
+        ClipRRect(
+          borderRadius: const .all(.circular(8)),
+          child: Image.file(File(path)),
+        ),
+        Padding(
+          padding: AppPadding.allSmall,
+          child: UiButton.icon(
+            onPressed: () =>
+                context.read<RequestFormBloc>().add(.deleteImage(index: index)),
+            icon: const Icon(Icons.clear, size: 16),
+            style: ButtonStyle(
+              padding: const WidgetStatePropertyAll<EdgeInsets>(.all(2.0)),
+              minimumSize: const WidgetStatePropertyAll<Size>(.square(8.0)),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }

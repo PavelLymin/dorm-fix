@@ -1,22 +1,17 @@
 import 'package:ui_kit/ui.dart';
 
-class UiSwitch extends StatefulWidget {
+class UiSwitch extends StatelessWidget {
   const UiSwitch({super.key, required this.value, this.onChanged});
 
   final bool value;
   final Function(bool)? onChanged;
 
   @override
-  State<UiSwitch> createState() => _UiSwitchState();
-}
-
-class _UiSwitchState extends State<UiSwitch> {
-  @override
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
     return Switch(
-      value: widget.value,
-      onChanged: widget.onChanged,
+      value: value,
+      onChanged: onChanged,
       thumbColor: WidgetStateColor.resolveWith((Set<WidgetState> states) {
         return colorPalette.accent;
       }),
