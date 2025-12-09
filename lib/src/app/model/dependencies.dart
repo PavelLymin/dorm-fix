@@ -1,4 +1,5 @@
 import 'package:dorm_fix/src/features/room/state_management/room_search_bloc/room_search_bloc_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 import '../../core/rest_client/rest_client.dart';
 import '../../features/authentication/authentication.dart';
@@ -11,6 +12,7 @@ import '../router/router.dart';
 
 class DependencyContainer {
   const DependencyContainer({
+    required this.firebaseAuth,
     required this.client,
     required this.router,
     required this.logger,
@@ -25,6 +27,8 @@ class DependencyContainer {
     required this.specializationBloc,
     required this.roomSearcBloc,
   });
+
+  final FirebaseAuth firebaseAuth;
 
   final RestClientHttp client;
 

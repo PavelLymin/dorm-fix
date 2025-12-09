@@ -53,6 +53,7 @@ void main(List<String> args) async {
                 .add(dependency.dormitoryRouter.handler)
                 .add(dependency.specializationRouter.handler)
                 .add(dependency.roomRouter.handler)
+                .add(dependency.requestRouter.handler)
                 .handler,
           );
 

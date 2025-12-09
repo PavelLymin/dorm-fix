@@ -21,7 +21,7 @@ void main() async {
           child: SettingsScope(
             settingsContainer: dependency.settingsContainer,
             child: WindowSizeScope(
-              updateMode: WindowSizeUpdateMode.categoriesOnly,
+              updateMode: .categoriesOnly,
               child: SettingsBuilder(
                 builder: (context, settings) => MainApp(settings: settings),
               ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:backend/src/server/router/room.dart';
+import 'package:backend/src/server/router/request.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
 import '../../core/database/database.dart';
@@ -8,6 +9,7 @@ import '../../core/rest_api/src/rest_api.dart';
 import '../../server/data/repository/dormitory_repository.dart';
 import '../../server/data/repository/master_repository.dart';
 import '../../server/data/repository/room_repository.dart';
+import '../../server/data/repository/request_repository.dart';
 import '../../server/data/repository/specialization_repository.dart';
 import '../../server/data/repository/student_repository.dart';
 import '../../server/data/repository/user_repository.dart';
@@ -81,6 +83,13 @@ class CompositionRoot {
       masterRepository: masterRepository,
     );
 
+    // Request
+    final requestRepository = RequestRepositoryImpl(database: database);
+    final requestRouter = RequestRouter(
+      requestRepository: requestRepository,
+      restApi: restApi,
+    );
+
     // Dormitory
     final dormitoryRepository = DormitoryRepository(database: database);
     final dormitoryRouter = DormitoryRouter(
@@ -110,6 +119,7 @@ class CompositionRoot {
       restApi: restApi,
       database: database,
       userRouter: userRouter,
+      requestRouter: requestRouter,
       profileRouter: profileRouter,
       studentRouter: studentRouter,
       dormitoryRouter: dormitoryRouter,
@@ -126,6 +136,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.restApi,
     required this.database,
     required this.userRouter,
+    required this.requestRouter,
     required this.profileRouter,
     required this.studentRouter,
     required this.dormitoryRouter,
@@ -142,6 +153,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final Database database;
 
   final UserRouter userRouter;
+
+  final RequestRouter requestRouter;
 
   final ProfileRouter profileRouter;
 
@@ -160,6 +173,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     restApi: restApi,
     database: database,
     userRouter: userRouter,
+    requestRouter: requestRouter,
     profileRouter: profileRouter,
     studentRouter: studentRouter,
     dormitoryRouter: dormitoryRouter,

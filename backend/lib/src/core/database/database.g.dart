@@ -2194,6 +2194,919 @@ class MastersCompanion extends UpdateCompanion<Master> {
   }
 }
 
+class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RequestsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _uidMeta = const VerificationMeta('uid');
+  @override
+  late final GeneratedColumn<String> uid = GeneratedColumn<String>(
+    'uid',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES users (uid)',
+    ),
+  );
+  static const VerificationMeta _specializationIdMeta = const VerificationMeta(
+    'specializationId',
+  );
+  @override
+  late final GeneratedColumn<int> specializationId = GeneratedColumn<int>(
+    'specialization_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES specializations (id)',
+    ),
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _priorityMeta = const VerificationMeta(
+    'priority',
+  );
+  @override
+  late final GeneratedColumn<String> priority = GeneratedColumn<String>(
+    'priority',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _studentAbsentMeta = const VerificationMeta(
+    'studentAbsent',
+  );
+  @override
+  late final GeneratedColumn<bool> studentAbsent = GeneratedColumn<bool>(
+    'student_absent',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("student_absent" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startTimeMeta = const VerificationMeta(
+    'startTime',
+  );
+  @override
+  late final GeneratedColumn<int> startTime = GeneratedColumn<int>(
+    'start_time',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endTimeMeta = const VerificationMeta(
+    'endTime',
+  );
+  @override
+  late final GeneratedColumn<int> endTime = GeneratedColumn<int>(
+    'end_time',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    uid,
+    specializationId,
+    description,
+    priority,
+    status,
+    studentAbsent,
+    date,
+    startTime,
+    endTime,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'requests';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Request> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('uid')) {
+      context.handle(
+        _uidMeta,
+        uid.isAcceptableOrUnknown(data['uid']!, _uidMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_uidMeta);
+    }
+    if (data.containsKey('specialization_id')) {
+      context.handle(
+        _specializationIdMeta,
+        specializationId.isAcceptableOrUnknown(
+          data['specialization_id']!,
+          _specializationIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_specializationIdMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('priority')) {
+      context.handle(
+        _priorityMeta,
+        priority.isAcceptableOrUnknown(data['priority']!, _priorityMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_priorityMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('student_absent')) {
+      context.handle(
+        _studentAbsentMeta,
+        studentAbsent.isAcceptableOrUnknown(
+          data['student_absent']!,
+          _studentAbsentMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_studentAbsentMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('start_time')) {
+      context.handle(
+        _startTimeMeta,
+        startTime.isAcceptableOrUnknown(data['start_time']!, _startTimeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startTimeMeta);
+    }
+    if (data.containsKey('end_time')) {
+      context.handle(
+        _endTimeMeta,
+        endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_endTimeMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Request map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Request(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      uid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}uid'],
+      )!,
+      specializationId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}specialization_id'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      )!,
+      priority: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}priority'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      studentAbsent: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}student_absent'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+      startTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}start_time'],
+      )!,
+      endTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}end_time'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $RequestsTable createAlias(String alias) {
+    return $RequestsTable(attachedDatabase, alias);
+  }
+}
+
+class Request extends DataClass implements Insertable<Request> {
+  final int id;
+  final String uid;
+  final int specializationId;
+  final String description;
+  final String priority;
+  final String status;
+  final bool studentAbsent;
+  final DateTime date;
+  final int startTime;
+  final int endTime;
+  final DateTime createdAt;
+  const Request({
+    required this.id,
+    required this.uid,
+    required this.specializationId,
+    required this.description,
+    required this.priority,
+    required this.status,
+    required this.studentAbsent,
+    required this.date,
+    required this.startTime,
+    required this.endTime,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['uid'] = Variable<String>(uid);
+    map['specialization_id'] = Variable<int>(specializationId);
+    map['description'] = Variable<String>(description);
+    map['priority'] = Variable<String>(priority);
+    map['status'] = Variable<String>(status);
+    map['student_absent'] = Variable<bool>(studentAbsent);
+    map['date'] = Variable<DateTime>(date);
+    map['start_time'] = Variable<int>(startTime);
+    map['end_time'] = Variable<int>(endTime);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  RequestsCompanion toCompanion(bool nullToAbsent) {
+    return RequestsCompanion(
+      id: Value(id),
+      uid: Value(uid),
+      specializationId: Value(specializationId),
+      description: Value(description),
+      priority: Value(priority),
+      status: Value(status),
+      studentAbsent: Value(studentAbsent),
+      date: Value(date),
+      startTime: Value(startTime),
+      endTime: Value(endTime),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory Request.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Request(
+      id: serializer.fromJson<int>(json['id']),
+      uid: serializer.fromJson<String>(json['uid']),
+      specializationId: serializer.fromJson<int>(json['specializationId']),
+      description: serializer.fromJson<String>(json['description']),
+      priority: serializer.fromJson<String>(json['priority']),
+      status: serializer.fromJson<String>(json['status']),
+      studentAbsent: serializer.fromJson<bool>(json['studentAbsent']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      startTime: serializer.fromJson<int>(json['startTime']),
+      endTime: serializer.fromJson<int>(json['endTime']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'uid': serializer.toJson<String>(uid),
+      'specializationId': serializer.toJson<int>(specializationId),
+      'description': serializer.toJson<String>(description),
+      'priority': serializer.toJson<String>(priority),
+      'status': serializer.toJson<String>(status),
+      'studentAbsent': serializer.toJson<bool>(studentAbsent),
+      'date': serializer.toJson<DateTime>(date),
+      'startTime': serializer.toJson<int>(startTime),
+      'endTime': serializer.toJson<int>(endTime),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  Request copyWith({
+    int? id,
+    String? uid,
+    int? specializationId,
+    String? description,
+    String? priority,
+    String? status,
+    bool? studentAbsent,
+    DateTime? date,
+    int? startTime,
+    int? endTime,
+    DateTime? createdAt,
+  }) => Request(
+    id: id ?? this.id,
+    uid: uid ?? this.uid,
+    specializationId: specializationId ?? this.specializationId,
+    description: description ?? this.description,
+    priority: priority ?? this.priority,
+    status: status ?? this.status,
+    studentAbsent: studentAbsent ?? this.studentAbsent,
+    date: date ?? this.date,
+    startTime: startTime ?? this.startTime,
+    endTime: endTime ?? this.endTime,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  Request copyWithCompanion(RequestsCompanion data) {
+    return Request(
+      id: data.id.present ? data.id.value : this.id,
+      uid: data.uid.present ? data.uid.value : this.uid,
+      specializationId: data.specializationId.present
+          ? data.specializationId.value
+          : this.specializationId,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      priority: data.priority.present ? data.priority.value : this.priority,
+      status: data.status.present ? data.status.value : this.status,
+      studentAbsent: data.studentAbsent.present
+          ? data.studentAbsent.value
+          : this.studentAbsent,
+      date: data.date.present ? data.date.value : this.date,
+      startTime: data.startTime.present ? data.startTime.value : this.startTime,
+      endTime: data.endTime.present ? data.endTime.value : this.endTime,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Request(')
+          ..write('id: $id, ')
+          ..write('uid: $uid, ')
+          ..write('specializationId: $specializationId, ')
+          ..write('description: $description, ')
+          ..write('priority: $priority, ')
+          ..write('status: $status, ')
+          ..write('studentAbsent: $studentAbsent, ')
+          ..write('date: $date, ')
+          ..write('startTime: $startTime, ')
+          ..write('endTime: $endTime, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    uid,
+    specializationId,
+    description,
+    priority,
+    status,
+    studentAbsent,
+    date,
+    startTime,
+    endTime,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Request &&
+          other.id == this.id &&
+          other.uid == this.uid &&
+          other.specializationId == this.specializationId &&
+          other.description == this.description &&
+          other.priority == this.priority &&
+          other.status == this.status &&
+          other.studentAbsent == this.studentAbsent &&
+          other.date == this.date &&
+          other.startTime == this.startTime &&
+          other.endTime == this.endTime &&
+          other.createdAt == this.createdAt);
+}
+
+class RequestsCompanion extends UpdateCompanion<Request> {
+  final Value<int> id;
+  final Value<String> uid;
+  final Value<int> specializationId;
+  final Value<String> description;
+  final Value<String> priority;
+  final Value<String> status;
+  final Value<bool> studentAbsent;
+  final Value<DateTime> date;
+  final Value<int> startTime;
+  final Value<int> endTime;
+  final Value<DateTime> createdAt;
+  const RequestsCompanion({
+    this.id = const Value.absent(),
+    this.uid = const Value.absent(),
+    this.specializationId = const Value.absent(),
+    this.description = const Value.absent(),
+    this.priority = const Value.absent(),
+    this.status = const Value.absent(),
+    this.studentAbsent = const Value.absent(),
+    this.date = const Value.absent(),
+    this.startTime = const Value.absent(),
+    this.endTime = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  RequestsCompanion.insert({
+    this.id = const Value.absent(),
+    required String uid,
+    required int specializationId,
+    required String description,
+    required String priority,
+    required String status,
+    required bool studentAbsent,
+    required DateTime date,
+    required int startTime,
+    required int endTime,
+    this.createdAt = const Value.absent(),
+  }) : uid = Value(uid),
+       specializationId = Value(specializationId),
+       description = Value(description),
+       priority = Value(priority),
+       status = Value(status),
+       studentAbsent = Value(studentAbsent),
+       date = Value(date),
+       startTime = Value(startTime),
+       endTime = Value(endTime);
+  static Insertable<Request> custom({
+    Expression<int>? id,
+    Expression<String>? uid,
+    Expression<int>? specializationId,
+    Expression<String>? description,
+    Expression<String>? priority,
+    Expression<String>? status,
+    Expression<bool>? studentAbsent,
+    Expression<DateTime>? date,
+    Expression<int>? startTime,
+    Expression<int>? endTime,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (uid != null) 'uid': uid,
+      if (specializationId != null) 'specialization_id': specializationId,
+      if (description != null) 'description': description,
+      if (priority != null) 'priority': priority,
+      if (status != null) 'status': status,
+      if (studentAbsent != null) 'student_absent': studentAbsent,
+      if (date != null) 'date': date,
+      if (startTime != null) 'start_time': startTime,
+      if (endTime != null) 'end_time': endTime,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  RequestsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? uid,
+    Value<int>? specializationId,
+    Value<String>? description,
+    Value<String>? priority,
+    Value<String>? status,
+    Value<bool>? studentAbsent,
+    Value<DateTime>? date,
+    Value<int>? startTime,
+    Value<int>? endTime,
+    Value<DateTime>? createdAt,
+  }) {
+    return RequestsCompanion(
+      id: id ?? this.id,
+      uid: uid ?? this.uid,
+      specializationId: specializationId ?? this.specializationId,
+      description: description ?? this.description,
+      priority: priority ?? this.priority,
+      status: status ?? this.status,
+      studentAbsent: studentAbsent ?? this.studentAbsent,
+      date: date ?? this.date,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (uid.present) {
+      map['uid'] = Variable<String>(uid.value);
+    }
+    if (specializationId.present) {
+      map['specialization_id'] = Variable<int>(specializationId.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (priority.present) {
+      map['priority'] = Variable<String>(priority.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (studentAbsent.present) {
+      map['student_absent'] = Variable<bool>(studentAbsent.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (startTime.present) {
+      map['start_time'] = Variable<int>(startTime.value);
+    }
+    if (endTime.present) {
+      map['end_time'] = Variable<int>(endTime.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RequestsCompanion(')
+          ..write('id: $id, ')
+          ..write('uid: $uid, ')
+          ..write('specializationId: $specializationId, ')
+          ..write('description: $description, ')
+          ..write('priority: $priority, ')
+          ..write('status: $status, ')
+          ..write('studentAbsent: $studentAbsent, ')
+          ..write('date: $date, ')
+          ..write('startTime: $startTime, ')
+          ..write('endTime: $endTime, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ProblemsTable extends Problems with TableInfo<$ProblemsTable, Problem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProblemsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _requestIdMeta = const VerificationMeta(
+    'requestId',
+  );
+  @override
+  late final GeneratedColumn<int> requestId = GeneratedColumn<int>(
+    'request_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES requests (id)',
+    ),
+  );
+  static const VerificationMeta _photoPathMeta = const VerificationMeta(
+    'photoPath',
+  );
+  @override
+  late final GeneratedColumn<String> photoPath = GeneratedColumn<String>(
+    'photo_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, requestId, photoPath];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'problems';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Problem> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('request_id')) {
+      context.handle(
+        _requestIdMeta,
+        requestId.isAcceptableOrUnknown(data['request_id']!, _requestIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_requestIdMeta);
+    }
+    if (data.containsKey('photo_path')) {
+      context.handle(
+        _photoPathMeta,
+        photoPath.isAcceptableOrUnknown(data['photo_path']!, _photoPathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_photoPathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Problem map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Problem(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      requestId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}request_id'],
+      )!,
+      photoPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}photo_path'],
+      )!,
+    );
+  }
+
+  @override
+  $ProblemsTable createAlias(String alias) {
+    return $ProblemsTable(attachedDatabase, alias);
+  }
+}
+
+class Problem extends DataClass implements Insertable<Problem> {
+  final int id;
+  final int requestId;
+  final String photoPath;
+  const Problem({
+    required this.id,
+    required this.requestId,
+    required this.photoPath,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['request_id'] = Variable<int>(requestId);
+    map['photo_path'] = Variable<String>(photoPath);
+    return map;
+  }
+
+  ProblemsCompanion toCompanion(bool nullToAbsent) {
+    return ProblemsCompanion(
+      id: Value(id),
+      requestId: Value(requestId),
+      photoPath: Value(photoPath),
+    );
+  }
+
+  factory Problem.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Problem(
+      id: serializer.fromJson<int>(json['id']),
+      requestId: serializer.fromJson<int>(json['requestId']),
+      photoPath: serializer.fromJson<String>(json['photoPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'requestId': serializer.toJson<int>(requestId),
+      'photoPath': serializer.toJson<String>(photoPath),
+    };
+  }
+
+  Problem copyWith({int? id, int? requestId, String? photoPath}) => Problem(
+    id: id ?? this.id,
+    requestId: requestId ?? this.requestId,
+    photoPath: photoPath ?? this.photoPath,
+  );
+  Problem copyWithCompanion(ProblemsCompanion data) {
+    return Problem(
+      id: data.id.present ? data.id.value : this.id,
+      requestId: data.requestId.present ? data.requestId.value : this.requestId,
+      photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Problem(')
+          ..write('id: $id, ')
+          ..write('requestId: $requestId, ')
+          ..write('photoPath: $photoPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, requestId, photoPath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Problem &&
+          other.id == this.id &&
+          other.requestId == this.requestId &&
+          other.photoPath == this.photoPath);
+}
+
+class ProblemsCompanion extends UpdateCompanion<Problem> {
+  final Value<int> id;
+  final Value<int> requestId;
+  final Value<String> photoPath;
+  const ProblemsCompanion({
+    this.id = const Value.absent(),
+    this.requestId = const Value.absent(),
+    this.photoPath = const Value.absent(),
+  });
+  ProblemsCompanion.insert({
+    this.id = const Value.absent(),
+    required int requestId,
+    required String photoPath,
+  }) : requestId = Value(requestId),
+       photoPath = Value(photoPath);
+  static Insertable<Problem> custom({
+    Expression<int>? id,
+    Expression<int>? requestId,
+    Expression<String>? photoPath,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (requestId != null) 'request_id': requestId,
+      if (photoPath != null) 'photo_path': photoPath,
+    });
+  }
+
+  ProblemsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? requestId,
+    Value<String>? photoPath,
+  }) {
+    return ProblemsCompanion(
+      id: id ?? this.id,
+      requestId: requestId ?? this.requestId,
+      photoPath: photoPath ?? this.photoPath,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (requestId.present) {
+      map['request_id'] = Variable<int>(requestId.value);
+    }
+    if (photoPath.present) {
+      map['photo_path'] = Variable<String>(photoPath.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProblemsCompanion(')
+          ..write('id: $id, ')
+          ..write('requestId: $requestId, ')
+          ..write('photoPath: $photoPath')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   $DatabaseManager get managers => $DatabaseManager(this);
@@ -2205,6 +3118,8 @@ abstract class _$Database extends GeneratedDatabase {
     this,
   );
   late final $MastersTable masters = $MastersTable(this);
+  late final $RequestsTable requests = $RequestsTable(this);
+  late final $ProblemsTable problems = $ProblemsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2216,6 +3131,8 @@ abstract class _$Database extends GeneratedDatabase {
     students,
     specializations,
     masters,
+    requests,
+    problems,
   ];
 }
 
@@ -2279,6 +3196,25 @@ final class $$UsersTableReferences
     ).filter((f) => f.uid.uid.sqlEquals($_itemColumn<String>('uid')!));
 
     final cache = $_typedResult.readTableOrNull(_mastersRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$RequestsTable, List<Request>> _requestsRefsTable(
+    _$Database db,
+  ) => MultiTypedResultKey.fromTable(
+    db.requests,
+    aliasName: $_aliasNameGenerator(db.users.uid, db.requests.uid),
+  );
+
+  $$RequestsTableProcessedTableManager get requestsRefs {
+    final manager = $$RequestsTableTableManager(
+      $_db,
+      $_db.requests,
+    ).filter((f) => f.uid.uid.sqlEquals($_itemColumn<String>('uid')!));
+
+    final cache = $_typedResult.readTableOrNull(_requestsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -2369,6 +3305,31 @@ class $$UsersTableFilterComposer extends Composer<_$Database, $UsersTable> {
           }) => $$MastersTableFilterComposer(
             $db: $db,
             $table: $db.masters,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> requestsRefs(
+    Expression<bool> Function($$RequestsTableFilterComposer f) f,
+  ) {
+    final $$RequestsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableFilterComposer(
+            $db: $db,
+            $table: $db.requests,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2505,6 +3466,31 @@ class $$UsersTableAnnotationComposer extends Composer<_$Database, $UsersTable> {
     );
     return f(composer);
   }
+
+  Expression<T> requestsRefs<T extends Object>(
+    Expression<T> Function($$RequestsTableAnnotationComposer a) f,
+  ) {
+    final $$RequestsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.requests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$UsersTableTableManager
@@ -2520,7 +3506,11 @@ class $$UsersTableTableManager
           $$UsersTableUpdateCompanionBuilder,
           (User, $$UsersTableReferences),
           User,
-          PrefetchHooks Function({bool studentsRefs, bool mastersRefs})
+          PrefetchHooks Function({
+            bool studentsRefs,
+            bool mastersRefs,
+            bool requestsRefs,
+          })
         > {
   $$UsersTableTableManager(_$Database db, $UsersTable table)
     : super(
@@ -2579,43 +3569,73 @@ class $$UsersTableTableManager
                     (e.readTable(table), $$UsersTableReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({studentsRefs = false, mastersRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (studentsRefs) db.students,
-                if (mastersRefs) db.masters,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (studentsRefs)
-                    await $_getPrefetchedData<User, $UsersTable, Student>(
-                      currentTable: table,
-                      referencedTable: $$UsersTableReferences
-                          ._studentsRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$UsersTableReferences(db, table, p0).studentsRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.uid == item.uid),
-                      typedResults: items,
-                    ),
-                  if (mastersRefs)
-                    await $_getPrefetchedData<User, $UsersTable, Master>(
-                      currentTable: table,
-                      referencedTable: $$UsersTableReferences._mastersRefsTable(
-                        db,
-                      ),
-                      managerFromTypedResult: (p0) =>
-                          $$UsersTableReferences(db, table, p0).mastersRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.uid == item.uid),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({
+                studentsRefs = false,
+                mastersRefs = false,
+                requestsRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (studentsRefs) db.students,
+                    if (mastersRefs) db.masters,
+                    if (requestsRefs) db.requests,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (studentsRefs)
+                        await $_getPrefetchedData<User, $UsersTable, Student>(
+                          currentTable: table,
+                          referencedTable: $$UsersTableReferences
+                              ._studentsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$UsersTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).studentsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.uid == item.uid,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (mastersRefs)
+                        await $_getPrefetchedData<User, $UsersTable, Master>(
+                          currentTable: table,
+                          referencedTable: $$UsersTableReferences
+                              ._mastersRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$UsersTableReferences(db, table, p0).mastersRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.uid == item.uid,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (requestsRefs)
+                        await $_getPrefetchedData<User, $UsersTable, Request>(
+                          currentTable: table,
+                          referencedTable: $$UsersTableReferences
+                              ._requestsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$UsersTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).requestsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.uid == item.uid,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -2632,7 +3652,11 @@ typedef $$UsersTableProcessedTableManager =
       $$UsersTableUpdateCompanionBuilder,
       (User, $$UsersTableReferences),
       User,
-      PrefetchHooks Function({bool studentsRefs, bool mastersRefs})
+      PrefetchHooks Function({
+        bool studentsRefs,
+        bool mastersRefs,
+        bool requestsRefs,
+      })
     >;
 typedef $$DormitoriesTableCreateCompanionBuilder =
     DormitoriesCompanion Function({
@@ -4047,6 +5071,28 @@ final class $$SpecializationsTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$RequestsTable, List<Request>> _requestsRefsTable(
+    _$Database db,
+  ) => MultiTypedResultKey.fromTable(
+    db.requests,
+    aliasName: $_aliasNameGenerator(
+      db.specializations.id,
+      db.requests.specializationId,
+    ),
+  );
+
+  $$RequestsTableProcessedTableManager get requestsRefs {
+    final manager = $$RequestsTableTableManager(
+      $_db,
+      $_db.requests,
+    ).filter((f) => f.specializationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_requestsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$SpecializationsTableFilterComposer
@@ -4094,6 +5140,31 @@ class $$SpecializationsTableFilterComposer
           }) => $$MastersTableFilterComposer(
             $db: $db,
             $table: $db.masters,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> requestsRefs(
+    Expression<bool> Function($$RequestsTableFilterComposer f) f,
+  ) {
+    final $$RequestsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.specializationId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableFilterComposer(
+            $db: $db,
+            $table: $db.requests,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -4181,6 +5252,31 @@ class $$SpecializationsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> requestsRefs<T extends Object>(
+    Expression<T> Function($$RequestsTableAnnotationComposer a) f,
+  ) {
+    final $$RequestsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.specializationId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.requests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$SpecializationsTableTableManager
@@ -4196,7 +5292,7 @@ class $$SpecializationsTableTableManager
           $$SpecializationsTableUpdateCompanionBuilder,
           (Specialization, $$SpecializationsTableReferences),
           Specialization,
-          PrefetchHooks Function({bool mastersRefs})
+          PrefetchHooks Function({bool mastersRefs, bool requestsRefs})
         > {
   $$SpecializationsTableTableManager(_$Database db, $SpecializationsTable table)
     : super(
@@ -4241,10 +5337,13 @@ class $$SpecializationsTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({mastersRefs = false}) {
+          prefetchHooksCallback: ({mastersRefs = false, requestsRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (mastersRefs) db.masters],
+              explicitlyWatchedTables: [
+                if (mastersRefs) db.masters,
+                if (requestsRefs) db.requests,
+              ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
@@ -4263,6 +5362,27 @@ class $$SpecializationsTableTableManager
                             table,
                             p0,
                           ).mastersRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where(
+                            (e) => e.specializationId == item.id,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (requestsRefs)
+                    await $_getPrefetchedData<
+                      Specialization,
+                      $SpecializationsTable,
+                      Request
+                    >(
+                      currentTable: table,
+                      referencedTable: $$SpecializationsTableReferences
+                          ._requestsRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$SpecializationsTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).requestsRefs,
                       referencedItemsForCurrentItem: (item, referencedItems) =>
                           referencedItems.where(
                             (e) => e.specializationId == item.id,
@@ -4289,7 +5409,7 @@ typedef $$SpecializationsTableProcessedTableManager =
       $$SpecializationsTableUpdateCompanionBuilder,
       (Specialization, $$SpecializationsTableReferences),
       Specialization,
-      PrefetchHooks Function({bool mastersRefs})
+      PrefetchHooks Function({bool mastersRefs, bool requestsRefs})
     >;
 typedef $$MastersTableCreateCompanionBuilder =
     MastersCompanion Function({
@@ -4789,6 +5909,899 @@ typedef $$MastersTableProcessedTableManager =
         bool dormitoryId,
       })
     >;
+typedef $$RequestsTableCreateCompanionBuilder =
+    RequestsCompanion Function({
+      Value<int> id,
+      required String uid,
+      required int specializationId,
+      required String description,
+      required String priority,
+      required String status,
+      required bool studentAbsent,
+      required DateTime date,
+      required int startTime,
+      required int endTime,
+      Value<DateTime> createdAt,
+    });
+typedef $$RequestsTableUpdateCompanionBuilder =
+    RequestsCompanion Function({
+      Value<int> id,
+      Value<String> uid,
+      Value<int> specializationId,
+      Value<String> description,
+      Value<String> priority,
+      Value<String> status,
+      Value<bool> studentAbsent,
+      Value<DateTime> date,
+      Value<int> startTime,
+      Value<int> endTime,
+      Value<DateTime> createdAt,
+    });
+
+final class $$RequestsTableReferences
+    extends BaseReferences<_$Database, $RequestsTable, Request> {
+  $$RequestsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $UsersTable _uidTable(_$Database db) =>
+      db.users.createAlias($_aliasNameGenerator(db.requests.uid, db.users.uid));
+
+  $$UsersTableProcessedTableManager get uid {
+    final $_column = $_itemColumn<String>('uid')!;
+
+    final manager = $$UsersTableTableManager(
+      $_db,
+      $_db.users,
+    ).filter((f) => f.uid.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_uidTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $SpecializationsTable _specializationIdTable(_$Database db) =>
+      db.specializations.createAlias(
+        $_aliasNameGenerator(
+          db.requests.specializationId,
+          db.specializations.id,
+        ),
+      );
+
+  $$SpecializationsTableProcessedTableManager get specializationId {
+    final $_column = $_itemColumn<int>('specialization_id')!;
+
+    final manager = $$SpecializationsTableTableManager(
+      $_db,
+      $_db.specializations,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_specializationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$ProblemsTable, List<Problem>> _problemsRefsTable(
+    _$Database db,
+  ) => MultiTypedResultKey.fromTable(
+    db.problems,
+    aliasName: $_aliasNameGenerator(db.requests.id, db.problems.requestId),
+  );
+
+  $$ProblemsTableProcessedTableManager get problemsRefs {
+    final manager = $$ProblemsTableTableManager(
+      $_db,
+      $_db.problems,
+    ).filter((f) => f.requestId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_problemsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$RequestsTableFilterComposer
+    extends Composer<_$Database, $RequestsTable> {
+  $$RequestsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get priority => $composableBuilder(
+    column: $table.priority,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get studentAbsent => $composableBuilder(
+    column: $table.studentAbsent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get startTime => $composableBuilder(
+    column: $table.startTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get endTime => $composableBuilder(
+    column: $table.endTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$UsersTableFilterComposer get uid {
+    final $$UsersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.users,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UsersTableFilterComposer(
+            $db: $db,
+            $table: $db.users,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$SpecializationsTableFilterComposer get specializationId {
+    final $$SpecializationsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.specializationId,
+      referencedTable: $db.specializations,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SpecializationsTableFilterComposer(
+            $db: $db,
+            $table: $db.specializations,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> problemsRefs(
+    Expression<bool> Function($$ProblemsTableFilterComposer f) f,
+  ) {
+    final $$ProblemsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.problems,
+      getReferencedColumn: (t) => t.requestId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ProblemsTableFilterComposer(
+            $db: $db,
+            $table: $db.problems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$RequestsTableOrderingComposer
+    extends Composer<_$Database, $RequestsTable> {
+  $$RequestsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get priority => $composableBuilder(
+    column: $table.priority,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get studentAbsent => $composableBuilder(
+    column: $table.studentAbsent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get startTime => $composableBuilder(
+    column: $table.startTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get endTime => $composableBuilder(
+    column: $table.endTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$UsersTableOrderingComposer get uid {
+    final $$UsersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.users,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UsersTableOrderingComposer(
+            $db: $db,
+            $table: $db.users,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$SpecializationsTableOrderingComposer get specializationId {
+    final $$SpecializationsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.specializationId,
+      referencedTable: $db.specializations,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SpecializationsTableOrderingComposer(
+            $db: $db,
+            $table: $db.specializations,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RequestsTableAnnotationComposer
+    extends Composer<_$Database, $RequestsTable> {
+  $$RequestsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get priority =>
+      $composableBuilder(column: $table.priority, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<bool> get studentAbsent => $composableBuilder(
+    column: $table.studentAbsent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<int> get startTime =>
+      $composableBuilder(column: $table.startTime, builder: (column) => column);
+
+  GeneratedColumn<int> get endTime =>
+      $composableBuilder(column: $table.endTime, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$UsersTableAnnotationComposer get uid {
+    final $$UsersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.uid,
+      referencedTable: $db.users,
+      getReferencedColumn: (t) => t.uid,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UsersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.users,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$SpecializationsTableAnnotationComposer get specializationId {
+    final $$SpecializationsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.specializationId,
+      referencedTable: $db.specializations,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SpecializationsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.specializations,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> problemsRefs<T extends Object>(
+    Expression<T> Function($$ProblemsTableAnnotationComposer a) f,
+  ) {
+    final $$ProblemsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.problems,
+      getReferencedColumn: (t) => t.requestId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ProblemsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.problems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$RequestsTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $RequestsTable,
+          Request,
+          $$RequestsTableFilterComposer,
+          $$RequestsTableOrderingComposer,
+          $$RequestsTableAnnotationComposer,
+          $$RequestsTableCreateCompanionBuilder,
+          $$RequestsTableUpdateCompanionBuilder,
+          (Request, $$RequestsTableReferences),
+          Request,
+          PrefetchHooks Function({
+            bool uid,
+            bool specializationId,
+            bool problemsRefs,
+          })
+        > {
+  $$RequestsTableTableManager(_$Database db, $RequestsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RequestsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RequestsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RequestsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> uid = const Value.absent(),
+                Value<int> specializationId = const Value.absent(),
+                Value<String> description = const Value.absent(),
+                Value<String> priority = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<bool> studentAbsent = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<int> startTime = const Value.absent(),
+                Value<int> endTime = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => RequestsCompanion(
+                id: id,
+                uid: uid,
+                specializationId: specializationId,
+                description: description,
+                priority: priority,
+                status: status,
+                studentAbsent: studentAbsent,
+                date: date,
+                startTime: startTime,
+                endTime: endTime,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String uid,
+                required int specializationId,
+                required String description,
+                required String priority,
+                required String status,
+                required bool studentAbsent,
+                required DateTime date,
+                required int startTime,
+                required int endTime,
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => RequestsCompanion.insert(
+                id: id,
+                uid: uid,
+                specializationId: specializationId,
+                description: description,
+                priority: priority,
+                status: status,
+                studentAbsent: studentAbsent,
+                date: date,
+                startTime: startTime,
+                endTime: endTime,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$RequestsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({uid = false, specializationId = false, problemsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [if (problemsRefs) db.problems],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (uid) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.uid,
+                                    referencedTable: $$RequestsTableReferences
+                                        ._uidTable(db),
+                                    referencedColumn: $$RequestsTableReferences
+                                        ._uidTable(db)
+                                        .uid,
+                                  )
+                                  as T;
+                        }
+                        if (specializationId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.specializationId,
+                                    referencedTable: $$RequestsTableReferences
+                                        ._specializationIdTable(db),
+                                    referencedColumn: $$RequestsTableReferences
+                                        ._specializationIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (problemsRefs)
+                        await $_getPrefetchedData<
+                          Request,
+                          $RequestsTable,
+                          Problem
+                        >(
+                          currentTable: table,
+                          referencedTable: $$RequestsTableReferences
+                              ._problemsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$RequestsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).problemsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.requestId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$RequestsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $RequestsTable,
+      Request,
+      $$RequestsTableFilterComposer,
+      $$RequestsTableOrderingComposer,
+      $$RequestsTableAnnotationComposer,
+      $$RequestsTableCreateCompanionBuilder,
+      $$RequestsTableUpdateCompanionBuilder,
+      (Request, $$RequestsTableReferences),
+      Request,
+      PrefetchHooks Function({
+        bool uid,
+        bool specializationId,
+        bool problemsRefs,
+      })
+    >;
+typedef $$ProblemsTableCreateCompanionBuilder =
+    ProblemsCompanion Function({
+      Value<int> id,
+      required int requestId,
+      required String photoPath,
+    });
+typedef $$ProblemsTableUpdateCompanionBuilder =
+    ProblemsCompanion Function({
+      Value<int> id,
+      Value<int> requestId,
+      Value<String> photoPath,
+    });
+
+final class $$ProblemsTableReferences
+    extends BaseReferences<_$Database, $ProblemsTable, Problem> {
+  $$ProblemsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $RequestsTable _requestIdTable(_$Database db) => db.requests
+      .createAlias($_aliasNameGenerator(db.problems.requestId, db.requests.id));
+
+  $$RequestsTableProcessedTableManager get requestId {
+    final $_column = $_itemColumn<int>('request_id')!;
+
+    final manager = $$RequestsTableTableManager(
+      $_db,
+      $_db.requests,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_requestIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ProblemsTableFilterComposer
+    extends Composer<_$Database, $ProblemsTable> {
+  $$ProblemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$RequestsTableFilterComposer get requestId {
+    final $$RequestsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.requestId,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableFilterComposer(
+            $db: $db,
+            $table: $db.requests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ProblemsTableOrderingComposer
+    extends Composer<_$Database, $ProblemsTable> {
+  $$ProblemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$RequestsTableOrderingComposer get requestId {
+    final $$RequestsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.requestId,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableOrderingComposer(
+            $db: $db,
+            $table: $db.requests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ProblemsTableAnnotationComposer
+    extends Composer<_$Database, $ProblemsTable> {
+  $$ProblemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get photoPath =>
+      $composableBuilder(column: $table.photoPath, builder: (column) => column);
+
+  $$RequestsTableAnnotationComposer get requestId {
+    final $$RequestsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.requestId,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.requests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ProblemsTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $ProblemsTable,
+          Problem,
+          $$ProblemsTableFilterComposer,
+          $$ProblemsTableOrderingComposer,
+          $$ProblemsTableAnnotationComposer,
+          $$ProblemsTableCreateCompanionBuilder,
+          $$ProblemsTableUpdateCompanionBuilder,
+          (Problem, $$ProblemsTableReferences),
+          Problem,
+          PrefetchHooks Function({bool requestId})
+        > {
+  $$ProblemsTableTableManager(_$Database db, $ProblemsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ProblemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ProblemsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ProblemsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> requestId = const Value.absent(),
+                Value<String> photoPath = const Value.absent(),
+              }) => ProblemsCompanion(
+                id: id,
+                requestId: requestId,
+                photoPath: photoPath,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int requestId,
+                required String photoPath,
+              }) => ProblemsCompanion.insert(
+                id: id,
+                requestId: requestId,
+                photoPath: photoPath,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ProblemsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({requestId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (requestId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.requestId,
+                                referencedTable: $$ProblemsTableReferences
+                                    ._requestIdTable(db),
+                                referencedColumn: $$ProblemsTableReferences
+                                    ._requestIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ProblemsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $ProblemsTable,
+      Problem,
+      $$ProblemsTableFilterComposer,
+      $$ProblemsTableOrderingComposer,
+      $$ProblemsTableAnnotationComposer,
+      $$ProblemsTableCreateCompanionBuilder,
+      $$ProblemsTableUpdateCompanionBuilder,
+      (Problem, $$ProblemsTableReferences),
+      Problem,
+      PrefetchHooks Function({bool requestId})
+    >;
 
 class $DatabaseManager {
   final _$Database _db;
@@ -4805,4 +6818,8 @@ class $DatabaseManager {
       $$SpecializationsTableTableManager(_db, _db.specializations);
   $$MastersTableTableManager get masters =>
       $$MastersTableTableManager(_db, _db.masters);
+  $$RequestsTableTableManager get requests =>
+      $$RequestsTableTableManager(_db, _db.requests);
+  $$ProblemsTableTableManager get problems =>
+      $$ProblemsTableTableManager(_db, _db.problems);
 }

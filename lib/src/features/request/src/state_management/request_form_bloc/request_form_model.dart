@@ -5,6 +5,7 @@ class RequestFormModel {
     this.specializationId,
     this.description = '',
     this.priority = Priority.ordinary,
+    this.status = Status.newRequest,
     this.studentAbsent = false,
     this.date,
     this.startTime,
@@ -15,6 +16,7 @@ class RequestFormModel {
   final int? specializationId;
   final String description;
   final Priority priority;
+  final Status status;
   final bool studentAbsent;
   final DateTime? date;
   final String? startTime;
@@ -35,6 +37,7 @@ class RequestFormModel {
     int? specializationId,
     String? description,
     Priority? priority,
+    Status? status,
     bool? studentAbsent,
     DateTime? date,
     String? startTime,
@@ -44,6 +47,7 @@ class RequestFormModel {
     specializationId: specializationId ?? this.specializationId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
+    status: status ?? this.status,
     studentAbsent: studentAbsent ?? this.studentAbsent,
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
@@ -54,7 +58,7 @@ class RequestFormModel {
   String? messageError;
 
   void checkError() {
-    if (specializationId == null) messageError = 'Выберите мастера';
+    if (specializationId == null) messageError = 'Укажите мастера';
     if (description.trim().isEmpty) messageError = 'Опишите проблему';
     if (date == null) messageError = 'Укажите дату';
     if (startTime == null || endTime == null) messageError = 'Укажите время';
@@ -68,6 +72,7 @@ class RequestFormModel {
       specializationId: specializationId!,
       description: description,
       priority: priority,
+      status: status,
       studentAbsent: studentAbsent,
       date: date!,
       startTime: int.parse(startTime!),

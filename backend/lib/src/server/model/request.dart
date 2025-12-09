@@ -1,32 +1,16 @@
 import 'problem.dart';
 
 enum Priority {
-  ordinary(value: 'Обычный'),
-  high(value: 'Высокий');
+  ordinary(priority: 'Обычный'),
+  high(priority: 'Высокий');
 
-  const Priority({required this.value});
-  final String value;
+  const Priority({required this.priority});
+  final String priority;
 
   factory Priority.fromValue(String priority) {
     return Priority.values.firstWhere(
-      (element) => element.value == priority,
+      (element) => element.priority == priority,
       orElse: () => throw FormatException('Unknown priority: $priority'),
-    );
-  }
-}
-
-enum Status {
-  newRequest(value: 'Создан'),
-  inProgress(value: 'В работе'),
-  completed(value: 'Выполнен');
-
-  const Status({required this.value});
-  final String value;
-
-  factory Status.fromValue(String status) {
-    return Status.values.firstWhere(
-      (element) => element.value == status,
-      orElse: () => throw FormatException('Unknown status: $status'),
     );
   }
 }
@@ -46,7 +30,7 @@ sealed class RequestEntity {
   final int specializationId;
   final String description;
   final Priority priority;
-  final Status status;
+  final String status;
   final bool studentAbsent;
   final DateTime date;
   final int startTime;
@@ -58,7 +42,7 @@ sealed class RequestEntity {
     required final int specializationId,
     required final String description,
     required final Priority priority,
-    required final Status status,
+    required final String status,
     required final bool studentAbsent,
     required final DateTime date,
     required final int startTime,
@@ -71,7 +55,7 @@ sealed class RequestEntity {
     required final int specializationId,
     required final String description,
     required final Priority priority,
-    required final Status status,
+    required final String status,
     required final bool studentAbsent,
     required final DateTime date,
     required final int startTime,
@@ -102,7 +86,7 @@ final class CreatedRequestEntity extends RequestEntity {
     int? specializationId,
     String? description,
     Priority? priority,
-    Status? status,
+    String? status,
     bool? studentAbsent,
     DateTime? date,
     int? startTime,
@@ -187,7 +171,7 @@ final class FullRequestEntity extends RequestEntity {
     int? specializationId,
     String? description,
     Priority? priority,
-    Status? status,
+    String? status,
     bool? studentAbsent,
     DateTime? date,
     int? startTime,

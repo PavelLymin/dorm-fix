@@ -5,7 +5,7 @@ import 'dormitory.dart';
 import 'room.dart';
 import 'user.dart';
 
-abstract class StudentDto {
+sealed class StudentDto {
   const StudentDto();
 
   factory StudentDto.created({
@@ -25,7 +25,7 @@ abstract class StudentDto {
 
   StudentEntity toEntity();
 
-  Map<String, Object> toJson();
+  Map<String, Object?> toJson();
 }
 
 class CreatedStudentDto extends StudentDto {

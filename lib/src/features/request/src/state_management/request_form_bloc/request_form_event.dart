@@ -24,7 +24,10 @@ sealed class RequestFormEvent {
 
   const factory RequestFormEvent.loadImages() = _LoadImagesEvent;
 
-  const factory RequestFormEvent.submitForm() = _SubmitFormEvent;
+  const factory RequestFormEvent.submitForm({
+    required String description,
+    required int specializationId,
+  }) = _SubmitFormEvent;
 
   FutureOr<R> map<R>({
     required RequestFormEventMatch<R, _UpadateRequestFormEvent>
@@ -81,5 +84,11 @@ final class _LoadImagesEvent extends RequestFormEvent {
 }
 
 final class _SubmitFormEvent extends RequestFormEvent {
-  const _SubmitFormEvent();
+  const _SubmitFormEvent({
+    required this.description,
+    required this.specializationId,
+  });
+
+  final String description;
+  final int specializationId;
 }

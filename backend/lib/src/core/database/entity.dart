@@ -49,15 +49,25 @@ class Rooms extends Table {
 
 class Requests extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
-  IntColumn get uid => integer().named('uid').references(Users, #uid)();
-  TextColumn get category => text().named('category')();
+  TextColumn get uid => text().named('uid').references(Users, #uid)();
+  IntColumn get specializationId =>
+      integer().named('specialization_id').references(Specializations, #id)();
   TextColumn get description => text().named('description')();
   TextColumn get priority => text().named('priority')();
   TextColumn get status => text().named('status')();
   BoolColumn get studentAbsent => boolean().named('student_absent')();
-  DateTimeColumn get scheduleTime => dateTime().named('schedule_time')();
+  DateTimeColumn get date => dateTime().named('date')();
+  IntColumn get startTime => integer().named('start_time')();
+  IntColumn get endTime => integer().named('end_time')();
   DateTimeColumn get createdAt =>
       dateTime().named('created_at').withDefault(currentDateAndTime)();
+}
+
+class Problems extends Table {
+  IntColumn get id => integer().named('id').autoIncrement()();
+  IntColumn get requestId =>
+      integer().named('request_id').references(Requests, #id)();
+  TextColumn get photoPath => text().named('photo_path')();
 }
 
 class Assignments extends Table {

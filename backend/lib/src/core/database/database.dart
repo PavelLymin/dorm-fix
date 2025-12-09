@@ -7,7 +7,16 @@ part 'database.g.dart';
 part 'entity.dart';
 
 @DriftDatabase(
-  tables: [Users, Students, Masters, Dormitories, Specializations, Rooms],
+  tables: [
+    Users,
+    Students,
+    Masters,
+    Dormitories,
+    Specializations,
+    Rooms,
+    Requests,
+    Problems,
+  ],
 )
 class Database extends _$Database {
   Database.lazy({

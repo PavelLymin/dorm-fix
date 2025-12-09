@@ -1,3 +1,5 @@
+import 'package:drift/drift.dart';
+import '../../../core/database/database.dart';
 import '../../model/request.dart';
 import 'problem.dart';
 
@@ -16,7 +18,7 @@ sealed class RequestDto {
   final int specializationId;
   final String description;
   final Priority priority;
-  final Status status;
+  final String status;
   final bool studentAbsent;
   final DateTime date;
   final int startTime;
@@ -72,10 +74,9 @@ final class CreatedRequestDto extends RequestDto {
   Map<String, Object?> toJson() => {
     'specialization_id': specializationId,
     'description': description,
-    'priority': priority.value,
-    'status': status.value,
+    'priority': priority.name,
     'student_absent': studentAbsent,
-    'date': date.toLocal().toString(),
+    'date': date,
     'start_time': startTime,
     'end_time': endTime,
     'image_paths': imagePaths,
@@ -98,7 +99,7 @@ final class CreatedRequestDto extends RequestDto {
         specializationId: specializationId,
         description: description,
         priority: Priority.fromValue(priority),
-        status: Status.fromValue(status),
+        status: status,
         studentAbsent: studentAbsent,
         date: DateTime.parse(date),
         startTime: startTime,
@@ -109,6 +110,18 @@ final class CreatedRequestDto extends RequestDto {
       throw ArgumentError('Invalid JSON format for FullRequestEntity: $json');
     }
   }
+
+  RequestsCompanion toCompanion({required String uid}) => RequestsCompanion(
+    uid: Value(uid),
+    specializationId: Value(specializationId),
+    description: Value(description),
+    priority: Value(priority.name),
+    status: Value(status),
+    studentAbsent: Value(studentAbsent),
+    date: Value(date),
+    startTime: Value(startTime),
+    endTime: Value(endTime),
+  );
 }
 
 final class FullRequestDto extends RequestDto {
@@ -172,7 +185,7 @@ final class FullRequestDto extends RequestDto {
     'priority': priority.name,
     'status': status,
     'student_absent': studentAbsent,
-    'date': date.toLocal().toString(),
+    'date': date,
     'start_time': startTime,
     'end_time': endTime,
     'image_paths': imagePaths,
@@ -200,7 +213,7 @@ final class FullRequestDto extends RequestDto {
         specializationId: specializationId,
         description: description,
         priority: Priority.fromValue(priority),
-        status: Status.fromValue(status),
+        status: status,
         studentAbsent: studentAbsent,
         date: date,
         startTime: startTime,
@@ -212,4 +225,20 @@ final class FullRequestDto extends RequestDto {
       throw ArgumentError('Invalid JSON format for FullRequestEntity: $json');
     }
   }
+
+  factory FullRequestDto.fromData(Request request, List<Problem> problem) =>
+      FullRequestDto(
+        id: request.id,
+        uid: request.uid,
+        specializationId: request.specializationId,
+        description: request.description,
+        priority: Priority.fromValue(request.priority),
+        status: request.status,
+        studentAbsent: request.studentAbsent,
+        date: request.date,
+        startTime: request.startTime,
+        endTime: request.endTime,
+        imagePaths: problem.map((e) => ProblemDto.fromData(e)).toList(),
+        createdAt: request.createdAt,
+      );
 }

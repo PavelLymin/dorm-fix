@@ -40,9 +40,9 @@ class CompositionRoot {
     logger.i('Initializing dependencies...');
 
     // Firebase
-    // await Firebase.initializeApp(
-    //   options: DefaultFirebaseOptions.currentPlatform,
-    // );
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     // auto_route
     final router = AppRouter();
@@ -140,6 +140,7 @@ class CompositionRoot {
     );
 
     return _DependencyFactory(
+      firebaseAuth: firebaseAuth,
       client: client,
       router: router,
       dormitorySearchBloc: dormitorySearchBloc,
@@ -159,6 +160,7 @@ class CompositionRoot {
 
 class _DependencyFactory extends Factory<DependencyContainer> {
   const _DependencyFactory({
+    required this.firebaseAuth,
     required this.client,
     required this.router,
     required this.logger,
@@ -173,6 +175,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.roomSearcBloc,
     required this.pinsBloc,
   });
+
+  final FirebaseAuth firebaseAuth;
 
   final RestClientHttp client;
 
@@ -202,6 +206,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   @override
   DependencyContainer create() => DependencyContainer(
+    firebaseAuth: firebaseAuth,
     client: client,
     router: router,
     logger: logger,
