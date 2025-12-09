@@ -10,7 +10,7 @@ class RoomEntity {
   final int id;
   final int dormitoryId;
   final int floor;
-  final int number;
+  final String number;
   final bool isOccupied;
 
   String get roomNumber => '$floor-$number';
@@ -19,7 +19,7 @@ class RoomEntity {
     int? id,
     int? dormitoryId,
     int? floor,
-    int? number,
+    String? number,
     bool? isOccupied,
   }) => RoomEntity(
     id: id ?? this.id,

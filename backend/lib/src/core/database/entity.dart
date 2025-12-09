@@ -43,7 +43,7 @@ class Rooms extends Table {
   IntColumn get dormitoryId =>
       integer().named('dormitory_id').references(Dormitories, #id)();
   IntColumn get floor => integer().named('floor')();
-  IntColumn get number => integer().named('number')();
+  TextColumn get number => text().named('number')();
   BoolColumn get isOccupied => boolean().named('is_occupied')();
 }
 

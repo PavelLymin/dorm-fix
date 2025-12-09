@@ -2,7 +2,7 @@ import 'package:dorm_fix/src/features/yandex_mapkit/model/dormitory.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 
-import '../../../data/repository/dormitory_repository.dart';
+import '../../data/repository/dormitory_repository.dart';
 
 part 'pins_event.dart';
 part 'pins_state.dart';

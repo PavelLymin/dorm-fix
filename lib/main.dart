@@ -53,8 +53,8 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     _authenticationBloc = DependeciesScope.of(context).authenticationBloc;
-    _profileBloc = DependeciesScope.of(context).profileBloc
-      ..add(ProfileEvent.get());
+    // _profileBloc = DependeciesScope.of(context).profileBloc
+    //   ..add(ProfileEvent.get());
   }
 
   // ThemeData get _themeData {

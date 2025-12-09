@@ -80,7 +80,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
       email: s.email,
       password: s.password,
     );
-    emit(AuthState.signedUp(user: user));
+    emit(AuthState.loggedIn(user: user));
   }
 
   Future<void> _signUpWithEmailAndPassword(
@@ -91,7 +91,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
       email: s.email,
       password: s.password,
     );
-    emit(AuthState.loggedIn(user: user));
+    emit(AuthState.signedUp(user: user));
   }
 
   Future<void> _logIn({

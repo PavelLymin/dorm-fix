@@ -1,3 +1,4 @@
+import 'package:dorm_fix/src/features/yandex_mapkit/widget/map_with_dormitories.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../app/widget/dependencies_scope.dart';
@@ -59,6 +60,10 @@ class _SignInScreenState extends State<SignInScreen> {
         if (!state.isSmsCodeSent) _addSmsCodeSent(false);
         state.mapOrNull(
           loading: (_) => _addLoading(true),
+          signedUp: (_) => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MapWithDormitories()),
+          ),
           loggedIn: (_) => Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -104,7 +109,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 padding: AppPadding.symmetricIncrement(
                   horizontal: 6,
                   vertical: 22,
-                ), // const EdgeInsets.symmetric(
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

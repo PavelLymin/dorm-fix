@@ -1,5 +1,5 @@
 import 'package:dorm_fix/src/features/yandex_mapkit/data/dto/dormitory.dart';
-import 'package:flutter/rendering.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/rest_client/rest_client.dart';
 import '../../model/dormitory.dart';
@@ -10,21 +10,25 @@ abstract class IDormitoryRepository {
 }
 
 class DormitoryRepository implements IDormitoryRepository {
-  const DormitoryRepository({required RestClientHttp client})
-    : _client = client;
+  const DormitoryRepository({
+    required RestClientHttp client,
+    required FirebaseAuth firebaseAuth,
+  }) : _client = client,
+       _firebaseAuth = firebaseAuth;
   final RestClientHttp _client;
+  final FirebaseAuth _firebaseAuth;
 
   @override
   Future<List<DormitoryEntity>> searchDormitories({
     required String query,
   }) async {
-    debugPrint('query = $query');
+    final token = await _firebaseAuth.currentUser?.getIdToken();
     final response = await _client.send(
-      path: '/dormitories',
+      path: '/dormitories/search',
       method: 'GET',
       queryParams: {'query': query},
+      headers: {'Authorization': 'Bearer $token'},
     );
-    debugPrint(response.toString());
 
     final data = response?['dormitories'];
 
@@ -44,24 +48,26 @@ class DormitoryRepository implements IDormitoryRepository {
 
   @override
   Future<List<DormitoryEntity>> getDormitories() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return [
-      DormitoryEntity(
-        id: 1,
-        number: 30,
-        name: 'Общежитие',
-        address: 'address',
-        long: 92.793795,
-        lat: 55.995387,
-      ),
-      DormitoryEntity(
-        id: 2,
-        number: 21,
-        name: 'Общежитие',
-        address: 'address',
-        long: 92.766513,
-        lat: 56.008465,
-      ),
-    ];
+    final token = await _firebaseAuth.currentUser?.getIdToken();
+    final response = await _client.send(
+      path: '/dormitories',
+      method: 'GET',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    final data = response?['dormitories'];
+
+    if (data is! List) {
+      throw StructuredBackendException(
+        error: {'description': 'The dormitories was not found.'},
+        statusCode: 404,
+      );
+    }
+
+    final dormitories = data
+        .map((json) => DormitoryDto.fromJson(json).toEntity())
+        .toList();
+
+    return dormitories;
   }
 }

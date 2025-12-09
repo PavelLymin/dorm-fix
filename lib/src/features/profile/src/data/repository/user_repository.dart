@@ -21,10 +21,12 @@ class UserRepositoryImpl implements IUserRepository {
 
   @override
   Future<bool> checkUserByEmail({required String email}) async {
+    final token = await _firebaseAuth.currentUser?.getIdToken();
     final response = await _client.send(
-      path: '/users/check-email',
+      path: '/users/check_email',
       queryParams: {'email': email},
       method: 'GET',
+      headers: {'Authorization': 'Bearer $token'},
     );
     if (response?['exist_user'] case final bool existUser) {
       return existUser;

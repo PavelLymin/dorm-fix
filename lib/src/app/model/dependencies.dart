@@ -1,18 +1,18 @@
+import 'package:dorm_fix/src/features/room/state_management/room_search_bloc/room_search_bloc_bloc.dart';
 import 'package:logger/logger.dart';
 import '../../core/rest_client/rest_client.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/settings/settings.dart';
-import '../../features/yandex_mapkit/state_management/pins/bloc/pins_bloc.dart';
-import '../../features/yandex_mapkit/state_management/search/search_bloc.dart';
+import '../../features/yandex_mapkit/state_management/pins_bloc/pins_bloc.dart';
+import '../../features/yandex_mapkit/state_management/dormitory_search_bloc/dormitory_search_bloc.dart';
 import '../router/router.dart';
 
 class DependencyContainer {
   const DependencyContainer({
     required this.client,
     required this.router,
-    required this.searchBloc,
     required this.logger,
     required this.settingsContainer,
     required this.authenticationBloc,
@@ -20,8 +20,10 @@ class DependencyContainer {
     required this.userRepository,
     required this.firebaseUserRepository,
     required this.authButton,
+    required this.dormitorySearchBloc,
     required this.pinsBloc,
     required this.specializationBloc,
+    required this.roomSearcBloc,
   });
 
   final RestClientHttp client;
@@ -42,7 +44,9 @@ class DependencyContainer {
 
   final AuthButtonBloc authButton;
 
-  final SearchBloc searchBloc;
+  final DormitorySearchBloc dormitorySearchBloc;
+
+  final RoomSearcBloc roomSearcBloc;
 
   final PinsBloc pinsBloc;
 

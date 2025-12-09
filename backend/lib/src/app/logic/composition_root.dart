@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:backend/src/server/router/room.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
 import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
 import '../../server/data/repository/dormitory_repository.dart';
 import '../../server/data/repository/master_repository.dart';
+import '../../server/data/repository/room_repository.dart';
 import '../../server/data/repository/specialization_repository.dart';
 import '../../server/data/repository/student_repository.dart';
 import '../../server/data/repository/user_repository.dart';
@@ -80,9 +82,16 @@ class CompositionRoot {
     );
 
     // Dormitory
-    final dormitoryRepository = DormitoryRepositoryImpl(database: database);
+    final dormitoryRepository = DormitoryRepository(database: database);
     final dormitoryRouter = DormitoryRouter(
       dormitoryRepository: dormitoryRepository,
+      restApi: restApi,
+    );
+
+    // Room
+    final roomRepository = RoomRepository(database: database);
+    final roomRouter = RoomRouter(
+      roomRepository: roomRepository,
       restApi: restApi,
     );
 
@@ -104,6 +113,7 @@ class CompositionRoot {
       profileRouter: profileRouter,
       studentRouter: studentRouter,
       dormitoryRouter: dormitoryRouter,
+      roomRouter: roomRouter,
       specializationRouter: specializationRouter,
     ).create();
   }
@@ -119,6 +129,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.profileRouter,
     required this.studentRouter,
     required this.dormitoryRouter,
+    required this.roomRouter,
     required this.specializationRouter,
   });
 
@@ -138,6 +149,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final DormitoryRouter dormitoryRouter;
 
+  final RoomRouter roomRouter;
+
   final SpecializationRouter specializationRouter;
 
   @override
@@ -150,6 +163,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     profileRouter: profileRouter,
     studentRouter: studentRouter,
     dormitoryRouter: dormitoryRouter,
+    roomRouter: roomRouter,
     specializationRouter: specializationRouter,
   );
 }

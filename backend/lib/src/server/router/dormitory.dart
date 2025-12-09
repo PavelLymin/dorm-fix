@@ -17,7 +17,8 @@ class DormitoryRouter {
   Handler get handler {
     final router = Router();
 
-    router.get('/dormitories', _search);
+    router.get('/dormitories/search', _search);
+    router.get('/dormitories', _getDormitories);
     return router.call;
   }
 
@@ -40,6 +41,21 @@ class DormitoryRouter {
     final query = _checkQuery(request);
 
     final dormitories = await _dormitoryRepository.search(query: query);
+
+    final json = dormitories
+        .map((dormitory) => DormitoryDto.fromEntity(dormitory).toJson())
+        .toList();
+
+    return _restApi.send(
+      statusCode: 200,
+      responseBody: {
+        'data': {'dormitories': json},
+      },
+    );
+  }
+
+  Future<Response> _getDormitories(Request request) async {
+    final dormitories = await _dormitoryRepository.getDormitories();
 
     final json = dormitories
         .map((dormitory) => DormitoryDto.fromEntity(dormitory).toJson())

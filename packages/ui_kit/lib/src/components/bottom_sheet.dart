@@ -1,6 +1,6 @@
 import 'package:ui_kit/ui.dart';
 
-void showUiBottomSheet(
+Future<T?> showUiBottomSheet<T>(
   BuildContext context,
   Widget widget, {
   AnimationStyle style = const AnimationStyle(
@@ -15,7 +15,8 @@ void showUiBottomSheet(
   bool isScrollControlled = true,
 }) {
   final colorPalette = Theme.of(context).colorPalette;
-  showModalBottomSheet<void>(
+
+  return showModalBottomSheet<T>(
     context: context,
     sheetAnimationStyle: style,
     backgroundColor: backgroundColor ?? colorPalette.secondary,
@@ -37,7 +38,11 @@ void showUiBottomSheet(
         crossAxisAlignment: .center,
         mainAxisAlignment: .start,
         mainAxisSize: .min,
-        children: [const SizedBox(height: 16), const _SheetHandle(), widget],
+        children: [
+          const SizedBox(height: 16),
+          const _SheetHandle(),
+          Flexible(child: widget),
+        ],
       ),
     ),
   );

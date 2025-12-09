@@ -1,3 +1,4 @@
+import 'package:dorm_fix/src/features/room/state_management/room_search_bloc/room_search_bloc_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,10 +9,11 @@ import '../../core/rest_client/rest_client.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
+import '../../features/room/data/repository/room_repository.dart';
 import '../../features/settings/settings.dart';
 import '../../features/yandex_mapkit/data/repository/dormitory_repository.dart';
-import '../../features/yandex_mapkit/state_management/pins/bloc/pins_bloc.dart';
-import '../../features/yandex_mapkit/state_management/search/search_bloc.dart';
+import '../../features/yandex_mapkit/state_management/pins_bloc/pins_bloc.dart';
+import '../../features/yandex_mapkit/state_management/dormitory_search_bloc/dormitory_search_bloc.dart';
 import '../bloc/app_bloc_observer.dart';
 import '../model/application_config.dart';
 import '../model/dependencies.dart';
@@ -114,20 +116,33 @@ class CompositionRoot {
     );
 
     // Search Dormitory
-    final searchRepository = DormitoryRepository(client: client);
-    final searchBloc = SearchBloc(
-      dormitoryRepository: searchRepository,
+    final dormitoryRepository = DormitoryRepository(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+    final dormitorySearchBloc = DormitorySearchBloc(
+      dormitoryRepository: dormitoryRepository,
       logger: logger,
     );
     final pinsBloc = PinsBloc(
-      dormitoryRepository: searchRepository,
+      dormitoryRepository: dormitoryRepository,
+      logger: logger,
+    );
+
+    // Search Room
+    final roomRepository = RoomRepository(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+    final roomSearcBloc = RoomSearcBloc(
+      roomRepository: roomRepository,
       logger: logger,
     );
 
     return _DependencyFactory(
       client: client,
       router: router,
-      searchBloc: searchBloc,
+      dormitorySearchBloc: dormitorySearchBloc,
       logger: logger,
       settingsContainer: settingsContainer,
       authenticationBloc: authenticationBloc,
@@ -137,6 +152,7 @@ class CompositionRoot {
       authButton: authButton,
       specializationBloc: specializationBloc,
       pinsBloc: pinsBloc,
+      roomSearcBloc: roomSearcBloc,
     ).create();
   }
 }
@@ -145,7 +161,6 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   const _DependencyFactory({
     required this.client,
     required this.router,
-    required this.searchBloc,
     required this.logger,
     required this.settingsContainer,
     required this.authenticationBloc,
@@ -154,6 +169,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.firebaseUserRepository,
     required this.authButton,
     required this.specializationBloc,
+    required this.dormitorySearchBloc,
+    required this.roomSearcBloc,
     required this.pinsBloc,
   });
 
@@ -175,7 +192,9 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final AuthButtonBloc authButton;
 
-  final SearchBloc searchBloc;
+  final DormitorySearchBloc dormitorySearchBloc;
+
+  final RoomSearcBloc roomSearcBloc;
 
   final PinsBloc pinsBloc;
 
@@ -185,7 +204,6 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   DependencyContainer create() => DependencyContainer(
     client: client,
     router: router,
-    searchBloc: searchBloc,
     logger: logger,
     settingsContainer: settingsContainer,
     authenticationBloc: authenticationBloc,
@@ -193,6 +211,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     userRepository: userRepository,
     firebaseUserRepository: firebaseUserRepository,
     authButton: authButton,
+    dormitorySearchBloc: dormitorySearchBloc,
+    roomSearcBloc: roomSearcBloc,
     pinsBloc: pinsBloc,
     specializationBloc: specializationBloc,
   );

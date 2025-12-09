@@ -12,7 +12,7 @@ class RoomDto {
   final int id;
   final int dormitoryId;
   final int floor;
-  final int number;
+  final String number;
   final bool isOccupied;
 
   RoomEntity toEntity() => RoomEntity(
@@ -35,7 +35,7 @@ class RoomDto {
     id: json['id'] as int,
     dormitoryId: json['dormitoryId'] as int,
     floor: json['floor'] as int,
-    number: json['number'] as int,
+    number: json['number'] as String,
     isOccupied: json['isOccupied'] as bool,
   );
 

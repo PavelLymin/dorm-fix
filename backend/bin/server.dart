@@ -26,13 +26,25 @@ void main(List<String> args) async {
         Cascade().add(dependency.userRouter.publicHandler).handler,
       );
 
+      // dependency.database
+      //     .into(dependency.database.dormitories)
+      //     .insert(
+      //       DormitoriesCompanion(
+      //         address: Value('проспект Свободный, 76Н'),
+      //         number: Value(21),
+      //         name: Value('общежитие 21'),
+      //         long: Value(92.766513),
+      //         lat: Value(56.008465),
+      //       ),
+      //     );
+
       final protectedRoutes = Pipeline()
           .addMiddleware(corsHeaders())
-          .addMiddleware(
-            AuthenticationMiddleware.call(
-              firebaseAdmin: dependency.firebaseAdmin,
-            ),
-          )
+          // .addMiddleware(
+          //   AuthenticationMiddleware.call(
+          //     firebaseAdmin: dependency.firebaseAdmin,
+          //   ),
+          // )
           .addHandler(
             Cascade()
                 .add(dependency.profileRouter.handler)
@@ -40,6 +52,7 @@ void main(List<String> args) async {
                 .add(dependency.studentRouter.handler)
                 .add(dependency.dormitoryRouter.handler)
                 .add(dependency.specializationRouter.handler)
+                .add(dependency.roomRouter.handler)
                 .handler,
           );
 

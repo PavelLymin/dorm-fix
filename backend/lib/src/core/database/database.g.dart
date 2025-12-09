@@ -904,11 +904,11 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
   );
   static const VerificationMeta _numberMeta = const VerificationMeta('number');
   @override
-  late final GeneratedColumn<int> number = GeneratedColumn<int>(
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
     'number',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
   static const VerificationMeta _isOccupiedMeta = const VerificationMeta(
@@ -1005,7 +1005,7 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
         data['${effectivePrefix}floor'],
       )!,
       number: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}number'],
       )!,
       isOccupied: attachedDatabase.typeMapping.read(
@@ -1025,7 +1025,7 @@ class Room extends DataClass implements Insertable<Room> {
   final int id;
   final int dormitoryId;
   final int floor;
-  final int number;
+  final String number;
   final bool isOccupied;
   const Room({
     required this.id,
@@ -1040,7 +1040,7 @@ class Room extends DataClass implements Insertable<Room> {
     map['id'] = Variable<int>(id);
     map['dormitory_id'] = Variable<int>(dormitoryId);
     map['floor'] = Variable<int>(floor);
-    map['number'] = Variable<int>(number);
+    map['number'] = Variable<String>(number);
     map['is_occupied'] = Variable<bool>(isOccupied);
     return map;
   }
@@ -1064,7 +1064,7 @@ class Room extends DataClass implements Insertable<Room> {
       id: serializer.fromJson<int>(json['id']),
       dormitoryId: serializer.fromJson<int>(json['dormitoryId']),
       floor: serializer.fromJson<int>(json['floor']),
-      number: serializer.fromJson<int>(json['number']),
+      number: serializer.fromJson<String>(json['number']),
       isOccupied: serializer.fromJson<bool>(json['isOccupied']),
     );
   }
@@ -1075,7 +1075,7 @@ class Room extends DataClass implements Insertable<Room> {
       'id': serializer.toJson<int>(id),
       'dormitoryId': serializer.toJson<int>(dormitoryId),
       'floor': serializer.toJson<int>(floor),
-      'number': serializer.toJson<int>(number),
+      'number': serializer.toJson<String>(number),
       'isOccupied': serializer.toJson<bool>(isOccupied),
     };
   }
@@ -1084,7 +1084,7 @@ class Room extends DataClass implements Insertable<Room> {
     int? id,
     int? dormitoryId,
     int? floor,
-    int? number,
+    String? number,
     bool? isOccupied,
   }) => Room(
     id: id ?? this.id,
@@ -1136,7 +1136,7 @@ class RoomsCompanion extends UpdateCompanion<Room> {
   final Value<int> id;
   final Value<int> dormitoryId;
   final Value<int> floor;
-  final Value<int> number;
+  final Value<String> number;
   final Value<bool> isOccupied;
   const RoomsCompanion({
     this.id = const Value.absent(),
@@ -1149,7 +1149,7 @@ class RoomsCompanion extends UpdateCompanion<Room> {
     this.id = const Value.absent(),
     required int dormitoryId,
     required int floor,
-    required int number,
+    required String number,
     required bool isOccupied,
   }) : dormitoryId = Value(dormitoryId),
        floor = Value(floor),
@@ -1159,7 +1159,7 @@ class RoomsCompanion extends UpdateCompanion<Room> {
     Expression<int>? id,
     Expression<int>? dormitoryId,
     Expression<int>? floor,
-    Expression<int>? number,
+    Expression<String>? number,
     Expression<bool>? isOccupied,
   }) {
     return RawValuesInsertable({
@@ -1175,7 +1175,7 @@ class RoomsCompanion extends UpdateCompanion<Room> {
     Value<int>? id,
     Value<int>? dormitoryId,
     Value<int>? floor,
-    Value<int>? number,
+    Value<String>? number,
     Value<bool>? isOccupied,
   }) {
     return RoomsCompanion(
@@ -1200,7 +1200,7 @@ class RoomsCompanion extends UpdateCompanion<Room> {
       map['floor'] = Variable<int>(floor.value);
     }
     if (number.present) {
-      map['number'] = Variable<int>(number.value);
+      map['number'] = Variable<String>(number.value);
     }
     if (isOccupied.present) {
       map['is_occupied'] = Variable<bool>(isOccupied.value);
@@ -3149,7 +3149,7 @@ typedef $$RoomsTableCreateCompanionBuilder =
       Value<int> id,
       required int dormitoryId,
       required int floor,
-      required int number,
+      required String number,
       required bool isOccupied,
     });
 typedef $$RoomsTableUpdateCompanionBuilder =
@@ -3157,7 +3157,7 @@ typedef $$RoomsTableUpdateCompanionBuilder =
       Value<int> id,
       Value<int> dormitoryId,
       Value<int> floor,
-      Value<int> number,
+      Value<String> number,
       Value<bool> isOccupied,
     });
 
@@ -3222,7 +3222,7 @@ class $$RoomsTableFilterComposer extends Composer<_$Database, $RoomsTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get number => $composableBuilder(
+  ColumnFilters<String> get number => $composableBuilder(
     column: $table.number,
     builder: (column) => ColumnFilters(column),
   );
@@ -3299,7 +3299,7 @@ class $$RoomsTableOrderingComposer extends Composer<_$Database, $RoomsTable> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get number => $composableBuilder(
+  ColumnOrderings<String> get number => $composableBuilder(
     column: $table.number,
     builder: (column) => ColumnOrderings(column),
   );
@@ -3347,7 +3347,7 @@ class $$RoomsTableAnnotationComposer extends Composer<_$Database, $RoomsTable> {
   GeneratedColumn<int> get floor =>
       $composableBuilder(column: $table.floor, builder: (column) => column);
 
-  GeneratedColumn<int> get number =>
+  GeneratedColumn<String> get number =>
       $composableBuilder(column: $table.number, builder: (column) => column);
 
   GeneratedColumn<bool> get isOccupied => $composableBuilder(
@@ -3435,7 +3435,7 @@ class $$RoomsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<int> dormitoryId = const Value.absent(),
                 Value<int> floor = const Value.absent(),
-                Value<int> number = const Value.absent(),
+                Value<String> number = const Value.absent(),
                 Value<bool> isOccupied = const Value.absent(),
               }) => RoomsCompanion(
                 id: id,
@@ -3449,7 +3449,7 @@ class $$RoomsTableTableManager
                 Value<int> id = const Value.absent(),
                 required int dormitoryId,
                 required int floor,
-                required int number,
+                required String number,
                 required bool isOccupied,
               }) => RoomsCompanion.insert(
                 id: id,

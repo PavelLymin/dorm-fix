@@ -6,26 +6,27 @@ import 'package:rxdart/rxdart.dart';
 import '../../data/repository/dormitory_repository.dart';
 import '../../model/dormitory.dart';
 
-part 'search_state.dart';
-part 'search_event.dart';
+part 'dormitory_search_state.dart';
+part 'dormitory_search_event.dart';
 
-class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({
+class DormitorySearchBloc
+    extends Bloc<DormitorySearchEvent, DormitorySearchState> {
+  DormitorySearchBloc({
     required IDormitoryRepository dormitoryRepository,
     required Logger logger,
   }) : _dormitoryRepository = dormitoryRepository,
        _logger = logger,
-       super(const SearchState.noTerm(dormitories: [])) {
+       super(const DormitorySearchState.noTerm(dormitories: [])) {
     onTextChanged = BehaviorSubject<String>();
 
     _subscription = onTextChanged.stream
         .distinct()
         .debounceTime(const Duration(milliseconds: 500))
         .listen((text) {
-          add(_SearchEventTextChanged(text: text));
+          add(DormitorySearchEvent.textChanged(text: text));
         });
 
-    on<_SearchEventTextChanged>(
+    on<DormitorySearchEvent>(
       (event, emit) => event.map(textChanged: (e) => _search(e, emit)),
     );
   }
@@ -42,15 +43,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Future<void> _search(
     _SearchEventTextChanged event,
-    Emitter<SearchState> emit,
+    Emitter<DormitorySearchState> emit,
   ) async {
     final searchTerm = event.text.trim();
     if (searchTerm.isEmpty) {
-      emit(SearchState.noTerm(dormitories: []));
+      emit(DormitorySearchState.noTerm(dormitories: []));
       return;
     }
 
-    emit(SearchState.loading(dormitories: state.dormitories));
+    emit(DormitorySearchState.loading(dormitories: state.dormitories));
 
     try {
       final results = await _dormitoryRepository.searchDormitories(
@@ -58,14 +59,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
 
       if (results.isEmpty) {
-        emit(SearchState.searchEmpty(dormitories: []));
+        emit(DormitorySearchState.searchEmpty(dormitories: []));
       } else {
-        emit(SearchState.searchPopulated(dormitories: results));
+        emit(DormitorySearchState.searchPopulated(dormitories: results));
       }
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(
-        SearchState.error(
+        DormitorySearchState.error(
           dormitories: state.dormitories,
           message: e.toString(),
         ),

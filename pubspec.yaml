@@ -57,11 +57,12 @@ flutter:
     - packages/ui_kit/assets/icons/
 
   fonts:
-    - family: Proximanova
+    - family: SFPro
       fonts:
-        - asset: packages/ui_kit/fonts/proximanova_regular.ttf
-        - asset: packages/ui_kit/fonts/proximanova_boldit.otf
-          style: italic
-          weight: 700
-        - asset: packages/ui_kit/fonts/proximanova_bold.otf
+        - asset: packages/ui_kit/fonts/SF-Pro-Display-Regular.otf
+        - asset: packages/ui_kit/fonts/SF-Pro-Display-Medium.otf
+          weight: 500
+        - asset: packages/ui_kit/fonts/SF-Pro-Display-Semibold.otf
+          weight: 600
+        - asset: packages/ui_kit/fonts/SF-Pro-Display-Bold.otf
           weight: 700

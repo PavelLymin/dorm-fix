@@ -2,10 +2,11 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 
-import '../state_management/pins/bloc/pins_bloc.dart';
+import '../state_management/pins_bloc/pins_bloc.dart';
 import '../../../app/widget/dependencies_scope.dart';
 import '../model/dormitory.dart';
-import 'search_modal_sheet.dart';
+import 'dormitory_details_modal_sheet.dart';
+import 'dormitory_search_modal_sheet.dart';
 import 'yandex_mapkit.dart';
 
 class MapWithDormitories extends StatefulWidget {
@@ -71,55 +72,71 @@ class _MapWithDormitoriesState extends State<MapWithDormitories> {
     ),
   );
 
-  Future<void> _onMapCreated(YandexMapController controller) async {
+  void _onMapCreated(YandexMapController controller) {
     _mapController = controller;
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _mapController?.moveCamera(
-        CameraUpdate.newCameraPosition(
-          const CameraPosition(
-            target: Point(latitude: 56.010543, longitude: 92.852581),
-            zoom: 14,
-          ),
+    _mapController?.moveCamera(
+      CameraUpdate.newCameraPosition(
+        const CameraPosition(
+          target: Point(latitude: 56.010543, longitude: 92.852581),
+          zoom: 14,
         ),
-      );
-    });
+      ),
+    );
   }
 
   List<MapObject> _createMapObjects(List<DormitoryEntity> dormitories) {
     return dormitories
         .map(
-          (dorm) => PlacemarkMapObject(
-            mapId: MapObjectId(dorm.id.toString()),
-            point: Point(latitude: dorm.lat, longitude: dorm.long),
+          (dormitory) => PlacemarkMapObject(
+            mapId: MapObjectId(dormitory.id.toString()),
+            point: Point(latitude: dormitory.lat, longitude: dormitory.long),
             icon: PlacemarkIcon.single(
               PlacemarkIconStyle(
                 image: BitmapDescriptor.fromAssetImage(ImagesHelper.dormPin),
               ),
             ),
+            onTap: (PlacemarkMapObject self, Point point) =>
+                _showDormitoryDetailsModalSheet(context, dormitory),
           ),
         )
         .toList();
   }
 
-  Future<void> _onMoveCamera(
-    Point target,
-    MapAnimation animation,
-    double zoom,
-  ) async {
-    final controller = _mapController;
-    final update = CameraUpdate.newCameraPosition(
-      CameraPosition(target: target, zoom: zoom),
+  void _onMoveCameraToPoint(Point target, {double zoom = 17}) async {
+    await _mapController?.moveCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: target, zoom: zoom),
+      ),
+      animation: const MapAnimation(
+        type: MapAnimationType.smooth,
+        duration: 1.0,
+      ),
     );
-
-    await controller?.moveCamera(update, animation: animation);
   }
 
-  void _showSearchModalSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (builder) {
-        return SearchModalSheet(onMoveCamera: _onMoveCamera);
-      },
+  void _showDormitoryDetailsModalSheet(
+    BuildContext context,
+    DormitoryEntity dormitory,
+  ) {
+    _onMoveCameraToPoint(
+      Point(longitude: dormitory.long, latitude: dormitory.lat),
     );
+    showUiBottomSheet(
+      context,
+      DormitoryDetailsModalSheet(dormitory: dormitory),
+      maxHeight: MediaQuery.of(context).size.height * 0.3,
+    );
+  }
+
+  Future<void> _showSearchModalSheet(BuildContext context) async {
+    await showUiBottomSheet<DormitoryEntity?>(
+      context,
+      const DormitorySearchModalSheet(),
+      maxHeight: MediaQuery.of(context).size.height * 0.4,
+    ).then((selectedDormitory) {
+      if (selectedDormitory != null && context.mounted) {
+        _showDormitoryDetailsModalSheet(context, selectedDormitory);
+      }
+    });
   }
 }

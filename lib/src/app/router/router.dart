@@ -15,13 +15,15 @@ class AppRouter extends RootStackRouter {
       builder: (context, data) => const SignInScreen(),
     ),
     NamedRouteDef(
+      name: 'Map',
+      initial: true,
+      builder: (context, data) => MapWithDormitories(),
+    ),
+    NamedRouteDef(
       name: 'UpdatePhonScreen',
       builder: (context, data) => const UpdatePhoneScreen(),
     ),
-    NamedRouteDef(
-      name: 'Map',
-      builder: (context, data) => MapWithDormitories(),
-    ),
+
     NamedRouteDef(
       initial: true,
       name: 'Root',

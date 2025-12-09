@@ -3,6 +3,7 @@ import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
 import '../../server/router/dormitory.dart';
 import '../../server/router/profile.dart';
+import '../../server/router/room.dart';
 import '../../server/router/specialization.dart';
 import '../../server/router/student.dart';
 import '../../server/router/user.dart';
@@ -18,6 +19,7 @@ class DependencyContainer {
     required this.profileRouter,
     required this.studentRouter,
     required this.dormitoryRouter,
+    required this.roomRouter,
     required this.specializationRouter,
   });
 
@@ -36,6 +38,8 @@ class DependencyContainer {
   final StudentRouter studentRouter;
 
   final DormitoryRouter dormitoryRouter;
+
+  final RoomRouter roomRouter;
 
   final SpecializationRouter specializationRouter;
 }

@@ -10,14 +10,14 @@ class RoomEntity {
   final int id;
   final int dormitoryId;
   final int floor;
-  final int number;
+  final String number;
   final bool isOccupied;
 
   RoomEntity copyWith({
     int? id,
     int? dormitoryId,
     int? floor,
-    int? number,
+    String? number,
     bool? isOccupied,
   }) => RoomEntity(
     id: id ?? this.id,
