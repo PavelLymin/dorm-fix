@@ -32,15 +32,4 @@ class RoomRepository implements IRoomRepository {
 
     return result;
   }
-
-  // final data = await (_database.select(
-  //   _database.rooms,
-  // )..where((row) => row.dormitoryId.equals(dormitoryId))).get();
-
-  // if (data.isEmpty) return [];
-
-  // final result = data.map((row) => RoomDto.fromData(row).toEntity()).toList();
-
-  // return result;
-  // }
 }

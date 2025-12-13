@@ -1,4 +1,3 @@
-import 'package:dorm_fix/src/features/yandex_mapkit/model/dormitory.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../app/widget/dependencies_scope.dart';
@@ -31,51 +30,57 @@ class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorPalette;
     return BlocProvider.value(
       value: _dormitorySearchBloc,
-      child: Column(
-        children: [
-          SizedBox(height: 16),
-          UiTextField.standard(
-            controller: _searchController,
-            style: UiTextFieldStyle(hintText: 'Text input'),
-            onChanged: _dormitorySearchBloc.onTextChanged.add,
-          ),
-          Expanded(
-            child: BlocBuilder<DormitorySearchBloc, DormitorySearchState>(
-              builder: (context, state) {
-                return state.map(
-                  loading: (_) => CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Theme.of(
-                      context,
-                    ).colorPalette.primary.withValues(alpha: .38),
-                  ),
-                  error: (state) => Text(state.message),
-                  noTerm: (_) => Text('Введите текст'),
-                  searchPopulated: (state) {
-                    final dormitories = state.dormitories;
-                    return ListView.builder(
-                      itemCount: dormitories.length,
-                      itemBuilder: (context, index) {
-                        final dormitory = dormitories[index];
-                        return TextButton(
-                          onPressed: () {
-                            Navigator.of(
-                              context,
-                            ).pop<DormitoryEntity>(dormitory);
-                          },
-                          child: Text(dormitory.name),
-                        );
-                      },
-                    );
-                  },
-                  searchEmpty: (_) => Text('Такого общежития не существует'),
-                );
-              },
+      child: Padding(
+        padding: AppPadding.symmetricIncrement(horizontal: 2),
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            UiTextField.standard(
+              controller: _searchController,
+              style: UiTextFieldStyle(hintText: 'Поиск общежитий...'),
+              onChanged: _dormitorySearchBloc.onTextChanged.add,
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            Flexible(
+              child: BlocBuilder<DormitorySearchBloc, DormitorySearchState>(
+                builder: (context, state) {
+                  return state.map(
+                    loading: (_) => CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Theme.of(
+                        context,
+                      ).colorPalette.primary.withValues(alpha: .38),
+                    ),
+                    error: (state) => UiText.bodyMedium(state.message),
+                    noTerm: (_) => UiText.bodyMedium('Введите текст в поле'),
+                    searchPopulated: (state) {
+                      final dormitories = state.dormitories;
+                      return GroupedList(
+                        color: color.secondaryButton,
+                        items: [
+                          for (var dormitory in dormitories)
+                            GroupedListItem(
+                              title: UiText.bodyMedium(
+                                dormitory.name,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              data: UiText.bodyMedium(dormitory.address),
+                              onTap: () => Navigator.pop(context, dormitory),
+                            ),
+                        ],
+                      );
+                    },
+                    searchEmpty: (_) =>
+                        const Text('Такого общежития не существует'),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

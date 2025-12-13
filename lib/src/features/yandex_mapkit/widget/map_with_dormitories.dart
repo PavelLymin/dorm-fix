@@ -1,3 +1,5 @@
+import 'package:dorm_fix/src/features/yandex_mapkit/widget/map_title.dart';
+import 'package:dorm_fix/src/features/yandex_mapkit/widget/search_button.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
@@ -42,27 +44,16 @@ class _MapWithDormitoriesState extends State<MapWithDormitories> {
         loading: (_) => const Center(child: CircularProgressIndicator()),
         loaded: (state) {
           _mapObjects = _createMapObjects(state.dormitories);
-
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Stack(
               children: [
                 YandexMapkit(
                   onMapCreated: _onMapCreated,
                   mapObjects: _mapObjects,
                 ),
-                Positioned(
-                  bottom: 0.0,
-                  right: 0.0,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ElevatedButton(
-                        onPressed: () => _showSearchModalSheet(context),
-                        child: const Text('Search'),
-                      ),
-                    ),
-                  ),
-                ),
+                MapTitle(),
+                SearchButton(onTap: () => _showSearchModalSheet(context)),
               ],
             ),
           );
@@ -132,7 +123,7 @@ class _MapWithDormitoriesState extends State<MapWithDormitories> {
     await showUiBottomSheet<DormitoryEntity?>(
       context,
       const DormitorySearchModalSheet(),
-      maxHeight: MediaQuery.of(context).size.height * 0.4,
+      maxHeight: MediaQuery.of(context).size.height * 0.6,
     ).then((selectedDormitory) {
       if (selectedDormitory != null && context.mounted) {
         _showDormitoryDetailsModalSheet(context, selectedDormitory);

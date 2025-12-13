@@ -1,3 +1,4 @@
+import 'package:dorm_fix/src/features/room/data/repository/room_repository.dart';
 import 'package:dorm_fix/src/features/room/state_management/room_search_bloc/room_search_bloc_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
@@ -20,12 +21,13 @@ class DependencyContainer {
     required this.authenticationBloc,
     required this.profileBloc,
     required this.userRepository,
+    required this.studentRepository,
     required this.firebaseUserRepository,
     required this.authButton,
     required this.dormitorySearchBloc,
     required this.pinsBloc,
     required this.specializationBloc,
-    required this.roomSearcBloc,
+    required this.roomRepository,
   });
 
   final FirebaseAuth firebaseAuth;
@@ -44,13 +46,15 @@ class DependencyContainer {
 
   final IUserRepository userRepository;
 
+  final IStudentRepository studentRepository;
+
   final IFirebaseUserRepository firebaseUserRepository;
 
   final AuthButtonBloc authButton;
 
   final DormitorySearchBloc dormitorySearchBloc;
 
-  final RoomSearcBloc roomSearcBloc;
+  final RoomRepository roomRepository;
 
   final PinsBloc pinsBloc;
 

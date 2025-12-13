@@ -1,4 +1,3 @@
-import 'package:dorm_fix/src/features/room/state_management/room_search_bloc/room_search_bloc_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -129,14 +128,10 @@ class CompositionRoot {
       logger: logger,
     );
 
-    // Search Room
+    // Room
     final roomRepository = RoomRepository(
       client: client,
       firebaseAuth: firebaseAuth,
-    );
-    final roomSearcBloc = RoomSearcBloc(
-      roomRepository: roomRepository,
-      logger: logger,
     );
 
     return _DependencyFactory(
@@ -149,11 +144,12 @@ class CompositionRoot {
       authenticationBloc: authenticationBloc,
       profileBloc: profileBloc,
       userRepository: userRepository,
+      studentRepository: studentRepository,
       firebaseUserRepository: firebaseUserRepository,
       authButton: authButton,
       specializationBloc: specializationBloc,
       pinsBloc: pinsBloc,
-      roomSearcBloc: roomSearcBloc,
+      roomRepository: roomRepository,
     ).create();
   }
 }
@@ -168,11 +164,12 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.authenticationBloc,
     required this.profileBloc,
     required this.userRepository,
+    required this.studentRepository,
     required this.firebaseUserRepository,
     required this.authButton,
     required this.specializationBloc,
     required this.dormitorySearchBloc,
-    required this.roomSearcBloc,
+    required this.roomRepository,
     required this.pinsBloc,
   });
 
@@ -192,13 +189,15 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final IUserRepository userRepository;
 
+  final IStudentRepository studentRepository;
+
   final IFirebaseUserRepository firebaseUserRepository;
 
   final AuthButtonBloc authButton;
 
   final DormitorySearchBloc dormitorySearchBloc;
 
-  final RoomSearcBloc roomSearcBloc;
+  final RoomRepository roomRepository;
 
   final PinsBloc pinsBloc;
 
@@ -214,10 +213,11 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     authenticationBloc: authenticationBloc,
     profileBloc: profileBloc,
     userRepository: userRepository,
+    studentRepository: studentRepository,
     firebaseUserRepository: firebaseUserRepository,
     authButton: authButton,
     dormitorySearchBloc: dormitorySearchBloc,
-    roomSearcBloc: roomSearcBloc,
+    roomRepository: roomRepository,
     pinsBloc: pinsBloc,
     specializationBloc: specializationBloc,
   );

@@ -13,6 +13,10 @@ class YandexMapkit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return YandexMap(onMapCreated: _onMapCreated, mapObjects: _mapObjects);
+    return YandexMap(
+      nightModeEnabled: true,
+      onMapCreated: _onMapCreated,
+      mapObjects: _mapObjects,
+    );
   }
 }

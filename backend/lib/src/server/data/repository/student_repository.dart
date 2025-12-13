@@ -46,9 +46,9 @@ class StudentRepositoryImpl implements IStudentRepository {
           .insert(CreatedStudentDto.fromEntity(student).toCompanion());
     });
 
-    await _firebaseApp.auth().setCustomUserClaims(uid, {
-      'role': Role.student.name,
-    });
+    // await _firebaseApp.auth().setCustomUserClaims(uid, {
+    //   'role': Role.student.name,
+    // });
   }
 
   @override

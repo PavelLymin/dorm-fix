@@ -6,6 +6,8 @@ import 'package:dorm_fix/src/features/room/data/repository/room_repository.dart'
 import 'package:logger/web.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../../core/rest_client/rest_client.dart';
+
 part 'room_search_event.dart';
 part 'room_search_state.dart';
 
@@ -28,12 +30,7 @@ class RoomSearcBloc extends Bloc<RoomSearchEvent, RoomSearchState> {
     on<RoomSearchEvent>(
       (event, emit) => event.map(
         textChanged: (e) => _search(e, emit),
-        chooseDormitory: (e) => emit(
-          RoomSearchState.dormitoryChosen(
-            rooms: [],
-            dormitoryId: e.dormitoryId,
-          ),
-        ),
+        chooseDormitory: (e) => _chooseDormitory(e, emit),
       ),
     );
   }
@@ -48,12 +45,24 @@ class RoomSearcBloc extends Bloc<RoomSearchEvent, RoomSearchState> {
     _subscription.cancel();
   }
 
+  void _chooseDormitory(
+    _SearchEventChooseDormitory event,
+    Emitter<RoomSearchState> emit,
+  ) {
+    onTextChanged.add('');
+    emit(
+      RoomSearchState.dormitoryChosen(
+        rooms: [],
+        dormitoryId: event.dormitoryId,
+      ),
+    );
+  }
+
   Future<void> _search(
     _SearchEventTextChanged event,
     Emitter<RoomSearchState> emit,
   ) async {
     final searchTerm = event.text.trim();
-
     final currentDormitoryId = state.dormitoryId;
 
     if (searchTerm.isEmpty) {
@@ -79,11 +88,14 @@ class RoomSearcBloc extends Bloc<RoomSearchEvent, RoomSearchState> {
       } else {
         emit(
           RoomSearchState.searchPopulated(
-            rooms: [],
+            rooms: results,
             dormitoryId: currentDormitoryId,
           ),
         );
       }
+    } on RestClientException catch (e, stackTrace) {
+      _logger.e(e.message, stackTrace: stackTrace);
+      emit(RoomSearchState.error(rooms: state.rooms, message: e.message));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(

@@ -28,7 +28,7 @@ class StudentRouter {
     return router.call;
   }
 
-  Future<Map<String, Object>> _readJson(Request request) async {
+  Future<Map<String, dynamic>> _readJson(Request request) async {
     final body = await request.readAsString();
 
     if (body.trim().isEmpty) {

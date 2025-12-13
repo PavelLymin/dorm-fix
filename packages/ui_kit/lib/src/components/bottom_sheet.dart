@@ -30,10 +30,9 @@ Future<T?> showUiBottomSheet<T>(
       maxHeight: maxHeight,
     ),
     isScrollControlled: isScrollControlled,
-    builder: (BuildContext context) => Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
+    builder: (BuildContext context) => MediaQuery.removeViewInsets(
+      removeBottom: true,
+      context: context,
       child: Column(
         crossAxisAlignment: .center,
         mainAxisAlignment: .start,

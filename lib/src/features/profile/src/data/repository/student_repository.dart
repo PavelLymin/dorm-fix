@@ -21,8 +21,7 @@ class StudentRepositoryImpl implements IStudentRepository {
 
   @override
   Future<void> createStudent({required CreatedStudentEntity student}) async {
-    final token = _firebaseAuth.currentUser?.getIdToken();
-
+    final token = await _firebaseAuth.currentUser?.getIdToken();
     final body = CreatedStudentDto.fromEntity(student).toJson();
     final response = await _client.send(
       path: '/students/me',
@@ -30,12 +29,19 @@ class StudentRepositoryImpl implements IStudentRepository {
       headers: {'Authorization': 'Bearer $token'},
       body: body,
     );
+    print('Full response: $response');
+    print('Response type: ${response.runtimeType}');
 
-    if (response?['status_code'] != 201) {
-      throw StructuredBackendException(
-        error: {'description': 'Failed to create student.'},
-      );
+    if (response is Map) {
+      print('Response keys: ${response?.keys}');
+      print('Response values: ${response?.values}');
     }
+
+    // if (response?['status_code'] != 201) {
+    //   throw StructuredBackendException(
+    //     error: {'description': 'Failed to create student.'},
+    //   );
+    // }
   }
 
   @override

@@ -12,11 +12,11 @@ class AppRouter extends RootStackRouter {
   List<NamedRouteDef> get routes => [
     NamedRouteDef(
       name: 'SignIn',
+      initial: true,
       builder: (context, data) => const SignInScreen(),
     ),
     NamedRouteDef(
       name: 'Map',
-      initial: true,
       builder: (context, data) => MapWithDormitories(),
     ),
     NamedRouteDef(
@@ -25,15 +25,10 @@ class AppRouter extends RootStackRouter {
     ),
 
     NamedRouteDef(
-      initial: true,
       name: 'Root',
       builder: (_, _) => const RootScreen(),
       children: [
-        NamedRouteDef(
-          initial: true,
-          name: 'Home',
-          builder: (_, _) => const HomeScreen(),
-        ),
+        NamedRouteDef(name: 'Home', builder: (_, _) => const HomeScreen()),
         NamedRouteDef(
           name: 'Request',
           builder: (_, _) => const RequestScreen(),

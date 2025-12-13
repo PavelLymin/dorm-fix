@@ -30,21 +30,34 @@ void main(List<String> args) async {
       //     .into(dependency.database.dormitories)
       //     .insert(
       //       DormitoriesCompanion(
-      //         address: Value('проспект Свободный, 76Н'),
-      //         number: Value(21),
-      //         name: Value('общежитие 21'),
-      //         long: Value(92.766513),
-      //         lat: Value(56.008465),
+      //         id: Value(5),
+      //         address: Value('улица Борисова, 24'),
+      //         number: Value(5),
+      //         name: Value('Общежитие 5'),
+      //         long: Value(92.796050),
+      //         lat: Value(55.994265),
+      //       ),
+      //     );
+
+      // dependency.database
+      //     .into(dependency.database.rooms)
+      //     .insert(
+      //       RoomsCompanion(
+      //         id: Value(1),
+      //         dormitoryId: Value(5),
+      //         floor: Value(6),
+      //         number: Value('6-42'),
+      //         isOccupied: Value(true),
       //       ),
       //     );
 
       final protectedRoutes = Pipeline()
           .addMiddleware(corsHeaders())
-          // .addMiddleware(
-          //   AuthenticationMiddleware.call(
-          //     firebaseAdmin: dependency.firebaseAdmin,
-          //   ),
-          // )
+          .addMiddleware(
+            AuthenticationMiddleware.call(
+              firebaseAdmin: dependency.firebaseAdmin,
+            ),
+          )
           .addHandler(
             Cascade()
                 .add(dependency.profileRouter.handler)

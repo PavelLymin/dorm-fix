@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../../core/rest_client/rest_client.dart';
 import '../../data/repository/dormitory_repository.dart';
 import '../../model/dormitory.dart';
 
@@ -63,6 +64,14 @@ class DormitorySearchBloc
       } else {
         emit(DormitorySearchState.searchPopulated(dormitories: results));
       }
+    } on RestClientException catch (e, stackTrace) {
+      _logger.e(e.message, stackTrace: stackTrace);
+      emit(
+        DormitorySearchState.error(
+          dormitories: state.dormitories,
+          message: e.message,
+        ),
+      );
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(

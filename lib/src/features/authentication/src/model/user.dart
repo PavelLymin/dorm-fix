@@ -29,6 +29,7 @@ abstract class UserEntity with _UserPatternMatching {
     required final String? photoURL,
     required final String? email,
     required final String? phoneNumber,
+    required final Role? role,
   }) = AuthenticatedUser;
 
   bool get isAuthenticated;
@@ -73,6 +74,7 @@ class AuthenticatedUser implements UserEntity {
     required this.photoURL,
     required this.email,
     required this.phoneNumber,
+    this.role = Role.student,
   });
 
   final String uid;
@@ -80,6 +82,7 @@ class AuthenticatedUser implements UserEntity {
   final String? photoURL;
   final String? email;
   final String? phoneNumber;
+  final Role? role;
 
   @override
   bool get isAuthenticated => !isNotAuthenticated;
@@ -103,7 +106,8 @@ class AuthenticatedUser implements UserEntity {
       'uid: $uid, '
       'name: $displayName, '
       'email: $email, '
-      'phone: $phoneNumber)';
+      'phone: $phoneNumber, '
+      'role: $role)';
 
   @override
   bool operator ==(final Object other) =>

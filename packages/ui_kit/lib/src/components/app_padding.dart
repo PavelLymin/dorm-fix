@@ -28,7 +28,7 @@ class AppPadding {
   static EdgeInsets allIncrement({required int increment}) =>
       EdgeInsets.all(defaultPadding * increment);
 
-  static EdgeInsets horizontalIncrement({required int increment}) =>
+  static EdgeInsets horizontalIncrement({required double increment}) =>
       EdgeInsets.symmetric(
         horizontal: defaultPadding * increment,
         vertical: defaultPadding,

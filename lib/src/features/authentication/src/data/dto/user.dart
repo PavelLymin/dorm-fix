@@ -8,6 +8,7 @@ class UserDto {
     required this.photoURL,
     required this.email,
     required this.phoneNumber,
+    required this.role,
   });
 
   final String uid;
@@ -15,6 +16,7 @@ class UserDto {
   final String? photoURL;
   final String? email;
   final String? phoneNumber;
+  final Role? role;
 
   factory UserDto.fromFirebase(User user) => UserDto(
     uid: user.uid,
@@ -22,6 +24,7 @@ class UserDto {
     photoURL: user.photoURL,
     email: user.email,
     phoneNumber: user.phoneNumber,
+    role: Role.student,
   );
 
   AuthenticatedUser toEntity() => AuthenticatedUser(
@@ -30,6 +33,7 @@ class UserDto {
     photoURL: photoURL,
     email: email,
     phoneNumber: phoneNumber,
+    role: role,
   );
 
   factory UserDto.fromEntity(AuthenticatedUser user) => UserDto(
@@ -38,6 +42,7 @@ class UserDto {
     photoURL: user.photoURL,
     email: user.email,
     phoneNumber: user.phoneNumber,
+    role: user.role,
   );
 
   Map<String, dynamic> toJson() {
@@ -47,6 +52,7 @@ class UserDto {
       'photo_url': photoURL,
       'email': email,
       'phone_number': phoneNumber,
+      'role': role?.name,
     };
   }
 
@@ -57,6 +63,7 @@ class UserDto {
       'photo_url': final String? photoURL,
       'email': final String? email,
       'phone_number': final String? phoneNumber,
+      'role': final Role? role,
     }) {
       return UserDto(
         uid: uid,
@@ -64,6 +71,7 @@ class UserDto {
         photoURL: photoURL,
         email: email,
         phoneNumber: phoneNumber,
+        role: role ?? Role.student,
       );
     }
     throw ArgumentError('Invalid JSON data for User: $json');
