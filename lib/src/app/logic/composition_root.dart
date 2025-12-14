@@ -1,3 +1,4 @@
+import 'package:dorm_fix/src/features/request/request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../firebase_options.dart';
 import '../../core/rest_client/rest_client.dart';
+import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
@@ -43,18 +45,15 @@ class CompositionRoot {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
-    // auto_route
-    final router = AppRouter();
-
-    // Settings
-    final settingsContainer = await _CreateSettings().create();
-
     // Http
     final RestClientHttp client = RestClientHttp(
       baseUrl: Config.apiBaseUrl,
       client: createDefaultHttpClient(),
     );
 
+    final IWebSocket webSocket = WebSocketBase(
+      uri: '${Config.wsBaseUrl}/connection',
+    );
     // Firebase
     final firebaseAuth = await _CreateFirebaseAuth().create();
 
@@ -72,13 +71,22 @@ class CompositionRoot {
     );
 
     // Authentication
-    final authRepository = AuthRepository(firebaseAuth: firebaseAuth);
+    final authRepository = AuthRepository(
+      firebaseAuth: firebaseAuth,
+      webSocket: webSocket,
+    );
     final authenticationBloc = AuthBloc(
       authRepository: authRepository,
       userRepository: userPerository,
       firebaseUserRepository: firebaseUserRepository,
       logger: logger,
     );
+    // auto_route
+    final router = AppRouter(authenticationBloc: authenticationBloc);
+
+    // Settings
+    final settingsContainer = await _CreateSettings().create();
+
     final authButton = AuthButtonBloc();
 
     // Student
@@ -134,9 +142,22 @@ class CompositionRoot {
       firebaseAuth: firebaseAuth,
     );
 
+    // RepairRequest
+    final requestRepository = RequestRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+
+    final repairRequestBloc = RepairRequestBloc(
+      requestRepository: requestRepository,
+      webSocket: webSocket,
+      logger: logger,
+    );
+
     return _DependencyFactory(
       firebaseAuth: firebaseAuth,
       client: client,
+      webSocket: webSocket,
       router: router,
       dormitorySearchBloc: dormitorySearchBloc,
       logger: logger,
@@ -150,6 +171,8 @@ class CompositionRoot {
       specializationBloc: specializationBloc,
       pinsBloc: pinsBloc,
       roomRepository: roomRepository,
+      requestRepository: requestRepository,
+      repairRequestBloc: repairRequestBloc,
     ).create();
   }
 }
@@ -158,6 +181,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   const _DependencyFactory({
     required this.firebaseAuth,
     required this.client,
+    required this.webSocket,
     required this.router,
     required this.logger,
     required this.settingsContainer,
@@ -171,11 +195,15 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.dormitorySearchBloc,
     required this.roomRepository,
     required this.pinsBloc,
+    required this.requestRepository,
+    required this.repairRequestBloc,
   });
 
   final FirebaseAuth firebaseAuth;
 
   final RestClientHttp client;
+
+  final IWebSocket webSocket;
 
   final AppRouter router;
 
@@ -203,10 +231,15 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final SpecializationBloc specializationBloc;
 
+  final RepairRequestBloc repairRequestBloc;
+
+  final IRequestRepository requestRepository;
+
   @override
   DependencyContainer create() => DependencyContainer(
     firebaseAuth: firebaseAuth,
     client: client,
+    webSocket: webSocket,
     router: router,
     logger: logger,
     settingsContainer: settingsContainer,
@@ -220,6 +253,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     roomRepository: roomRepository,
     pinsBloc: pinsBloc,
     specializationBloc: specializationBloc,
+    requestRepository: requestRepository,
+    repairRequestBloc: repairRequestBloc,
   );
 }
 

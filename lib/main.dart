@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dorm_fix/src/features/request/request.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ui_kit/ui.dart';
@@ -15,6 +16,7 @@ void main() async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       final dependency = await CompositionRoot(logger: logger).compose();
+
       runApp(
         DependeciesScope(
           dependencyContainer: dependency,
@@ -46,15 +48,17 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  late AuthBloc _authenticationBloc;
-  late ProfileBloc _profileBloc;
+  late final AuthBloc _authenticationBloc;
+  late final ProfileBloc _profileBloc;
+  late final RepairRequestBloc _requestBloc;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = DependeciesScope.of(context).authenticationBloc;
-    // _profileBloc = DependeciesScope.of(context).profileBloc
-    //   ..add(ProfileEvent.get());
+    _profileBloc = DependeciesScope.of(context).profileBloc
+      ..add(ProfileEvent.get());
+    _requestBloc = DependeciesScope.of(context).repairRequestBloc;
   }
 
   // ThemeData get _themeData {
@@ -76,6 +80,7 @@ class _MainAppState extends State<MainApp> {
       providers: [
         BlocProvider(create: (context) => _authenticationBloc),
         BlocProvider(create: (context) => _profileBloc),
+        BlocProvider(create: (context) => _requestBloc),
       ],
       child: MaterialApp.router(
         localizationsDelegates: [

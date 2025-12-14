@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:backend/src/app/logic/composition_root.dart';
-import 'package:backend/src/server/middleware/authentication.dart';
-import 'package:backend/src/server/middleware/error.dart';
+import 'package:backend/src/core/middleware/authentication.dart';
+import 'package:backend/src/core/middleware/error.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
@@ -26,31 +26,6 @@ void main(List<String> args) async {
         Cascade().add(dependency.userRouter.publicHandler).handler,
       );
 
-      // dependency.database
-      //     .into(dependency.database.dormitories)
-      //     .insert(
-      //       DormitoriesCompanion(
-      //         id: Value(5),
-      //         address: Value('улица Борисова, 24'),
-      //         number: Value(5),
-      //         name: Value('Общежитие 5'),
-      //         long: Value(92.796050),
-      //         lat: Value(55.994265),
-      //       ),
-      //     );
-
-      // dependency.database
-      //     .into(dependency.database.rooms)
-      //     .insert(
-      //       RoomsCompanion(
-      //         id: Value(1),
-      //         dormitoryId: Value(5),
-      //         floor: Value(6),
-      //         number: Value('6-42'),
-      //         isOccupied: Value(true),
-      //       ),
-      //     );
-
       final protectedRoutes = Pipeline()
           .addMiddleware(corsHeaders())
           .addMiddleware(
@@ -60,6 +35,7 @@ void main(List<String> args) async {
           )
           .addHandler(
             Cascade()
+                .add(dependency.wsRouter.handler)
                 .add(dependency.profileRouter.handler)
                 .add(dependency.userRouter.protectedHandler)
                 .add(dependency.studentRouter.handler)

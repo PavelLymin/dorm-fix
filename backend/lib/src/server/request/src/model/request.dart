@@ -1,16 +1,32 @@
 import 'problem.dart';
 
 enum Priority {
-  ordinary(priority: 'Обычный'),
-  high(priority: 'Высокий');
+  ordinary(value: 'Обычный'),
+  high(value: 'Высокий');
 
-  const Priority({required this.priority});
-  final String priority;
+  const Priority({required this.value});
+  final String value;
 
   factory Priority.fromValue(String priority) {
     return Priority.values.firstWhere(
-      (element) => element.priority == priority,
+      (element) => element.value == priority,
       orElse: () => throw FormatException('Unknown priority: $priority'),
+    );
+  }
+}
+
+enum Status {
+  newRequest(value: 'Создан'),
+  inProgress(value: 'В работе'),
+  completed(value: 'Выполнен');
+
+  const Status({required this.value});
+  final String value;
+
+  factory Status.fromValue(String status) {
+    return Status.values.firstWhere(
+      (element) => element.value == status,
+      orElse: () => throw FormatException('Unknown status: $status'),
     );
   }
 }
@@ -30,11 +46,23 @@ sealed class RequestEntity {
   final int specializationId;
   final String description;
   final Priority priority;
-  final String status;
+  final Status status;
   final bool studentAbsent;
   final DateTime date;
   final int startTime;
   final int endTime;
+
+  const factory RequestEntity.created({
+    required final int specializationId,
+    required final String description,
+    required final Priority priority,
+    required final Status status,
+    required final bool studentAbsent,
+    required final DateTime date,
+    required final int startTime,
+    required final int endTime,
+    required final List<String> imagePaths,
+  }) = CreatedRequestEntity;
 
   const factory RequestEntity.full({
     required final int id,
@@ -42,7 +70,7 @@ sealed class RequestEntity {
     required final int specializationId,
     required final String description,
     required final Priority priority,
-    required final String status,
+    required final Status status,
     required final bool studentAbsent,
     required final DateTime date,
     required final int startTime,
@@ -50,18 +78,6 @@ sealed class RequestEntity {
     required final List<ProblemEntity> imagePaths,
     required final DateTime createdAt,
   }) = FullRequestEntity;
-
-  const factory RequestEntity.created({
-    required final int specializationId,
-    required final String description,
-    required final Priority priority,
-    required final String status,
-    required final bool studentAbsent,
-    required final DateTime date,
-    required final int startTime,
-    required final int endTime,
-    required final List<String> imagePaths,
-  }) = CreatedRequestEntity;
 
   RequestEntity copyWith();
 }
@@ -86,7 +102,7 @@ final class CreatedRequestEntity extends RequestEntity {
     int? specializationId,
     String? description,
     Priority? priority,
-    String? status,
+    Status? status,
     bool? studentAbsent,
     DateTime? date,
     int? startTime,
@@ -171,7 +187,7 @@ final class FullRequestEntity extends RequestEntity {
     int? specializationId,
     String? description,
     Priority? priority,
-    String? status,
+    Status? status,
     bool? studentAbsent,
     DateTime? date,
     int? startTime,

@@ -3,7 +3,9 @@ import '../../../../../core/rest_client/rest_client.dart';
 import '../../../request.dart';
 
 abstract interface class IRequestRepository {
-  Future<void> createRequest({required CreatedRequestEntity request});
+  Future<List<FullRepairRequest>> getRequests();
+
+  Future<void> createRequest({required CreatedRepairRequest request});
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
@@ -17,10 +19,34 @@ class RequestRepositoryImpl implements IRequestRepository {
   final FirebaseAuth _firebaseAuth;
 
   @override
-  Future<void> createRequest({required CreatedRequestEntity request}) async {
+  Future<List<FullRepairRequest>> getRequests() async {
+    final token = await _firebaseAuth.currentUser?.getIdToken();
+    final response = await _client.send(
+      path: '/requests',
+      method: 'GET',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    final data = response?['requests'];
+    if (data is! List) {
+      throw StructuredBackendException(
+        error: {'description': 'The specializations was not found.'},
+        statusCode: 404,
+      );
+    }
+
+    final specializations = data
+        .map((json) => FullRepairRequestDto.fromJson(json).toEntity())
+        .toList();
+
+    return specializations;
+  }
+
+  @override
+  Future<void> createRequest({required CreatedRepairRequest request}) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
 
-    final body = CreatedRequestDto.fromEntity(request).toJson();
+    final body = CreatedRepairRequestDto.fromEntity(request).toJson();
 
     await _client.send(
       path: '/requests',

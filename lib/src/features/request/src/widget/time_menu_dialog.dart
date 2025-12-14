@@ -111,7 +111,7 @@ mixin _TimeMenuDialogStateMixin on State<TimeMenuDialog> {
 
   void _onPressedButton() {
     context.read<RequestFormBloc>().add(
-      .upadteRequestForm(
+      .updateRequestForm(
         startTime: _startTimeController.text,
         endTime: _endTimeController.text,
       ),

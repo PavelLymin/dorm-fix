@@ -34,7 +34,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
               lastDate: DateTime.now().add(const Duration(days: 365)),
               locale: const Locale('ru'),
             );
-            _requestFormBloc.add(.upadteRequestForm(date: date));
+            _requestFormBloc.add(.updateRequestForm(date: date));
           },
           content: _ContentDateTime(
             color: colorPalette.secondaryButton,

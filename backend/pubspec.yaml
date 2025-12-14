@@ -16,7 +16,9 @@ dependencies:
   shelf: ^1.4.2
   shelf_cors_headers: ^0.1.5
   shelf_router: ^1.1.2
+  shelf_web_socket: ^3.0.0
   sqlite3: ^2.9.3
+  web_socket_channel: ^3.0.3
 
 dev_dependencies:
   # Codegen

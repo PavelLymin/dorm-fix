@@ -1,4 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/ui.dart';
+
+enum HomeCardType { request, history }
 
 sealed class HomeCard extends StatelessWidget {
   const HomeCard({
@@ -6,11 +9,13 @@ sealed class HomeCard extends StatelessWidget {
     required this.nameImage,
     required this.title,
     required this.subtitle,
+    required this.type,
   });
 
   final String nameImage;
   final String title;
   final String subtitle;
+  final HomeCardType type;
 
   const factory HomeCard.request() = RequestCard;
   const factory HomeCard.history() = HistoryCard;
@@ -22,7 +27,14 @@ sealed class HomeCard extends StatelessWidget {
     return SizedBox(
       height: isLarge ? 208 : null,
       child: UiCard.clickable(
-        onTap: () {},
+        onTap: () => switch (type) {
+          HomeCardType.request => context.pushRoute(
+            NamedRoute('RequestScreen'),
+          ),
+          HomeCardType.history => context.pushRoute(
+            NamedRoute('HistoryScreen'),
+          ),
+        },
         child: Row(
           crossAxisAlignment: .center,
           mainAxisAlignment: .start,
@@ -62,6 +74,7 @@ sealed class HomeCard extends StatelessWidget {
 final class RequestCard extends HomeCard {
   const RequestCard({
     super.key,
+    super.type = HomeCardType.request,
     super.nameImage = ImagesHelper.request,
     super.title = 'Создать заявку',
     super.subtitle =
@@ -72,6 +85,7 @@ final class RequestCard extends HomeCard {
 final class HistoryCard extends HomeCard {
   const HistoryCard({
     super.key,
+    super.type = HomeCardType.history,
     super.nameImage = ImagesHelper.history,
     super.title = 'История заявок',
     super.subtitle =

@@ -19,7 +19,7 @@ class PresenceSwitch extends StatelessWidget {
             value: state.currentFormModel.studentAbsent,
             onChanged: (value) {
               context.read<RequestFormBloc>().add(
-                .upadteRequestForm(studentAbsent: value),
+                .updateRequestForm(studentAbsent: value),
               );
             },
           );

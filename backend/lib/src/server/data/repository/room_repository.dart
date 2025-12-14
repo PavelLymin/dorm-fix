@@ -1,6 +1,5 @@
-import 'package:backend/src/core/database/database.dart';
 import 'package:drift/drift.dart';
-
+import '../../../core/database/database.dart';
 import '../../model/room.dart';
 import '../dto/room.dart';
 

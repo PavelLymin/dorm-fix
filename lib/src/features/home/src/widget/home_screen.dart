@@ -88,14 +88,14 @@ class _UserDisplayProfile extends StatelessWidget {
           final student = state.student;
           return Column(
             spacing: 4,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: .start,
             children: [
               UiText.headlineLarge(
                 student.user.displayName!,
                 style: TextStyle(color: Theme.of(context).colorPalette.primary),
               ),
               UiText.headlineLarge(student.dormitory.name),
-              UiText.headlineLarge(student.room.roomNumber),
+              UiText.headlineLarge(student.room.number),
             ],
           );
         },
@@ -112,7 +112,7 @@ mixin _HomeScreenStateMixin on State<HomeScreen> {
   void initState() {
     super.initState();
     _specializationBloc = DependeciesScope.of(context).specializationBloc
-      ..add(SpecializationEvent.getSpecializations());
+      ..add(.getSpecializations());
   }
 
   @override

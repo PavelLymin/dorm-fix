@@ -1,4 +1,5 @@
-import 'package:backend/src/server/router/request.dart';
+import 'package:backend/src/core/ws/src/connection/ws_router.dart';
+import 'package:backend/src/server/request/src/router/request.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
@@ -15,6 +16,7 @@ class DependencyContainer {
     required this.firebaseAdmin,
     required this.config,
     required this.restApi,
+    required this.wsRouter,
     required this.database,
     required this.userRouter,
     required this.requestRouter,
@@ -30,6 +32,8 @@ class DependencyContainer {
   final Config config;
 
   final RestApi restApi;
+
+  final WsRouter wsRouter;
 
   final Database database;
 

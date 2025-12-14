@@ -64,11 +64,11 @@ class RequestFormModel {
     if (startTime == null || endTime == null) messageError = 'Укажите время';
   }
 
-  CreatedRequestEntity toEntity() {
+  CreatedRepairRequest toEntity() {
     checkError();
     if (messageError != null) throw ArgumentError(messageError);
 
-    return CreatedRequestEntity(
+    return CreatedRepairRequest(
       specializationId: specializationId!,
       description: description,
       priority: priority,

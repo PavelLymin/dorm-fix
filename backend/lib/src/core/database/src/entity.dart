@@ -1,5 +1,15 @@
 part of 'database.dart';
 
+class DateTimeConverter extends TypeConverter<DateTime, String> {
+  const DateTimeConverter();
+
+  @override
+  DateTime fromSql(String fromDb) => DateTime.parse(fromDb);
+
+  @override
+  String toSql(DateTime value) => value.toLocal().toString();
+}
+
 class Users extends Table {
   TextColumn get uid => text().named('uid')();
   TextColumn get displayName => text().nullable().named('display_name')();
@@ -7,8 +17,10 @@ class Users extends Table {
   TextColumn get phoneNumber => text().nullable().named('phone_number')();
   TextColumn get photoURL => text().nullable().named('photo_url')();
   TextColumn get role => text().named('role')();
-  DateTimeColumn get createdAt =>
-      dateTime().named('created_at').withDefault(currentDateAndTime)();
+  TextColumn get createdAt => text()
+      .named('created_at')
+      .map(const DateTimeConverter())
+      .withDefault(currentDateAndTime.datetime)();
 }
 
 class Students extends Table {
@@ -56,11 +68,13 @@ class Requests extends Table {
   TextColumn get priority => text().named('priority')();
   TextColumn get status => text().named('status')();
   BoolColumn get studentAbsent => boolean().named('student_absent')();
-  DateTimeColumn get date => dateTime().named('date')();
+  TextColumn get date => text().map(const DateTimeConverter()).named('date')();
   IntColumn get startTime => integer().named('start_time')();
   IntColumn get endTime => integer().named('end_time')();
-  DateTimeColumn get createdAt =>
-      dateTime().named('created_at').withDefault(currentDateAndTime)();
+  TextColumn get createdAt => text()
+      .named('created_at')
+      .map(const DateTimeConverter())
+      .withDefault(currentDateAndTime.datetime)();
 }
 
 class Problems extends Table {
@@ -72,7 +86,7 @@ class Problems extends Table {
 
 class Assignments extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
-  IntColumn get uid => integer().named('uid').references(Users, #uid)();
+  TextColumn get uid => text().named('uid').references(Users, #uid)();
   IntColumn get requestId =>
       integer().named('request_id').references(Requests, #id)();
   DateTimeColumn get createdAt =>

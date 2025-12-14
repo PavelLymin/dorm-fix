@@ -1,15 +1,15 @@
 import 'dart:io';
 
 import 'package:backend/src/server/router/room.dart';
-import 'package:backend/src/server/router/request.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
-import '../../core/database/database.dart';
+import '../../core/database/src/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
+import '../../core/ws/ws.dart';
 import '../../server/data/repository/dormitory_repository.dart';
 import '../../server/data/repository/master_repository.dart';
 import '../../server/data/repository/room_repository.dart';
-import '../../server/data/repository/request_repository.dart';
+import '../../server/request/request.dart';
 import '../../server/data/repository/specialization_repository.dart';
 import '../../server/data/repository/student_repository.dart';
 import '../../server/data/repository/user_repository.dart';
@@ -54,7 +54,12 @@ class CompositionRoot {
     // Database
     final database = Database.lazy(file: File(config.databasePath));
 
+    // RestApi
     final restApi = RestApiBase();
+
+    // WS
+    final wsConnection = WsConnection();
+    final wsRouter = WsRouter(connection: wsConnection);
 
     // User
     final userRepository = UserRepositoryImpl(database: database);
@@ -88,6 +93,7 @@ class CompositionRoot {
     final requestRouter = RequestRouter(
       requestRepository: requestRepository,
       restApi: restApi,
+      wsConnection: wsConnection,
     );
 
     // Dormitory
@@ -117,6 +123,7 @@ class CompositionRoot {
       firebaseAdmin: app,
       config: config,
       restApi: restApi,
+      wsRouter: wsRouter,
       database: database,
       userRouter: userRouter,
       requestRouter: requestRouter,
@@ -134,6 +141,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.firebaseAdmin,
     required this.config,
     required this.restApi,
+    required this.wsRouter,
     required this.database,
     required this.userRouter,
     required this.requestRouter,
@@ -149,6 +157,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final Config config;
 
   final RestApi restApi;
+
+  final WsRouter wsRouter;
 
   final Database database;
 
@@ -171,6 +181,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     firebaseAdmin: firebaseAdmin,
     config: config,
     restApi: restApi,
+    wsRouter: wsRouter,
     database: database,
     userRouter: userRouter,
     requestRouter: requestRouter,

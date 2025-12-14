@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../home/home.dart';
+import '../../request.dart';
 
 class ChoosingService extends StatelessWidget {
   const ChoosingService({super.key, required this.selectedIndex});
@@ -40,8 +41,10 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
   @override
   void initState() {
     super.initState();
-    // final id = widget.specialization.first.id;
-    // _requestFormBloc.add(.upadteRequestForm(specializationId: id));
+    final id = widget.specialization.first.id;
+    context.read<RequestFormBloc>().add(
+      .updateRequestForm(specializationId: id),
+    );
     options = widget.specialization
         .map((specialization) => ChoiceItem(title: specialization.title))
         .toList();
@@ -58,11 +61,11 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
         barColor: colorPalette.secondary,
         selectedColor: colorPalette.primary,
         onChange: (index) {
-          // _requestFormBloc.add(
-          //   .upadteRequestForm(
-          //     specializationId: widget.specialization[index].id,
-          //   ),
-          // );
+          context.read<RequestFormBloc>().add(
+            .updateRequestForm(
+              specializationId: widget.specialization[index].id,
+            ),
+          );
           widget.selectedIndex.value = index;
         },
       ),

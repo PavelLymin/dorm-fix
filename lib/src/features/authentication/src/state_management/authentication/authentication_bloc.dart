@@ -26,7 +26,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
         data.map(
           notAuthenticatedUser: (user) =>
               setState(_NotAuthenticated(user: user)),
-          authenticatedUser: (_) {},
+          authenticatedUser: (user) async {
+            setState(_LoggedIn(user: user));
+            await _authRepository.connect();
+          },
         );
       },
       onError: (e) =>

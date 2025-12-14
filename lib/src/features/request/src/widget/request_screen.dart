@@ -72,7 +72,7 @@ class _RequestScreenState extends State<RequestScreen>
                   SizedBox(
                     height: 48,
                     child: UiButton.filledPrimary(
-                      onPressed: _onButtonTap,
+                      onPressed: _submitForm,
                       label: UiText.titleMedium('Создать заявку'),
                     ),
                   ),
@@ -102,13 +102,9 @@ mixin _RequestScreenStateMixin on State<RequestScreen> {
   void _initRequestBloc() {
     final imageRepository = ImageRepositoryImpl(picker: ImagePicker());
     final dependency = DependeciesScope.of(context);
-    final requestRepository = RequestRepositoryImpl(
-      client: dependency.client,
-      firebaseAuth: dependency.firebaseAuth,
-    );
     _requestFormBloc = RequestFormBloc(
       imageRepository: imageRepository,
-      requestRepository: requestRepository,
+      requestRepository: dependency.requestRepository,
       logger: dependency.logger,
     );
   }
@@ -125,21 +121,11 @@ mixin _RequestScreenStateMixin on State<RequestScreen> {
     super.dispose();
   }
 
-  void _onButtonTap() {
-    final specializations = _specializationBloc.state.specializations;
-    if (specializations.isEmpty) return;
-
-    final specializationId = specializations[_specializationIndex.value].id;
-    _submitForm(specializationId);
-    _cleanForm();
-  }
-
-  void _submitForm(int id) => _requestFormBloc.add(
-    .submitForm(description: _descriptionController.text, specializationId: id),
-  );
-
-  void _cleanForm() {
-    _descriptionController.clear();
+  void _submitForm() {
+    final request = _requestFormBloc.state.currentFormModel.toEntity();
+    context.read<RepairRequestBloc>().add(.create(request: request));
     _specializationIndex.value = 0;
+    _descriptionController.clear();
+    _requestFormBloc.add(.clearForm());
   }
 }

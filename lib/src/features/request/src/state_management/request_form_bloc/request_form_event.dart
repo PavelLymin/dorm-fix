@@ -6,9 +6,9 @@ typedef RequestFormEventMatch<R, E extends RequestFormEvent> =
 sealed class RequestFormEvent {
   const RequestFormEvent();
 
-  const factory RequestFormEvent.upadteRequestForm({
+  const factory RequestFormEvent.updateRequestForm({
     int? specializationId,
-    String? description,
+    String description,
     Priority priority,
     bool studentAbsent,
     DateTime? date,
@@ -24,10 +24,7 @@ sealed class RequestFormEvent {
 
   const factory RequestFormEvent.loadImages() = _LoadImagesEvent;
 
-  const factory RequestFormEvent.submitForm({
-    required String description,
-    required int specializationId,
-  }) = _SubmitFormEvent;
+  const factory RequestFormEvent.clearForm() = _ClearFormEvent;
 
   FutureOr<R> map<R>({
     required RequestFormEventMatch<R, _UpadateRequestFormEvent>
@@ -35,13 +32,13 @@ sealed class RequestFormEvent {
     required RequestFormEventMatch<R, _DeleteImageEvent> deleteImage,
     required RequestFormEventMatch<R, _AddImagesEvent> addImages,
     required RequestFormEventMatch<R, _LoadImagesEvent> loadImages,
-    required RequestFormEventMatch<R, _SubmitFormEvent> submitForm,
+    required RequestFormEventMatch<R, _ClearFormEvent> clearForm,
   }) => switch (this) {
     _UpadateRequestFormEvent e => updateRequestForm(e),
     _DeleteImageEvent e => deleteImage(e),
     _AddImagesEvent e => addImages(e),
     _LoadImagesEvent e => loadImages(e),
-    _SubmitFormEvent e => submitForm(e),
+    _ClearFormEvent e => clearForm(e),
   };
 }
 
@@ -83,12 +80,6 @@ final class _LoadImagesEvent extends RequestFormEvent {
   const _LoadImagesEvent();
 }
 
-final class _SubmitFormEvent extends RequestFormEvent {
-  const _SubmitFormEvent({
-    required this.description,
-    required this.specializationId,
-  });
-
-  final String description;
-  final int specializationId;
+final class _ClearFormEvent extends RequestFormEvent {
+  const _ClearFormEvent();
 }

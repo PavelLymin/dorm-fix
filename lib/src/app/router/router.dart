@@ -8,6 +8,10 @@ import '../../features/root/widget/root_screen.dart';
 import '../../features/yandex_mapkit/widget/map_with_dormitories.dart';
 
 class AppRouter extends RootStackRouter {
+  AppRouter({required AuthBloc authenticationBloc})
+    : _authenticationBloc = authenticationBloc;
+
+  final AuthBloc _authenticationBloc;
   @override
   List<NamedRouteDef> get routes => [
     NamedRouteDef(
@@ -23,9 +27,17 @@ class AppRouter extends RootStackRouter {
       name: 'UpdatePhonScreen',
       builder: (context, data) => const UpdatePhoneScreen(),
     ),
-
+    NamedRouteDef(
+      name: 'RequestScreen',
+      builder: (context, data) => const RequestScreen(),
+    ),
+    NamedRouteDef(
+      name: 'HistoryScreen',
+      builder: (context, data) => const HistoryScreen(),
+    ),
     NamedRouteDef(
       name: 'Root',
+      guards: [AuthGuard(authenticationBloc: _authenticationBloc)],
       builder: (_, _) => const RootScreen(),
       children: [
         NamedRouteDef(name: 'Home', builder: (_, _) => const HomeScreen()),
@@ -40,4 +52,21 @@ class AppRouter extends RootStackRouter {
       ],
     ),
   ];
+}
+
+class AuthGuard extends AutoRouteGuard {
+  const AuthGuard({required AuthBloc authenticationBloc})
+    : _authenticationBloc = authenticationBloc;
+
+  final AuthBloc _authenticationBloc;
+
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) {
+    final isAuthenticated = _authenticationBloc.state.isAuthenticated;
+    if (isAuthenticated) {
+      resolver.next(true);
+    } else {
+      router.navigate(NamedRoute('SignIn'));
+    }
+  }
 }

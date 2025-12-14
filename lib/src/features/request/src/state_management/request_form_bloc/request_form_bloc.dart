@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
-import '../../../../../core/rest_client/rest_client.dart';
 import '../../../request.dart';
 import 'request_form_model.dart';
 
@@ -14,9 +13,7 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
     required IRequestRepository requestRepository,
     required IImageRepository imageRepository,
     required Logger logger,
-  }) : _requestRepository = requestRepository,
-       _imageRepository = imageRepository,
-       _logger = logger,
+  }) : _imageRepository = imageRepository,
        super(.form(formModel: RequestFormModel())) {
     on<RequestFormEvent>((event, emit) async {
       await event.map(
@@ -24,14 +21,12 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
         deleteImage: (e) => _deleteImage(emit, e),
         addImages: (e) => _addImages(emit, e),
         loadImages: (e) => _loadImages(emit, e),
-        submitForm: (e) => _submitForm(emit, e),
+        clearForm: (_) => _clearForm(emit),
       );
     });
   }
 
-  final IRequestRepository _requestRepository;
   final IImageRepository _imageRepository;
-  final Logger _logger;
 
   void _updateRequestForm(
     Emitter<RequestFormState> emit,
@@ -47,6 +42,10 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
       endTime: e.endTime,
     );
     emit(.form(formModel: form));
+  }
+
+  void _clearForm(Emitter<RequestFormState> emit) {
+    emit(.form(formModel: RequestFormModel()));
   }
 
   Future<void> _loadImages(
@@ -73,36 +72,4 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
     await _imageRepository.deleteImage(e.index);
     add(const .loadImages());
   }
-
-  Future<void> _submitForm(
-    Emitter<RequestFormState> emit,
-    _SubmitFormEvent e,
-  ) async {
-    try {
-      final request = state.currentFormModel
-          .copyWith(
-            description: e.description,
-            specializationId: e.specializationId,
-          )
-          .toEntity();
-      await _requestRepository.createRequest(request: request);
-      _clearForm(emit);
-    } on StructuredBackendException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      _emitError(emit, e.message);
-    } on RestClientException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      _emitError(emit, e.message);
-    } on Object catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      _emitError(emit, e.toString());
-    }
-  }
-
-  void _clearForm(Emitter<RequestFormState> emit) {
-    emit(.form(formModel: RequestFormModel()));
-  }
-
-  void _emitError(Emitter<RequestFormState> emit, String e) =>
-      emit(.error(formModel: state.currentFormModel, message: e));
 }

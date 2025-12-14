@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import '../../../core/database/database.dart';
+import '../../../../../core/database/database.dart';
 import '../../model/problem.dart';
 
 class ProblemDto {

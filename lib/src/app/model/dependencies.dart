@@ -1,20 +1,22 @@
 import 'package:dorm_fix/src/features/room/data/repository/room_repository.dart';
-import 'package:dorm_fix/src/features/room/state_management/room_search_bloc/room_search_bloc_bloc.dart';
+import 'package:dorm_fix/src/features/request/request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:logger/logger.dart';
+import 'package:logger/web.dart';
 import '../../core/rest_client/rest_client.dart';
+import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/settings/settings.dart';
-import '../../features/yandex_mapkit/state_management/pins_bloc/pins_bloc.dart';
 import '../../features/yandex_mapkit/state_management/dormitory_search_bloc/dormitory_search_bloc.dart';
+import '../../features/yandex_mapkit/state_management/pins_bloc/pins_bloc.dart';
 import '../router/router.dart';
 
 class DependencyContainer {
   const DependencyContainer({
     required this.firebaseAuth,
     required this.client,
+    required this.webSocket,
     required this.router,
     required this.logger,
     required this.settingsContainer,
@@ -28,11 +30,15 @@ class DependencyContainer {
     required this.pinsBloc,
     required this.specializationBloc,
     required this.roomRepository,
+    required this.requestRepository,
+    required this.repairRequestBloc,
   });
 
   final FirebaseAuth firebaseAuth;
 
   final RestClientHttp client;
+
+  final IWebSocket webSocket;
 
   final AppRouter router;
 
@@ -59,4 +65,8 @@ class DependencyContainer {
   final PinsBloc pinsBloc;
 
   final SpecializationBloc specializationBloc;
+
+  final IRequestRepository requestRepository;
+
+  final RepairRequestBloc repairRequestBloc;
 }

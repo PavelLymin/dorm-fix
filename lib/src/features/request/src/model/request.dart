@@ -31,8 +31,8 @@ enum Status {
   }
 }
 
-sealed class RequestEntity {
-  const RequestEntity({
+sealed class RepairRequestEntity {
+  const RepairRequestEntity({
     required this.specializationId,
     required this.description,
     required this.priority,
@@ -52,7 +52,7 @@ sealed class RequestEntity {
   final int startTime;
   final int endTime;
 
-  const factory RequestEntity.full({
+  const factory RepairRequestEntity.full({
     required final int id,
     required final String uid,
     required final int specializationId,
@@ -65,9 +65,9 @@ sealed class RequestEntity {
     required final int endTime,
     required final List<ProblemEntity> imagePaths,
     required final DateTime createdAt,
-  }) = FullRequestEntity;
+  }) = FullRepairRequest;
 
-  const factory RequestEntity.created({
+  const factory RepairRequestEntity.created({
     required final int specializationId,
     required final String description,
     required final Priority priority,
@@ -77,13 +77,13 @@ sealed class RequestEntity {
     required final int startTime,
     required final int endTime,
     required final List<String> imagePaths,
-  }) = CreatedRequestEntity;
+  }) = CreatedRepairRequest;
 
-  RequestEntity copyWith();
+  RepairRequestEntity copyWith();
 }
 
-final class CreatedRequestEntity extends RequestEntity {
-  const CreatedRequestEntity({
+final class CreatedRepairRequest extends RepairRequestEntity {
+  const CreatedRepairRequest({
     required super.specializationId,
     required super.description,
     required super.priority,
@@ -98,7 +98,7 @@ final class CreatedRequestEntity extends RequestEntity {
   final List<String> imagePaths;
 
   @override
-  CreatedRequestEntity copyWith({
+  CreatedRepairRequest copyWith({
     int? specializationId,
     String? description,
     Priority? priority,
@@ -108,7 +108,7 @@ final class CreatedRequestEntity extends RequestEntity {
     int? startTime,
     int? endTime,
     List<String>? imagePaths,
-  }) => CreatedRequestEntity(
+  }) => CreatedRepairRequest(
     specializationId: specializationId ?? this.specializationId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
@@ -122,7 +122,7 @@ final class CreatedRequestEntity extends RequestEntity {
 
   @override
   String toString() =>
-      'CreatedRequestEntity('
+      'CreatedRepairRequest('
       'specializationId: $specializationId, '
       'description: $description, '
       'priority: $priority, '
@@ -135,7 +135,7 @@ final class CreatedRequestEntity extends RequestEntity {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is CreatedRequestEntity &&
+    return other is CreatedRepairRequest &&
         other.specializationId == specializationId &&
         other.description == description &&
         other.priority == priority &&
@@ -159,8 +159,8 @@ final class CreatedRequestEntity extends RequestEntity {
   );
 }
 
-final class FullRequestEntity extends RequestEntity {
-  const FullRequestEntity({
+final class FullRepairRequest extends RepairRequestEntity {
+  const FullRepairRequest({
     required this.id,
     required this.uid,
     required super.specializationId,
@@ -181,7 +181,7 @@ final class FullRequestEntity extends RequestEntity {
   final List<ProblemEntity> imagePaths;
 
   @override
-  FullRequestEntity copyWith({
+  FullRepairRequest copyWith({
     int? id,
     String? uid,
     int? specializationId,
@@ -194,7 +194,7 @@ final class FullRequestEntity extends RequestEntity {
     int? endTime,
     List<ProblemEntity>? imagePaths,
     DateTime? createdAt,
-  }) => FullRequestEntity(
+  }) => FullRepairRequest(
     id: id ?? this.id,
     uid: uid ?? this.uid,
     specializationId: specializationId ?? this.specializationId,
@@ -211,7 +211,7 @@ final class FullRequestEntity extends RequestEntity {
 
   @override
   String toString() =>
-      'RequestEntity('
+      'FullRepairRequest('
       'id: $id,'
       'uid: $uid, '
       'specializationId: $specializationId, '
@@ -228,7 +228,7 @@ final class FullRequestEntity extends RequestEntity {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is FullRequestEntity && other.id == id;
+    return other is FullRepairRequest && other.id == id;
   }
 
   @override

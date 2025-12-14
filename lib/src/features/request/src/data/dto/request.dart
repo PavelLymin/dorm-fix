@@ -1,8 +1,8 @@
 import '../../model/request.dart';
 import 'problem.dart';
 
-sealed class RequestDto {
-  const RequestDto({
+sealed class RepairRequestDto {
+  const RepairRequestDto({
     required this.specializationId,
     required this.description,
     required this.priority,
@@ -22,13 +22,13 @@ sealed class RequestDto {
   final int startTime;
   final int endTime;
 
-  RequestEntity toEntity();
+  RepairRequestEntity toEntity();
 
   Map<String, Object?> toJson();
 }
 
-final class CreatedRequestDto extends RequestDto {
-  const CreatedRequestDto({
+final class CreatedRepairRequestDto extends RepairRequestDto {
+  const CreatedRepairRequestDto({
     required super.specializationId,
     required super.description,
     required super.priority,
@@ -43,7 +43,7 @@ final class CreatedRequestDto extends RequestDto {
   final List<String> imagePaths;
 
   @override
-  CreatedRequestEntity toEntity() => CreatedRequestEntity(
+  CreatedRepairRequest toEntity() => CreatedRepairRequest(
     specializationId: specializationId,
     description: description,
     priority: priority,
@@ -55,8 +55,8 @@ final class CreatedRequestDto extends RequestDto {
     imagePaths: imagePaths,
   );
 
-  factory CreatedRequestDto.fromEntity(CreatedRequestEntity entity) =>
-      CreatedRequestDto(
+  factory CreatedRepairRequestDto.fromEntity(CreatedRepairRequest entity) =>
+      CreatedRepairRequestDto(
         specializationId: entity.specializationId,
         description: entity.description,
         priority: entity.priority,
@@ -78,10 +78,10 @@ final class CreatedRequestDto extends RequestDto {
     'date': date.toLocal().toString(),
     'start_time': startTime,
     'end_time': endTime,
-    'image_paths': imagePaths,
+    'problems': imagePaths,
   };
 
-  factory CreatedRequestDto.fromJson(Map<String, Object?> json) {
+  factory CreatedRepairRequestDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
       'specialization_id': final int specializationId,
       'description': final String description,
@@ -91,10 +91,10 @@ final class CreatedRequestDto extends RequestDto {
       'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
-      'image_paths': final List<dynamic> imagePaths,
+      'problems': final List<dynamic> imagePaths,
     }) {
       final List<String> paths = imagePaths.cast<String>().toList();
-      return CreatedRequestDto(
+      return CreatedRepairRequestDto(
         specializationId: specializationId,
         description: description,
         priority: Priority.fromValue(priority),
@@ -111,8 +111,8 @@ final class CreatedRequestDto extends RequestDto {
   }
 }
 
-final class FullRequestDto extends RequestDto {
-  const FullRequestDto({
+final class FullRepairRequestDto extends RepairRequestDto {
+  const FullRepairRequestDto({
     required this.id,
     required this.uid,
     required super.specializationId,
@@ -133,7 +133,7 @@ final class FullRequestDto extends RequestDto {
   final List<ProblemDto> imagePaths;
 
   @override
-  FullRequestEntity toEntity() => FullRequestEntity(
+  FullRepairRequest toEntity() => FullRepairRequest(
     id: id,
     uid: uid,
     specializationId: specializationId,
@@ -148,20 +148,23 @@ final class FullRequestDto extends RequestDto {
     createdAt: createdAt,
   );
 
-  factory FullRequestDto.fromEntity(FullRequestEntity entity) => FullRequestDto(
-    id: entity.id,
-    uid: entity.uid,
-    specializationId: entity.specializationId,
-    description: entity.description,
-    priority: entity.priority,
-    status: entity.status,
-    studentAbsent: entity.studentAbsent,
-    date: entity.date,
-    startTime: entity.startTime,
-    endTime: entity.endTime,
-    imagePaths: entity.imagePaths.map((e) => ProblemDto.fromEntity(e)).toList(),
-    createdAt: entity.createdAt,
-  );
+  factory FullRepairRequestDto.fromEntity(FullRepairRequest entity) =>
+      FullRepairRequestDto(
+        id: entity.id,
+        uid: entity.uid,
+        specializationId: entity.specializationId,
+        description: entity.description,
+        priority: entity.priority,
+        status: entity.status,
+        studentAbsent: entity.studentAbsent,
+        date: entity.date,
+        startTime: entity.startTime,
+        endTime: entity.endTime,
+        imagePaths: entity.imagePaths
+            .map((e) => ProblemDto.fromEntity(e))
+            .toList(),
+        createdAt: entity.createdAt,
+      );
 
   @override
   Map<String, Object?> toJson() => {
@@ -169,17 +172,17 @@ final class FullRequestDto extends RequestDto {
     'uid': uid,
     'specialization_id': specializationId,
     'description': description,
-    'priority': priority.name,
-    'status': status,
+    'priority': priority.value,
+    'status': status.value,
     'student_absent': studentAbsent,
     'date': date.toLocal().toString(),
     'start_time': startTime,
     'end_time': endTime,
-    'image_paths': imagePaths,
+    'problems': imagePaths,
     'created_at': createdAt,
   };
 
-  factory FullRequestDto.fromJson(Map<String, Object?> json) {
+  factory FullRepairRequestDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
       'id': final int id,
       'uid': final String uid,
@@ -188,13 +191,13 @@ final class FullRequestDto extends RequestDto {
       'priority': final String priority,
       'status': final String status,
       'student_absent': final bool studentAbsent,
-      'date': final DateTime date,
+      'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
-      'image_paths': final List<Map<String, Object?>> imagePaths,
-      'created_at': final DateTime createdAt,
+      'problems': final List<dynamic> imagePaths,
+      'created_at': final String createdAt,
     }) {
-      return FullRequestDto(
+      return FullRepairRequestDto(
         id: id,
         uid: uid,
         specializationId: specializationId,
@@ -202,11 +205,11 @@ final class FullRequestDto extends RequestDto {
         priority: Priority.fromValue(priority),
         status: Status.fromValue(status),
         studentAbsent: studentAbsent,
-        date: date,
+        date: DateTime.parse(date),
         startTime: startTime,
         endTime: endTime,
         imagePaths: imagePaths.map((e) => ProblemDto.fromJson(e)).toList(),
-        createdAt: createdAt,
+        createdAt: DateTime.parse(createdAt),
       );
     } else {
       throw ArgumentError('Invalid JSON format for FullRequestEntity: $json');

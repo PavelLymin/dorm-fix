@@ -68,18 +68,16 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
   @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
-  );
+  late final GeneratedColumnWithTypeConverter<DateTime, String> createdAt =
+      GeneratedColumn<String>(
+        'created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: currentDateAndTime.datetime,
+      ).withConverter<DateTime>($UsersTable.$convertercreatedAt);
   @override
   List<GeneratedColumn> get $columns => [
     uid,
@@ -148,12 +146,6 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     } else if (isInserting) {
       context.missing(_roleMeta);
     }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    }
     return context;
   }
 
@@ -187,10 +179,12 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
         DriftSqlType.string,
         data['${effectivePrefix}role'],
       )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
+      createdAt: $UsersTable.$convertercreatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}created_at'],
+        )!,
+      ),
     );
   }
 
@@ -198,6 +192,9 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   $UsersTable createAlias(String alias) {
     return $UsersTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<DateTime, String> $convertercreatedAt =
+      const DateTimeConverter();
 }
 
 class User extends DataClass implements Insertable<User> {
@@ -234,7 +231,11 @@ class User extends DataClass implements Insertable<User> {
       map['photo_url'] = Variable<String>(photoURL);
     }
     map['role'] = Variable<String>(role);
-    map['created_at'] = Variable<DateTime>(createdAt);
+    {
+      map['created_at'] = Variable<String>(
+        $UsersTable.$convertercreatedAt.toSql(createdAt),
+      );
+    }
     return map;
   }
 
@@ -394,7 +395,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     Expression<String>? phoneNumber,
     Expression<String>? photoURL,
     Expression<String>? role,
-    Expression<DateTime>? createdAt,
+    Expression<String>? createdAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -453,7 +454,9 @@ class UsersCompanion extends UpdateCompanion<User> {
       map['role'] = Variable<String>(role.value);
     }
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+      map['created_at'] = Variable<String>(
+        $UsersTable.$convertercreatedAt.toSql(createdAt.value),
+      );
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -2283,15 +2286,15 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
       'CHECK ("student_absent" IN (0, 1))',
     ),
   );
-  static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
-  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
-    'date',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
+  late final GeneratedColumnWithTypeConverter<DateTime, String> date =
+      GeneratedColumn<String>(
+        'date',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($RequestsTable.$converterdate);
   static const VerificationMeta _startTimeMeta = const VerificationMeta(
     'startTime',
   );
@@ -2314,18 +2317,16 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
   @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
-  );
+  late final GeneratedColumnWithTypeConverter<DateTime, String> createdAt =
+      GeneratedColumn<String>(
+        'created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: currentDateAndTime.datetime,
+      ).withConverter<DateTime>($RequestsTable.$convertercreatedAt);
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2412,14 +2413,6 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
     } else if (isInserting) {
       context.missing(_studentAbsentMeta);
     }
-    if (data.containsKey('date')) {
-      context.handle(
-        _dateMeta,
-        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_dateMeta);
-    }
     if (data.containsKey('start_time')) {
       context.handle(
         _startTimeMeta,
@@ -2435,12 +2428,6 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
       );
     } else if (isInserting) {
       context.missing(_endTimeMeta);
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
     }
     return context;
   }
@@ -2479,10 +2466,12 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
         DriftSqlType.bool,
         data['${effectivePrefix}student_absent'],
       )!,
-      date: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}date'],
-      )!,
+      date: $RequestsTable.$converterdate.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}date'],
+        )!,
+      ),
       startTime: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}start_time'],
@@ -2491,10 +2480,12 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
         DriftSqlType.int,
         data['${effectivePrefix}end_time'],
       )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
+      createdAt: $RequestsTable.$convertercreatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}created_at'],
+        )!,
+      ),
     );
   }
 
@@ -2502,6 +2493,11 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
   $RequestsTable createAlias(String alias) {
     return $RequestsTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<DateTime, String> $converterdate =
+      const DateTimeConverter();
+  static TypeConverter<DateTime, String> $convertercreatedAt =
+      const DateTimeConverter();
 }
 
 class Request extends DataClass implements Insertable<Request> {
@@ -2539,10 +2535,16 @@ class Request extends DataClass implements Insertable<Request> {
     map['priority'] = Variable<String>(priority);
     map['status'] = Variable<String>(status);
     map['student_absent'] = Variable<bool>(studentAbsent);
-    map['date'] = Variable<DateTime>(date);
+    {
+      map['date'] = Variable<String>($RequestsTable.$converterdate.toSql(date));
+    }
     map['start_time'] = Variable<int>(startTime);
     map['end_time'] = Variable<int>(endTime);
-    map['created_at'] = Variable<DateTime>(createdAt);
+    {
+      map['created_at'] = Variable<String>(
+        $RequestsTable.$convertercreatedAt.toSql(createdAt),
+      );
+    }
     return map;
   }
 
@@ -2749,10 +2751,10 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     Expression<String>? priority,
     Expression<String>? status,
     Expression<bool>? studentAbsent,
-    Expression<DateTime>? date,
+    Expression<String>? date,
     Expression<int>? startTime,
     Expression<int>? endTime,
-    Expression<DateTime>? createdAt,
+    Expression<String>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2822,7 +2824,9 @@ class RequestsCompanion extends UpdateCompanion<Request> {
       map['student_absent'] = Variable<bool>(studentAbsent.value);
     }
     if (date.present) {
-      map['date'] = Variable<DateTime>(date.value);
+      map['date'] = Variable<String>(
+        $RequestsTable.$converterdate.toSql(date.value),
+      );
     }
     if (startTime.present) {
       map['start_time'] = Variable<int>(startTime.value);
@@ -2831,7 +2835,9 @@ class RequestsCompanion extends UpdateCompanion<Request> {
       map['end_time'] = Variable<int>(endTime.value);
     }
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+      map['created_at'] = Variable<String>(
+        $RequestsTable.$convertercreatedAt.toSql(createdAt.value),
+      );
     }
     return map;
   }
@@ -3259,10 +3265,11 @@ class $$UsersTableFilterComposer extends Composer<_$Database, $UsersTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get createdAt =>
+      $composableBuilder(
+        column: $table.createdAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   Expression<bool> studentsRefs(
     Expression<bool> Function($$StudentsTableFilterComposer f) f,
@@ -3378,7 +3385,7 @@ class $$UsersTableOrderingComposer extends Composer<_$Database, $UsersTable> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+  ColumnOrderings<String> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
@@ -3414,7 +3421,7 @@ class $$UsersTableAnnotationComposer extends Composer<_$Database, $UsersTable> {
   GeneratedColumn<String> get role =>
       $composableBuilder(column: $table.role, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get createdAt =>
+  GeneratedColumnWithTypeConverter<DateTime, String> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   Expression<T> studentsRefs<T extends Object>(
@@ -6035,10 +6042,11 @@ class $$RequestsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get date => $composableBuilder(
-    column: $table.date,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get date =>
+      $composableBuilder(
+        column: $table.date,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnFilters<int> get startTime => $composableBuilder(
     column: $table.startTime,
@@ -6050,10 +6058,11 @@ class $$RequestsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get createdAt =>
+      $composableBuilder(
+        column: $table.createdAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   $$UsersTableFilterComposer get uid {
     final $$UsersTableFilterComposer composer = $composerBuilder(
@@ -6161,7 +6170,7 @@ class $$RequestsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get date => $composableBuilder(
+  ColumnOrderings<String> get date => $composableBuilder(
     column: $table.date,
     builder: (column) => ColumnOrderings(column),
   );
@@ -6176,7 +6185,7 @@ class $$RequestsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+  ColumnOrderings<String> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
@@ -6256,7 +6265,7 @@ class $$RequestsTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<DateTime> get date =>
+  GeneratedColumnWithTypeConverter<DateTime, String> get date =>
       $composableBuilder(column: $table.date, builder: (column) => column);
 
   GeneratedColumn<int> get startTime =>
@@ -6265,7 +6274,7 @@ class $$RequestsTableAnnotationComposer
   GeneratedColumn<int> get endTime =>
       $composableBuilder(column: $table.endTime, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get createdAt =>
+  GeneratedColumnWithTypeConverter<DateTime, String> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   $$UsersTableAnnotationComposer get uid {

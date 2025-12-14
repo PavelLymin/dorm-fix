@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../../core/firebase/firebase.dart';
+import '../../../../../core/ws/ws.dart';
 import '../../../authentication.dart';
 
 abstract interface class IAuthRepository {
   Stream<UserEntity> get userChanges;
+
+  Future<void> connect();
 
   Future<AuthenticatedUser> signInWithEmailAndPassword({
     required String email,
@@ -29,10 +32,14 @@ abstract interface class IAuthRepository {
 }
 
 class AuthRepository implements IAuthRepository {
-  AuthRepository({required FirebaseAuth firebaseAuth})
-    : _firebaseAuth = firebaseAuth;
+  AuthRepository({
+    required FirebaseAuth firebaseAuth,
+    required IWebSocket webSocket,
+  }) : _firebaseAuth = firebaseAuth,
+       _webSocket = webSocket;
 
   final FirebaseAuth _firebaseAuth;
+  final IWebSocket _webSocket;
 
   @override
   Stream<UserEntity> get userChanges => _firebaseAuth.userChanges().map((data) {
@@ -42,6 +49,17 @@ class AuthRepository implements IAuthRepository {
       return const NotAuthenticatedUser();
     }
   });
+
+  @override
+  Future<void> connect() async {
+    try {
+      final token = await _firebaseAuth.currentUser?.getIdToken();
+
+      await _webSocket.connect({'Authorization': 'Bearer $token'});
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   @override
   Future<AuthenticatedUser> signInWithEmailAndPassword({
