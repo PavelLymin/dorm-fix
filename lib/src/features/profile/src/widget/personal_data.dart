@@ -75,7 +75,7 @@ mixin _PersonalDataStateMixin on State<PersonalData> {
     ),
     GroupedListItem(
       title: UiText.labelLarge('Комната'),
-      data: UiText.bodyMedium(student.room.roomNumber, style: dataStyle),
+      data: UiText.bodyMedium(student.room.number, style: dataStyle),
       onTap: () {},
     ),
   ];

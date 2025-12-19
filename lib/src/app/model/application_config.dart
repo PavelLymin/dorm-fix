@@ -14,20 +14,25 @@ abstract final class Config {
   /// e.g. https://api.domain.tld
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://localhost:8080',
+    defaultValue: 'http://10.0.2.2:8080',
   );
 
   /// Base url for ws.
   /// e.g. ws://api.domain.tld
   static const String wsBaseUrl = String.fromEnvironment(
     'WS_BASE_URL',
-    defaultValue: 'ws://localhost:8080',
+    defaultValue: 'ws://10.0.2.2:8080',
   );
 
   /// Api key for MapKit SDK
   static const String mapKitApiKey = String.fromEnvironment(
     'MAPKIT_API_KEY',
     defaultValue: '152caab1-17a7-4ec4-a0b9-aaa267e6b0a8',
+  );
+
+  static const String googleClientId = String.fromEnvironment(
+    '889571705211-l3jel9lhdsbq252dvpg51583755n7sm7.apps.googleusercontent.com',
+    defaultValue: '',
   );
 
   /// Timeout in milliseconds for opening url.

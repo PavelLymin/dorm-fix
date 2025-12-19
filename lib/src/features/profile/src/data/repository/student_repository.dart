@@ -29,13 +29,8 @@ class StudentRepositoryImpl implements IStudentRepository {
       headers: {'Authorization': 'Bearer $token'},
       body: body,
     );
-    print('Full response: $response');
-    print('Response type: ${response.runtimeType}');
 
-    if (response is Map) {
-      print('Response keys: ${response?.keys}');
-      print('Response values: ${response?.values}');
-    }
+    if (response is Map) {}
 
     // if (response?['status_code'] != 201) {
     //   throw StructuredBackendException(

@@ -114,10 +114,4 @@ mixin _HomeScreenStateMixin on State<HomeScreen> {
     _specializationBloc = DependeciesScope.of(context).specializationBloc
       ..add(.getSpecializations());
   }
-
-  @override
-  void dispose() {
-    _specializationBloc.close();
-    super.dispose();
-  }
 }

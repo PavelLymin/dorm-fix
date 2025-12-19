@@ -63,7 +63,7 @@ class UserDto {
       'photo_url': final String? photoURL,
       'email': final String? email,
       'phone_number': final String? phoneNumber,
-      'role': final Role? role,
+      'role': final String? role,
     }) {
       return UserDto(
         uid: uid,
@@ -71,7 +71,7 @@ class UserDto {
         photoURL: photoURL,
         email: email,
         phoneNumber: phoneNumber,
-        role: role ?? Role.student,
+        role: role == null ? Role.student : Role.fromString(role),
       );
     }
     throw ArgumentError('Invalid JSON data for User: $json');

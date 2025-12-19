@@ -25,12 +25,12 @@ class _RequestScreenState extends State<RequestScreen>
       BlocProvider(create: (context) => _requestFormBloc),
       BlocProvider.value(value: _specializationBloc),
     ],
-    child: BlocListener<RequestFormBloc, RequestFormState>(
+    child: BlocListener<RepairRequestBloc, RepairRequestState>(
       listener: (context, state) {
         state.mapOrNull(
           error: (state) => ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text(state.message))),
+          ).showSnackBar(SnackBar(content: Text('wekwkjejwk'))),
         );
       },
       child: SafeArea(
@@ -116,13 +116,12 @@ mixin _RequestScreenStateMixin on State<RequestScreen> {
 
   @override
   void dispose() {
-    _specializationBloc.close();
     _specializationIndex.dispose();
     super.dispose();
   }
 
   void _submitForm() {
-    final request = _requestFormBloc.state.currentFormModel.toEntity();
+    final request = _requestFormBloc.state.currentFormModel;
     context.read<RepairRequestBloc>().add(.create(request: request));
     _specializationIndex.value = 0;
     _descriptionController.clear();

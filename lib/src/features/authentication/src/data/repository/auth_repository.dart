@@ -34,11 +34,14 @@ abstract interface class IAuthRepository {
 class AuthRepository implements IAuthRepository {
   AuthRepository({
     required FirebaseAuth firebaseAuth,
+    required GoogleSignIn googleSignIn,
     required IWebSocket webSocket,
   }) : _firebaseAuth = firebaseAuth,
+       _googleSignIn = googleSignIn,
        _webSocket = webSocket;
 
   final FirebaseAuth _firebaseAuth;
+  final GoogleSignIn _googleSignIn;
   final IWebSocket _webSocket;
 
   @override
@@ -149,7 +152,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<({AuthenticatedUser user, bool isNewUser})> signInWithGoogle() async {
     try {
-      final googleUser = await GoogleSignIn.instance.authenticate();
+      final googleUser = await _googleSignIn.authenticate();
       final googleAuth = googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,

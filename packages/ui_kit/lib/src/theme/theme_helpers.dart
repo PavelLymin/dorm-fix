@@ -30,19 +30,39 @@ ThemeData createThemeData({
 }) => ThemeData(brightness: brightness, extensions: {palette, typography});
 
 ColorPalette generatePaletteForBrightness(Brightness brightness) {
+  if (brightness == Brightness.dark) {
+    return ColorPalette(
+      background: const Color(0xFF000000),
+      foreground: const Color(0xFFFFFFFF),
+      muted: const Color(0xFF50ACF9).withValues(alpha: 0.5),
+      mutedForeground: const Color(0xFF949494),
+      border: const Color(0xFF3B3B3B),
+      buttonBorder: Color(0xFF7DB3FC),
+      primary: const Color(0xFF50ACF9),
+      primaryForeground: const Color(0xFFFFFFFF),
+      secondary: const Color(0xFF232325),
+      secondaryButton: const Color(0xFF38383A),
+      secondaryForeground: const Color(0xFF8A8888),
+      accent: const Color(0xFFFFFFFF),
+      accentForeground: const Color(0xFFFFFFFF),
+      destructive: const Color(0xFFFD273E),
+      destructiveForeground: const Color(0xFFFD273E),
+      ring: const Color(0xFF3C8BFA),
+    );
+  }
   return ColorPalette(
-    background: const Color(0xFF000000),
-    foreground: const Color(0xFFFFFFFF),
+    background: const Color(0xFFFFFFFF),
+    foreground: const Color(0xFF000000),
     muted: const Color(0xFF50ACF9).withValues(alpha: 0.5),
     mutedForeground: const Color(0xFF949494),
     border: const Color(0xFF3B3B3B),
     buttonBorder: Color(0xFF7DB3FC),
     primary: const Color(0xFF50ACF9),
     primaryForeground: const Color(0xFFFFFFFF),
-    secondary: const Color(0xFF232325),
-    secondaryButton: const Color(0xFF38383A),
+    secondary: const Color(0xFFEDEDED),
+    secondaryButton: const Color(0xFFCECECE),
     secondaryForeground: const Color(0xFF8A8888),
-    accent: const Color(0xFFFFFFFF),
+    accent: const Color(0xFF000000),
     accentForeground: const Color(0xFFFFFFFF),
     destructive: const Color(0xFFFD273E),
     destructiveForeground: const Color(0xFFFD273E),

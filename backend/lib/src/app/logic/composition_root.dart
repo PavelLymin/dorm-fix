@@ -69,10 +69,7 @@ class CompositionRoot {
     );
 
     // Student
-    final studentRepository = StudentRepositoryImpl(
-      database: database,
-      firebaseAdmin: app,
-    );
+    final studentRepository = StudentRepositoryImpl(database: database);
     final studentRouter = StudentRouter(
       studentRepository: studentRepository,
       restApi: restApi,

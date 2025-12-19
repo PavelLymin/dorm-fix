@@ -1,8 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:dorm_fix/src/features/yandex_mapkit/widget/map_with_dormitories.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../app/widget/dependencies_scope.dart';
-import '../../../home/src/widget/home_screen.dart';
 import '../../authentication.dart';
 import 'signin_form.dart';
 import 'signin_social.dart';
@@ -64,10 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
             context,
             MaterialPageRoute(builder: (context) => const MapWithDormitories()),
           ),
-          loggedIn: (_) => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          ),
+          loggedIn: (_) => context.router.replace(const NamedRoute('Home')),
           smsCodeSent: (_) => _addSmsCodeSent(true),
           error: (error) => ScaffoldMessenger.of(
             context,

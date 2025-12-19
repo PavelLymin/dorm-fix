@@ -1,9 +1,7 @@
 import 'package:backend/src/server/data/dto/student.dart';
 import 'package:drift/drift.dart';
-import 'package:firebase_admin/firebase_admin.dart';
 import '../../../core/database/database.dart';
 import '../../model/student.dart';
-import '../../model/user.dart';
 import '../dto/user.dart';
 
 abstract interface class IStudentRepository {
@@ -23,14 +21,9 @@ abstract interface class IStudentRepository {
 }
 
 class StudentRepositoryImpl implements IStudentRepository {
-  StudentRepositoryImpl({
-    required Database database,
-    required App firebaseAdmin,
-  }) : _database = database,
-       _firebaseApp = firebaseAdmin;
+  StudentRepositoryImpl({required Database database}) : _database = database;
 
   final Database _database;
-  final App _firebaseApp;
 
   @override
   Future<void> createStudent({

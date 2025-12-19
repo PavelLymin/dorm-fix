@@ -4,7 +4,9 @@
     <application
         android:label="dorm_fix"
         android:icon="@mipmap/ic_launcher"
-        android:name="com.example.dormfix.MainApplication">
+        android:name="com.example.dormfix.MainApplication"
+        android:usesCleartextTraffic="true"
+        >
         <activity
             android:name=".MainActivity"
             android:exported="true"

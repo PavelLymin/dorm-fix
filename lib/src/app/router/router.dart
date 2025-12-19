@@ -16,7 +16,6 @@ class AppRouter extends RootStackRouter {
   List<NamedRouteDef> get routes => [
     NamedRouteDef(
       name: 'SignIn',
-      initial: true,
       builder: (context, data) => const SignInScreen(),
     ),
     NamedRouteDef(
@@ -36,6 +35,7 @@ class AppRouter extends RootStackRouter {
       builder: (context, data) => const HistoryScreen(),
     ),
     NamedRouteDef(
+      initial: true,
       name: 'Root',
       guards: [AuthGuard(authenticationBloc: _authenticationBloc)],
       builder: (_, _) => const RootScreen(),

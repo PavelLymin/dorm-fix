@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
 import '../../../../../core/ws/ws.dart';
 import '../../../request.dart';
+import '../request_form_bloc/request_form_model.dart';
 
 part 'repair_request_event.dart';
 part 'repair_request_state.dart';
@@ -55,8 +56,9 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
     Emitter<RepairRequestState> emit,
   ) async {
     try {
-      await _requestRepository.createRequest(request: event.request);
-    } on Object catch (e, stackTrace) {
+      final request = event.request.toEntity();
+      await _requestRepository.createRequest(request: request);
+    } catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(.error(requests: state.requests, message: e.toString()));
     }

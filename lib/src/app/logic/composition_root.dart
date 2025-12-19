@@ -2,6 +2,7 @@ import 'package:dorm_fix/src/features/request/request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../firebase_options.dart';
@@ -70,9 +71,13 @@ class CompositionRoot {
       firebaseAuth: firebaseAuth,
     );
 
+    final googleSignIn = GoogleSignIn.instance;
+    await googleSignIn.initialize(clientId: Config.googleClientId);
+
     // Authentication
     final authRepository = AuthRepository(
       firebaseAuth: firebaseAuth,
+      googleSignIn: googleSignIn,
       webSocket: webSocket,
     );
     final authenticationBloc = AuthBloc(

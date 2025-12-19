@@ -1,7 +1,8 @@
 import 'package:ui_kit/ui.dart';
+import 'log_out.dart';
 import 'personal_avatar.dart';
 import 'personal_data.dart';
-import 'personal_theme.dart';
+import 'theme_menu.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -13,15 +14,20 @@ class ProfileScreen extends StatelessWidget {
         child: Center(
           child: Padding(
             padding: AppPadding.horizontalIncrement(increment: 3),
-            child: Column(
-              crossAxisAlignment: .start,
+            child: const Column(
+              crossAxisAlignment: .stretch,
               mainAxisAlignment: .start,
               children: [
-                const Center(child: PersonalAvatar()),
-                const SizedBox(height: 24),
-                const PersonalData(),
-                const SizedBox(height: 16),
-                const PersonalTheme(),
+                Stack(
+                  children: [
+                    Center(child: PersonalAvatar()),
+                    Align(alignment: .topRight, child: PersonalTheme()),
+                  ],
+                ),
+                SizedBox(height: 24),
+                PersonalData(),
+                SizedBox(height: 32),
+                LogOut(),
               ],
             ),
           ),

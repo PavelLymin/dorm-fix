@@ -30,22 +30,10 @@ sealed class RepairRequestResponse {
     final type = ResponseType.fromValue(json.type);
 
     return switch (type) {
-      ResponseType.created => CreatedRepairRequestResponse.fromJson(
-        json.payload,
-        requests,
-      ),
-      ResponseType.deleted => DeletedRepairRequestResponse.fromJson(
-        json.payload,
-        requests,
-      ),
-      ResponseType.updated => UpdatedRepairRequestResponse.fromJson(
-        json.payload,
-        requests,
-      ),
-      ResponseType.error => UpdatedRepairRequestResponse.fromJson(
-        json.payload,
-        requests,
-      ),
+      .created => CreatedRepairRequestResponse.fromJson(json.payload, requests),
+      .deleted => DeletedRepairRequestResponse.fromJson(json.payload, requests),
+      .updated => UpdatedRepairRequestResponse.fromJson(json.payload, requests),
+      .error => UpdatedRepairRequestResponse.fromJson(json.payload, requests),
     };
   }
 
@@ -53,14 +41,12 @@ sealed class RepairRequestResponse {
     required T Function(CreatedRepairRequestResponse) created,
     required T Function(DeletedRepairRequestResponse) deleted,
     required T Function(UpdatedRepairRequestResponse) updated,
-  }) {
-    return switch (type) {
-      ResponseType.created => created(this as CreatedRepairRequestResponse),
-      ResponseType.deleted => deleted(this as DeletedRepairRequestResponse),
-      ResponseType.updated => updated(this as UpdatedRepairRequestResponse),
-      ResponseType.error => updated(this as UpdatedRepairRequestResponse),
-    };
-  }
+  }) => switch (type) {
+    .created => created(this as CreatedRepairRequestResponse),
+    .deleted => deleted(this as DeletedRepairRequestResponse),
+    .updated => updated(this as UpdatedRepairRequestResponse),
+    .error => updated(this as UpdatedRepairRequestResponse),
+  };
 }
 
 final class CreatedRepairRequestResponse extends RepairRequestResponse {

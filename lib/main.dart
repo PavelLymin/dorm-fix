@@ -61,17 +61,17 @@ class _MainAppState extends State<MainApp> {
     _requestBloc = DependeciesScope.of(context).repairRequestBloc;
   }
 
-  // ThemeData get _themeData {
-  //   switch (widget.settings.themeMode) {
-  //     case ThemeModeVO.light:
-  //       return lightTheme;
-  //     case ThemeModeVO.dark:
-  //       return darkTheme;
-  //     case ThemeModeVO.system:
-  //       final brightness = MediaQuery.platformBrightnessOf(context);
-  //       return brightness == Brightness.dark ? darkTheme : lightTheme;
-  //   }
-  // }
+  ThemeData get _themeData {
+    switch (widget.settings.themeMode) {
+      case ThemeModeVO.light:
+        return lightTheme;
+      case ThemeModeVO.dark:
+        return darkTheme;
+      case ThemeModeVO.system:
+        final brightness = MediaQuery.platformBrightnessOf(context);
+        return brightness == Brightness.dark ? darkTheme : lightTheme;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,7 @@ class _MainAppState extends State<MainApp> {
         ],
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,
-        theme: darkTheme,
+        theme: _themeData,
         routerConfig: router.config(),
       ),
     );

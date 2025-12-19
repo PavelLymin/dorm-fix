@@ -8,7 +8,7 @@ sealed class RepairRequestEvent {
 
   factory RepairRequestEvent.get() = _GetRepairRequestsEvent;
 
-  factory RepairRequestEvent.create({required CreatedRepairRequest request}) =>
+  factory RepairRequestEvent.create({required RequestFormModel request}) =>
       _CreateRepairRequestsEvent(request: request);
 
   FutureOr<R> map<R>({
@@ -27,5 +27,5 @@ final class _GetRepairRequestsEvent extends RepairRequestEvent {
 final class _CreateRepairRequestsEvent extends RepairRequestEvent {
   const _CreateRepairRequestsEvent({required this.request});
 
-  final CreatedRepairRequest request;
+  final RequestFormModel request;
 }
