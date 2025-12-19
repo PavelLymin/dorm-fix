@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-
 import '../../request.dart';
 
 class DescriptionText extends StatefulWidget {
@@ -14,11 +13,18 @@ class DescriptionText extends StatefulWidget {
 
 class _DescriptionTextState extends State<DescriptionText> {
   late final RequestFormBloc _requestFormBloc;
+
   @override
   void initState() {
     super.initState();
     _requestFormBloc = context.read<RequestFormBloc>();
     widget.controller.addListener(_onChange);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onChange);
+    super.dispose();
   }
 
   void _onChange() {

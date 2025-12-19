@@ -1,5 +1,5 @@
 import '../../../../authentication/src/data/dto/user.dart';
-import '../../../../yandex_mapkit/data/dto/dormitory.dart';
+import '../../../../yandex_mapkit/src/data/dto/dormitory.dart';
 import '../../model/profile.dart';
 
 class MasterDto {

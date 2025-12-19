@@ -1,4 +1,4 @@
-import 'package:dorm_fix/src/features/yandex_mapkit/model/dormitory.dart';
+import '../../../yandex_mapkit.dart';
 
 class DormitoryDto {
   DormitoryDto({

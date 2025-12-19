@@ -10,18 +10,18 @@ abstract final class Config {
 
   // --- API --- //
 
-  /// Base url for api.
+  /// Base url for api. 'http://10.0.2.2:8080'
   /// e.g. https://api.domain.tld
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:8080',
+    defaultValue: 'http://localhost:8080',
   );
 
   /// Base url for ws.
   /// e.g. ws://api.domain.tld
   static const String wsBaseUrl = String.fromEnvironment(
     'WS_BASE_URL',
-    defaultValue: 'ws://10.0.2.2:8080',
+    defaultValue: 'ws://localhost:8080',
   );
 
   /// Api key for MapKit SDK
@@ -31,7 +31,7 @@ abstract final class Config {
   );
 
   static const String googleClientId = String.fromEnvironment(
-    '889571705211-l3jel9lhdsbq252dvpg51583755n7sm7.apps.googleusercontent.com',
+    '889571705211-3m5otprqtm98lojcub115a29ed138lil.apps.googleusercontent.com',
     defaultValue: '',
   );
 

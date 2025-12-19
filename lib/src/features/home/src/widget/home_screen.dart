@@ -91,7 +91,7 @@ class _UserDisplayProfile extends StatelessWidget {
             crossAxisAlignment: .start,
             children: [
               UiText.headlineLarge(
-                student.user.displayName!,
+                student.user.displayName ?? 'User',
                 style: TextStyle(color: Theme.of(context).colorPalette.primary),
               ),
               UiText.headlineLarge(student.dormitory.name),
@@ -111,6 +111,7 @@ mixin _HomeScreenStateMixin on State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    DependeciesScope.of(context).profileBloc.add(.get());
     _specializationBloc = DependeciesScope.of(context).specializationBloc
       ..add(.getSpecializations());
   }

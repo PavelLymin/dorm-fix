@@ -1,4 +1,3 @@
-import 'package:dorm_fix/src/features/room/data/repository/room_repository.dart';
 import 'package:dorm_fix/src/features/request/request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/web.dart';
@@ -7,9 +6,9 @@ import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
+import '../../features/room/room.dart';
 import '../../features/settings/settings.dart';
-import '../../features/yandex_mapkit/state_management/dormitory_search_bloc/dormitory_search_bloc.dart';
-import '../../features/yandex_mapkit/state_management/pins_bloc/pins_bloc.dart';
+import '../../features/yandex_mapkit/yandex_mapkit.dart';
 import '../router/router.dart';
 
 class DependencyContainer {
@@ -25,9 +24,8 @@ class DependencyContainer {
     required this.userRepository,
     required this.studentRepository,
     required this.firebaseUserRepository,
-    required this.authButton,
     required this.dormitorySearchBloc,
-    required this.pinsBloc,
+    required this.dormitoryRepository,
     required this.specializationBloc,
     required this.roomRepository,
     required this.requestRepository,
@@ -56,13 +54,11 @@ class DependencyContainer {
 
   final IFirebaseUserRepository firebaseUserRepository;
 
-  final AuthButtonBloc authButton;
-
   final DormitorySearchBloc dormitorySearchBloc;
 
   final RoomRepository roomRepository;
 
-  final PinsBloc pinsBloc;
+  final IDormitoryRepository dormitoryRepository;
 
   final SpecializationBloc specializationBloc;
 

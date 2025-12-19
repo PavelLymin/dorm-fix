@@ -16,7 +16,7 @@ class MapTitle extends StatelessWidget {
             child: UiText.displayLarge(
               'Найдите свое общежитие',
               softWrap: true,
-              textAlign: TextAlign.left,
+              textAlign: .left,
             ),
           ),
         ),

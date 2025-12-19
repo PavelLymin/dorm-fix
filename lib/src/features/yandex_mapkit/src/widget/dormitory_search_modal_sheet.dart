@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../app/widget/dependencies_scope.dart';
-import '../state_management/dormitory_search_bloc/dormitory_search_bloc.dart';
+import '../../../../app/widget/dependencies_scope.dart';
+import '../../yandex_mapkit.dart';
 
 class DormitorySearchModalSheet extends StatefulWidget {
   const DormitorySearchModalSheet({super.key});
@@ -13,7 +13,7 @@ class DormitorySearchModalSheet extends StatefulWidget {
 
 class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
   late final TextEditingController _searchController;
-  late DormitorySearchBloc _dormitorySearchBloc;
+  late final DormitorySearchBloc _dormitorySearchBloc;
 
   @override
   void initState() {
@@ -25,6 +25,7 @@ class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
   @override
   void dispose() {
     _searchController.dispose();
+    _dormitorySearchBloc.dispose();
     super.dispose();
   }
 
@@ -40,7 +41,10 @@ class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
             const SizedBox(height: 16),
             UiTextField.standard(
               controller: _searchController,
-              style: UiTextFieldStyle(hintText: 'Поиск общежитий...'),
+              style: UiTextFieldStyle(
+                hintText: 'Поиск общежитий...',
+                prefixIcon: const Icon(Icons.search),
+              ),
               onChanged: _dormitorySearchBloc.onTextChanged.add,
             ),
             const SizedBox(height: 16),
@@ -50,9 +54,7 @@ class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
                   return state.map(
                     loading: (_) => CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: Theme.of(
-                        context,
-                      ).colorPalette.primary.withValues(alpha: .38),
+                      color: color.primary.withValues(alpha: .38),
                     ),
                     error: (state) => UiText.bodyMedium(state.message),
                     noTerm: (_) => UiText.bodyMedium('Введите текст в поле'),
@@ -65,7 +67,7 @@ class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
                             GroupedListItem(
                               title: UiText.bodyMedium(
                                 dormitory.name,
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: .bold),
                               ),
                               data: UiText.bodyMedium(dormitory.address),
                               onTap: () => Navigator.pop(context, dormitory),

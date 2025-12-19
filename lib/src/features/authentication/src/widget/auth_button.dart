@@ -17,7 +17,7 @@ class AuthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox(
     height: 48,
-    width: double.infinity,
+    width: .infinity,
     child: BlocBuilder<AuthButtonBloc, AuthButtonState>(
       builder: (context, state) => UiButton.filledPrimary(
         onPressed: () => state.mapOrNull(

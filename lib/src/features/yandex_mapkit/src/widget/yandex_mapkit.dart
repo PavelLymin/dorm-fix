@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:ui_kit/ui.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class YandexMapkit extends StatelessWidget {

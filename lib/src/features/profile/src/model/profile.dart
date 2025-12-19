@@ -1,6 +1,6 @@
 import '../../../authentication/src/model/user.dart';
-import '../../../room/model/room.dart';
-import '../../../yandex_mapkit/model/dormitory.dart';
+import '../../../room/src/model/room.dart';
+import '../../../yandex_mapkit/src/model/dormitory.dart';
 import '../data/dto/master.dart';
 import '../data/dto/student.dart';
 

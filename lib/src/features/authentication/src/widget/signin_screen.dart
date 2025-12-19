@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:dorm_fix/src/features/yandex_mapkit/widget/map_with_dormitories.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../app/widget/dependencies_scope.dart';
 import '../../authentication.dart';
 import 'signin_form.dart';
 import 'signin_social.dart';
@@ -17,13 +15,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   bool _isLoading = false;
   bool _isSmsCode = false;
-  late AuthButtonBloc _authButtonBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _authButtonBloc = DependeciesScope.of(context).authButton;
-  }
+  final _authButtonBloc = AuthButtonBloc();
 
   void _addLoading(bool state) {
     if (!_isLoading && state) {
@@ -46,24 +38,15 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _authButtonBloc.close();
-  }
-
-  @override
-  Widget build(BuildContext context) => BlocProvider.value(
-    value: _authButtonBloc,
+  Widget build(BuildContext context) => BlocProvider(
+    create: (_) => _authButtonBloc,
     child: BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (!state.isLoading) _addLoading(false);
         if (!state.isSmsCodeSent) _addSmsCodeSent(false);
         state.mapOrNull(
           loading: (_) => _addLoading(true),
-          signedUp: (_) => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MapWithDormitories()),
-          ),
+          signedUp: (_) => context.router.replace(const NamedRoute('Map')),
           loggedIn: (_) => context.router.replace(const NamedRoute('Home')),
           smsCodeSent: (_) => _addSmsCodeSent(true),
           error: (error) => ScaffoldMessenger.of(

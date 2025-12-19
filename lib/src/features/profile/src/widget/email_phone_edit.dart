@@ -176,7 +176,7 @@ class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
         label: BlocConsumer<PhoneNumberBloc, PhoneNumberState>(
           listener: (context, state) => state.mapOrNull(
             smsCodeSent: (_) =>
-                context.router.push(const NamedRoute('UpdatePhonScreen')),
+                context.router.push(const NamedRoute('UpdatePhoneScreen')),
           ),
           builder: (context, state) => state.maybeMap(
             orElse: () => UiText.titleMedium('Изменить'),
@@ -206,7 +206,6 @@ mixin _PhoneNumberEditStateMixin on State<_ButtonPhoneUpdate> {
   @override
   void dispose() {
     _isEnabled.dispose();
-    widget.controller.dispose();
     super.dispose();
   }
 

@@ -21,12 +21,12 @@ class SearchButton extends StatelessWidget {
                 padding: AppPadding.allMedium,
                 decoration: BoxDecoration(
                   color: theme.accent.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: const .all(.circular(16)),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search_rounded),
-                    SizedBox(width: 16),
+                    const Icon(Icons.search_rounded),
+                    const SizedBox(width: 16),
                     UiText.bodyMedium('Поиск общежитий...'),
                   ],
                 ),

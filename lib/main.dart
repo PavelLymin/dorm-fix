@@ -16,7 +16,6 @@ void main() async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       final dependency = await CompositionRoot(logger: logger).compose();
-
       runApp(
         DependeciesScope(
           dependencyContainer: dependency,
@@ -56,8 +55,7 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     _authenticationBloc = DependeciesScope.of(context).authenticationBloc;
-    _profileBloc = DependeciesScope.of(context).profileBloc
-      ..add(ProfileEvent.get());
+    _profileBloc = DependeciesScope.of(context).profileBloc;
     _requestBloc = DependeciesScope.of(context).repairRequestBloc;
   }
 

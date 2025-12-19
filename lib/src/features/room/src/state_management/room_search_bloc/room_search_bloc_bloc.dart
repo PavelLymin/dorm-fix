@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:dorm_fix/src/features/room/model/room.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dorm_fix/src/features/room/data/repository/room_repository.dart';
 import 'package:logger/web.dart';
 import 'package:rxdart/rxdart.dart';
-
-import '../../../../core/rest_client/rest_client.dart';
+import '../../../../../core/rest_client/rest_client.dart';
+import '../../../room.dart';
 
 part 'room_search_event.dart';
 part 'room_search_state.dart';

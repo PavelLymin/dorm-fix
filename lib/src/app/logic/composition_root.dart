@@ -11,11 +11,9 @@ import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
-import '../../features/room/data/repository/room_repository.dart';
+import '../../features/room/room.dart';
 import '../../features/settings/settings.dart';
-import '../../features/yandex_mapkit/data/repository/dormitory_repository.dart';
-import '../../features/yandex_mapkit/state_management/pins_bloc/pins_bloc.dart';
-import '../../features/yandex_mapkit/state_management/dormitory_search_bloc/dormitory_search_bloc.dart';
+import '../../features/yandex_mapkit/yandex_mapkit.dart';
 import '../bloc/app_bloc_observer.dart';
 import '../model/application_config.dart';
 import '../model/dependencies.dart';
@@ -72,7 +70,7 @@ class CompositionRoot {
     );
 
     final googleSignIn = GoogleSignIn.instance;
-    await googleSignIn.initialize(clientId: Config.googleClientId);
+    // await googleSignIn.initialize(clientId: Config.googleClientId);
 
     // Authentication
     final authRepository = AuthRepository(
@@ -86,13 +84,12 @@ class CompositionRoot {
       firebaseUserRepository: firebaseUserRepository,
       logger: logger,
     );
+
     // auto_route
     final router = AppRouter(authenticationBloc: authenticationBloc);
 
     // Settings
     final settingsContainer = await _CreateSettings().create();
-
-    final authButton = AuthButtonBloc();
 
     // Student
     final studentRepository = StudentRepositoryImpl(
@@ -136,10 +133,6 @@ class CompositionRoot {
       dormitoryRepository: dormitoryRepository,
       logger: logger,
     );
-    final pinsBloc = PinsBloc(
-      dormitoryRepository: dormitoryRepository,
-      logger: logger,
-    );
 
     // Room
     final roomRepository = RoomRepository(
@@ -172,9 +165,8 @@ class CompositionRoot {
       userRepository: userRepository,
       studentRepository: studentRepository,
       firebaseUserRepository: firebaseUserRepository,
-      authButton: authButton,
       specializationBloc: specializationBloc,
-      pinsBloc: pinsBloc,
+      dormitoryRepository: dormitoryRepository,
       roomRepository: roomRepository,
       requestRepository: requestRepository,
       repairRequestBloc: repairRequestBloc,
@@ -195,11 +187,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.userRepository,
     required this.studentRepository,
     required this.firebaseUserRepository,
-    required this.authButton,
     required this.specializationBloc,
     required this.dormitorySearchBloc,
     required this.roomRepository,
-    required this.pinsBloc,
+    required this.dormitoryRepository,
     required this.requestRepository,
     required this.repairRequestBloc,
   });
@@ -226,13 +217,11 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final IFirebaseUserRepository firebaseUserRepository;
 
-  final AuthButtonBloc authButton;
-
   final DormitorySearchBloc dormitorySearchBloc;
 
   final RoomRepository roomRepository;
 
-  final PinsBloc pinsBloc;
+  final IDormitoryRepository dormitoryRepository;
 
   final SpecializationBloc specializationBloc;
 
@@ -253,10 +242,9 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     userRepository: userRepository,
     studentRepository: studentRepository,
     firebaseUserRepository: firebaseUserRepository,
-    authButton: authButton,
     dormitorySearchBloc: dormitorySearchBloc,
     roomRepository: roomRepository,
-    pinsBloc: pinsBloc,
+    dormitoryRepository: dormitoryRepository,
     specializationBloc: specializationBloc,
     requestRepository: requestRepository,
     repairRequestBloc: repairRequestBloc,

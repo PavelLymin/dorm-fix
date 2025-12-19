@@ -50,8 +50,12 @@ mixin _PersonalDataStateMixin on State<PersonalData> {
   ) => <GroupedListItem>[
     GroupedListItem(
       title: UiText.labelLarge('Адрес электронной почты'),
-      data: UiText.bodyMedium(student.user.email ?? '', style: dataStyle),
+      data: UiText.bodyMedium(
+        student.user.email ?? 'Укажите почту',
+        style: dataStyle,
+      ),
       onTap: () => showUiBottomSheet(
+        isScrollControlled: true,
         context,
         _BottomSheetWrapper(
           widget: EmailAddressEdit(initialText: student.user.email ?? ''),
@@ -60,8 +64,12 @@ mixin _PersonalDataStateMixin on State<PersonalData> {
     ),
     GroupedListItem(
       title: UiText.labelLarge('Номер телефона'),
-      data: UiText.bodyMedium(student.user.phoneNumber ?? '', style: dataStyle),
+      data: UiText.bodyMedium(
+        student.user.phoneNumber ?? 'Укажите телефон',
+        style: dataStyle,
+      ),
       onTap: () => showUiBottomSheet(
+        isScrollControlled: true,
         context,
         _BottomSheetWrapper(
           widget: PhoneNumberEdit(initialText: student.user.phoneNumber ?? ''),
@@ -86,19 +94,24 @@ class _BottomSheetWrapper extends StatelessWidget {
   final Widget widget;
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-    child: Padding(
-      padding: AppPadding.horizontalIncrement(increment: 3),
-      child: Column(
-        crossAxisAlignment: .center,
-        mainAxisAlignment: .center,
-        mainAxisSize: .min,
-        children: [
-          const SizedBox(height: 32),
-          widget,
-          const SizedBox(height: 32),
-        ],
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    return Padding(
+      padding: AppPadding.horizontalIncrement(
+        increment: 3,
+      ).add(EdgeInsets.only(bottom: bottomInset)),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: .center,
+          mainAxisAlignment: .center,
+          mainAxisSize: .min,
+          children: [
+            const SizedBox(height: 32),
+            widget,
+            const SizedBox(height: 64),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

@@ -1,8 +1,6 @@
-import 'package:dorm_fix/src/features/room/data/dto/room.dart';
-import 'package:dorm_fix/src/features/room/model/room.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../../../../core/rest_client/rest_client.dart';
+import '../../../../../core/rest_client/rest_client.dart';
+import '../../../room.dart';
 
 abstract interface class IRoomRepository {
   Future<List<RoomEntity>> searchRoomsByDormitoryId({

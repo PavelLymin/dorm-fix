@@ -30,12 +30,12 @@ class _RequestScreenState extends State<RequestScreen>
         state.mapOrNull(
           error: (state) => ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text('wekwkjejwk'))),
+          ).showSnackBar(SnackBar(content: Text(state.message))),
         );
       },
-      child: SafeArea(
-        child: Scaffold(
-          body: SingleChildScrollView(
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
             child: Padding(
               padding: AppPadding.symmetricIncrement(
                 horizontal: 3,
@@ -95,11 +95,6 @@ mixin _RequestScreenStateMixin on State<RequestScreen> {
   @override
   void initState() {
     super.initState();
-    _initRequestBloc();
-    _initSpecializationBloc();
-  }
-
-  void _initRequestBloc() {
     final imageRepository = ImageRepositoryImpl(picker: ImagePicker());
     final dependency = DependeciesScope.of(context);
     _requestFormBloc = RequestFormBloc(
@@ -107,10 +102,6 @@ mixin _RequestScreenStateMixin on State<RequestScreen> {
       requestRepository: dependency.requestRepository,
       logger: dependency.logger,
     );
-  }
-
-  void _initSpecializationBloc() {
-    final dependency = DependeciesScope.of(context);
     _specializationBloc = dependency.specializationBloc;
   }
 

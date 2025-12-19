@@ -1,6 +1,5 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-
-import '../../../../app/widget/dependencies_scope.dart';
 import '../../authentication.dart';
 
 class EmailPasswordForm extends StatefulWidget {
@@ -88,12 +87,10 @@ class _EmailPasswordFormState extends State<EmailPasswordForm>
 mixin _EmailPasswordFormStateMixin on State<EmailPasswordForm> {
   bool _isValidateEmail = false;
   bool _isValidatePassword = false;
-  late AuthButtonBloc _authButtonBloc;
 
   @override
   void initState() {
     super.initState();
-    _authButtonBloc = DependeciesScope.of(context).authButton;
     widget.emailController.addListener(_onEmailChanged);
     widget.passwordController.addListener(_onPasswordChanged);
   }
@@ -109,13 +106,17 @@ mixin _EmailPasswordFormStateMixin on State<EmailPasswordForm> {
     if (EmailPasswordValidator.validateEmail(widget.emailController.text) &&
         !_isValidateEmail) {
       _isValidateEmail = true;
-      _authButtonBloc.add(AuthButtonEvent.changeState(isEmail: true));
+      context.read<AuthButtonBloc>().add(
+        AuthButtonEvent.changeState(isEmail: true),
+      );
     } else if (!EmailPasswordValidator.validateEmail(
           widget.emailController.text,
         ) &&
         _isValidateEmail) {
       _isValidateEmail = false;
-      _authButtonBloc.add(AuthButtonEvent.changeState(isEmail: false));
+      context.read<AuthButtonBloc>().add(
+        AuthButtonEvent.changeState(isEmail: false),
+      );
     }
   }
 
@@ -125,13 +126,17 @@ mixin _EmailPasswordFormStateMixin on State<EmailPasswordForm> {
         ) &&
         !_isValidatePassword) {
       _isValidatePassword = true;
-      _authButtonBloc.add(AuthButtonEvent.changeState(isPassword: true));
+      context.read<AuthButtonBloc>().add(
+        AuthButtonEvent.changeState(isPassword: true),
+      );
     } else if (!EmailPasswordValidator.validatePassword(
           widget.passwordController.text,
         ) &&
         _isValidatePassword) {
       _isValidatePassword = false;
-      _authButtonBloc.add(AuthButtonEvent.changeState(isPassword: false));
+      context.read<AuthButtonBloc>().add(
+        AuthButtonEvent.changeState(isPassword: false),
+      );
     }
   }
 }

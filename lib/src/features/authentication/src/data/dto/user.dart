@@ -16,7 +16,7 @@ class UserDto {
   final String? photoURL;
   final String? email;
   final String? phoneNumber;
-  final Role? role;
+  final Role role;
 
   factory UserDto.fromFirebase(User user) => UserDto(
     uid: user.uid,
@@ -52,7 +52,7 @@ class UserDto {
       'photo_url': photoURL,
       'email': email,
       'phone_number': phoneNumber,
-      'role': role?.name,
+      'role': role.name,
     };
   }
 

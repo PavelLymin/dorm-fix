@@ -30,19 +30,15 @@ Future<T?> showUiBottomSheet<T>(
       maxHeight: maxHeight,
     ),
     isScrollControlled: isScrollControlled,
-    builder: (BuildContext context) => MediaQuery.removeViewInsets(
-      removeBottom: true,
-      context: context,
-      child: Column(
-        crossAxisAlignment: .center,
-        mainAxisAlignment: .start,
-        mainAxisSize: .min,
-        children: [
-          const SizedBox(height: 16),
-          const _SheetHandle(),
-          Flexible(child: widget),
-        ],
-      ),
+    builder: (BuildContext context) => Column(
+      crossAxisAlignment: .center,
+      mainAxisAlignment: .start,
+      mainAxisSize: .min,
+      children: [
+        const SizedBox(height: 16),
+        const _SheetHandle(),
+        Flexible(child: widget),
+      ],
     ),
   );
 }

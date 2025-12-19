@@ -29,7 +29,7 @@ abstract class UserEntity with _UserPatternMatching {
     required final String? photoURL,
     required final String? email,
     required final String? phoneNumber,
-    required final Role? role,
+    required final Role role,
   }) = AuthenticatedUser;
 
   bool get isAuthenticated;
@@ -82,7 +82,7 @@ class AuthenticatedUser implements UserEntity {
   final String? photoURL;
   final String? email;
   final String? phoneNumber;
-  final Role? role;
+  final Role role;
 
   @override
   bool get isAuthenticated => !isNotAuthenticated;
@@ -93,6 +93,22 @@ class AuthenticatedUser implements UserEntity {
   @override
   AuthenticatedUser? get authenticatedOrNull =>
       isNotAuthenticated ? null : this;
+
+  AuthenticatedUser copyWith({
+    String? uid,
+    String? displayName,
+    String? photoURL,
+    String? email,
+    String? phoneNumber,
+    Role? role,
+  }) => AuthenticatedUser(
+    uid: uid ?? this.uid,
+    displayName: displayName ?? this.displayName,
+    photoURL: photoURL ?? this.photoURL,
+    email: email ?? this.email,
+    phoneNumber: phoneNumber ?? this.phoneNumber,
+    role: role ?? this.role,
+  );
 
   @override
   T map<T>({

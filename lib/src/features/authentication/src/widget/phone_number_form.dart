@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 
 import '../../../../app/widget/dependencies_scope.dart';
@@ -84,13 +85,11 @@ class _PhoneNumberFormState extends State<PhoneNumberForm>
 mixin _PhoneNumberFormStateMixin on State<PhoneNumberForm> {
   bool _isValidatePhone = false;
   bool _isPinValidate = false;
-  late AuthButtonBloc _authButtonBloc;
-  late AuthBloc _authBloc;
+  late final AuthBloc _authBloc;
 
   @override
   void initState() {
     super.initState();
-    _authButtonBloc = DependeciesScope.of(context).authButton;
     _authBloc = DependeciesScope.of(context).authenticationBloc;
     widget.phoneController.addListener(_onPhoneChanged);
     widget.pinCodeController.addListener(_onPinChanged);
@@ -107,13 +106,17 @@ mixin _PhoneNumberFormStateMixin on State<PhoneNumberForm> {
     if (PhoneNumberValidator.validatePhoneNumber(widget.phoneController.text) &&
         !_isValidatePhone) {
       _isValidatePhone = true;
-      _authButtonBloc.add(AuthButtonEvent.changeState(isPhoneNumber: true));
+      context.read<AuthButtonBloc>().add(
+        AuthButtonEvent.changeState(isPhoneNumber: true),
+      );
     } else if (!PhoneNumberValidator.validatePhoneNumber(
           widget.phoneController.text,
         ) &&
         _isValidatePhone) {
       _isValidatePhone = false;
-      _authButtonBloc.add(AuthButtonEvent.changeState(isPhoneNumber: false));
+      context.read<AuthButtonBloc>().add(
+        AuthButtonEvent.changeState(isPhoneNumber: false),
+      );
     }
   }
 
@@ -129,13 +132,17 @@ mixin _PhoneNumberFormStateMixin on State<PhoneNumberForm> {
           ),
         ),
       );
-      _authButtonBloc.add(AuthButtonEvent.changeState(isPin: true));
+      context.read<AuthButtonBloc>().add(
+        AuthButtonEvent.changeState(isPin: true),
+      );
     } else if (!PhoneNumberValidator.validatePinCode(
           widget.pinCodeController.text,
         ) &&
         _isPinValidate) {
       _isPinValidate = false;
-      _authButtonBloc.add(AuthButtonEvent.changeState(isPin: false));
+      context.read<AuthButtonBloc>().add(
+        AuthButtonEvent.changeState(isPin: false),
+      );
     }
   }
 }

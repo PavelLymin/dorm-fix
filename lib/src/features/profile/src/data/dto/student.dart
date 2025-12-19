@@ -1,6 +1,6 @@
 import '../../../../authentication/src/data/dto/user.dart';
-import '../../../../room/data/dto/room.dart';
-import '../../../../yandex_mapkit/data/dto/dormitory.dart';
+import '../../../../room/src/data/dto/room.dart';
+import '../../../../yandex_mapkit/src/data/dto/dormitory.dart';
 import '../../model/profile.dart';
 
 abstract class StudentDto {

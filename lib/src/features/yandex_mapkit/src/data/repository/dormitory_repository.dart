@@ -1,8 +1,6 @@
-import 'package:dorm_fix/src/features/yandex_mapkit/data/dto/dormitory.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../../../../core/rest_client/rest_client.dart';
-import '../../model/dormitory.dart';
+import '../../../../../core/rest_client/rest_client.dart';
+import '../../../yandex_mapkit.dart';
 
 abstract class IDormitoryRepository {
   Future<List<DormitoryEntity>> searchDormitories({required String query});

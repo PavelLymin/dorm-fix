@@ -1,4 +1,4 @@
-import '../../model/room.dart';
+import '../../../room.dart';
 
 class RoomDto {
   const RoomDto({

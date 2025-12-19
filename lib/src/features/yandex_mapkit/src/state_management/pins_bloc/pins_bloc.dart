@@ -1,4 +1,4 @@
-import 'package:dorm_fix/src/features/yandex_mapkit/model/dormitory.dart';
+import 'package:dorm_fix/src/features/yandex_mapkit/src/model/dormitory.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 

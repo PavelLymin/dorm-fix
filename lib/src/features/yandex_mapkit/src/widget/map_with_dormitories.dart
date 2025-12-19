@@ -1,14 +1,12 @@
-import 'package:dorm_fix/src/features/yandex_mapkit/widget/map_title.dart';
-import 'package:dorm_fix/src/features/yandex_mapkit/widget/search_button.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-
-import '../state_management/pins_bloc/pins_bloc.dart';
-import '../../../app/widget/dependencies_scope.dart';
-import '../model/dormitory.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
+import '../../../../app/widget/dependencies_scope.dart';
+import '../../yandex_mapkit.dart';
 import 'dormitory_details_modal_sheet.dart';
 import 'dormitory_search_modal_sheet.dart';
+import 'map_title.dart';
+import 'search_button.dart';
 import 'yandex_mapkit.dart';
 
 class MapWithDormitories extends StatefulWidget {
@@ -20,14 +18,17 @@ class MapWithDormitories extends StatefulWidget {
 
 class _MapWithDormitoriesState extends State<MapWithDormitories> {
   YandexMapController? _mapController;
-  late PinsBloc _pinsBloc;
+  late final PinsBloc _pinsBloc;
   List<MapObject> _mapObjects = [];
 
   @override
   void initState() {
     super.initState();
-    _pinsBloc = DependeciesScope.of(context).pinsBloc;
-    _pinsBloc.add(PinsEvent.get());
+    final dependency = DependeciesScope.of(context);
+    _pinsBloc = PinsBloc(
+      dormitoryRepository: dependency.dormitoryRepository,
+      logger: dependency.logger,
+    )..add(PinsEvent.get());
   }
 
   @override
@@ -37,8 +38,8 @@ class _MapWithDormitoriesState extends State<MapWithDormitories> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocProvider.value(
-    value: _pinsBloc,
+  Widget build(BuildContext context) => BlocProvider(
+    create: (context) => _pinsBloc,
     child: BlocBuilder<PinsBloc, PinsState>(
       builder: (context, state) => state.map(
         loading: (_) => const Center(child: CircularProgressIndicator()),
@@ -52,7 +53,7 @@ class _MapWithDormitoriesState extends State<MapWithDormitories> {
                   onMapCreated: _onMapCreated,
                   mapObjects: _mapObjects,
                 ),
-                MapTitle(),
+                const MapTitle(),
                 SearchButton(onTap: () => _showSearchModalSheet(context)),
               ],
             ),

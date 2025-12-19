@@ -27,7 +27,7 @@ class PersonalAvatar extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 UiText.titleLarge(
-                  student.user.displayName ?? '',
+                  student.user.displayName ?? 'User',
                   style: TextStyle(color: colorPallete.primary),
                 ),
                 UiText.titleLarge(student.dormitory.name),
