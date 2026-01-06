@@ -1,4 +1,4 @@
-import '../../model/request.dart';
+import '../../model/repair_request.dart';
 import 'problem.dart';
 
 sealed class RepairRequestDto {
@@ -24,7 +24,22 @@ sealed class RepairRequestDto {
 
   RepairRequestEntity toEntity();
 
+  factory RepairRequestDto.fromEntity(RepairRequestEntity entity) =>
+      switch (entity) {
+        CreatedRepairRequest e => .fromEntity(e),
+        FullRepairRequest e => .fromEntity(e),
+      };
+
   Map<String, Object?> toJson();
+
+  factory RepairRequestDto.fromJson(Map<String, Object?> json) =>
+      switch (json['id']) {
+        null => CreatedRepairRequestDto.fromJson(json),
+        int _ => FullRepairRequestDto.fromJson(json),
+        _ => throw ArgumentError(
+          'Invalid JSON format for FullRequestEntity: $json',
+        ),
+      };
 }
 
 final class CreatedRepairRequestDto extends RepairRequestDto {
@@ -123,14 +138,14 @@ final class FullRepairRequestDto extends RepairRequestDto {
     required super.date,
     required super.startTime,
     required super.endTime,
-    required this.imagePaths,
+    required this.problems,
     required this.createdAt,
   });
 
   final int id;
   final String uid;
   final DateTime createdAt;
-  final List<ProblemDto> imagePaths;
+  final List<ProblemDto> problems;
 
   @override
   FullRepairRequest toEntity() => FullRepairRequest(
@@ -144,7 +159,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
     date: date,
     startTime: startTime,
     endTime: endTime,
-    imagePaths: imagePaths.map((e) => e.toEntity()).toList(),
+    problems: problems.map((e) => e.toEntity()).toList(),
     createdAt: createdAt,
   );
 
@@ -160,9 +175,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
         date: entity.date,
         startTime: entity.startTime,
         endTime: entity.endTime,
-        imagePaths: entity.imagePaths
-            .map((e) => ProblemDto.fromEntity(e))
-            .toList(),
+        problems: entity.problems.map((e) => ProblemDto.fromEntity(e)).toList(),
         createdAt: entity.createdAt,
       );
 
@@ -178,7 +191,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
     'date': date.toLocal().toString(),
     'start_time': startTime,
     'end_time': endTime,
-    'problems': imagePaths,
+    'problems': problems,
     'created_at': createdAt,
   };
 
@@ -208,7 +221,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
         date: DateTime.parse(date),
         startTime: startTime,
         endTime: endTime,
-        imagePaths: imagePaths.map((e) => ProblemDto.fromJson(e)).toList(),
+        problems: imagePaths.map((e) => ProblemDto.fromJson(e)).toList(),
         createdAt: DateTime.parse(createdAt),
       );
     } else {

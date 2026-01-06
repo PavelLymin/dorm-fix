@@ -1,4 +1,4 @@
-import 'package:dorm_fix/src/features/request/request.dart';
+import 'package:dorm_fix/src/features/repair_request/request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/web.dart';
 import '../../core/rest_client/rest_client.dart';

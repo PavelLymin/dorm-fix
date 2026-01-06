@@ -41,10 +41,6 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
   @override
   void initState() {
     super.initState();
-    final id = widget.specialization.first.id;
-    context.read<RequestFormBloc>().add(
-      .updateRequestForm(specializationId: id),
-    );
     options = widget.specialization
         .map((specialization) => ChoiceItem(title: specialization.title))
         .toList();

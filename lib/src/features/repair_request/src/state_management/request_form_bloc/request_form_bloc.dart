@@ -5,8 +5,8 @@ import 'package:logger/web.dart';
 import '../../../request.dart';
 import 'request_form_model.dart';
 
-part 'request_form_event.dart';
-part 'request_form_state.dart';
+part 'form_state.dart';
+part 'form_event.dart';
 
 class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
   RequestFormBloc({
@@ -14,7 +14,7 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
     required IImageRepository imageRepository,
     required Logger logger,
   }) : _imageRepository = imageRepository,
-       super(.form(formModel: RequestFormModel())) {
+       super(const .form(formModel: RequestFormModel())) {
     on<RequestFormEvent>((event, emit) async {
       await event.map(
         updateRequestForm: (e) => _updateRequestForm(emit, e),
@@ -44,9 +44,8 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
     emit(.form(formModel: form));
   }
 
-  void _clearForm(Emitter<RequestFormState> emit) {
-    emit(.form(formModel: RequestFormModel()));
-  }
+  void _clearForm(Emitter<RequestFormState> emit) =>
+      emit(const .form(formModel: RequestFormModel()));
 
   Future<void> _loadImages(
     Emitter<RequestFormState> emit,

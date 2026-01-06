@@ -44,7 +44,8 @@ sealed class UiCard extends StatelessWidget {
       standart: (variant) => DecoratedBox(
         decoration: BoxDecoration(
           color: variant.color ?? Theme.of(context).colorPalette.secondary,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: .circular(16),
+          border: .all(color: colorPalette.border),
           gradient: variant.gradient,
         ),
         child: Padding(
@@ -59,11 +60,9 @@ sealed class UiCard extends StatelessWidget {
           gradient: variant.gradient,
         ),
         child: InkWell(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: .circular(24),
           onTap: variant.onTap,
-          overlayColor: WidgetStateProperty.resolveWith((
-            Set<WidgetState> states,
-          ) {
+          overlayColor: .resolveWith((Set<WidgetState> states) {
             final color = colorPalette.primaryForeground;
             if (states.contains(WidgetState.pressed)) {
               return color.withValues(alpha: 0.2);
@@ -82,6 +81,77 @@ sealed class UiCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ClickableCard extends StatefulWidget {
+  const ClickableCard({
+    super.key,
+    this.isSelected = false,
+    this.autofocus = false,
+    this.onPress,
+    this.child,
+    this.builder = _builder,
+  });
+
+  static Widget _builder(
+    BuildContext context,
+    Set<WidgetState> states,
+    Widget? child,
+  ) => child!;
+
+  final bool isSelected;
+  final bool autofocus;
+  final VoidCallback? onPress;
+  final Widget? child;
+  final ValueWidgetBuilder<Set<WidgetState>> builder;
+
+  bool get isDisabled => onPress == null;
+
+  @override
+  State<ClickableCard> createState() => _ClickableCardState();
+}
+
+class _ClickableCardState extends State<ClickableCard> {
+  late final WidgetStateController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WidgetStateController({
+      if (widget.isSelected) .selected,
+      if (widget.autofocus) .focused,
+      if (widget.isDisabled) .disabled,
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant ClickableCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.update(.selected, widget.isSelected);
+    _controller.update(.focused, widget.autofocus);
+    _controller.update(.disabled, widget.isDisabled);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {});
+        widget.onPress?.call();
+        if (widget.isSelected &&
+            !_controller.value.contains(WidgetState.selected)) {
+          _controller.update(.selected, true);
+        }
+      },
+      child: widget.builder(context, _controller.value, widget.child),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dorm_fix/src/features/request/request.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ui_kit/ui.dart';
@@ -8,6 +7,7 @@ import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
 import 'src/features/authentication/authentication.dart';
 import 'src/features/profile/profile.dart';
+import 'src/features/repair_request/request.dart';
 import 'src/features/settings/settings.dart';
 
 void main() async {

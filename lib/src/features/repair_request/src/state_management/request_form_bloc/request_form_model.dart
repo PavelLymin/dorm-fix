@@ -1,8 +1,8 @@
 import '../../../request.dart';
 
 class RequestFormModel {
-  RequestFormModel({
-    this.specializationId,
+  const RequestFormModel({
+    this.specializationId = 1,
     this.description = '',
     this.priority = Priority.ordinary,
     this.status = Status.newRequest,
@@ -13,7 +13,7 @@ class RequestFormModel {
     this.imagePaths = const [],
   });
 
-  final int? specializationId;
+  final int specializationId;
   final String description;
   final Priority priority;
   final Status status;
@@ -55,21 +55,20 @@ class RequestFormModel {
     imagePaths: imagePaths ?? this.imagePaths,
   );
 
-  String? messageError;
+  String? checkError() {
+    if (description.trim().isEmpty) return 'Опишите проблему';
+    if (date == null) return 'Укажите дату';
+    if (startTime == null || endTime == null) return 'Укажите время';
 
-  void checkError() {
-    if (specializationId == null) messageError = 'Укажите мастера';
-    if (description.trim().isEmpty) messageError = 'Опишите проблему';
-    if (date == null) messageError = 'Укажите дату';
-    if (startTime == null || endTime == null) messageError = 'Укажите время';
+    return null;
   }
 
   CreatedRepairRequest toEntity() {
-    checkError();
+    final messageError = checkError();
     if (messageError != null) throw ArgumentError(messageError);
 
     return CreatedRepairRequest(
-      specializationId: specializationId!,
+      specializationId: specializationId,
       description: description,
       priority: priority,
       status: status,
@@ -77,7 +76,7 @@ class RequestFormModel {
       date: date!,
       startTime: int.parse(startTime!),
       endTime: int.parse(endTime!),
-      imagePaths: List.unmodifiable(imagePaths),
+      imagePaths: imagePaths,
     );
   }
 

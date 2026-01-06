@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:ui_kit/menu_link_preview.dart';
+import 'package:ui_kit/src/components/line_calendar/line_calendar_controller.dart';
+import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
 import 'button_previews.dart';
 import 'check_box_preview.dart';
@@ -28,13 +30,31 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: darkTheme,
       theme: darkTheme,
+      builder: (context, child) => StylesScope(
+        styleData: StyleData(
+          appStyle: const AppStyle(),
+          lineCalendarStyle: LineCalendarStyle.defaultStyle(
+            Theme.of(context).colorPalette,
+            Theme.of(context).appTypography,
+            const AppStyle(),
+          ),
+        ),
+        child: child!,
+      ),
       home: const UiPreview(),
     ),
   );
 }
 
-class UiPreview extends StatelessWidget {
+class UiPreview extends StatefulWidget {
   const UiPreview({super.key});
+
+  @override
+  State<UiPreview> createState() => _UiPreviewState();
+}
+
+class _UiPreviewState extends State<UiPreview> {
+  final _controller = LineCalendarController(.now());
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +165,21 @@ class UiPreview extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const MenuLinkPreview(),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.center,
+                  child: UiText.titleLarge('Line Calendar'),
+                ),
+                const SizedBox(height: 8),
+                UiCard.standart(
+                  child: LineCalendar(
+                    today: .now(),
+                    start: .now(),
+                    end: .now().add(const Duration(days: 7)),
+                    style: context.styles.lineCalendarStyle,
+                    controller: _controller,
+                  ),
+                ),
                 const SizedBox(height: 24),
               ],
             ),

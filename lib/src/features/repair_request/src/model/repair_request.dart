@@ -52,21 +52,6 @@ sealed class RepairRequestEntity {
   final int startTime;
   final int endTime;
 
-  const factory RepairRequestEntity.full({
-    required final int id,
-    required final String uid,
-    required final int specializationId,
-    required final String description,
-    required final Priority priority,
-    required final Status status,
-    required final bool studentAbsent,
-    required final DateTime date,
-    required final int startTime,
-    required final int endTime,
-    required final List<ProblemEntity> imagePaths,
-    required final DateTime createdAt,
-  }) = FullRepairRequest;
-
   const factory RepairRequestEntity.created({
     required final int specializationId,
     required final String description,
@@ -78,6 +63,21 @@ sealed class RepairRequestEntity {
     required final int endTime,
     required final List<String> imagePaths,
   }) = CreatedRepairRequest;
+
+  const factory RepairRequestEntity.full({
+    required final int id,
+    required final String uid,
+    required final int specializationId,
+    required final String description,
+    required final Priority priority,
+    required final Status status,
+    required final bool studentAbsent,
+    required final DateTime date,
+    required final int startTime,
+    required final int endTime,
+    required final List<ProblemEntity> problems,
+    required final DateTime createdAt,
+  }) = FullRepairRequest;
 
   RepairRequestEntity copyWith();
 }
@@ -171,14 +171,14 @@ final class FullRepairRequest extends RepairRequestEntity {
     required super.date,
     required super.startTime,
     required super.endTime,
-    required this.imagePaths,
+    required this.problems,
     required this.createdAt,
   });
 
   final int id;
   final String uid;
   final DateTime createdAt;
-  final List<ProblemEntity> imagePaths;
+  final List<ProblemEntity> problems;
 
   @override
   FullRepairRequest copyWith({
@@ -192,7 +192,7 @@ final class FullRepairRequest extends RepairRequestEntity {
     DateTime? date,
     int? startTime,
     int? endTime,
-    List<ProblemEntity>? imagePaths,
+    List<ProblemEntity>? problems,
     DateTime? createdAt,
   }) => FullRepairRequest(
     id: id ?? this.id,
@@ -205,7 +205,7 @@ final class FullRepairRequest extends RepairRequestEntity {
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
-    imagePaths: imagePaths ?? this.imagePaths,
+    problems: problems ?? this.problems,
     createdAt: createdAt ?? this.createdAt,
   );
 
@@ -222,7 +222,7 @@ final class FullRepairRequest extends RepairRequestEntity {
       'date: $date, '
       'startTime: $startTime, '
       'endTime: $endTime, '
-      'imagePaths: $imagePaths, '
+      'problems: $problems, '
       'createdAt: $createdAt)';
 
   @override

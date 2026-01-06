@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
-import '../../features/request/request.dart';
+import '../../features/repair_request/request.dart';
 import '../../features/root/widget/root_screen.dart';
 import '../../features/yandex_mapkit/yandex_mapkit.dart';
 
@@ -41,6 +41,11 @@ class AppRouter extends RootStackRouter {
       name: 'HistoryScreen',
       builder: (context, data) => const HistoryScreen(),
     ),
+    // NamedRouteDef(
+    //   name: 'RepairRequestDetailsScreen',
+    //   builder: (context, data) =>
+    //       RepairRequestDetailsScreen(request: data.params.get('request')),
+    // ),
     NamedRouteDef(
       initial: true,
       name: 'Root',

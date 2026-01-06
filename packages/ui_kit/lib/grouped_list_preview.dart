@@ -5,27 +5,24 @@ class GroupedListPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => UiCard.standart(
-    child: Padding(
-      padding: AppPadding.allIncrement(increment: 0),
-      child: GroupedList(
-        items: [
-          GroupedListItem(
-            title: UiText.labelLarge('Адрес электронной почты'),
-            data: UiText.bodyMedium('email.letter@mail.com'),
-            onTap: () {},
-          ),
-          GroupedListItem(
-            title: UiText.labelLarge('Номер телефона'),
-            data: UiText.bodyMedium('+7 123 456 78 90'),
-            onTap: () {},
-          ),
-          GroupedListItem(
-            title: UiText.labelLarge('Общежитие'),
-            data: UiText.bodyMedium('Общежитие 30'),
-            onTap: () {},
-          ),
-        ],
-      ),
+    child: GroupedList(
+      items: [
+        GroupedListItem(
+          title: UiText.labelLarge('Адрес электронной почты'),
+          data: UiText.bodyMedium('email.letter@mail.com'),
+          onTap: () {},
+        ),
+        GroupedListItem(
+          title: UiText.labelLarge('Номер телефона'),
+          data: UiText.bodyMedium('+7 123 456 78 90'),
+          onTap: () {},
+        ),
+        GroupedListItem(
+          title: UiText.labelLarge('Общежитие'),
+          data: UiText.bodyMedium('Общежитие 30'),
+          onTap: () {},
+        ),
+      ],
     ),
   );
 }

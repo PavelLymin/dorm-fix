@@ -1,5 +1,5 @@
 import 'package:dorm_fix/src/core/ws/ws.dart';
-import 'package:dorm_fix/src/features/request/request.dart';
+import 'package:dorm_fix/src/features/repair_request/request.dart';
 
 enum ResponseType {
   created(value: 'created'),

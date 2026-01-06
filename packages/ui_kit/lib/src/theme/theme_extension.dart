@@ -84,38 +84,30 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     }
 
     return ColorPalette(
-      background: Color.lerp(background, other.background, t)!,
-      foreground: Color.lerp(foreground, other.foreground, t)!,
-      muted: Color.lerp(muted, other.muted, t)!,
-      mutedForeground: Color.lerp(mutedForeground, other.mutedForeground, t)!,
-      border: Color.lerp(border, other.border, t)!,
-      buttonBorder: Color.lerp(buttonBorder, other.buttonBorder, t)!,
-      primary: Color.lerp(primary, other.primary, t)!,
-      primaryForeground: Color.lerp(
-        primaryForeground,
-        other.primaryForeground,
-        t,
-      )!,
-      secondary: Color.lerp(secondary, other.secondary, t)!,
-      secondaryButton: Color.lerp(secondaryButton, other.secondaryButton, t)!,
-      secondaryForeground: Color.lerp(
+      background: .lerp(background, other.background, t)!,
+      foreground: .lerp(foreground, other.foreground, t)!,
+      muted: .lerp(muted, other.muted, t)!,
+      mutedForeground: .lerp(mutedForeground, other.mutedForeground, t)!,
+      border: .lerp(border, other.border, t)!,
+      buttonBorder: .lerp(buttonBorder, other.buttonBorder, t)!,
+      primary: .lerp(primary, other.primary, t)!,
+      primaryForeground: .lerp(primaryForeground, other.primaryForeground, t)!,
+      secondary: .lerp(secondary, other.secondary, t)!,
+      secondaryButton: .lerp(secondaryButton, other.secondaryButton, t)!,
+      secondaryForeground: .lerp(
         secondaryForeground,
         other.secondaryForeground,
         t,
       )!,
-      accent: Color.lerp(accent, other.accent, t)!,
-      accentForeground: Color.lerp(
-        accentForeground,
-        other.accentForeground,
-        t,
-      )!,
-      destructive: Color.lerp(destructive, other.destructive, t)!,
-      destructiveForeground: Color.lerp(
+      accent: .lerp(accent, other.accent, t)!,
+      accentForeground: .lerp(accentForeground, other.accentForeground, t)!,
+      destructive: .lerp(destructive, other.destructive, t)!,
+      destructiveForeground: .lerp(
         destructiveForeground,
         other.destructiveForeground,
         t,
       )!,
-      ring: Color.lerp(ring, other.ring, t)!,
+      ring: .lerp(ring, other.ring, t)!,
     );
   }
 
@@ -171,9 +163,9 @@ class AppGradient extends ThemeExtension<AppGradient> {
     }
 
     return AppGradient(
-      background: Gradient.lerp(background, other.background, t)!,
-      primary: Gradient.lerp(primary, other.primary, t)!,
-      muted: Gradient.lerp(muted, other.muted, t)!,
+      background: .lerp(background, other.background, t)!,
+      primary: .lerp(primary, other.primary, t)!,
+      muted: .lerp(muted, other.muted, t)!,
     );
   }
 
@@ -264,21 +256,21 @@ class AppTypography extends ThemeExtension<AppTypography> {
     }
 
     return AppTypography(
-      displayLarge: TextStyle.lerp(displayLarge, other.displayLarge, t)!,
-      displayMedium: TextStyle.lerp(displayMedium, other.displayMedium, t)!,
-      displaySmall: TextStyle.lerp(displaySmall, other.displaySmall, t)!,
-      headlineLarge: TextStyle.lerp(headlineLarge, other.headlineLarge, t)!,
-      headlineMedium: TextStyle.lerp(headlineMedium, other.headlineMedium, t)!,
-      headlineSmall: TextStyle.lerp(headlineSmall, other.headlineSmall, t)!,
-      titleLarge: TextStyle.lerp(titleLarge, other.titleLarge, t)!,
-      titleMedium: TextStyle.lerp(titleMedium, other.titleMedium, t)!,
-      titleSmall: TextStyle.lerp(titleSmall, other.titleSmall, t)!,
-      bodyLarge: TextStyle.lerp(bodyLarge, other.bodyLarge, t)!,
-      bodyMedium: TextStyle.lerp(bodyMedium, other.bodyMedium, t)!,
-      bodySmall: TextStyle.lerp(bodySmall, other.bodySmall, t)!,
-      labelLarge: TextStyle.lerp(labelLarge, other.labelLarge, t)!,
-      labelMedium: TextStyle.lerp(labelMedium, other.labelMedium, t)!,
-      labelSmall: TextStyle.lerp(labelSmall, other.labelSmall, t)!,
+      displayLarge: .lerp(displayLarge, other.displayLarge, t)!,
+      displayMedium: .lerp(displayMedium, other.displayMedium, t)!,
+      displaySmall: .lerp(displaySmall, other.displaySmall, t)!,
+      headlineLarge: .lerp(headlineLarge, other.headlineLarge, t)!,
+      headlineMedium: .lerp(headlineMedium, other.headlineMedium, t)!,
+      headlineSmall: .lerp(headlineSmall, other.headlineSmall, t)!,
+      titleLarge: .lerp(titleLarge, other.titleLarge, t)!,
+      titleMedium: .lerp(titleMedium, other.titleMedium, t)!,
+      titleSmall: .lerp(titleSmall, other.titleSmall, t)!,
+      bodyLarge: .lerp(bodyLarge, other.bodyLarge, t)!,
+      bodyMedium: .lerp(bodyMedium, other.bodyMedium, t)!,
+      bodySmall: .lerp(bodySmall, other.bodySmall, t)!,
+      labelLarge: .lerp(labelLarge, other.labelLarge, t)!,
+      labelMedium: .lerp(labelMedium, other.labelMedium, t)!,
+      labelSmall: .lerp(labelSmall, other.labelSmall, t)!,
     );
   }
 }
