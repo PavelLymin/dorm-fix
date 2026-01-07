@@ -77,7 +77,7 @@ class _PinCodeState extends State<PinCode> {
   Widget build(BuildContext context) => SizedBox(
     height: widget.height,
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: [
         Opacity(
           opacity: 0,
@@ -87,7 +87,7 @@ class _PinCodeState extends State<PinCode> {
               controller: widget.controller,
               focusNode: _focusNode,
               enabled: widget.isEnable,
-              keyboardType: TextInputType.number,
+              keyboardType: .number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               maxLength: widget.length,
             ),
@@ -102,7 +102,7 @@ class _PinCodeState extends State<PinCode> {
             }
           },
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: .spaceEvenly,
             children: List.generate(
               widget.length,
               (index) => PinInput(
@@ -136,21 +136,17 @@ class PinInput extends StatelessWidget {
     Color color = isFocus ? palette.accent : palette.border;
 
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       width: isCurrentFocus ? 45 : 40,
       height: isCurrentFocus ? 60 : 50,
       decoration: BoxDecoration(
         color: palette.secondary,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color),
+        borderRadius: const .all(.circular(16)),
+        border: .all(color: color),
       ),
       child: Center(
         child: number.isEmpty && isCurrentFocus
-            ? Container(
-                height: 40,
-                width: 1.5,
-                decoration: BoxDecoration(color: color),
-              )
+            ? SizedBox(height: 40, width: 1.5, child: ColoredBox(color: color))
             : UiText.bodyLarge(number),
       ),
     );

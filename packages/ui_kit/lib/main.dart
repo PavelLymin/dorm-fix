@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:ui_kit/menu_link_preview.dart';
-import 'package:ui_kit/src/components/line_calendar/line_calendar_controller.dart';
 import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
 import 'button_previews.dart';
@@ -9,6 +8,7 @@ import 'check_box_preview.dart';
 import 'choice_options_preview.dart';
 import 'color_palette_preview.dart';
 import 'grouped_list_preview.dart';
+import 'line_calendar_preview.dart';
 import 'pin_preview.dart';
 import 'switch_preview.dart';
 import 'text_fields_preview.dart';
@@ -17,9 +17,7 @@ import 'bottom_sheet_preview.dart';
 
 final themeModeSwitcher = ValueNotifier(ThemeMode.system);
 
-void main() async {
-  runApp(const MainApp());
-}
+void main() async => runApp(const MainApp());
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -33,11 +31,8 @@ class MainApp extends StatelessWidget {
       builder: (context, child) => StylesScope(
         styleData: StyleData(
           appStyle: const AppStyle(),
-          lineCalendarStyle: LineCalendarStyle.defaultStyle(
-            Theme.of(context).colorPalette,
-            Theme.of(context).appTypography,
-            const AppStyle(),
-          ),
+          lineCalendarStyle: .defaultStyle(context, const AppStyle()),
+          groupedListStyle: .defaultStyle(context),
         ),
         child: child!,
       ),
@@ -54,8 +49,6 @@ class UiPreview extends StatefulWidget {
 }
 
 class _UiPreviewState extends State<UiPreview> {
-  final _controller = LineCalendarController(.now());
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -71,13 +64,13 @@ class _UiPreviewState extends State<UiPreview> {
             pinned: true,
             actions: [
               UiButton.icon(
-                icon: brightness == Brightness.light
+                icon: brightness == .light
                     ? const Icon(Icons.dark_mode_rounded)
                     : const Icon(Icons.light_mode_rounded),
                 onPressed: () {
-                  themeModeSwitcher.value = brightness == Brightness.light
-                      ? ThemeMode.dark
-                      : ThemeMode.light;
+                  themeModeSwitcher.value = brightness == .light
+                      ? .dark
+                      : .light;
                 },
               ),
             ],
@@ -90,96 +83,76 @@ class _UiPreviewState extends State<UiPreview> {
             sliver: SliverList.list(
               children: [
                 Align(
-                  alignment: Alignment.center,
+                  alignment: .center,
                   child: UiText.titleLarge('Color palette'),
                 ),
                 const SizedBox(height: 8),
                 ColorPalettePreview(),
                 const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: UiText.titleLarge('Buttons'),
-                ),
+                Align(alignment: .center, child: UiText.titleLarge('Buttons')),
                 const SizedBox(height: 8),
                 const ButtonsPreview(),
                 const SizedBox(height: 24),
                 Align(
-                  alignment: Alignment.center,
+                  alignment: .center,
                   child: UiText.titleLarge('Typography'),
                 ),
                 const SizedBox(height: 8),
                 const TypographyPreview(),
                 const SizedBox(height: 24),
                 Align(
-                  alignment: Alignment.center,
+                  alignment: .center,
                   child: UiText.titleLarge('Text Fields'),
                 ),
                 const SizedBox(height: 8),
                 const TextFieldsPreview(),
                 const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: UiText.titleLarge('Pin'),
-                ),
+                Align(alignment: .center, child: UiText.titleLarge('Pin')),
                 const SizedBox(height: 8),
                 const PinCodePreview(),
                 const SizedBox(height: 24),
                 Align(
-                  alignment: Alignment.center,
+                  alignment: .center,
                   child: UiText.titleLarge('Grouped List'),
                 ),
                 const SizedBox(height: 8),
                 const GroupedListPreview(),
                 const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: UiText.titleLarge('Switch'),
-                ),
+                Align(alignment: .center, child: UiText.titleLarge('Switch')),
                 const SizedBox(height: 8),
                 const SwitchPreview(),
                 const SizedBox(height: 24),
                 Align(
-                  alignment: Alignment.center,
+                  alignment: .center,
                   child: UiText.titleLarge('Bottom sheet'),
                 ),
                 const SizedBox(height: 8),
                 const BottomSheetPreview(),
                 const SizedBox(height: 24),
                 Align(
-                  alignment: Alignment.center,
+                  alignment: .center,
                   child: UiText.titleLarge('Choice options'),
                 ),
                 const SizedBox(height: 8),
                 const ChoiceOptionsPreview(),
                 const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: UiText.titleLarge('CheckBox'),
-                ),
+                Align(alignment: .center, child: UiText.titleLarge('CheckBox')),
                 const SizedBox(height: 8),
                 const CheckBoxPreview(),
                 const SizedBox(height: 24),
                 Align(
-                  alignment: Alignment.center,
+                  alignment: .center,
                   child: UiText.titleLarge('Menu link'),
                 ),
                 const SizedBox(height: 8),
                 const MenuLinkPreview(),
                 const SizedBox(height: 24),
                 Align(
-                  alignment: Alignment.center,
+                  alignment: .center,
                   child: UiText.titleLarge('Line Calendar'),
                 ),
                 const SizedBox(height: 8),
-                UiCard.standart(
-                  child: LineCalendar(
-                    today: .now(),
-                    start: .now(),
-                    end: .now().add(const Duration(days: 7)),
-                    style: context.styles.lineCalendarStyle,
-                    controller: _controller,
-                  ),
-                ),
+                const LineCalendarPreview(),
                 const SizedBox(height: 24),
               ],
             ),

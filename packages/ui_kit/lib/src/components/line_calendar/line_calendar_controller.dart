@@ -1,4 +1,4 @@
-import 'package:ui_kit/ui.dart';
+part of 'line_calendar.dart';
 
 DateTime _truncateAndStripTimezone(DateTime date) =>
     DateTime.utc(date.year, date.month, date.day);
@@ -8,6 +8,18 @@ extension YearMonthDay on DateTime {
 }
 
 class LineCalendarController extends ValueNotifier<DateTime> {
-  LineCalendarController(DateTime date)
+  LineCalendarController(DateTime date, {this.unUseWeekDays = const []})
     : super(date.truncateAndStripTimezone());
+
+  final List<int> unUseWeekDays;
+
+  @override
+  set value(DateTime newValue) {
+    newValue = newValue.truncateAndStripTimezone();
+    if (!unUseWeekDays.contains(newValue.weekday)) {
+      super.value = newValue;
+    }
+  }
+
+  bool isWeekDay(DateTime date) => !unUseWeekDays.contains(date.weekday);
 }

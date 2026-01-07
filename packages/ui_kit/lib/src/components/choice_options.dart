@@ -19,7 +19,7 @@ class ChoiceOptions extends StatefulWidget {
     this.overflow = .ellipsis,
     this.duration = const Duration(milliseconds: 300),
     this.curve = Curves.easeIn,
-    this.borderRadius = const BorderRadius.all(Radius.circular(24)),
+    this.borderRadius = const .all(.circular(24)),
     this.iconSize = 32,
   });
 
@@ -45,8 +45,7 @@ class _ChoiceOptionsState extends State<ChoiceOptions> {
   @override
   void initState() {
     super.initState();
-    _borderRadiusItem =
-        widget.borderRadius - const BorderRadius.all(Radius.circular(2));
+    _borderRadiusItem = widget.borderRadius - const .all(.circular(4));
   }
 
   @override
@@ -70,7 +69,7 @@ class _ChoiceOptionsState extends State<ChoiceOptions> {
                 height: widget.height,
                 width: constraints.maxWidth / widget.options.length,
                 child: Padding(
-                  padding: const EdgeInsets.all(2),
+                  padding: const .all(4),
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: widget.selectedColor,

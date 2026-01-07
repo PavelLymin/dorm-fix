@@ -1,11 +1,17 @@
 import 'package:ui_kit/ui.dart';
 
 final class StyleData {
-  const StyleData({required this.appStyle, required this.lineCalendarStyle});
+  const StyleData({
+    required this.appStyle,
+    required this.lineCalendarStyle,
+    required this.groupedListStyle,
+  });
 
   final AppStyle appStyle;
 
   final LineCalendarStyle lineCalendarStyle;
+
+  final GroupedListStyle groupedListStyle;
 }
 
 class StylesScope extends StatelessWidget {

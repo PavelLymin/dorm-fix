@@ -11,8 +11,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # Internationalization and localization support
   flutter_localizations:
-    sdk: flutter
+    sdk: flutter  
+    
+  intl: ^0.20.2
   # UI Kit
   ui_kit:
     path: packages/ui_kit
@@ -32,15 +36,13 @@ dependencies:
   rxdart: ^0.28.0
   # Yandex MapKit
   yandex_mapkit: ^4.2.1
-  # http clients  
+  # Http clients  
   http: ^1.5.0
   cronet_http: ^1.6.0
   cupertino_http: ^2.3.0
-  # local storage
+  # Local storage
   shared_preferences: ^2.5.3
-  # Internationalization and localization support
-  intl: ^0.20.2
-  # image picker
+  # Image picker
   image_picker: ^1.2.1
   video_player: ^2.10.1
   mime: ^2.0.0
@@ -51,6 +53,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
+  generate: true
   uses-material-design: true
 
   assets:

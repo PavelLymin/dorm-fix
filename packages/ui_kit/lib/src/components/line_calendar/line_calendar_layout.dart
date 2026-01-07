@@ -1,5 +1,4 @@
 import 'package:flutter/rendering.dart';
-import 'package:ui_kit/src/components/line_calendar/line_calendar_controller.dart';
 import 'package:ui_kit/ui.dart';
 
 class DefaultData extends ContainerBoxParentData<RenderBox>
@@ -21,7 +20,7 @@ class LineCalendarLayout extends StatefulWidget {
     required this.initialScroll,
     required this.today,
     required this.constraints,
-    required this.selectedDate,
+    required this.controller,
   });
 
   final LineCalendarStyle style;
@@ -33,7 +32,7 @@ class LineCalendarLayout extends StatefulWidget {
   final DateTime? initialScroll;
   final DateTime today;
   final BoxConstraints constraints;
-  final ValueNotifier<DateTime?> selectedDate;
+  final LineCalendarController controller;
 
   @override
   State<LineCalendarLayout> createState() => _LineCalendarLayoutState();
@@ -127,7 +126,7 @@ class _LineCalendarLayoutState extends State<LineCalendarLayout> {
               child: Item(
                 date: date.truncateAndStripTimezone(),
                 style: widget.style,
-                selectedDate: widget.selectedDate,
+                controller: widget.controller,
               ),
             );
           },
@@ -142,23 +141,23 @@ class Item extends StatelessWidget {
     super.key,
     required this.date,
     required this.style,
-    required this.selectedDate,
+    required this.controller,
   });
 
   final DateTime date;
   final LineCalendarStyle style;
-  final ValueNotifier<DateTime?> selectedDate;
+  final LineCalendarController controller;
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: selectedDate,
+      valueListenable: controller,
       builder: (context, state, child) {
         return ClickableCard(
           isSelected: date == state,
-          onPress: () {
-            selectedDate.value = date;
-          },
+          onPress: controller.isWeekDay(date)
+              ? () => controller.value = date
+              : null,
           builder: (context, state, _) => DecoratedBox(
             decoration: style.decoration.resolve(state),
             child: Column(

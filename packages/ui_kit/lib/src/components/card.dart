@@ -143,14 +143,7 @@ class _ClickableCardState extends State<ClickableCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {});
-        widget.onPress?.call();
-        if (widget.isSelected &&
-            !_controller.value.contains(WidgetState.selected)) {
-          _controller.update(.selected, true);
-        }
-      },
+      onTap: widget.onPress,
       child: widget.builder(context, _controller.value, widget.child),
     );
   }

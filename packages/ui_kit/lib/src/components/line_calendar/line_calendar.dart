@@ -1,7 +1,9 @@
+import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
 
-import 'line_calendar_controller.dart';
 import 'line_calendar_layout.dart';
+
+part 'line_calendar_controller.dart';
 
 class LineCalendar extends StatelessWidget {
   const LineCalendar({
@@ -11,7 +13,6 @@ class LineCalendar extends StatelessWidget {
     this.today,
     this.physics = const AlwaysScrollableScrollPhysics(),
     required this.controller,
-    required this.style,
     this.cacheExtent = 100,
   });
 
@@ -20,7 +21,6 @@ class LineCalendar extends StatelessWidget {
   final DateTime? today;
   final ScrollPhysics? physics;
   final LineCalendarController controller;
-  final LineCalendarStyle style;
   final double cacheExtent;
 
   @override
@@ -28,8 +28,8 @@ class LineCalendar extends StatelessWidget {
     return LayoutBuilder(
       builder: (_, constraints) {
         return LineCalendarLayout(
-          style: style,
-          selectedDate: controller,
+          style: context.styles.lineCalendarStyle,
+          controller: controller,
           alignment: .center,
           physics: physics,
           cacheExtent: cacheExtent,
@@ -50,7 +50,6 @@ class LineCalendarStyle {
     this.contentEdgeSpacing = 16,
     this.contentSpacing = 8,
     required this.decoration,
-    required this.todayIndicatorColor,
     required this.dateTextStyle,
     required this.weekdayTextStyle,
   });
@@ -59,94 +58,42 @@ class LineCalendarStyle {
   final double contentEdgeSpacing;
   final double contentSpacing;
   final AppWidgetStateMap<BoxDecoration> decoration;
-  final AppWidgetStateMap<Color> todayIndicatorColor;
   final AppWidgetStateMap<TextStyle> dateTextStyle;
   final AppWidgetStateMap<TextStyle> weekdayTextStyle;
 
-  factory LineCalendarStyle.defaultStyle(
-    ColorPalette colorPalette,
-    AppTypography typography,
-    AppStyle style,
-  ) {
-    final focusedBorder = Border.all(
-      color: colorPalette.border,
-      width: style.borderWidth,
-    );
-    final regularBorder = Border.all(
+  factory LineCalendarStyle.defaultStyle(BuildContext context, AppStyle style) {
+    final colorPalette = Theme.of(context).colorPalette;
+    final typography = Theme.of(context).appTypography;
+
+    final border = Border.all(
       color: colorPalette.border,
       width: style.borderWidth,
     );
 
     return .new(
       decoration: AppWidgetStateMap<BoxDecoration>({
-        WidgetState.disabled &
-            WidgetState.selected &
-            WidgetState.focused: BoxDecoration(
-          color: colorPalette.muted.withValues(alpha: .3),
-          border: focusedBorder,
-          borderRadius: style.borderRadius,
-        ),
-        WidgetState.disabled & WidgetState.selected: BoxDecoration(
-          color: colorPalette.muted.withValues(alpha: .3),
-          border: regularBorder,
-          borderRadius: style.borderRadius,
-        ),
-        WidgetState.disabled: BoxDecoration(
-          color: colorPalette.muted,
-          border: regularBorder,
-          borderRadius: style.borderRadius,
-        ),
-        WidgetState.selected &
-            (WidgetState.hovered | WidgetState.pressed): BoxDecoration(
-          color: colorPalette.primary.withValues(alpha: .8),
-          borderRadius: style.borderRadius,
-        ),
         WidgetState.selected: BoxDecoration(
           color: colorPalette.primary,
           borderRadius: style.borderRadius,
         ),
-        (WidgetState.hovered | WidgetState.pressed): BoxDecoration(
-          color: colorPalette.secondary.withValues(alpha: .2),
-          border: regularBorder,
-          borderRadius: style.borderRadius,
-        ),
-        WidgetState.focused: BoxDecoration(
-          color: colorPalette.secondary.withValues(alpha: .2),
-          border: focusedBorder,
+        WidgetState.disabled: BoxDecoration(
+          color: colorPalette.muted,
+          border: border,
           borderRadius: style.borderRadius,
         ),
         WidgetState.any: BoxDecoration(
           color: colorPalette.secondary,
-          border: regularBorder,
+          border: border,
           borderRadius: style.borderRadius,
         ),
       }),
-      todayIndicatorColor: AppWidgetStateMap<Color>({
-        WidgetState.disabled & WidgetState.selected: colorPalette
-            .mutedForeground
-            .withValues(alpha: .5),
-        WidgetState.disabled: colorPalette.mutedForeground.withValues(
-          alpha: .5,
-        ),
-        WidgetState.selected & (WidgetState.hovered | WidgetState.pressed):
-            colorPalette.primaryForeground,
-        WidgetState.selected: colorPalette.primaryForeground,
-        (WidgetState.hovered | WidgetState.pressed): colorPalette.primary
-            .withValues(alpha: .8),
-        WidgetState.any: colorPalette.primary,
-      }),
       dateTextStyle: AppWidgetStateMap<TextStyle>({
-        WidgetState.disabled & WidgetState.selected: typography.titleLarge
-            .copyWith(
-              color: colorPalette.mutedForeground.withValues(alpha: .5),
-              fontWeight: .w500,
-            ),
-        WidgetState.disabled: typography.titleLarge.copyWith(
-          color: colorPalette.mutedForeground.withValues(alpha: .5),
-          fontWeight: .w500,
-        ),
         WidgetState.selected: typography.titleLarge.copyWith(
           color: colorPalette.primaryForeground,
+          fontWeight: .w500,
+        ),
+        WidgetState.disabled: typography.titleLarge.copyWith(
+          color: colorPalette.mutedForeground,
           fontWeight: .w500,
         ),
         WidgetState.any: typography.titleLarge.copyWith(
@@ -155,17 +102,12 @@ class LineCalendarStyle {
         ),
       }),
       weekdayTextStyle: AppWidgetStateMap<TextStyle>({
-        WidgetState.disabled & WidgetState.selected: typography.titleMedium
-            .copyWith(
-              color: colorPalette.mutedForeground.withValues(alpha: .5),
-              fontWeight: .w500,
-            ),
-        WidgetState.disabled: typography.titleMedium.copyWith(
-          color: colorPalette.mutedForeground.withValues(alpha: .5),
-          fontWeight: .w500,
-        ),
         WidgetState.selected: typography.titleMedium.copyWith(
           color: colorPalette.primaryForeground,
+          fontWeight: .w500,
+        ),
+        WidgetState.disabled: typography.titleMedium.copyWith(
+          color: colorPalette.mutedForeground,
           fontWeight: .w500,
         ),
         WidgetState.any: typography.titleMedium.copyWith(

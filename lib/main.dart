@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ui_kit/ui.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
@@ -61,11 +61,11 @@ class _MainAppState extends State<MainApp> {
 
   ThemeData get _themeData {
     switch (widget.settings.themeMode) {
-      case ThemeModeVO.light:
+      case .light:
         return lightTheme;
-      case ThemeModeVO.dark:
+      case .dark:
         return darkTheme;
-      case ThemeModeVO.system:
+      case .system:
         final brightness = MediaQuery.platformBrightnessOf(context);
         return brightness == Brightness.dark ? darkTheme : lightTheme;
     }
@@ -81,11 +81,8 @@ class _MainAppState extends State<MainApp> {
         BlocProvider(create: (context) => _requestBloc),
       ],
       child: MaterialApp.router(
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,
         theme: _themeData,
