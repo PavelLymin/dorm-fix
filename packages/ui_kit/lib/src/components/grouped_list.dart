@@ -37,7 +37,7 @@ class GroupedList extends StatelessWidget {
       shrinkWrap: true,
       scrollDirection: .vertical,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const .all(0),
+      padding: const .all(.0),
       itemBuilder: (_, index) {
         final item = items[index];
         final isFirst = index == 0;
@@ -63,7 +63,7 @@ class _PersonalDataCard extends StatelessWidget {
     required this.item,
     required this.itemPadding,
     required this.color,
-    this.borderRadius = const BorderRadius.all(Radius.zero),
+    this.borderRadius = const .all(.zero),
   });
 
   final GroupedListItem item;

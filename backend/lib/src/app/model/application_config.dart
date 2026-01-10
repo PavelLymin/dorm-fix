@@ -1,31 +1,35 @@
-class Config {
+abstract class Config {
   const Config();
   // --- ENVIRONMENT --- //
 
   /// Environment flavor.
   /// e.g. development, staging, production
-  EnvironmentFlavor get environment => EnvironmentFlavor.from(
+  static EnvironmentFlavor environment = EnvironmentFlavor.from(
     const String.fromEnvironment('ENVIRONMENT', defaultValue: 'development'),
   );
 
   // --- DATABASE --- //
-  String get databasePath => const String.fromEnvironment(
+  static const String databasePath = String.fromEnvironment(
     'DATABASE_PATH',
     defaultValue: 'database.db',
   );
 
   // --- SERVER --- //
-  String get port => const String.fromEnvironment('PORT', defaultValue: '8080');
+  static const String port = String.fromEnvironment(
+    'PORT',
+    defaultValue: '8080',
+  );
 
   // --- FIREBASE --- //
-  String get serviceAccount => const String.fromEnvironment(
+  static const String serviceAccount = String.fromEnvironment(
     'SERVICE_ACCOUNT',
     defaultValue: 'bin/service-account.json',
   );
 
   // --- REGEX --- //
-  RegExp get email =>
-      RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+  static RegExp email = RegExp(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+  );
 }
 
 /// Environment flavor.

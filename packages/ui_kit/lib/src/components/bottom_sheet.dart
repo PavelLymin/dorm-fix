@@ -1,27 +1,32 @@
+import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
 
 Future<T?> showUiBottomSheet<T>(
-  BuildContext context,
-  Widget widget, {
+  BuildContext context, {
+  required Widget widget,
   AnimationStyle style = const AnimationStyle(
     duration: Duration(milliseconds: 300),
     reverseDuration: Duration(milliseconds: 100),
+    curve: Curves.easeIn,
   ),
   Color? backgroundColor,
-  double minWidth = 0.0,
+  BorderRadiusGeometry borderRadius = BorderRadius.zero,
+  double minWidth = .infinity,
   double maxWidth = .infinity,
-  double minHeight = 0.0,
+  double minHeight = .0,
   double maxHeight = .infinity,
   bool isScrollControlled = true,
+  bool useSafeArea = true,
 }) {
   final colorPalette = Theme.of(context).colorPalette;
-
+  final appStyle = context.styles.appStyle;
   return showModalBottomSheet<T>(
     context: context,
     sheetAnimationStyle: style,
     backgroundColor: backgroundColor ?? colorPalette.secondary,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: .circular(24)),
+    shape: RoundedSuperellipseBorder(
+      side: BorderSide(color: colorPalette.border, width: appStyle.borderWidth),
+      borderRadius: borderRadius,
     ),
     constraints: BoxConstraints(
       minWidth: minWidth,
@@ -29,35 +34,9 @@ Future<T?> showUiBottomSheet<T>(
       minHeight: minHeight,
       maxHeight: maxHeight,
     ),
+    useSafeArea: useSafeArea,
     isScrollControlled: isScrollControlled,
-    builder: (BuildContext context) => Column(
-      crossAxisAlignment: .center,
-      mainAxisAlignment: .start,
-      mainAxisSize: .min,
-      children: [
-        const SizedBox(height: 16),
-        const _SheetHandle(),
-        Flexible(child: widget),
-      ],
-    ),
+    builder: (BuildContext context) =>
+        Padding(padding: appStyle.pagePadding, child: widget),
   );
-}
-
-class _SheetHandle extends StatelessWidget {
-  const _SheetHandle();
-
-  @override
-  Widget build(BuildContext context) {
-    final color = Theme.of(context).colorPalette.accent;
-
-    return Container(
-      width: 128,
-      height: 5,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        color: color,
-      ),
-      margin: const EdgeInsets.only(top: 16),
-    );
-  }
 }

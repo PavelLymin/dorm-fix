@@ -1,6 +1,6 @@
-import 'package:backend/src/app/model/application_config.dart';
-import 'package:backend/src/server/model/user.dart';
 import 'package:shelf/shelf.dart';
+import '../../../app/model/application_config.dart';
+import '../../../server/profile/profile.dart';
 import '../../rest_api/src/rest_api.dart';
 
 abstract class RequireUser {
@@ -43,7 +43,7 @@ abstract class RequireUser {
       );
     }
 
-    if (Config().email.matchAsPrefix(email) == null) {
+    if (Config.email.matchAsPrefix(email) == null) {
       throw BadRequestException(
         error: {'description': 'Invalid email format.', 'field': 'email'},
       );

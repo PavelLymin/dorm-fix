@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:backend/src/app/logic/composition_root.dart';
+import 'package:backend/src/app/model/application_config.dart';
 import 'package:backend/src/core/middleware/authentication.dart';
 import 'package:backend/src/core/middleware/error.dart';
 import 'package:shelf/shelf.dart';
@@ -38,11 +39,10 @@ void main(List<String> args) async {
                 .add(dependency.wsRouter.handler)
                 .add(dependency.profileRouter.handler)
                 .add(dependency.userRouter.protectedHandler)
-                .add(dependency.studentRouter.handler)
                 .add(dependency.dormitoryRouter.handler)
                 .add(dependency.specializationRouter.handler)
                 .add(dependency.roomRouter.handler)
-                .add(dependency.requestRouter.handler)
+                .add(dependency.repairRequestRouter.handler)
                 .handler,
           );
 
@@ -51,7 +51,7 @@ void main(List<String> args) async {
           .addMiddleware(ErrorMiddleware.call(logger, dependency.restApi))
           .addHandler(Cascade().add(publicRoutes).add(protectedRoutes).handler);
 
-      final port = int.parse(dependency.config.port);
+      final port = int.parse(Config.port);
       await serve(handlers, ip, port);
     },
     (e, stackTrace) {

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../room/room.dart';
-import '../model/dormitory.dart';
+import '../../../dormitory/src/model/dormitory.dart';
 
 class RoomModalSheet extends StatefulWidget {
   const RoomModalSheet({super.key, required this.dormitory});

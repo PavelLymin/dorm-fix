@@ -1,6 +1,6 @@
 import '../../../../authentication/src/data/dto/user.dart';
 import '../../../../room/src/data/dto/room.dart';
-import '../../../../yandex_mapkit/src/data/dto/dormitory.dart';
+import '../../../../dormitory/src/data/dto/dormitory.dart';
 import '../../model/profile.dart';
 
 abstract class StudentDto {
@@ -51,7 +51,7 @@ class CreatedStudentDto extends StudentDto {
       CreatedStudentDto(
         dormitoryId: entity.dormitoryId,
         roomId: entity.roomId,
-        user: UserDto.fromEntity(entity.user),
+        user: .fromEntity(entity.user),
       );
 
   @override
@@ -61,12 +61,21 @@ class CreatedStudentDto extends StudentDto {
     'user': user.toJson(),
   };
 
-  factory CreatedStudentDto.fromJson(Map<String, Object?> json) =>
-      CreatedStudentDto(
-        dormitoryId: json['dormitory_id'] as int,
-        roomId: json['room_id'] as int,
-        user: UserDto.fromJson(json['user'] as Map<String, Object?>),
+  factory CreatedStudentDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'dormitory_id': final int dormitoryId,
+      'room_id': final int roomId,
+      'user': final Map<String, Object?> user,
+    }) {
+      return CreatedStudentDto(
+        dormitoryId: dormitoryId,
+        roomId: roomId,
+        user: .fromJson(user),
       );
+    } else {
+      throw ArgumentError('Invalid JSON format for CreatedStudentDto: $json');
+    }
+  }
 }
 
 class FullStudentDto extends StudentDto {
@@ -95,9 +104,9 @@ class FullStudentDto extends StudentDto {
 
   factory FullStudentDto.fromEntity(FullStudentEntity entity) => FullStudentDto(
     id: entity.id,
-    user: UserDto.fromEntity(entity.user),
-    dormitory: DormitoryDto.fromEntity(entity.dormitory),
-    room: RoomDto.fromEntity(entity.room),
+    user: .fromEntity(entity.user),
+    dormitory: .fromEntity(entity.dormitory),
+    room: .fromEntity(entity.room),
   );
 
   @override
@@ -108,10 +117,21 @@ class FullStudentDto extends StudentDto {
     'room': room.toJson(),
   };
 
-  factory FullStudentDto.fromJson(Map<String, Object?> json) => FullStudentDto(
-    id: json['id'] as int,
-    user: UserDto.fromJson(json['user'] as Map<String, Object?>),
-    dormitory: DormitoryDto.fromJson(json['dormitory'] as Map<String, Object?>),
-    room: RoomDto.fromJson(json['room'] as Map<String, Object?>),
-  );
+  factory FullStudentDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'id': final int id,
+      'user': final Map<String, Object?> user,
+      'dormitory': final Map<String, Object?> dormitory,
+      'room': final Map<String, Object?> room,
+    }) {
+      return FullStudentDto(
+        id: id,
+        user: .fromJson(user),
+        dormitory: .fromJson(dormitory),
+        room: .fromJson(room),
+      );
+    } else {
+      throw ArgumentError('Invalid JSON format for FullStudentDto: $json');
+    }
+  }
 }

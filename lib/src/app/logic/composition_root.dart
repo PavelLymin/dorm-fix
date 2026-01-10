@@ -9,11 +9,11 @@ import '../../../firebase_options.dart';
 import '../../core/rest_client/rest_client.dart';
 import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
+import '../../features/dormitory/dormitory.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/room/room.dart';
 import '../../features/settings/settings.dart';
-import '../../features/yandex_mapkit/yandex_mapkit.dart';
 import '../bloc/app_bloc_observer.dart';
 import '../model/application_config.dart';
 import '../model/dependencies.dart';
@@ -50,6 +50,7 @@ class CompositionRoot {
       client: createDefaultHttpClient(),
     );
 
+    // WS
     final IWebSocket webSocket = WebSocketBase(
       uri: '${Config.wsBaseUrl}/connection',
     );
@@ -91,12 +92,6 @@ class CompositionRoot {
     // Settings
     final settingsContainer = await _CreateSettings().create();
 
-    // Student
-    final studentRepository = StudentRepositoryImpl(
-      client: client,
-      firebaseAuth: firebaseAuth,
-    );
-
     // Profile
     final profileRepository = ProfileRepositoryImpl(
       client: client,
@@ -105,7 +100,6 @@ class CompositionRoot {
     final profileBloc = ProfileBloc(
       logger: logger,
       profileRepository: profileRepository,
-      studentRepository: studentRepository,
     );
 
     final userRepository = UserRepositoryImpl(
@@ -128,10 +122,6 @@ class CompositionRoot {
     final dormitoryRepository = DormitoryRepository(
       client: client,
       firebaseAuth: firebaseAuth,
-    );
-    final dormitorySearchBloc = DormitorySearchBloc(
-      dormitoryRepository: dormitoryRepository,
-      logger: logger,
     );
 
     // Room
@@ -157,13 +147,11 @@ class CompositionRoot {
       client: client,
       webSocket: webSocket,
       router: router,
-      dormitorySearchBloc: dormitorySearchBloc,
       logger: logger,
       settingsContainer: settingsContainer,
       authenticationBloc: authenticationBloc,
       profileBloc: profileBloc,
       userRepository: userRepository,
-      studentRepository: studentRepository,
       firebaseUserRepository: firebaseUserRepository,
       specializationBloc: specializationBloc,
       dormitoryRepository: dormitoryRepository,
@@ -182,52 +170,47 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.router,
     required this.logger,
     required this.settingsContainer,
-    required this.authenticationBloc,
-    required this.profileBloc,
     required this.userRepository,
-    required this.studentRepository,
     required this.firebaseUserRepository,
-    required this.specializationBloc,
-    required this.dormitorySearchBloc,
     required this.roomRepository,
     required this.dormitoryRepository,
     required this.requestRepository,
+    required this.authenticationBloc,
+    required this.profileBloc,
+    required this.specializationBloc,
     required this.repairRequestBloc,
   });
 
+  // Firebase
   final FirebaseAuth firebaseAuth;
 
+  // RestClient
   final RestClientHttp client;
 
+  // WebSocket
   final IWebSocket webSocket;
 
+  // Router
   final AppRouter router;
 
+  // Logger
   final Logger logger;
 
+  // Settings
   final SettingsContainer settingsContainer;
 
-  final AuthBloc authenticationBloc;
-
-  final ProfileBloc profileBloc;
-
+  // Repositories
   final IUserRepository userRepository;
-
-  final IStudentRepository studentRepository;
-
   final IFirebaseUserRepository firebaseUserRepository;
-
-  final DormitorySearchBloc dormitorySearchBloc;
-
   final RoomRepository roomRepository;
-
   final IDormitoryRepository dormitoryRepository;
-
-  final SpecializationBloc specializationBloc;
-
-  final RepairRequestBloc repairRequestBloc;
-
   final IRequestRepository requestRepository;
+
+  // BloC
+  final AuthBloc authenticationBloc;
+  final ProfileBloc profileBloc;
+  final SpecializationBloc specializationBloc;
+  final RepairRequestBloc repairRequestBloc;
 
   @override
   DependencyContainer create() => DependencyContainer(
@@ -237,16 +220,14 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     router: router,
     logger: logger,
     settingsContainer: settingsContainer,
-    authenticationBloc: authenticationBloc,
-    profileBloc: profileBloc,
     userRepository: userRepository,
-    studentRepository: studentRepository,
     firebaseUserRepository: firebaseUserRepository,
-    dormitorySearchBloc: dormitorySearchBloc,
     roomRepository: roomRepository,
     dormitoryRepository: dormitoryRepository,
-    specializationBloc: specializationBloc,
     requestRepository: requestRepository,
+    authenticationBloc: authenticationBloc,
+    profileBloc: profileBloc,
+    specializationBloc: specializationBloc,
     repairRequestBloc: repairRequestBloc,
   );
 }

@@ -51,7 +51,7 @@ sealed class RepairRequestResponse {
 
 final class CreatedRepairRequestResponse extends RepairRequestResponse {
   const CreatedRepairRequestResponse({
-    super.type = ResponseType.created,
+    super.type = .created,
     required this.requests,
   });
 
@@ -70,7 +70,7 @@ final class CreatedRepairRequestResponse extends RepairRequestResponse {
 
 final class DeletedRepairRequestResponse extends RepairRequestResponse {
   const DeletedRepairRequestResponse({
-    super.type = ResponseType.deleted,
+    super.type = .deleted,
     required this.requests,
   });
 
@@ -89,7 +89,7 @@ final class DeletedRepairRequestResponse extends RepairRequestResponse {
 
 final class UpdatedRepairRequestResponse extends RepairRequestResponse {
   const UpdatedRepairRequestResponse({
-    super.type = ResponseType.updated,
+    super.type = .updated,
     required this.requests,
   });
 
@@ -110,7 +110,7 @@ final class UpdatedRepairRequestResponse extends RepairRequestResponse {
 
 final class ErrorRepairRequestResponse extends RepairRequestResponse {
   const ErrorRepairRequestResponse({
-    super.type = ResponseType.error,
+    super.type = .error,
     required this.message,
     required this.requests,
   });

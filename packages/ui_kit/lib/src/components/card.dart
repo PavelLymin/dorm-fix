@@ -1,3 +1,4 @@
+import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
 
 sealed class UiCard extends StatelessWidget {
@@ -44,8 +45,11 @@ sealed class UiCard extends StatelessWidget {
       standart: (variant) => DecoratedBox(
         decoration: BoxDecoration(
           color: variant.color ?? Theme.of(context).colorPalette.secondary,
-          borderRadius: .circular(16),
-          border: .all(color: colorPalette.border),
+          borderRadius: const .all(.circular(16)),
+          border: .all(
+            color: colorPalette.border,
+            width: context.styles.appStyle.borderWidth,
+          ),
           gradient: variant.gradient,
         ),
         child: Padding(
@@ -56,11 +60,11 @@ sealed class UiCard extends StatelessWidget {
       clickable: (variant) => Ink(
         decoration: BoxDecoration(
           color: variant.color ?? Theme.of(context).colorPalette.secondary,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: const .all(.circular(24)),
           gradient: variant.gradient,
         ),
         child: InkWell(
-          borderRadius: .circular(24),
+          borderRadius: const .all(.circular(24)),
           onTap: variant.onTap,
           overlayColor: .resolveWith((Set<WidgetState> states) {
             final color = colorPalette.primaryForeground;

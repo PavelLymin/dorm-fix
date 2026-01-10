@@ -18,7 +18,7 @@ enum Role {
       };
 }
 
-abstract class UserEntity with _UserPatternMatching {
+sealed class UserEntity with _UserPatternMatching {
   const UserEntity();
 
   const factory UserEntity.notAuthenticated() = NotAuthenticatedUser;

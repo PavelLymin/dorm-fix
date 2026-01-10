@@ -1,5 +1,5 @@
 import '../../../../authentication/src/data/dto/user.dart';
-import '../../../../yandex_mapkit/src/data/dto/dormitory.dart';
+import '../../../../dormitory/src/data/dto/dormitory.dart';
 import '../../model/profile.dart';
 
 class MasterDto {
@@ -9,20 +9,20 @@ class MasterDto {
     required this.dormitory,
   });
 
-  final String id;
+  final int id;
   final UserDto user;
   final DormitoryDto dormitory;
 
   MasterEntity toEntity() => MasterEntity(
-    id: int.parse(id),
+    id: id,
     user: user.toEntity(),
     dormitory: dormitory.toEntity(),
   );
 
   factory MasterDto.fromEntity(MasterEntity entity) => MasterDto(
-    id: entity.id.toString(),
-    user: UserDto.fromEntity(entity.user),
-    dormitory: DormitoryDto.fromEntity(entity.dormitory),
+    id: entity.id,
+    user: .fromEntity(entity.user),
+    dormitory: .fromEntity(entity.dormitory),
   );
 
   Map<String, Object?> toJson() => {
@@ -33,17 +33,17 @@ class MasterDto {
 
   factory MasterDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
-      'id': final String id,
-      'user': final Map<String, Object?> userData,
-      'dormitory': final Map<String, Object?> dormitoryData,
+      'id': final int id,
+      'user': final Map<String, Object?> user,
+      'dormitory': final Map<String, Object?> dormitory,
     }) {
       return MasterDto(
         id: id,
-        user: UserDto.fromJson(userData),
-        dormitory: DormitoryDto.fromJson(dormitoryData),
+        user: .fromJson(user),
+        dormitory: .fromJson(dormitory),
       );
     } else {
-      throw ArgumentError('Invalid JSON format for CreatedStudent: $json');
+      throw ArgumentError('Invalid JSON format for MasterDto: $json');
     }
   }
 }

@@ -20,7 +20,7 @@ class SpecializationDto {
     photoUrl: photoUrl,
   );
 
-  static SpecializationDto fromEntity(SpecializationEntity entity) =>
+  factory SpecializationDto.fromEntity(SpecializationEntity entity) =>
       SpecializationDto(
         id: entity.id,
         title: entity.title,
@@ -35,11 +35,21 @@ class SpecializationDto {
     'photo_url': photoUrl,
   };
 
-  static SpecializationDto fromJson(Map<String, Object?> json) =>
-      SpecializationDto(
-        id: json['id'] as int,
-        title: json['title'] as String,
-        description: json['description'] as String,
-        photoUrl: json['photo_url'] as String,
+  factory SpecializationDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'id': final int id,
+      'title': final String title,
+      'description': final String description,
+      'photo_url': final String photoUrl,
+    }) {
+      return SpecializationDto(
+        id: id,
+        title: title,
+        description: description,
+        photoUrl: photoUrl,
       );
+    } else {
+      throw ArgumentError('Invalid JSON format for SpecializationDto: $json');
+    }
+  }
 }

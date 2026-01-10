@@ -289,9 +289,9 @@ class _WindowSizeScopeState extends State<WindowSizeScope>
     final windowSize = _getWindowSize();
 
     switch (widget.updateMode) {
-      case WindowSizeUpdateMode.continuous:
+      case .continuous:
         setState(() => _windowSize = windowSize);
-      case WindowSizeUpdateMode.categoriesOnly:
+      case .categoriesOnly:
         if (_windowSize.runtimeType != windowSize.runtimeType) {
           setState(() => _windowSize = windowSize);
         }

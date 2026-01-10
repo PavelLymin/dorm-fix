@@ -1,23 +1,16 @@
 import 'dart:io';
 
-import 'package:backend/src/server/router/room.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
-import '../../core/database/src/database.dart';
+
+import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
 import '../../core/ws/ws.dart';
-import '../../server/data/repository/dormitory_repository.dart';
-import '../../server/data/repository/master_repository.dart';
-import '../../server/data/repository/room_repository.dart';
-import '../../server/request/request.dart';
-import '../../server/data/repository/specialization_repository.dart';
-import '../../server/data/repository/student_repository.dart';
-import '../../server/data/repository/user_repository.dart';
-import '../../server/router/dormitory.dart';
-import '../../server/router/profile.dart';
-import '../../server/router/specialization.dart';
-import '../../server/router/student.dart';
-import '../../server/router/user.dart';
+import '../../server/dormitory/dormitory.dart';
+import '../../server/profile/profile.dart';
+import '../../server/repair_request/repair_request.dart';
+import '../../server/room/room.dart';
+import '../../server/specialization/specialization.dart';
 import '../model/application_config.dart';
 import '../model/dependencies_container.dart';
 
@@ -41,18 +34,15 @@ class CompositionRoot {
   Future<DependencyContainer> compose() async {
     logger.i('Initializing dependencies...');
 
-    // Config
-    final config = Config();
-
     // Firebase
     final options = AppOptions(
-      credential: FirebaseAdmin.instance.certFromPath(config.serviceAccount),
+      credential: FirebaseAdmin.instance.certFromPath(Config.serviceAccount),
     );
 
     final app = FirebaseAdmin.instance.initializeApp(options);
 
     // Database
-    final database = Database.lazy(file: File(config.databasePath));
+    final database = Database.lazy(file: File(Config.databasePath));
 
     // RestApi
     final restApi = RestApiBase();
@@ -70,10 +60,6 @@ class CompositionRoot {
 
     // Student
     final studentRepository = StudentRepositoryImpl(database: database);
-    final studentRouter = StudentRouter(
-      studentRepository: studentRepository,
-      restApi: restApi,
-    );
 
     // Master
     final masterRepository = MasterRepository(database: database);
@@ -87,7 +73,7 @@ class CompositionRoot {
 
     // Request
     final requestRepository = RequestRepositoryImpl(database: database);
-    final requestRouter = RequestRouter(
+    final repairRequestRouter = RepairRequestRouter(
       requestRepository: requestRepository,
       restApi: restApi,
       wsConnection: wsConnection,
@@ -118,14 +104,12 @@ class CompositionRoot {
 
     return _DependencyFactory(
       firebaseAdmin: app,
-      config: config,
       restApi: restApi,
       wsRouter: wsRouter,
       database: database,
       userRouter: userRouter,
-      requestRouter: requestRouter,
+      repairRequestRouter: repairRequestRouter,
       profileRouter: profileRouter,
-      studentRouter: studentRouter,
       dormitoryRouter: dormitoryRouter,
       roomRouter: roomRouter,
       specializationRouter: specializationRouter,
@@ -136,22 +120,18 @@ class CompositionRoot {
 class _DependencyFactory extends Factory<DependencyContainer> {
   const _DependencyFactory({
     required this.firebaseAdmin,
-    required this.config,
     required this.restApi,
     required this.wsRouter,
     required this.database,
     required this.userRouter,
-    required this.requestRouter,
+    required this.repairRequestRouter,
     required this.profileRouter,
-    required this.studentRouter,
     required this.dormitoryRouter,
     required this.roomRouter,
     required this.specializationRouter,
   });
 
   final App firebaseAdmin;
-
-  final Config config;
 
   final RestApi restApi;
 
@@ -161,11 +141,9 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final UserRouter userRouter;
 
-  final RequestRouter requestRouter;
+  final RepairRequestRouter repairRequestRouter;
 
   final ProfileRouter profileRouter;
-
-  final StudentRouter studentRouter;
 
   final DormitoryRouter dormitoryRouter;
 
@@ -176,14 +154,12 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   @override
   DependencyContainer create() => DependencyContainer(
     firebaseAdmin: firebaseAdmin,
-    config: config,
     restApi: restApi,
     wsRouter: wsRouter,
     database: database,
     userRouter: userRouter,
-    requestRouter: requestRouter,
+    repairRequestRouter: repairRequestRouter,
     profileRouter: profileRouter,
-    studentRouter: studentRouter,
     dormitoryRouter: dormitoryRouter,
     roomRouter: roomRouter,
     specializationRouter: specializationRouter,

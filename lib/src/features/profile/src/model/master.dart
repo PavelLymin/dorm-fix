@@ -29,4 +29,10 @@ final class MasterEntity extends ProfileEntity {
       'id: $id, '
       'user: $user, '
       'dormitory: $dormitory)';
+
+  @override
+  bool operator ==(Object other) => other is MasterEntity && uid == other.uid;
+
+  @override
+  int get hashCode => uid.hashCode;
 }

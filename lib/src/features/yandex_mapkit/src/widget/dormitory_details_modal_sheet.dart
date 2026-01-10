@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../app/widget/dependencies_scope.dart';
 import '../../../room/room.dart';
-import '../model/dormitory.dart';
+import '../../../dormitory/src/model/dormitory.dart';
 import 'room_modal_sheet.dart';
 
 class DormitoryDetailsModalSheet extends StatefulWidget {
@@ -64,7 +64,7 @@ class _DormitoryModalSheetState extends State<DormitoryDetailsModalSheet> {
     );
     showUiBottomSheet(
       context,
-      BlocProvider.value(
+      widget: BlocProvider.value(
         value: _roomSearcBloc,
         child: RoomModalSheet(dormitory: dormitory),
       ),

@@ -13,8 +13,6 @@ class RoomEntity {
   final String number;
   final bool isOccupied;
 
-  String get roomNumber => '$floor-$number';
-
   RoomEntity copyWith({
     int? id,
     int? dormitoryId,

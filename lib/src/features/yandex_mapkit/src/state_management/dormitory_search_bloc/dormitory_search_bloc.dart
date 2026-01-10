@@ -4,8 +4,7 @@ import 'package:logger/web.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../../../core/rest_client/rest_client.dart';
-import '../../data/repository/dormitory_repository.dart';
-import '../../model/dormitory.dart';
+import '../../../../dormitory/dormitory.dart';
 
 part 'dormitory_search_state.dart';
 part 'dormitory_search_event.dart';

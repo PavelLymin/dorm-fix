@@ -24,8 +24,6 @@ sealed class StudentEntity extends ProfileEntity {
 
   String get uid;
 
-  StudentEntity copyWith();
-
   @override
   bool operator ==(Object other) => other is StudentEntity && uid == other.uid;
 
@@ -47,7 +45,6 @@ final class CreatedStudentEntity extends StudentEntity {
   @override
   String get uid => user.uid;
 
-  @override
   CreatedStudentEntity copyWith({
     int? dormitoryId,
     int? roomId,
@@ -82,7 +79,6 @@ final class FullStudentEntity extends StudentEntity {
   @override
   String get uid => user.uid;
 
-  @override
   FullStudentEntity copyWith({
     int? id,
     DormitoryEntity? dormitory,
@@ -109,7 +105,4 @@ class StudentEmpty extends StudentEntity {
 
   @override
   String get uid => '';
-
-  @override
-  StudentEmpty copyWith() => const StudentEmpty();
 }

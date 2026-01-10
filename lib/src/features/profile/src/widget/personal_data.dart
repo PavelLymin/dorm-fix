@@ -57,7 +57,7 @@ mixin _PersonalDataStateMixin on State<PersonalData> {
       onTap: () => showUiBottomSheet(
         isScrollControlled: true,
         context,
-        _BottomSheetWrapper(
+        widget: _BottomSheetWrapper(
           widget: EmailAddressEdit(initialText: student.user.email ?? ''),
         ),
       ),
@@ -71,7 +71,7 @@ mixin _PersonalDataStateMixin on State<PersonalData> {
       onTap: () => showUiBottomSheet(
         isScrollControlled: true,
         context,
-        _BottomSheetWrapper(
+        widget: _BottomSheetWrapper(
           widget: PhoneNumberEdit(initialText: student.user.phoneNumber ?? ''),
         ),
       ),

@@ -3,22 +3,18 @@ import 'package:ui_kit/ui.dart';
 class AppPadding {
   static const double defaultPadding = 8.0;
 
-  static const EdgeInsets allSmall = EdgeInsets.all(defaultPadding);
-  static const EdgeInsets allMedium = EdgeInsets.all(defaultPadding * 2);
-  static const EdgeInsets allLarge = EdgeInsets.all(defaultPadding * 3);
+  static const EdgeInsets allSmall = .all(defaultPadding);
+  static const EdgeInsets allMedium = .all(defaultPadding * 2);
+  static const EdgeInsets allLarge = .all(defaultPadding * 3);
 
-  static const EdgeInsets horizontal = EdgeInsets.symmetric(
-    horizontal: defaultPadding,
-  );
-  static const EdgeInsets vertical = EdgeInsets.symmetric(
-    vertical: defaultPadding,
-  );
-  static const EdgeInsets symmetric = EdgeInsets.symmetric(
+  static const EdgeInsets horizontal = .symmetric(horizontal: defaultPadding);
+  static const EdgeInsets vertical = .symmetric(vertical: defaultPadding);
+  static const EdgeInsets symmetric = .symmetric(
     horizontal: defaultPadding,
     vertical: defaultPadding,
   );
 
-  static const EdgeInsets only = EdgeInsets.only(
+  static const EdgeInsets only = .only(
     top: defaultPadding,
     right: defaultPadding,
     bottom: defaultPadding,
@@ -26,24 +22,23 @@ class AppPadding {
   );
 
   static EdgeInsets allIncrement({required int increment}) =>
-      EdgeInsets.all(defaultPadding * increment);
+      .all(defaultPadding * increment);
 
   static EdgeInsets horizontalIncrement({required double increment}) =>
-      EdgeInsets.symmetric(
+      .symmetric(
         horizontal: defaultPadding * increment,
         vertical: defaultPadding,
       );
 
-  static EdgeInsets verticalIncrement({required int increment}) =>
-      EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-        vertical: defaultPadding * increment,
-      );
+  static EdgeInsets verticalIncrement({required int increment}) => .symmetric(
+    horizontal: defaultPadding,
+    vertical: defaultPadding * increment,
+  );
 
   static EdgeInsets symmetricIncrement({
     int horizontal = 0,
     int vertical = 0,
-  }) => EdgeInsets.symmetric(
+  }) => .symmetric(
     horizontal: defaultPadding * horizontal,
     vertical: defaultPadding * vertical,
   );
@@ -53,7 +48,7 @@ class AppPadding {
     int right = 0,
     int bottom = 0,
     int left = 0,
-  }) => EdgeInsets.only(
+  }) => .only(
     top: defaultPadding * top,
     right: defaultPadding * right,
     bottom: defaultPadding * bottom,

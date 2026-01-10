@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../app/widget/dependencies_scope.dart';
 import '../../../profile/profile.dart';
 import '../../authentication.dart';
 
@@ -23,13 +22,12 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneNumberController = TextEditingController();
-  late final StudentBloc _studentBloc;
+  late final ProfileBloc _studentBloc;
 
   @override
   void initState() {
     super.initState();
     _initTextControllers();
-    _initStudentBloc();
   }
 
   void _initTextControllers() {
@@ -41,14 +39,6 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         _emailController.text = user.email ?? '';
         _phoneNumberController.text = user.phoneNumber ?? '';
       },
-    );
-  }
-
-  void _initStudentBloc() {
-    final dependency = DependeciesScope.of(context);
-    _studentBloc = StudentBloc(
-      logger: dependency.logger,
-      studentRepository: dependency.studentRepository,
     );
   }
 
@@ -70,26 +60,17 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
   }
 
   void _submitForm() {
-    final user = _addPersonalData();
-    _studentBloc.add(
-      .create(
-        student: CreatedStudentEntity(
-          user: user,
-          dormitoryId: widget.dormitoryId,
-          roomId: widget.roomId,
-        ),
-      ),
-    );
+    _addPersonalData();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _studentBloc,
-      child: BlocListener<StudentBloc, StudentState>(
+      child: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
           state.mapOrNull(
-            created: (_) => context.router.replace(NamedRoute('Home')),
+            loadedMaster: (_) => context.router.replace(NamedRoute('Home')),
           );
         },
         child: Scaffold(

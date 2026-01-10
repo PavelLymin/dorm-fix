@@ -12,24 +12,16 @@ class UiSwitch extends StatelessWidget {
     return Switch(
       value: value,
       onChanged: onChanged,
-      thumbColor: WidgetStateColor.resolveWith((Set<WidgetState> states) {
-        return colorPalette.accent;
+      thumbColor: WidgetStateMapper<Color>({
+        WidgetState.any: colorPalette.accent,
       }),
-      trackOutlineColor: WidgetStateColor.resolveWith((
-        Set<WidgetState> states,
-      ) {
-        if (states.contains(WidgetState.selected)) {
-          return colorPalette.primary;
-        }
-
-        return colorPalette.secondaryButton;
+      trackOutlineColor: WidgetStateMapper<Color>({
+        WidgetState.selected: colorPalette.primary,
+        WidgetState.any: colorPalette.secondaryButton,
       }),
-      trackColor: WidgetStateColor.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.selected)) {
-          return colorPalette.primary;
-        }
-
-        return colorPalette.secondaryButton;
+      trackColor: WidgetStateMapper<Color>({
+        WidgetState.selected: colorPalette.primary,
+        WidgetState.any: colorPalette.secondaryButton,
       }),
     );
   }

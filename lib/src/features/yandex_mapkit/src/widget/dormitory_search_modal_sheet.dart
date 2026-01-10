@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../app/widget/dependencies_scope.dart';
 import '../../yandex_mapkit.dart';
 
 class DormitorySearchModalSheet extends StatefulWidget {
@@ -19,7 +18,7 @@ class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _dormitorySearchBloc = DependeciesScope.of(context).dormitorySearchBloc;
+    // _dormitorySearchBloc = DependeciesScope.of(context).dormitorySearchBloc;
   }
 
   @override

@@ -6,7 +6,7 @@ class UiButton extends ButtonStyleButton {
   UiButton.filledPrimary({
     required VoidCallback? onPressed,
     bool enabled = true,
-    IconAlignment iconAlignment = IconAlignment.start,
+    IconAlignment iconAlignment = .start,
     Widget? label,
     Widget? icon,
     VoidCallback? onLongPress,
@@ -19,7 +19,7 @@ class UiButton extends ButtonStyleButton {
     super.statesController,
     super.isSemanticButton,
     super.key,
-  }) : variant = ButtonVariant.filledPrimary,
+  }) : variant = .filledPrimary,
        super(
          child: _ButtonIconAndLabel(
            icon: icon,
@@ -33,7 +33,7 @@ class UiButton extends ButtonStyleButton {
   const UiButton.icon({
     required VoidCallback? onPressed,
     bool enabled = true,
-    IconAlignment iconAlignment = IconAlignment.start,
+    IconAlignment iconAlignment = .start,
     Widget? icon,
     VoidCallback? onLongPress,
     super.autofocus = false,
@@ -45,7 +45,7 @@ class UiButton extends ButtonStyleButton {
     super.statesController,
     super.isSemanticButton,
     super.key,
-  }) : variant = ButtonVariant.icon,
+  }) : variant = .icon,
        super(
          child: icon,
          onPressed: enabled ? onPressed : null,
@@ -90,8 +90,8 @@ class _ButtonIconAndLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
-    children: iconAlignment == IconAlignment.start
+    mainAxisSize: .min,
+    children: iconAlignment == .start
         ? [
             if (icon != null) icon!,
             if (icon != null && label != null) const SizedBox(width: 8),
@@ -113,38 +113,24 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<Color?>? get foregroundColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
-          return colorPalette.mutedForeground;
-        }
-        return colorPalette.primaryForeground;
+      WidgetStateMapper<Color?>({
+        WidgetState.disabled: colorPalette.mutedForeground,
+        WidgetState.any: colorPalette.primaryForeground,
       });
 
   @override
   WidgetStateProperty<Color?>? get backgroundColor =>
-      WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return colorPalette.muted;
-        }
-
-        return colorPalette.primary;
+      WidgetStateMapper<Color?>({
+        WidgetState.disabled: colorPalette.muted,
+        WidgetState.any: colorPalette.primary,
       });
 
   @override
-  WidgetStateProperty<Color?>? get overlayColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        final color = colorPalette.primaryForeground;
-        if (states.contains(WidgetState.pressed)) {
-          return color.withValues(alpha: 0.2);
-        }
-        if (states.contains(WidgetState.hovered)) {
-          return color.withValues(alpha: 0.1);
-        }
-        if (states.contains(WidgetState.focused)) {
-          return color.withValues(alpha: 0);
-        }
-        return null;
-      });
+  WidgetStateProperty<Color?>? get overlayColor => WidgetStateMapper<Color?>({
+    WidgetState.pressed: colorPalette.primary.withValues(alpha: .2),
+    WidgetState.hovered: colorPalette.primary.withValues(alpha: .1),
+    WidgetState.focused: colorPalette.primary.withValues(alpha: .1),
+  });
 
   @override
   WidgetStateProperty<double>? get elevation =>
@@ -152,7 +138,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<Color>? get shadowColor => WidgetStatePropertyAll<Color>(
-    colorPalette.foreground..withValues(alpha: .18),
+    colorPalette.foreground.withValues(alpha: .18),
   );
 }
 
@@ -166,7 +152,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
   final AppTypography typography;
 
   @override
-  AlignmentGeometry? get alignment => Alignment.center;
+  AlignmentGeometry? get alignment => .center;
 
   @override
   Duration? get animationDuration => const Duration(milliseconds: 200);
@@ -174,13 +160,11 @@ class _UiBaseButtonStyle extends ButtonStyle {
   @override
   WidgetStateProperty<OutlinedBorder?>? get shape =>
       const WidgetStatePropertyAll(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
+        RoundedRectangleBorder(borderRadius: .all(.circular(16))),
       );
 
   @override
-  MaterialTapTargetSize? get tapTargetSize => MaterialTapTargetSize.shrinkWrap;
+  MaterialTapTargetSize? get tapTargetSize => .shrinkWrap;
 
   @override
   WidgetStateProperty<EdgeInsetsGeometry?>? get padding =>
@@ -194,7 +178,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
 
   @override
   WidgetStateProperty<Size?>? get maximumSize =>
-      const WidgetStatePropertyAll(Size.infinite);
+      const WidgetStatePropertyAll(.infinite);
 
   @override
   WidgetStateProperty<TextStyle?>? get textStyle =>
@@ -217,11 +201,9 @@ class _UiBaseButtonStyle extends ButtonStyle {
 
   @override
   WidgetStateProperty<MouseCursor?>? get mouseCursor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
-          return SystemMouseCursors.basic;
-        }
-        return SystemMouseCursors.click;
+      WidgetStateMapper<MouseCursor?>({
+        WidgetState.disabled: SystemMouseCursors.basic,
+        WidgetState.any: SystemMouseCursors.click,
       });
 
   @override
@@ -307,31 +289,17 @@ class _IconButtonStandardStyle extends _IconButtonBaseStyle {
 
   @override
   WidgetStateProperty<Color?>? get foregroundColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
-          return colorPalette.muted;
-        }
-
-        return colorPalette.foreground;
+      WidgetStateMapper<Color?>({
+        WidgetState.disabled: colorPalette.muted,
+        WidgetState.any: colorPalette.foreground,
       });
 
   @override
-  WidgetStateProperty<Color?>? get overlayColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.pressed)) {
-          return colorPalette.foreground.withValues(alpha: 0.1);
-        }
-
-        if (states.contains(WidgetState.hovered)) {
-          return colorPalette.foreground.withValues(alpha: 0.08);
-        }
-
-        if (states.contains(WidgetState.focused)) {
-          return colorPalette.foreground.withValues(alpha: 0.1);
-        }
-
-        return null;
-      });
+  WidgetStateProperty<Color?>? get overlayColor => WidgetStateMapper<Color?>({
+    WidgetState.pressed: colorPalette.foreground.withValues(alpha: .1),
+    WidgetState.hovered: colorPalette.foreground.withValues(alpha: .08),
+    WidgetState.focused: colorPalette.foreground.withValues(alpha: .1),
+  });
 }
 
 class _IconButtonBaseStyle extends _UiBaseButtonStyle {
@@ -346,36 +314,25 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<Color?>? get foregroundColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
-          return colorPalette.foreground.withValues(alpha: 0.38);
-        }
-
-        return colorPalette.foreground;
+      WidgetStateMapper<Color?>({
+        WidgetState.disabled: colorPalette.foreground.withValues(alpha: .38),
+        WidgetState.any: colorPalette.foreground,
       });
 
   @override
-  WidgetStateProperty<Color?>? get overlayColor =>
-      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.pressed)) {
-          return colorPalette.foreground.withValues(alpha: 0.1);
-        }
-        if (states.contains(WidgetState.hovered)) {
-          return colorPalette.foreground.withValues(alpha: 0.08);
-        }
-        if (states.contains(WidgetState.focused)) {
-          return colorPalette.foreground.withValues(alpha: 0.1);
-        }
-        return null;
-      });
+  WidgetStateProperty<Color?>? get overlayColor => WidgetStateMapper<Color?>({
+    WidgetState.pressed: colorPalette.foreground.withValues(alpha: .1),
+    WidgetState.hovered: colorPalette.foreground.withValues(alpha: .08),
+    WidgetState.focused: colorPalette.foreground.withValues(alpha: .1),
+  });
 
   @override
   WidgetStateProperty<EdgeInsetsGeometry>? get padding =>
-      const WidgetStatePropertyAll<EdgeInsetsGeometry>(EdgeInsets.all(8.0));
+      const WidgetStatePropertyAll<EdgeInsetsGeometry>(.all(8.0));
 
   @override
   WidgetStateProperty<Size>? get minimumSize =>
-      const WidgetStatePropertyAll<Size>(Size.square(48));
+      const WidgetStatePropertyAll<Size>(.square(48));
 
   @override
   WidgetStateProperty<double>? get iconSize =>

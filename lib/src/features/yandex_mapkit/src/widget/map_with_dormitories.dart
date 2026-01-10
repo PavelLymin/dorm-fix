@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 import '../../../../app/widget/dependencies_scope.dart';
+import '../../../dormitory/dormitory.dart';
 import '../../yandex_mapkit.dart';
 import 'dormitory_details_modal_sheet.dart';
 import 'dormitory_search_modal_sheet.dart';
@@ -115,7 +116,7 @@ class _MapWithDormitoriesState extends State<MapWithDormitories> {
     );
     showUiBottomSheet(
       context,
-      DormitoryDetailsModalSheet(dormitory: dormitory),
+      widget: DormitoryDetailsModalSheet(dormitory: dormitory),
       maxHeight: MediaQuery.of(context).size.height * 0.3,
     );
   }
@@ -123,7 +124,7 @@ class _MapWithDormitoriesState extends State<MapWithDormitories> {
   Future<void> _showSearchModalSheet(BuildContext context) async {
     await showUiBottomSheet<DormitoryEntity?>(
       context,
-      const DormitorySearchModalSheet(),
+      widget: const DormitorySearchModalSheet(),
       maxHeight: MediaQuery.of(context).size.height * 0.6,
     ).then((selectedDormitory) {
       if (selectedDormitory != null && context.mounted) {

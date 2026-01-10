@@ -23,7 +23,7 @@ class RoomDto {
     isOccupied: isOccupied,
   );
 
-  static RoomDto fromEntity(RoomEntity entity) => RoomDto(
+  factory RoomDto.fromEntity(RoomEntity entity) => RoomDto(
     id: entity.id,
     dormitoryId: entity.dormitoryId,
     floor: entity.floor,
@@ -31,19 +31,31 @@ class RoomDto {
     isOccupied: entity.isOccupied,
   );
 
-  static RoomDto fromJson(Map<String, Object?> json) => RoomDto(
-    id: json['id'] as int,
-    dormitoryId: json['dormitoryId'] as int,
-    floor: json['floor'] as int,
-    number: json['number'] as String,
-    isOccupied: json['isOccupied'] as bool,
-  );
+  factory RoomDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'id': final int id,
+      'dormitory_id': final int dormitoryId,
+      'floor': final int floor,
+      'number': final String number,
+      'is_occupied': final bool isOccupied,
+    }) {
+      return RoomDto(
+        id: id,
+        dormitoryId: dormitoryId,
+        floor: floor,
+        number: number,
+        isOccupied: isOccupied,
+      );
+    } else {
+      throw ArgumentError('Invalid JSON format for RoomDto: $json');
+    }
+  }
 
   Map<String, Object?> toJson() => {
     'id': id,
-    'dormitoryId': dormitoryId,
+    'dormitory_id': dormitoryId,
     'floor': floor,
     'number': number,
-    'isOccupied': isOccupied,
+    'is_occupied': isOccupied,
   };
 }

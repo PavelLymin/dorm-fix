@@ -3,7 +3,6 @@ import 'package:logger/logger.dart';
 
 import '../../../../../core/rest_client/rest_client.dart';
 import '../../data/repository/profile_repository.dart';
-import '../../data/repository/student_repository.dart';
 import '../../model/profile.dart';
 
 part 'profile_event.dart';
@@ -13,11 +12,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc({
     required Logger logger,
     required IProfileRepository profileRepository,
-    required IStudentRepository studentRepository,
   }) : _logger = logger,
        _profileRepository = profileRepository,
-       _studentRepository = studentRepository,
-       super(ProfileState.loading(profile: ProfileEntity.empty())) {
+       super(ProfileState.loading(profile: .empty())) {
     on<ProfileEvent>((event, emit) async {
       await event.map(
         get: (_) => _getProfile(emit),
@@ -28,7 +25,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   final Logger _logger;
   final IProfileRepository _profileRepository;
-  final IStudentRepository _studentRepository;
 
   Future<void> runSafe(
     Emitter<ProfileState> emit,
@@ -52,9 +48,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await runSafe(emit, () async {
       final profile = await _profileRepository.getProfile();
       profile.map(
-        student: (profile) =>
-            emit(ProfileState.loadedStudent(student: profile)),
-        master: (profile) => emit(ProfileState.loadedMaster(master: profile)),
+        student: (profile) => emit(.loadedStudent(student: profile)),
+        master: (profile) => emit(.loadedMaster(master: profile)),
       );
     });
   }
@@ -62,12 +57,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> _updateStudentProfile(
     _UpdateStudentProfileEvent event,
     Emitter<ProfileState> emit,
-  ) async {
-    await runSafe(emit, () async {
-      await _studentRepository.updateUserProfile(student: event.student);
-      add(ProfileEvent.get());
-    });
-  }
+  ) async {}
 
   void _emitError(Emitter<ProfileState> emit, String e) =>
       emit(ProfileState.error(profile: state.currentProfile, message: e));

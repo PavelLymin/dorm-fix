@@ -10,14 +10,16 @@ class BottomSheetPreview extends StatelessWidget {
       child: UiButton.filledPrimary(
         onPressed: () => showUiBottomSheet(
           context,
-          Column(
+          widget: Column(
             mainAxisAlignment: .center,
+            crossAxisAlignment: .stretch,
             mainAxisSize: .min,
-            children: <Widget>[
-              const Text('Modal bottom sheet'),
-              ElevatedButton(
-                child: const Text('Close'),
+            children: [
+              UiText.titleMedium('Modal bottom sheet'),
+              const SizedBox(height: 24),
+              UiButton.filledPrimary(
                 onPressed: () => Navigator.pop(context),
+                label: UiText.bodyMedium('Close'),
               ),
             ],
           ),

@@ -31,6 +31,7 @@ class FirebaseUserRepositoryImpl implements IFirebaseUserRepository {
         message: 'No user is currently signed in.',
       );
     }
+
     await user.reload();
   }
 

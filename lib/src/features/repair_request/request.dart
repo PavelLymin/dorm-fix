@@ -2,7 +2,7 @@ library;
 
 export 'src/model/repair_request.dart';
 export 'src/model/working_time.dart';
-export 'src/data/dto/request.dart';
+export 'src/data/dto/repair_request.dart';
 export 'src/data/repository/image_repository.dart';
 export 'src/data/repository/request_repository.dart';
 export 'src/data/helper/repair_request_helper.dart';

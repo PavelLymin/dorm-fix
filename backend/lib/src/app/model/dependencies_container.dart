@@ -1,35 +1,29 @@
-import 'package:backend/src/core/ws/src/connection/ws_router.dart';
-import 'package:backend/src/server/request/src/router/request.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
-import '../../server/router/dormitory.dart';
-import '../../server/router/profile.dart';
-import '../../server/router/room.dart';
-import '../../server/router/specialization.dart';
-import '../../server/router/student.dart';
-import '../../server/router/user.dart';
-import 'application_config.dart';
+import '../../core/ws/ws.dart';
+import '../../server/repair_request/repair_request.dart';
+import '../../server/dormitory/src/router/dormitory.dart';
+import '../../server/profile/src/router/profile.dart';
+import '../../server/room/src/router/room.dart';
+import '../../server/specialization/src/router/specialization.dart';
+import '../../server/profile/src/router/user.dart';
 
 class DependencyContainer {
   const DependencyContainer({
     required this.firebaseAdmin,
-    required this.config,
     required this.restApi,
     required this.wsRouter,
     required this.database,
     required this.userRouter,
-    required this.requestRouter,
     required this.profileRouter,
-    required this.studentRouter,
-    required this.dormitoryRouter,
     required this.roomRouter,
+    required this.dormitoryRouter,
+    required this.repairRequestRouter,
     required this.specializationRouter,
   });
 
   final App firebaseAdmin;
-
-  final Config config;
 
   final RestApi restApi;
 
@@ -39,15 +33,13 @@ class DependencyContainer {
 
   final UserRouter userRouter;
 
-  final RequestRouter requestRouter;
-
   final ProfileRouter profileRouter;
 
-  final StudentRouter studentRouter;
+  final RoomRouter roomRouter;
 
   final DormitoryRouter dormitoryRouter;
 
-  final RoomRouter roomRouter;
+  final RepairRequestRouter repairRequestRouter;
 
   final SpecializationRouter specializationRouter;
 }

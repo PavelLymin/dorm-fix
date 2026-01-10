@@ -12,12 +12,11 @@ class UiCheckBox extends StatelessWidget {
     return Checkbox(
       value: value,
       onChanged: onChanged,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      fillColor: .resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return colorPalette.primary;
-        }
-        return Colors.transparent;
+      materialTapTargetSize: .shrinkWrap,
+      fillColor: WidgetStateMapper<Color>({
+        WidgetState.selected: colorPalette.primary,
+        WidgetState.disabled: colorPalette.secondaryButton,
+        WidgetState.any: Colors.transparent,
       }),
       checkColor: colorPalette.accent,
     );

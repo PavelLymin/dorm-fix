@@ -10,7 +10,7 @@ class Surface extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(27),
+        borderRadius: const .all(.circular(16)),
         boxShadow: [
           BoxShadow(
             blurRadius: 8,

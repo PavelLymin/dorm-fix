@@ -1,6 +1,6 @@
 import '../../../authentication/src/model/user.dart';
 import '../../../room/src/model/room.dart';
-import '../../../yandex_mapkit/src/model/dormitory.dart';
+import '../../../dormitory/src/model/dormitory.dart';
 import '../data/dto/master.dart';
 import '../data/dto/student.dart';
 
@@ -17,8 +17,8 @@ sealed class ProfileEntity {
     required Map<String, Object?> json,
   }) {
     final entity = switch (role) {
-      Role.student => FullStudentDto.fromJson(json).toEntity(),
-      Role.master => MasterDto.fromJson(json).toEntity(),
+      .student => FullStudentDto.fromJson(json).toEntity(),
+      .master => MasterDto.fromJson(json).toEntity(),
     };
 
     return entity;
@@ -27,16 +27,11 @@ sealed class ProfileEntity {
   T map<T>({
     required T Function(FullStudentEntity student) student,
     required T Function(MasterEntity master) master,
-  }) {
-    switch (this) {
-      case FullStudentEntity():
-        return student(this as FullStudentEntity);
-      case MasterEntity():
-        return master(this as MasterEntity);
-      default:
-        throw UnimplementedError('Unknown ProfileEntity type: $runtimeType');
-    }
-  }
+  }) => switch (this) {
+    FullStudentEntity() => student(this as FullStudentEntity),
+    MasterEntity() => master(this as MasterEntity),
+    _ => throw UnimplementedError('Unknown ProfileEntity type: $runtimeType'),
+  };
 }
 
 class ProfileEntityEmpty extends ProfileEntity {

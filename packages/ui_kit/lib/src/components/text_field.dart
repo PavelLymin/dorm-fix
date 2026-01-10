@@ -20,14 +20,14 @@ class UiTextField extends StatefulWidget {
     this.textInputAction,
     this.selectionControls,
     this.maxLengthEnforcement,
-    this.textAlign = TextAlign.start,
-    this.textCapitalization = TextCapitalization.none,
+    this.textAlign = .start,
+    this.textCapitalization = .none,
     this.autofocus = false,
     this.expands = false,
     this.obscureText = false,
     this.showCounter = false,
     super.key,
-  }) : variant = UiTextInputVariant.standard;
+  }) : variant = .standard;
 
   final UiTextFieldStyle? style;
   final TextEditingController? controller;
@@ -64,7 +64,7 @@ class _UiTextFieldState extends State<UiTextField> {
     final typography = theme.appTypography;
 
     final variantStyle = switch (widget.variant) {
-      UiTextInputVariant.standard => _StandardUiTextFieldStyle(
+      .standard => _StandardUiTextFieldStyle(
         palette: palette,
         typography: typography,
       ),
@@ -163,31 +163,31 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
 
   @override
   InputBorder? get focusedBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(16),
+    borderRadius: const .all(.circular(16)),
     borderSide: BorderSide(color: palette.accent, width: 1),
   );
 
   @override
   InputBorder? get focusedErrorBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(16),
+    borderRadius: const .all(.circular(16)),
     borderSide: BorderSide(color: palette.destructive, width: 1),
   );
 
   @override
   InputBorder? get errorBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(16),
+    borderRadius: const .all(.circular(16)),
     borderSide: BorderSide(color: palette.destructive),
   );
 
   @override
   InputBorder? get enabledBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(16),
+    borderRadius: const .all(.circular(16)),
     borderSide: BorderSide(color: palette.border),
   );
 
   @override
   InputBorder? get disabledBorder => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(16),
+    borderRadius: const .all(.circular(16)),
     borderSide: BorderSide(color: palette.foreground.withValues(alpha: .08)),
   );
 
