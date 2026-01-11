@@ -14,31 +14,53 @@ final class StyleData {
   final GroupedListStyle groupedListStyle;
 }
 
-class StylesScope extends StatelessWidget {
-  const StylesScope({super.key, required this.styleData, required this.child});
+class StylesScope extends StatefulWidget {
+  const StylesScope({super.key, this.styleData, required this.child});
 
-  final StyleData styleData;
+  final StyleData? styleData;
   final Widget child;
 
   static StyleData of(BuildContext context) {
-    try {
-      final result = context
-          .dependOnInheritedWidgetOfExactType<_InheritedStyle>();
-      if (result == null) {
-        throw Exception(
-          'No Styles found in context. Make sure to wrap your widget tree with Styles.',
-        );
-      }
-
-      return result.styleData;
-    } catch (e, stackTrace) {
-      Error.throwWithStackTrace(e, stackTrace);
+    final result = context
+        .dependOnInheritedWidgetOfExactType<_InheritedStyle>();
+    if (result == null) {
+      throw ArgumentError(
+        'Out of scope, not found inherited widget '
+            'a $result of the exact type',
+        'out_of_scope',
+      );
     }
+
+    return result.styleData;
+  }
+
+  @override
+  State<StylesScope> createState() => _StylesScopeState();
+}
+
+class _StylesScopeState extends State<StylesScope> {
+  late final StyleData styleData;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final appStyle = const AppStyle();
+    final lineCalendarStyle = LineCalendarStyle.defaultStyle(context, appStyle);
+    final groupedListStyle = GroupedListStyle.defaultStyle(context);
+
+    styleData =
+        widget.styleData ??
+        StyleData(
+          appStyle: appStyle,
+          lineCalendarStyle: lineCalendarStyle,
+          groupedListStyle: groupedListStyle,
+        );
   }
 
   @override
   Widget build(BuildContext context) =>
-      _InheritedStyle(styleData: styleData, child: child);
+      _InheritedStyle(styleData: styleData, child: widget.child);
 }
 
 class _InheritedStyle extends InheritedTheme {

@@ -18,15 +18,14 @@ class _LineCalendarPreviewState extends State<LineCalendarPreview> {
   }
 
   @override
-  Widget build(BuildContext context) => UiCard.standart(
-    child: Padding(
-      padding: AppPadding.allSmall,
+  Widget build(BuildContext context) {
+    return UiCard.standart(
       child: LineCalendar(
         controller: _controller,
         start: _today,
         end: _today.add(const Duration(days: 6)),
         today: _today,
       ),
-    ),
-  );
+    );
+  }
 }

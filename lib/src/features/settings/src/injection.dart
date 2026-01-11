@@ -1,6 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'application/settings_service.dart';
-import 'data/repository/settings_repository.dart';
+import '../settings.dart';
 
 class SettingsContainer {
   const SettingsContainer._(this.settingsService);

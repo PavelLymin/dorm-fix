@@ -64,11 +64,8 @@ class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
                         items: [
                           for (var dormitory in dormitories)
                             GroupedListItem(
-                              title: UiText.bodyMedium(
-                                dormitory.name,
-                                style: TextStyle(fontWeight: .bold),
-                              ),
-                              data: UiText.bodyMedium(dormitory.address),
+                              title: dormitory.name,
+                              data: dormitory.address,
                               onTap: () => Navigator.pop(context, dormitory),
                             ),
                         ],

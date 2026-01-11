@@ -8,20 +8,16 @@ class GroupedListPreview extends StatelessWidget {
     child: GroupedList(
       items: [
         GroupedListItem(
-          title: UiText.labelLarge('Адрес электронной почты'),
-          data: UiText.bodyMedium('email.letter@mail.com'),
+          title: 'Адрес электронной почты',
+          data: 'email.letter@mail.com',
           onTap: () {},
         ),
         GroupedListItem(
-          title: UiText.labelLarge('Номер телефона'),
-          data: UiText.bodyMedium('+7 123 456 78 90'),
+          title: 'Номер телефона',
+          data: '+7 123 456 78 90',
           onTap: () {},
         ),
-        GroupedListItem(
-          title: UiText.labelLarge('Общежитие'),
-          data: UiText.bodyMedium('Общежитие 30'),
-          onTap: () {},
-        ),
+        GroupedListItem(title: 'Общежитие', data: 'Общежитие 30', onTap: () {}),
       ],
     ),
   );

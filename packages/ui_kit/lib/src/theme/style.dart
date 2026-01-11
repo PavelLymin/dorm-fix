@@ -2,7 +2,7 @@ import 'package:ui_kit/ui.dart';
 
 class AppStyle {
   const AppStyle({
-    this.borderRadius = const .all(.circular(16)),
+    this.borderRadius = const .all(.circular(24)),
     this.borderWidth = 2,
     this.pagePadding = AppPadding.allLarge,
     this.shadow = const [

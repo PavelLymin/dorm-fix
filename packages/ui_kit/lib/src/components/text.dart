@@ -343,7 +343,6 @@ class UiText extends StatelessWidget {
     final palette = Theme.of(context).colorPalette;
 
     final baseStyle = _styleBuilder?.call(typography) ?? typography.bodyLarge;
-
     return Text(
       data,
       textAlign: textAlign,
@@ -351,11 +350,7 @@ class UiText extends StatelessWidget {
       maxLines: maxLines,
       softWrap: softWrap,
       style: baseStyle
-          .copyWith(
-            color: color ?? palette.foreground,
-            fontFamily: 'SFPro',
-            height: 0.9,
-          )
+          .copyWith(color: color ?? palette.foreground, height: 1)
           .merge(style),
     );
   }

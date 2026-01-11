@@ -1,4 +1,3 @@
-import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
 
 sealed class UiCard extends StatelessWidget {
@@ -45,11 +44,7 @@ sealed class UiCard extends StatelessWidget {
       standart: (variant) => DecoratedBox(
         decoration: BoxDecoration(
           color: variant.color ?? Theme.of(context).colorPalette.secondary,
-          borderRadius: const .all(.circular(16)),
-          border: .all(
-            color: colorPalette.border,
-            width: context.styles.appStyle.borderWidth,
-          ),
+          borderRadius: const .all(.circular(24.0)),
           gradient: variant.gradient,
         ),
         child: Padding(

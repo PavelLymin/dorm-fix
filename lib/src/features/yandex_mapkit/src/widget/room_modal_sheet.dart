@@ -72,10 +72,7 @@ class _RoomModalSheetState extends State<RoomModalSheet> {
                       items: [
                         for (var room in rooms)
                           GroupedListItem(
-                            title: UiText.bodyMedium(
-                              room.number,
-                              style: TextStyle(fontWeight: .bold),
-                            ),
+                            title: room.number,
                             onTap: () {
                               _roomController.text = room.number;
                               _isEnabled.value = true;

@@ -58,7 +58,7 @@ class RootScreen extends StatelessWidget {
         bottomNavigationBar: window.mapOrNull(
           compact: (_) => const BottomNavigation(),
         ),
-        drawer: Drawer(child: MenuNavigation()),
+        // drawer: Drawer(child: MenuNavigation()),
         body: window.maybeMap(
           compact: (_) => child,
           medium: (_) => Burger(child: child),

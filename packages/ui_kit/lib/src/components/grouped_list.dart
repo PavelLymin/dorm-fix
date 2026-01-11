@@ -1,33 +1,58 @@
-import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
 
 class GroupedListItem {
   const GroupedListItem({
     required this.title,
+    this.icon,
     this.data,
     this.content,
     this.onTap,
   });
 
-  final UiText title;
-  final UiText? data;
+  final String title;
+  final IconData? icon;
+  final String? data;
   final Widget? content;
   final void Function()? onTap;
 }
 
-class GroupedList extends StatelessWidget {
+class GroupedList extends StatefulWidget {
   const GroupedList({
     super.key,
     required this.items,
-    this.itemPadding,
-    this.borderRadius = const .circular(16),
+    this.borderRadius = const .circular(16.0),
     this.color,
   });
 
   final List<GroupedListItem> items;
-  final EdgeInsets? itemPadding;
   final Radius borderRadius;
   final Color? color;
+
+  @override
+  State<GroupedList> createState() => _GroupedListState();
+}
+
+class _GroupedListState extends State<GroupedList> {
+  late final double _height;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _height = height(context.styles.groupedListStyle);
+  }
+
+  double height(GroupedListStyle style) {
+    final titleHeight = style.titleStyle.fontSize! * style.titleStyle.height!;
+    final dataHeight = style.dataStyle.fontSize! * style.dataStyle.height!;
+    final itemPadding = style.contentEdgeSpacing * 2;
+    final textHeight = (titleHeight + dataHeight).ceil();
+
+    final contentHeight = textHeight > style.iconSize
+        ? textHeight
+        : style.iconSize;
+
+    return contentHeight + itemPadding + style.contentSpacingColumn;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,27 +64,33 @@ class GroupedList extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       padding: const .all(.0),
       itemBuilder: (_, index) {
-        final item = items[index];
+        final item = widget.items[index];
         final isFirst = index == 0;
-        final isLast = index == items.length - 1;
-        return _PersonalDataCard(
-          item: item,
-          itemPadding: itemPadding ?? style.itemPadding,
-          color: color,
-          borderRadius: .vertical(
-            top: isFirst ? style.borderRadius : .zero,
-            bottom: isLast ? style.borderRadius : .zero,
+        final isLast = index == widget.items.length - 1;
+        return SizedBox(
+          height: _height,
+          child: _Item(
+            item: item,
+            itemPadding: .all(style.contentEdgeSpacing),
+            color: widget.color,
+            borderRadius: .vertical(
+              top: isFirst ? style.borderRadius : .zero,
+              bottom: isLast ? style.borderRadius : .zero,
+            ),
           ),
         );
       },
-      separatorBuilder: (_, _) => const Divider(height: 0, thickness: 1),
-      itemCount: items.length,
+      separatorBuilder: (_, _) => Padding(
+        padding: .symmetric(horizontal: style.contentEdgeSpacing),
+        child: const Divider(height: .0, thickness: 1.0),
+      ),
+      itemCount: widget.items.length,
     );
   }
 }
 
-class _PersonalDataCard extends StatelessWidget {
-  const _PersonalDataCard({
+class _Item extends StatelessWidget {
+  const _Item({
     required this.item,
     required this.itemPadding,
     required this.color,
@@ -82,24 +113,38 @@ class _PersonalDataCard extends StatelessWidget {
         borderRadius: borderRadius,
         onTap: item.onTap,
         overlayColor: style.overlayColor,
-        child: Row(
-          crossAxisAlignment: .center,
-          mainAxisAlignment: .spaceBetween,
-          children: [
-            Padding(
-              padding: itemPadding,
-              child: Column(
-                spacing: 4,
-                crossAxisAlignment: .start,
-                mainAxisAlignment: .center,
-                children: [item.title, item.data ?? const SizedBox.shrink()],
+        child: Padding(
+          padding: itemPadding,
+          child: Row(
+            crossAxisAlignment: .center,
+            mainAxisAlignment: .spaceBetween,
+            children: [
+              Row(
+                spacing: style.contentSpacingRow,
+                crossAxisAlignment: .center,
+                mainAxisAlignment: .start,
+                children: [
+                  Icon(item.icon, size: style.iconSize),
+                  Column(
+                    spacing: style.contentSpacingColumn,
+                    crossAxisAlignment: .start,
+                    mainAxisAlignment: .center,
+                    children: [
+                      Text(item.title, style: style.titleStyle, softWrap: true),
+                      item.data != null
+                          ? Text(
+                              item.data!,
+                              style: style.dataStyle,
+                              softWrap: true,
+                            )
+                          : const SizedBox.shrink(),
+                    ],
+                  ),
+                ],
               ),
-            ),
-            Padding(
-              padding: .only(right: itemPadding.right),
-              child: item.content ?? const SizedBox.shrink(),
-            ),
-          ],
+              item.content ?? const SizedBox.shrink(),
+            ],
+          ),
         ),
       ),
     );
@@ -108,20 +153,31 @@ class _PersonalDataCard extends StatelessWidget {
 
 class GroupedListStyle {
   const GroupedListStyle({
+    required this.titleStyle,
+    required this.dataStyle,
     required this.overlayColor,
     required this.itemColor,
-    this.itemPadding = AppPadding.allMedium,
-    this.borderRadius = const .circular(16),
+    this.iconSize = 24.0,
+    this.contentEdgeSpacing = 16.0,
+    this.contentSpacingRow = 16.0,
+    this.contentSpacingColumn = 4.0,
+    this.borderRadius = const .circular(16.0),
   });
 
-  final EdgeInsets itemPadding;
+  final TextStyle titleStyle;
+  final TextStyle dataStyle;
+  final double contentEdgeSpacing;
+  final double contentSpacingRow;
+  final double contentSpacingColumn;
+  final double iconSize;
   final Radius borderRadius;
   final AppWidgetStateMap<Color> overlayColor;
   final Color itemColor;
 
   factory GroupedListStyle.defaultStyle(BuildContext context) {
     final primaryForeground = Theme.of(context).colorPalette.primaryForeground;
-    final secondary = Theme.of(context).colorPalette.secondary;
+    final colorPalette = Theme.of(context).colorPalette;
+    final typography = Theme.of(context).appTypography;
 
     return GroupedListStyle(
       overlayColor: AppWidgetStateMap<Color>({
@@ -129,7 +185,9 @@ class GroupedListStyle {
         WidgetState.hovered: primaryForeground.withValues(alpha: 0.1),
         WidgetState.focused: primaryForeground.withValues(alpha: 0),
       }),
-      itemColor: secondary,
+      titleStyle: typography.bodyLarge,
+      dataStyle: typography.bodyMedium.copyWith(color: colorPalette.primary),
+      itemColor: colorPalette.secondary,
     );
   }
 }

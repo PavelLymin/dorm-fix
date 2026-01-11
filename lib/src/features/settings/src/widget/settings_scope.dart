@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:ui_kit/ui.dart';
 
 import '../injection.dart';
 
@@ -11,7 +11,7 @@ class SettingsScope extends InheritedWidget {
 
   final SettingsContainer settingsContainer;
 
-  static SettingsContainer of(BuildContext context) {
+  static SettingsContainer _getSettings(BuildContext context) {
     final settings = context
         .getInheritedWidgetOfExactType<SettingsScope>()
         ?.settingsContainer;
@@ -22,9 +22,27 @@ class SettingsScope extends InheritedWidget {
         'out_of_scope',
       );
     }
-    return context
-        .getInheritedWidgetOfExactType<SettingsScope>()!
-        .settingsContainer;
+    return settings;
+  }
+
+  static SettingsContainer of(BuildContext context) {
+    SettingsContainer settings = _getSettings(context);
+    return settings;
+  }
+
+  static ThemeData ofThemeData(BuildContext context) {
+    SettingsContainer settings = _getSettings(context);
+
+    final themeData = settings.settingsService.current.map(
+      light: (_) => lightTheme,
+      dark: (_) => darkTheme,
+      system: (_) {
+        final brightness = MediaQuery.platformBrightnessOf(context);
+        return brightness == Brightness.dark ? darkTheme : lightTheme;
+      },
+    );
+
+    return themeData;
   }
 
   @override

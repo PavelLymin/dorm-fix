@@ -22,6 +22,7 @@ class _EmailAddressEditState extends State<EmailAddressEdit>
     spacing: 64,
     crossAxisAlignment: .center,
     mainAxisAlignment: .center,
+    mainAxisSize: .min,
     children: [
       UiTextField.standard(
         controller: _controller,
@@ -126,6 +127,7 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
       spacing: 64,
       crossAxisAlignment: .center,
       mainAxisAlignment: .center,
+      mainAxisSize: .min,
       children: [
         UiTextField.standard(
           controller: _controller,

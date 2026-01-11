@@ -26,7 +26,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
       color: colorPalette.secondary,
       items: <GroupedListItem>[
         GroupedListItem(
-          title: UiText.bodyMedium('Дата'),
+          title: 'Дата',
           onTap: () async {
             final date = await showDatePicker(
               context: context,
@@ -48,7 +48,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
           ),
         ),
         GroupedListItem(
-          title: UiText.bodyMedium('Время'),
+          title: 'Время',
           onTap: () => showDialog(
             context: context,
             builder: (context) => BlocProvider.value(

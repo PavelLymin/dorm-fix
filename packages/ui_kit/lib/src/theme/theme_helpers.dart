@@ -1,9 +1,9 @@
 import 'package:ui_kit/ui.dart';
 
-final lightColorPalette = generatePaletteForBrightness(Brightness.light);
-final darkColorPalette = generatePaletteForBrightness(Brightness.dark);
-final lightGradient = generateGradientForBrightness(Brightness.light);
-final darkGradient = generateGradientForBrightness(Brightness.dark);
+final lightColorPalette = generatePaletteForBrightness(.light);
+final darkColorPalette = generatePaletteForBrightness(.dark);
+final lightGradient = generateGradientForBrightness(.light);
+final darkGradient = generateGradientForBrightness(.dark);
 
 final AppTypography defaultTypography = AppTypography(
   displayLarge: _material2021.displayLarge!,
@@ -27,10 +27,25 @@ ThemeData createThemeData({
   required ColorPalette palette,
   required AppTypography typography,
   required Brightness brightness,
-}) => ThemeData(brightness: brightness, extensions: {palette, typography});
+}) => ThemeData(
+  brightness: brightness,
+  fontFamily: 'Inter',
+  scaffoldBackgroundColor: palette.background,
+  appBarTheme: AppBarTheme(
+    centerTitle: false,
+    backgroundColor: palette.background,
+    foregroundColor: palette.foreground,
+    surfaceTintColor: Colors.transparent,
+    titleTextStyle: typography.headlineLarge.copyWith(
+      color: palette.primary,
+      fontWeight: .w700,
+    ),
+  ),
+  extensions: {palette, typography},
+);
 
 ColorPalette generatePaletteForBrightness(Brightness brightness) {
-  if (brightness == Brightness.dark) {
+  if (brightness == .dark) {
     return ColorPalette(
       background: const Color(0xFF000000),
       foreground: const Color(0xFFFFFFFF),
@@ -72,8 +87,8 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
 
 AppGradient generateGradientForBrightness(Brightness brightness) {
   final background = const LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
+    begin: .topCenter,
+    end: .bottomCenter,
     stops: [0, 0.66],
     colors: [Color(0xFF2E55BB), Color(0xFF0E0E0E)],
   );
@@ -90,4 +105,7 @@ AppGradient generateGradientForBrightness(Brightness brightness) {
   );
 }
 
-final _material2021 = Typography.material2021().tall;
+final _material2021 = Typography.material2021().tall.apply(
+  fontFamily: 'Inter',
+  heightFactor: .72,
+);

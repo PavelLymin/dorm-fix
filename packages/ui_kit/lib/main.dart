@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:ui_kit/menu_link_preview.dart';
-import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
 import 'button_previews.dart';
 import 'check_box_preview.dart';
@@ -15,7 +14,7 @@ import 'text_fields_preview.dart';
 import 'typography_preview.dart';
 import 'bottom_sheet_preview.dart';
 
-final themeModeSwitcher = ValueNotifier(ThemeMode.system);
+final themeModeSwitcher = ValueNotifier<ThemeMode>(.system);
 
 void main() async => runApp(const MainApp());
 
@@ -28,14 +27,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: darkTheme,
       theme: darkTheme,
-      builder: (context, child) => StylesScope(
-        styleData: StyleData(
-          appStyle: const AppStyle(),
-          lineCalendarStyle: .defaultStyle(context, const AppStyle()),
-          groupedListStyle: .defaultStyle(context),
-        ),
-        child: child!,
-      ),
+      builder: (context, child) => StylesScope(child: child!),
       home: const UiPreview(),
     ),
   );
@@ -87,9 +79,15 @@ class _UiPreviewState extends State<UiPreview> {
                   child: UiText.titleLarge('Color palette'),
                 ),
                 const SizedBox(height: 8),
-                ColorPalettePreview(),
+                const ColorPalettePreview(),
                 const SizedBox(height: 24),
-                Align(alignment: .center, child: UiText.titleLarge('Buttons')),
+                Align(
+                  alignment: .center,
+                  child: Text(
+                    'Buttons',
+                    style: TextStyle(fontSize: 24, fontFamily: 'Inter'),
+                  ),
+                ),
                 const SizedBox(height: 8),
                 const ButtonsPreview(),
                 const SizedBox(height: 24),

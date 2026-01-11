@@ -27,6 +27,7 @@ export 'package:ui_kit/src/theme/theme_helpers.dart';
 export 'package:ui_kit/src/theme/create_theme.dart';
 export 'package:ui_kit/src/theme/widget_state_map.dart';
 export 'package:ui_kit/src/theme/style.dart';
+export 'package:ui_kit/src/theme/style_data.dart';
 
 // Images
 export 'package:ui_kit/src/images/images_helper.dart';

@@ -1,6 +1,4 @@
-import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
-
 import 'line_calendar_layout.dart';
 
 part 'line_calendar_controller.dart';

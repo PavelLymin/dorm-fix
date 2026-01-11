@@ -109,8 +109,8 @@ class AllRepairRequest extends StatelessWidget {
                 ),
               ),
             ),
-            title: UiText.bodyMedium(request.description),
-            data: UiText.bodyMedium(request.date.toLocal().toString()),
+            title: request.description,
+            data: request.date.toLocal().toString(),
             onTap: () {
               context.router.push(
                 NamedRoute(

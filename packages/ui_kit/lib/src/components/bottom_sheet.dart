@@ -1,4 +1,3 @@
-import 'package:ui_kit/src/theme/style_data.dart';
 import 'package:ui_kit/ui.dart';
 
 Future<T?> showUiBottomSheet<T>(
@@ -10,13 +9,13 @@ Future<T?> showUiBottomSheet<T>(
     curve: Curves.easeIn,
   ),
   Color? backgroundColor,
-  BorderRadiusGeometry borderRadius = BorderRadius.zero,
   double minWidth = .infinity,
   double maxWidth = .infinity,
   double minHeight = .0,
   double maxHeight = .infinity,
   bool isScrollControlled = true,
   bool useSafeArea = true,
+  EdgeInsets? padding,
 }) {
   final colorPalette = Theme.of(context).colorPalette;
   final appStyle = context.styles.appStyle;
@@ -24,10 +23,7 @@ Future<T?> showUiBottomSheet<T>(
     context: context,
     sheetAnimationStyle: style,
     backgroundColor: backgroundColor ?? colorPalette.secondary,
-    shape: RoundedSuperellipseBorder(
-      side: BorderSide(color: colorPalette.border, width: appStyle.borderWidth),
-      borderRadius: borderRadius,
-    ),
+    shape: RoundedSuperellipseBorder(borderRadius: appStyle.borderRadius),
     constraints: BoxConstraints(
       minWidth: minWidth,
       maxWidth: maxWidth,
@@ -36,7 +32,11 @@ Future<T?> showUiBottomSheet<T>(
     ),
     useSafeArea: useSafeArea,
     isScrollControlled: isScrollControlled,
-    builder: (BuildContext context) =>
-        Padding(padding: appStyle.pagePadding, child: widget),
+    builder: (BuildContext context) => Padding(
+      padding:
+          padding ??
+          AppPadding.onlyIncrement(top: 3, left: 3, right: 3, bottom: 8),
+      child: widget,
+    ),
   );
 }

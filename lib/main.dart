@@ -24,7 +24,7 @@ void main() async {
             child: WindowSizeScope(
               updateMode: .categoriesOnly,
               child: SettingsBuilder(
-                builder: (context, settings) => MainApp(settings: settings),
+                builder: (context, settings) => const MainApp(),
               ),
             ),
           ),
@@ -38,9 +38,7 @@ void main() async {
 }
 
 class MainApp extends StatefulWidget {
-  const MainApp({super.key, required this.settings});
-
-  final SettingsEntity settings;
+  const MainApp({super.key});
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -49,26 +47,14 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   late final AuthBloc _authenticationBloc;
   late final ProfileBloc _profileBloc;
-  late final RepairRequestBloc _requestBloc;
+  late final RepairRequestBloc _repairRequestBloc;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = DependeciesScope.of(context).authenticationBloc;
     _profileBloc = DependeciesScope.of(context).profileBloc;
-    _requestBloc = DependeciesScope.of(context).repairRequestBloc;
-  }
-
-  ThemeData get _themeData {
-    switch (widget.settings.themeMode) {
-      case .light:
-        return lightTheme;
-      case .dark:
-        return darkTheme;
-      case .system:
-        final brightness = MediaQuery.platformBrightnessOf(context);
-        return brightness == Brightness.dark ? darkTheme : lightTheme;
-    }
+    _repairRequestBloc = DependeciesScope.of(context).repairRequestBloc;
   }
 
   @override
@@ -78,14 +64,15 @@ class _MainAppState extends State<MainApp> {
       providers: [
         BlocProvider(create: (context) => _authenticationBloc),
         BlocProvider(create: (context) => _profileBloc),
-        BlocProvider(create: (context) => _requestBloc),
+        BlocProvider(create: (context) => _repairRequestBloc),
       ],
       child: MaterialApp.router(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        builder: (context, child) => StylesScope(child: child!),
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,
-        theme: _themeData,
+        theme: SettingsScope.ofThemeData(context),
         routerConfig: router.config(),
       ),
     );
