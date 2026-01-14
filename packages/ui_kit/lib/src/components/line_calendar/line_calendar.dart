@@ -87,7 +87,7 @@ class LineCalendarStyle {
       }),
       dateTextStyle: AppWidgetStateMap<TextStyle>({
         WidgetState.selected: typography.titleLarge.copyWith(
-          color: colorPalette.primaryForeground,
+          color: colorPalette.foreground,
           fontWeight: .w500,
         ),
         WidgetState.disabled: typography.titleLarge.copyWith(
@@ -101,7 +101,7 @@ class LineCalendarStyle {
       }),
       weekdayTextStyle: AppWidgetStateMap<TextStyle>({
         WidgetState.selected: typography.titleMedium.copyWith(
-          color: colorPalette.primaryForeground,
+          color: colorPalette.foreground,
           fontWeight: .w500,
         ),
         WidgetState.disabled: typography.titleMedium.copyWith(

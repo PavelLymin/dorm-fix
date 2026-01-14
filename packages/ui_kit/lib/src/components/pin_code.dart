@@ -133,7 +133,7 @@ class PinInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = Theme.of(context).colorPalette;
-    Color color = isFocus ? palette.accent : palette.border;
+    Color color = isFocus ? palette.borderStrong : palette.border;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),

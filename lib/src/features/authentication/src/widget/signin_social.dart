@@ -46,9 +46,7 @@ class AuthWithSocial extends StatelessWidget {
                     Colors.transparent,
                   ),
                   side: WidgetStatePropertyAll<BorderSide>(
-                    BorderSide(
-                      color: Theme.of(context).colorPalette.buttonBorder,
-                    ),
+                    BorderSide(color: Theme.of(context).colorPalette.border),
                   ),
                 ),
               ),
@@ -68,9 +66,7 @@ class AuthWithSocial extends StatelessWidget {
                     Colors.transparent,
                   ),
                   side: WidgetStatePropertyAll<BorderSide>(
-                    BorderSide(
-                      color: Theme.of(context).colorPalette.buttonBorder,
-                    ),
+                    BorderSide(color: Theme.of(context).colorPalette.border),
                   ),
                 ),
               ),

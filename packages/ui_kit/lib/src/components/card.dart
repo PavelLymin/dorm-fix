@@ -43,7 +43,7 @@ sealed class UiCard extends StatelessWidget {
     return map(
       standart: (variant) => DecoratedBox(
         decoration: BoxDecoration(
-          color: variant.color ?? Theme.of(context).colorPalette.secondary,
+          color: variant.color ?? Theme.of(context).colorPalette.card,
           borderRadius: const .all(.circular(24.0)),
           gradient: variant.gradient,
         ),
@@ -54,7 +54,7 @@ sealed class UiCard extends StatelessWidget {
       ),
       clickable: (variant) => Ink(
         decoration: BoxDecoration(
-          color: variant.color ?? Theme.of(context).colorPalette.secondary,
+          color: variant.color ?? Theme.of(context).colorPalette.card,
           borderRadius: const .all(.circular(24)),
           gradient: variant.gradient,
         ),
@@ -62,7 +62,7 @@ sealed class UiCard extends StatelessWidget {
           borderRadius: const .all(.circular(24)),
           onTap: variant.onTap,
           overlayColor: .resolveWith((Set<WidgetState> states) {
-            final color = colorPalette.primaryForeground;
+            final color = colorPalette.card;
             if (states.contains(WidgetState.pressed)) {
               return color.withValues(alpha: 0.2);
             }

@@ -25,30 +25,22 @@ class _ChoiceOptionsPreviewState extends State<ChoiceOptionsPreview> {
                 ChoiceItem(title: 'Option 2'),
                 ChoiceItem(title: 'Option 3'),
               ],
-              barColor: colorPalette.secondaryButton,
-              selectedColor: colorPalette.primary,
+              barColor: colorPalette.card,
+              selectedColor: colorPalette.secondary,
               selected: _selected1,
-              onChange: (index) {
-                setState(() {
-                  _selected1 = index;
-                });
-              },
+              onChange: (index) => setState(() => _selected1 = index),
             ),
             const SizedBox(height: 16),
             ChoiceOptions(
               options: const [
-                ChoiceItem(title: 'Option 1', icon: Icons.star_rounded),
-                ChoiceItem(title: 'Option 2', icon: Icons.star_rounded),
-                ChoiceItem(title: 'Option 3', icon: Icons.star_rounded),
+                ChoiceItem(title: 'Option 1', icon: Icon(Icons.star_rounded)),
+                ChoiceItem(title: 'Option 2', icon: Icon(Icons.star_rounded)),
+                ChoiceItem(title: 'Option 3', icon: Icon(Icons.star_rounded)),
               ],
-              barColor: colorPalette.secondaryButton,
-              selectedColor: colorPalette.primary,
+              barColor: colorPalette.card,
+              selectedColor: colorPalette.secondary,
               selected: _selected2,
-              onChange: (index) {
-                setState(() {
-                  _selected2 = index;
-                });
-              },
+              onChange: (index) => setState(() => _selected2 = index),
             ),
           ],
         ),

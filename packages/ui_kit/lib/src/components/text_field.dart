@@ -141,7 +141,7 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
 
   @override
   TextStyle? get errorStyle =>
-      typography.bodySmall.copyWith(color: palette.destructive);
+      typography.bodySmall.copyWith(color: palette.destructiveForeground);
 
   @override
   TextStyle? get hintStyle => WidgetStateTextStyle.resolveWith((states) {
@@ -164,19 +164,19 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   @override
   InputBorder? get focusedBorder => OutlineInputBorder(
     borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.accent, width: 1),
+    borderSide: BorderSide(color: palette.border, width: 1),
   );
 
   @override
   InputBorder? get focusedErrorBorder => OutlineInputBorder(
     borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.destructive, width: 1),
+    borderSide: BorderSide(color: palette.borderDestructive, width: 1),
   );
 
   @override
   InputBorder? get errorBorder => OutlineInputBorder(
     borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.destructive),
+    borderSide: BorderSide(color: palette.borderDestructive, width: 1),
   );
 
   @override
@@ -199,7 +199,7 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   BoxConstraints? get constraints => const BoxConstraints(minHeight: 32);
 
   @override
-  Color? get cursorColor => palette.accent;
+  Color? get cursorColor => palette.foreground;
 
   @override
   bool? get isDense => true;

@@ -81,7 +81,7 @@ class AllRepairRequest extends StatelessWidget {
             state.requests,
             context,
           );
-          return GroupedList(items: items, color: colorPalette.secondary);
+          return GroupedList(items: items);
         },
         error: (state) => UiText.bodyLarge(state.message),
       ),

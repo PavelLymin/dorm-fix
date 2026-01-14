@@ -23,7 +23,6 @@ class _DateTimePickerState extends State<DateTimePicker> {
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
     return GroupedList(
-      color: colorPalette.secondary,
       items: <GroupedListItem>[
         GroupedListItem(
           title: 'Дата',
@@ -37,7 +36,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
             _requestFormBloc.add(.updateRequestForm(date: date));
           },
           content: _ContentDateTime(
-            color: colorPalette.secondaryButton,
+            color: colorPalette.secondary,
             dateOrTime: BlocBuilder<RequestFormBloc, RequestFormState>(
               buildWhen: (previous, current) =>
                   previous.currentFormModel.displayDate !=
@@ -57,7 +56,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
             ),
           ),
           content: _ContentDateTime(
-            color: colorPalette.secondaryButton,
+            color: colorPalette.secondary,
             dateOrTime: BlocBuilder<RequestFormBloc, RequestFormState>(
               buildWhen: (previous, current) =>
                   previous.currentFormModel.displayTime !=

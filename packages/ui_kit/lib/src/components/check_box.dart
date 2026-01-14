@@ -15,10 +15,10 @@ class UiCheckBox extends StatelessWidget {
       materialTapTargetSize: .shrinkWrap,
       fillColor: WidgetStateMapper<Color>({
         WidgetState.selected: colorPalette.primary,
-        WidgetState.disabled: colorPalette.secondaryButton,
+        WidgetState.disabled: colorPalette.secondary,
         WidgetState.any: Colors.transparent,
       }),
-      checkColor: colorPalette.accent,
+      checkColor: colorPalette.card,
     );
   }
 }

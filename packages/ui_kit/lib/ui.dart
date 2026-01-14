@@ -10,7 +10,7 @@ export 'package:ui_kit/src/components/surface.dart';
 export 'package:ui_kit/src/components/text_field.dart';
 export 'package:ui_kit/src/components/pin_code.dart';
 export 'package:ui_kit/src/components/app_padding.dart';
-export 'package:ui_kit/src/components/grouped_list.dart';
+export 'package:ui_kit/src/components/grouped_list/grouped_list.dart';
 export 'package:ui_kit/src/components/switch.dart';
 export 'package:ui_kit/src/components/bottom_sheet.dart';
 export 'package:ui_kit/src/components/choice_options.dart';

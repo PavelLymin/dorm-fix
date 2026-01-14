@@ -68,13 +68,13 @@ class _TabItemState extends State<TabItem> {
           Icon(
             _isActive ? widget.activeIcon : widget.icon,
             color: _isActive
-                ? colorPalette.accent
+                ? colorPalette.foreground
                 : colorPalette.mutedForeground,
           ),
           UiText.bodySmall(
             widget.title,
             color: _isActive
-                ? colorPalette.accent
+                ? colorPalette.foreground
                 : colorPalette.mutedForeground,
           ),
         ],

@@ -30,28 +30,28 @@ class Settings extends StatelessWidget {
     return <GroupedListItem>[
       GroupedListItem(
         title: 'Уведомления',
-        icon: Icons.notifications,
+        prefixIcon: Icons.notifications,
         data: 'Выкл.',
         onTap: () {},
         content: icon,
       ),
       GroupedListItem(
         title: 'Оформление',
-        icon: Icons.light,
+        prefixIcon: Icons.light,
         data: settings.themeMode.value,
         onTap: () {},
         content: icon,
       ),
       GroupedListItem(
         title: 'Язык',
-        icon: Icons.language,
+        prefixIcon: Icons.language,
         data: 'Русский',
         onTap: () {},
         content: icon,
       ),
       GroupedListItem(
         title: 'Выйти',
-        icon: Icons.logout,
+        prefixIcon: Icons.logout,
         onTap: () {
           context.read<AuthBloc>().add(.signOut());
           context.router.replace(const NamedRoute('SignIn'));

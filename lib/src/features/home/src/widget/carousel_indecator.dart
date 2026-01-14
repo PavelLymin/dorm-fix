@@ -33,7 +33,7 @@ class CarouselIndicators extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: .circle,
                       color: value == index
-                          ? color.accent
+                          ? color.foreground
                           : color.mutedForeground,
                     ),
                   ),

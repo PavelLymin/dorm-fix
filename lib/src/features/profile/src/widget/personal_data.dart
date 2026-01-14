@@ -34,7 +34,7 @@ class PersonalData extends StatelessWidget {
     return <GroupedListItem>[
       GroupedListItem(
         title: 'Адрес электронной почты',
-        icon: Icons.email_outlined,
+        prefixIcon: Icons.email_outlined,
         data: student.user.email ?? 'Укажите почту',
         onTap: () => showUiBottomSheet(
           isScrollControlled: true,
@@ -45,7 +45,7 @@ class PersonalData extends StatelessWidget {
       ),
       GroupedListItem(
         title: 'Номер телефона',
-        icon: Icons.phone_rounded,
+        prefixIcon: Icons.phone_rounded,
         data: student.user.phoneNumber ?? 'Укажите телефон',
         onTap: () => showUiBottomSheet(
           isScrollControlled: true,
@@ -56,14 +56,14 @@ class PersonalData extends StatelessWidget {
       ),
       GroupedListItem(
         title: 'Общежитие',
-        icon: Icons.apartment,
+        prefixIcon: Icons.apartment,
         data: student.dormitory.name,
         onTap: () {},
         content: icon,
       ),
       GroupedListItem(
         title: 'Комната',
-        icon: Icons.room_outlined,
+        prefixIcon: Icons.room_outlined,
         data: student.room.number,
         onTap: () {},
         content: icon,

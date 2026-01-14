@@ -13,15 +13,15 @@ class UiSwitch extends StatelessWidget {
       value: value,
       onChanged: onChanged,
       thumbColor: WidgetStateMapper<Color>({
-        WidgetState.any: colorPalette.accent,
+        WidgetState.any: colorPalette.card,
       }),
       trackOutlineColor: WidgetStateMapper<Color>({
         WidgetState.selected: colorPalette.primary,
-        WidgetState.any: colorPalette.secondaryButton,
+        WidgetState.any: colorPalette.secondary,
       }),
       trackColor: WidgetStateMapper<Color>({
         WidgetState.selected: colorPalette.primary,
-        WidgetState.any: colorPalette.secondaryButton,
+        WidgetState.any: colorPalette.secondary,
       }),
     );
   }

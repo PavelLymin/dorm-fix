@@ -20,7 +20,7 @@ class SearchButton extends StatelessWidget {
               child: Container(
                 padding: AppPadding.allMedium,
                 decoration: BoxDecoration(
-                  color: theme.accent.withValues(alpha: 0.2),
+                  color: theme.secondary.withValues(alpha: 0.2),
                   borderRadius: const .all(.circular(16)),
                 ),
                 child: Row(

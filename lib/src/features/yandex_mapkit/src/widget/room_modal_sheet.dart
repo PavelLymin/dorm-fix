@@ -68,7 +68,6 @@ class _RoomModalSheetState extends State<RoomModalSheet> {
                   searchPopulated: (state) {
                     final rooms = state.rooms;
                     return GroupedList(
-                      color: color.secondaryButton,
                       items: [
                         for (var room in rooms)
                           GroupedListItem(

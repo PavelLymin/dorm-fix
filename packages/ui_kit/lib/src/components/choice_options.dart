@@ -4,102 +4,145 @@ class ChoiceItem {
   const ChoiceItem({required this.title, this.icon});
 
   final String title;
-  final IconData? icon;
+  final Icon? icon;
 }
 
-class ChoiceOptions extends StatefulWidget {
+class ChoiceOptions extends StatelessWidget {
   const ChoiceOptions({
     super.key,
     required this.options,
     required this.selected,
+    required this.onChange,
     required this.barColor,
     required this.selectedColor,
-    required this.onChange,
+    this.borderRadius = const .all(.circular(16.0)),
+    this.iconSize = 32,
     this.height = 48,
-    this.overflow = .ellipsis,
     this.duration = const Duration(milliseconds: 300),
     this.curve = Curves.easeIn,
-    this.borderRadius = const .all(.circular(24)),
-    this.iconSize = 32,
   });
 
   final List<ChoiceItem> options;
   final int selected;
+  final void Function(int) onChange;
   final Color barColor;
   final Color selectedColor;
-  final void Function(int) onChange;
-  final double height;
-  final TextOverflow overflow;
-  final Duration duration;
-  final Curve curve;
   final BorderRadius borderRadius;
   final double iconSize;
+  final double height;
+  final Duration duration;
+  final Curve curve;
 
   @override
-  State<ChoiceOptions> createState() => _ChoiceOptionsState();
-}
-
-class _ChoiceOptionsState extends State<ChoiceOptions> {
-  late final BorderRadius _borderRadiusItem;
-
-  @override
-  void initState() {
-    super.initState();
-    _borderRadiusItem = widget.borderRadius - const .all(.circular(4));
-  }
-
-  @override
-  Widget build(BuildContext context) => Center(
-    child: DecoratedBox(
+  Widget build(BuildContext context) {
+    final colorPalette = Theme.of(context).colorPalette;
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: widget.barColor,
-        borderRadius: widget.borderRadius,
+        color: barColor,
+        borderRadius: borderRadius,
+        border: .all(
+          color: colorPalette.border,
+          width: context.styles.appStyle.borderWidth,
+        ),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) => Stack(
           alignment: .center,
           children: [
-            AnimatedPositioned(
-              duration: widget.duration,
-              curve: widget.curve,
-              left:
-                  (constraints.maxWidth / widget.options.length) *
-                  (widget.selected),
-              child: SizedBox(
-                height: widget.height,
-                width: constraints.maxWidth / widget.options.length,
-                child: Padding(
-                  padding: const .all(4),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: widget.selectedColor,
-                      borderRadius: _borderRadiusItem,
-                    ),
-                  ),
-                ),
-              ),
+            _SelectedItemOption(
+              options: options,
+              selected: selected,
+              constraints: constraints,
+              selectedColor: selectedColor,
+              borderRadius: borderRadius,
+              height: height,
+              duration: duration,
+              curve: curve,
             ),
             Row(
               mainAxisAlignment: .spaceAround,
               crossAxisAlignment: .center,
-              children: List.generate(widget.options.length, (index) {
-                final option = widget.options[index];
+              children: List.generate(options.length, (index) {
+                final option = options[index];
                 return _ButtonItemOption(
                   item: option,
-                  onChange: widget.onChange,
+                  onChange: onChange,
                   index: index,
-                  height: widget.height,
-                  borderRadiusItem: _borderRadiusItem,
-                  overflow: widget.overflow,
-                  iconSize: widget.iconSize,
+                  iconSize: iconSize,
+                  height: height,
                 );
               }),
             ),
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
+}
+
+class _SelectedItemOption extends StatefulWidget {
+  const _SelectedItemOption({
+    required this.options,
+    required this.selected,
+    required this.constraints,
+    required this.selectedColor,
+    required this.borderRadius,
+    required this.height,
+    required this.duration,
+    required this.curve,
+  });
+
+  final List<ChoiceItem> options;
+  final int selected;
+  final BoxConstraints constraints;
+  final Color selectedColor;
+  final BorderRadius borderRadius;
+  final double height;
+  final Duration duration;
+  final Curve curve;
+
+  @override
+  State<_SelectedItemOption> createState() => _SelectedItemOptionState();
+}
+
+class _SelectedItemOptionState extends State<_SelectedItemOption> {
+  final double _padding = 4.0;
+  late final BorderRadius _borderRadiusItem;
+
+  @override
+  void initState() {
+    super.initState();
+    _borderRadiusItem = widget.borderRadius - .all(.circular(_padding));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorPalette = Theme.of(context).colorPalette;
+    return AnimatedPositioned(
+      duration: widget.duration,
+      curve: widget.curve,
+      left:
+          (widget.constraints.maxWidth / widget.options.length) *
+          (widget.selected),
+      child: SizedBox(
+        height: widget.height,
+        width: widget.constraints.maxWidth / widget.options.length,
+        child: Padding(
+          padding: .all(_padding),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: widget.selectedColor,
+              borderRadius: _borderRadiusItem,
+              border: .all(
+                color: colorPalette.borderStrong,
+                width: context.styles.appStyle.borderWidth,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _ButtonItemOption extends StatelessWidget {
@@ -107,37 +150,31 @@ class _ButtonItemOption extends StatelessWidget {
     required this.item,
     required this.onChange,
     required this.index,
-    required this.height,
-    required this.borderRadiusItem,
-    required this.overflow,
     required this.iconSize,
+    required this.height,
   });
 
   final ChoiceItem item;
   final void Function(int) onChange;
   final int index;
-  final double height;
-  final BorderRadius borderRadiusItem;
-  final TextOverflow overflow;
   final double iconSize;
+  final double height;
 
   @override
-  Widget build(BuildContext context) => Expanded(
-    child: GestureDetector(
-      behavior: .opaque,
-      onTap: () => onChange(index),
-      child: SizedBox(
-        height: height,
-        child: Row(
-          mainAxisAlignment: .center,
-          children: [
-            item.icon != null
-                ? Flexible(child: Icon(item.icon, size: iconSize))
-                : const SizedBox.shrink(),
-            const SizedBox(width: 4),
-            Flexible(child: UiText.labelLarge(item.title, overflow: overflow)),
-          ],
-        ),
+  Widget build(BuildContext context) => GestureDetector(
+    behavior: .opaque,
+    onTap: () => onChange(index),
+    child: SizedBox(
+      height: height,
+      child: Row(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .center,
+        mainAxisSize: .min,
+        children: [
+          item.icon != null ? item.icon! : const SizedBox.shrink(),
+          const SizedBox(width: 4),
+          UiText.labelLarge(item.title, overflow: .ellipsis),
+        ],
       ),
     ),
   );

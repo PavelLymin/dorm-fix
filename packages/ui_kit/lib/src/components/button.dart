@@ -115,7 +115,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   WidgetStateProperty<Color?>? get foregroundColor =>
       WidgetStateMapper<Color?>({
         WidgetState.disabled: colorPalette.mutedForeground,
-        WidgetState.any: colorPalette.primaryForeground,
+        WidgetState.any: colorPalette.foreground,
       });
 
   @override
@@ -185,10 +185,6 @@ class _UiBaseButtonStyle extends ButtonStyle {
       WidgetStatePropertyAll(typography.bodyMedium);
 
   @override
-  WidgetStateProperty<Color>? get shadowColor =>
-      WidgetStatePropertyAll<Color>(colorPalette.accent);
-
-  @override
   VisualDensity? get visualDensity => VisualDensity.adaptivePlatformDensity;
 
   @override
@@ -223,8 +219,8 @@ class _UiBaseButtonStyle extends ButtonStyle {
     return OutlineFocusButtonBorder(
       showBorder: states.contains(WidgetState.focused),
       border: RoundedRectangleBorder(
-        side: BorderSide(color: colorPalette.destructive, width: 2),
-        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: colorPalette.border, width: 1),
+        borderRadius: const .all(.circular(16.0)),
       ),
       child: child,
     );

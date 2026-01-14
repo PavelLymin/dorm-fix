@@ -94,7 +94,7 @@ class _TabItemState extends State<_TabItem> {
       child: DecoratedBox(
         decoration: _isActive
             ? BoxDecoration(
-                color: Theme.of(context).colorPalette.secondaryButton,
+                color: Theme.of(context).colorPalette.secondary,
                 borderRadius: BorderRadius.circular(16),
               )
             : BoxDecoration(),

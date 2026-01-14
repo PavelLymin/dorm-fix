@@ -1,23 +1,17 @@
 import 'package:ui_kit/ui.dart';
 
 class MenuLink extends StatefulWidget {
-  const MenuLink({
-    super.key,
-    required this.child,
-    required this.actions,
-    this.color,
-  });
+  const MenuLink({super.key, required this.child, required this.items});
 
   final Widget child;
-  final Map<String, VoidCallback> actions;
-  final Color? color;
+  final List<GroupedListItem> items;
 
   @override
   State<MenuLink> createState() => _MenuLinkState();
 }
 
 class _MenuLinkState = State<MenuLink>
-    with _MenuLinkApiMixin, _MessageMenuBuilderMixin, _MessageMenuOverlayMixin;
+    with _MenuLinkApiMixin, _MenuLinkBuilderMixin, _MenuLinkOverlayMixin;
 
 mixin _MenuLinkApiMixin on State<MenuLink> {
   void show() {}
@@ -25,51 +19,15 @@ mixin _MenuLinkApiMixin on State<MenuLink> {
   void hide() {}
 }
 
-mixin _MessageMenuBuilderMixin on _MenuLinkApiMixin {
+mixin _MenuLinkBuilderMixin on _MenuLinkApiMixin {
   @override
-  Widget build(BuildContext context) => InkWell(
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: widget.items.isEmpty ? null : show,
     child: widget.child,
-    onTap: () => widget.actions.isEmpty ? null : show(),
   );
 }
 
-class _MessageMenuLayout extends StatelessWidget {
-  const _MessageMenuLayout({
-    required this.actions,
-    required this.hide,
-    required this.color,
-  });
-
-  final Map<String, VoidCallback> actions;
-  final VoidCallback hide;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) => Card(
-    color: color,
-    margin: .zero,
-    child: Column(
-      mainAxisSize: .max,
-      crossAxisAlignment: .stretch,
-      children: [
-        for (final action in actions.entries)
-          InkWell(
-            borderRadius: const .all(.circular(8)),
-            child: Padding(
-              padding: const .all(16.0),
-              child: UiText.bodyLarge(action.key),
-            ),
-            onTap: () {
-              action.value();
-              hide();
-            },
-          ),
-      ],
-    ),
-  );
-}
-
-mixin _MessageMenuOverlayMixin on _MenuLinkApiMixin {
+mixin _MenuLinkOverlayMixin on _MenuLinkApiMixin {
   final LayerLink _layerLink = LayerLink();
 
   OverlayEntry? _overlayEntry;
@@ -81,15 +39,17 @@ mixin _MessageMenuOverlayMixin on _MenuLinkApiMixin {
     Overlay.of(context).insert(
       _overlayEntry = OverlayEntry(
         builder: (context) => Positioned(
-          width: 176,
+          width: 200.0,
           child: CompositedTransformFollower(
             link: _layerLink,
+            targetAnchor: .bottomLeft,
             followerAnchor: .topRight,
             showWhenUnlinked: false,
-            child: _MessageMenuLayout(
-              actions: widget.actions,
-              hide: hide,
-              color: widget.color,
+            child: GroupedList(
+              style: .defaultStyle(context).copyWith(
+                contentEdgePadding: .symmetric(horizontal: 16.0, vertical: 8.0),
+              ),
+              items: widget.items,
             ),
           ),
         ),

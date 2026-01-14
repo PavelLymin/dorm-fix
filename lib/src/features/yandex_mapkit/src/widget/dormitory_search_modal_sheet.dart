@@ -60,7 +60,6 @@ class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
                     searchPopulated: (state) {
                       final dormitories = state.dormitories;
                       return GroupedList(
-                        color: color.secondaryButton,
                         items: [
                           for (var dormitory in dormitories)
                             GroupedListItem(

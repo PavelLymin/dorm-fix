@@ -4,74 +4,74 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
   const ColorPalette({
     required this.background,
     required this.foreground,
+    required this.card,
     required this.muted,
     required this.mutedForeground,
     required this.border,
-    required this.buttonBorder,
+    required this.borderStrong,
+    required this.borderDestructive,
+    required this.inputPlaceholder,
     required this.primary,
-    required this.primaryForeground,
+    required this.primaryLight,
+    required this.primaryMuted,
+    required this.primaryDestructive,
     required this.secondary,
-    required this.secondaryButton,
-    required this.secondaryForeground,
-    required this.accent,
-    required this.accentForeground,
-    required this.destructive,
+    required this.destructiveCard,
     required this.destructiveForeground,
-    required this.ring,
   });
 
   final Color background;
   final Color foreground;
+  final Color card;
   final Color muted;
   final Color mutedForeground;
   final Color border;
-  final Color buttonBorder;
+  final Color borderStrong;
+  final Color borderDestructive;
+  final Color inputPlaceholder;
   final Color primary;
-  final Color primaryForeground;
+  final Color primaryLight;
+  final Color primaryMuted;
+  final Color primaryDestructive;
   final Color secondary;
-  final Color secondaryButton;
-  final Color secondaryForeground;
-  final Color accent;
-  final Color accentForeground;
-  final Color destructive;
+  final Color destructiveCard;
   final Color destructiveForeground;
 
-  final Color ring;
   @override
   ThemeExtension<ColorPalette> copyWith({
     Color? background,
     Color? foreground,
+    Color? card,
     Color? muted,
     Color? mutedForeground,
     Color? border,
-    Color? buttonBorder,
+    Color? borderStrong,
+    Color? borderDestructive,
+    Color? inputPlaceholder,
     Color? primary,
-    Color? primaryForeground,
+    Color? primaryLight,
+    Color? primaryMuted,
+    Color? primaryDestructive,
     Color? secondary,
-    Color? secondaryButton,
-    Color? secondaryForeground,
-    Color? accent,
-    Color? accentForeground,
-    Color? destructive,
+    Color? destructiveCard,
     Color? destructiveForeground,
-    Color? ring,
   }) => ColorPalette(
     background: background ?? this.background,
     foreground: foreground ?? this.foreground,
+    card: card ?? this.card,
     muted: muted ?? this.muted,
     mutedForeground: mutedForeground ?? this.mutedForeground,
     border: border ?? this.border,
-    buttonBorder: buttonBorder ?? this.buttonBorder,
+    borderStrong: borderStrong ?? this.borderStrong,
+    borderDestructive: borderDestructive ?? this.borderDestructive,
+    inputPlaceholder: inputPlaceholder ?? this.inputPlaceholder,
     primary: primary ?? this.primary,
-    primaryForeground: primaryForeground ?? this.primaryForeground,
+    primaryLight: primaryLight ?? this.primaryLight,
+    primaryMuted: primaryMuted ?? this.primaryMuted,
+    primaryDestructive: primaryDestructive ?? this.primaryDestructive,
     secondary: secondary ?? this.secondary,
-    secondaryButton: secondaryButton ?? this.secondaryButton,
-    secondaryForeground: secondaryForeground ?? this.secondaryForeground,
-    accent: accent ?? this.accent,
-    accentForeground: accentForeground ?? this.accentForeground,
-    destructive: destructive ?? this.destructive,
+    destructiveCard: destructiveCard ?? this.destructiveCard,
     destructiveForeground: destructiveForeground ?? this.destructiveForeground,
-    ring: ring ?? this.ring,
   );
 
   @override
@@ -86,48 +86,48 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     return ColorPalette(
       background: .lerp(background, other.background, t)!,
       foreground: .lerp(foreground, other.foreground, t)!,
+      card: .lerp(card, other.card, t)!,
       muted: .lerp(muted, other.muted, t)!,
       mutedForeground: .lerp(mutedForeground, other.mutedForeground, t)!,
       border: .lerp(border, other.border, t)!,
-      buttonBorder: .lerp(buttonBorder, other.buttonBorder, t)!,
+      borderStrong: .lerp(borderStrong, other.borderStrong, t)!,
+      borderDestructive: .lerp(borderDestructive, other.borderDestructive, t)!,
+      inputPlaceholder: .lerp(inputPlaceholder, other.inputPlaceholder, t)!,
       primary: .lerp(primary, other.primary, t)!,
-      primaryForeground: .lerp(primaryForeground, other.primaryForeground, t)!,
-      secondary: .lerp(secondary, other.secondary, t)!,
-      secondaryButton: .lerp(secondaryButton, other.secondaryButton, t)!,
-      secondaryForeground: .lerp(
-        secondaryForeground,
-        other.secondaryForeground,
+      primaryLight: .lerp(primaryLight, other.primaryLight, t)!,
+      primaryMuted: .lerp(primaryMuted, other.primaryMuted, t)!,
+      primaryDestructive: .lerp(
+        primaryDestructive,
+        other.primaryDestructive,
         t,
       )!,
-      accent: .lerp(accent, other.accent, t)!,
-      accentForeground: .lerp(accentForeground, other.accentForeground, t)!,
-      destructive: .lerp(destructive, other.destructive, t)!,
+      secondary: .lerp(secondary, other.secondary, t)!,
+      destructiveCard: .lerp(destructiveCard, other.destructiveCard, t)!,
       destructiveForeground: .lerp(
         destructiveForeground,
         other.destructiveForeground,
         t,
       )!,
-      ring: .lerp(ring, other.ring, t)!,
     );
   }
 
   Map<String, Color> toMap() => {
     'Background': background,
     'Foreground': foreground,
+    'Card': card,
     'Muted': muted,
     'Muted Foreground': mutedForeground,
     'Border': border,
-    'ButtonBorder': buttonBorder,
+    'Border Strong': borderStrong,
+    'Border Destructive': borderDestructive,
+    'Input Placeholder': inputPlaceholder,
     'Primary': primary,
-    'Primary Foreground': primaryForeground,
+    'Primary Light': primaryLight,
+    'Muted Primary': primaryMuted,
+    'Primary Destructive': primaryDestructive,
     'Secondary': secondary,
-    'Secondary Button': secondaryButton,
-    'Secondary Foreground': secondaryForeground,
-    'Accent': accent,
-    'Accent Foreground': accentForeground,
-    'Destructive': destructive,
+    'Destructive Card': destructiveCard,
     'Destructive Foreground': destructiveForeground,
-    'Ring': ring,
   };
 }
 
