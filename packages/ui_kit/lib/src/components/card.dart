@@ -39,12 +39,14 @@ sealed class UiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final colorPalette = context.palette;
+    final style = context.appStyle.style;
     return map(
       standart: (variant) => DecoratedBox(
         decoration: BoxDecoration(
-          color: variant.color ?? Theme.of(context).colorPalette.card,
+          color: variant.color ?? colorPalette.card,
           borderRadius: const .all(.circular(24.0)),
+          border: .all(color: colorPalette.border, width: style.borderWidth),
           gradient: variant.gradient,
         ),
         child: Padding(
@@ -113,37 +115,15 @@ class ClickableCard extends StatefulWidget {
 }
 
 class _ClickableCardState extends State<ClickableCard> {
-  late final WidgetStateController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = WidgetStateController({
-      if (widget.isSelected) .selected,
-      if (widget.autofocus) .focused,
-      if (widget.isDisabled) .disabled,
-    });
-  }
-
-  @override
-  void didUpdateWidget(covariant ClickableCard oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _controller.update(.selected, widget.isSelected);
-    _controller.update(.focused, widget.autofocus);
-    _controller.update(.disabled, widget.isDisabled);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onPress,
-      child: widget.builder(context, _controller.value, widget.child),
+      child: WidgetStateBuilder(
+        isSelected: widget.isSelected,
+        autofocus: widget.autofocus,
+        builder: widget.builder,
+      ),
     );
   }
 }

@@ -23,6 +23,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
     return GroupedList(
+      divider: .indented(),
       items: <GroupedListItem>[
         GroupedListItem(
           title: 'Дата',

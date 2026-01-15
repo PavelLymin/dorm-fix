@@ -24,7 +24,7 @@ void main() async {
             child: WindowSizeScope(
               updateMode: .categoriesOnly,
               child: SettingsBuilder(
-                builder: (context, settings) => const MainApp(),
+                builder: (_, settings) => MainApp(settings: settings),
               ),
             ),
           ),
@@ -38,7 +38,9 @@ void main() async {
 }
 
 class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+  const MainApp({super.key, required this.settings});
+
+  final SettingsEntity settings;
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -69,10 +71,9 @@ class _MainAppState extends State<MainApp> {
       child: MaterialApp.router(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        builder: (context, child) => StylesScope(child: child!),
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,
-        theme: SettingsScope.ofThemeData(context),
+        theme: SettingsScope.ofThemeData(context, widget.settings),
         routerConfig: router.config(),
       ),
     );

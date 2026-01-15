@@ -4,8 +4,24 @@ import 'package:ui_kit/ui.dart';
 import '../../../authentication/authentication.dart';
 import '../../../settings/settings.dart';
 
-class Settings extends StatelessWidget {
+class Settings extends StatefulWidget {
   const Settings({super.key});
+
+  @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  late final SettingsService _settingsService;
+
+  @override
+  void initState() {
+    super.initState();
+    _settingsService = SettingsScope.of(context).settingsService;
+  }
+
+  Future<void> _onChange(ThemeModeVO themeMode) async =>
+      await _settingsService.update((s) => s.copyWith(themeMode: themeMode));
 
   @override
   Widget build(BuildContext context) {
@@ -15,43 +31,47 @@ class Settings extends StatelessWidget {
     return SettingsBuilder(
       builder: (context, settings) {
         final items = _createSettingsList(context, settings, textStyle);
-        return GroupedList(items: items);
+        return GroupedList<ThemeModeVO>(divider: .indented(), items: items);
       },
     );
   }
 
-  List<GroupedListItem> _createSettingsList(
+  List<GroupedListItem<ThemeModeVO>> _createSettingsList(
     BuildContext context,
     SettingsEntity settings,
     TextStyle dataStyle,
   ) {
-    final icon = const Icon(Icons.chevron_right_rounded);
+    final icon = const Icon(Icons.expand_more_outlined);
 
-    return <GroupedListItem>[
+    return <GroupedListItem<ThemeModeVO>>[
       GroupedListItem(
         title: 'Уведомления',
-        prefixIcon: Icons.notifications,
+        prefixIcon: Icons.notifications_none_outlined,
         data: 'Выкл.',
         onTap: () {},
         content: icon,
       ),
-      GroupedListItem(
+      GroupedListItem<ThemeModeVO>(
         title: 'Оформление',
-        prefixIcon: Icons.light,
-        data: settings.themeMode.value,
+        prefixIcon: Icons.light_mode_outlined,
         onTap: () {},
         content: icon,
+        selectItems: SelectItem<ThemeModeVO>(
+          items: {for (final mode in ThemeModeVO.values) mode.name: mode},
+          initial: settings.themeMode,
+          onChange: _onChange,
+        ),
       ),
       GroupedListItem(
         title: 'Язык',
-        prefixIcon: Icons.language,
+        prefixIcon: Icons.language_outlined,
         data: 'Русский',
         onTap: () {},
         content: icon,
       ),
       GroupedListItem(
         title: 'Выйти',
-        prefixIcon: Icons.logout,
+        prefixIcon: Icons.logout_outlined,
         onTap: () {
           context.read<AuthBloc>().add(.signOut());
           context.router.replace(const NamedRoute('SignIn'));

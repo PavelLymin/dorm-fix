@@ -21,7 +21,7 @@ class AppPadding {
     left: defaultPadding,
   );
 
-  static EdgeInsets allIncrement({required int increment}) =>
+  static EdgeInsets allIncrement({required double increment}) =>
       .all(defaultPadding * increment);
 
   static EdgeInsets horizontalIncrement({required double increment}) =>
@@ -30,24 +30,25 @@ class AppPadding {
         vertical: defaultPadding,
       );
 
-  static EdgeInsets verticalIncrement({required int increment}) => .symmetric(
-    horizontal: defaultPadding,
-    vertical: defaultPadding * increment,
-  );
+  static EdgeInsets verticalIncrement({required double increment}) =>
+      .symmetric(
+        horizontal: defaultPadding,
+        vertical: defaultPadding * increment,
+      );
 
   static EdgeInsets symmetricIncrement({
-    int horizontal = 0,
-    int vertical = 0,
+    double horizontal = 0,
+    double vertical = 0,
   }) => .symmetric(
     horizontal: defaultPadding * horizontal,
     vertical: defaultPadding * vertical,
   );
 
   static EdgeInsets onlyIncrement({
-    int top = 0,
-    int right = 0,
-    int bottom = 0,
-    int left = 0,
+    double top = 0,
+    double right = 0,
+    double bottom = 0,
+    double left = 0,
   }) => .only(
     top: defaultPadding * top,
     right: defaultPadding * right,

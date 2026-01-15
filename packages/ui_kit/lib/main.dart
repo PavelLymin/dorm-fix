@@ -27,7 +27,6 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: darkTheme,
       theme: darkTheme,
-      builder: (context, child) => StylesScope(child: child!),
       home: const UiPreview(),
     ),
   );

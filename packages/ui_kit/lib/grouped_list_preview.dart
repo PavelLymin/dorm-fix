@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ui_kit/ui.dart';
 
 class GroupedListPreview extends StatelessWidget {
@@ -6,6 +8,7 @@ class GroupedListPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) => UiCard.standart(
     child: GroupedList<SampleEnum>(
+      divider: .indented(),
       items: [
         GroupedListItem(
           prefixIcon: Icons.email_outlined,
@@ -41,7 +44,7 @@ class GroupedListPreview extends StatelessWidget {
               'Option 3': .option3,
             },
             initial: .option1,
-            onChange: (value) => print(value),
+            onChange: (value) => log(value.name),
           ),
         ),
       ],

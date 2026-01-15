@@ -42,7 +42,7 @@ class ChoiceOptions extends StatelessWidget {
         borderRadius: borderRadius,
         border: .all(
           color: colorPalette.border,
-          width: context.styles.appStyle.borderWidth,
+          width: context.appStyle.style.borderWidth,
         ),
       ),
       child: LayoutBuilder(
@@ -135,7 +135,7 @@ class _SelectedItemOptionState extends State<_SelectedItemOption> {
               borderRadius: _borderRadiusItem,
               border: .all(
                 color: colorPalette.borderStrong,
-                width: context.styles.appStyle.borderWidth,
+                width: context.appStyle.style.borderWidth,
               ),
             ),
           ),

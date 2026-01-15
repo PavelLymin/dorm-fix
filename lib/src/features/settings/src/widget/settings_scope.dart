@@ -1,6 +1,5 @@
+import 'package:dorm_fix/src/features/settings/settings.dart';
 import 'package:ui_kit/ui.dart';
-
-import '../injection.dart';
 
 class SettingsScope extends InheritedWidget {
   const SettingsScope({
@@ -30,10 +29,8 @@ class SettingsScope extends InheritedWidget {
     return settings;
   }
 
-  static ThemeData ofThemeData(BuildContext context) {
-    SettingsContainer settings = _getSettings(context);
-
-    final themeData = settings.settingsService.current.map(
+  static ThemeData ofThemeData(BuildContext context, SettingsEntity settings) {
+    final themeData = settings.themeMode.map(
       light: (_) => lightTheme,
       dark: (_) => darkTheme,
       system: (_) {

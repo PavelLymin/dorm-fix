@@ -45,21 +45,13 @@ class _LineCalendarLayoutState extends State<LineCalendarLayout> {
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+  }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _width = _estimateWidth();
-
-    final start =
-        ((widget.initialScroll ?? widget.today)
-            .difference(widget.start)
-            .inDays) *
-        _width;
-    _scrollController = ScrollController(
-      initialScrollOffset: switch (widget.alignment.start) {
-        -1 => start,
-        1 => start - widget.constraints.maxWidth + _width,
-        _ => start - (widget.constraints.maxWidth - _width) / 2,
-      },
-    );
   }
 
   @override
@@ -70,9 +62,10 @@ class _LineCalendarLayoutState extends State<LineCalendarLayout> {
 
   double _estimateWidth() {
     double height(LineCalendarStyle style, Set<WidgetState> states) {
-      final dateHeight = style.dateTextStyle.resolve(states).fontSize ?? 0;
+      final dateHeight =
+          widget.style.dateTextStyle(context).resolve(states).fontSize ?? 0;
       final weekdayHeight =
-          style.weekdayTextStyle.resolve(states).fontSize ?? 0;
+          widget.style.weekdayTextStyle(context).resolve(states).fontSize ?? 0;
       final otherHeight =
           widget.style.contentSpacing + (widget.style.contentEdgeSpacing * 2);
 
@@ -152,14 +145,14 @@ class Item extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: controller,
-      builder: (context, state, child) {
+      builder: (context, value, child) {
         return ClickableCard(
-          isSelected: date == state,
+          isSelected: date == value,
           onPress: controller.isWeekDay(date)
               ? () => controller.value = date
               : null,
           builder: (context, state, _) => DecoratedBox(
-            decoration: style.decoration.resolve(state),
+            decoration: style.decoration(context).resolve(state),
             child: Column(
               crossAxisAlignment: .center,
               mainAxisAlignment: .center,
@@ -167,11 +160,11 @@ class Item extends StatelessWidget {
               children: [
                 Text(
                   date.day.toString(),
-                  style: style.dateTextStyle.resolve(state),
+                  style: style.dateTextStyle(context).resolve(state),
                 ),
                 Text(
                   date.weekday.toString(),
-                  style: style.weekdayTextStyle.resolve(state),
+                  style: style.weekdayTextStyle(context).resolve(state),
                 ),
               ],
             ),
@@ -251,7 +244,7 @@ class ItemContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: style.decoration.resolve(states),
+      decoration: style.decoration(context).resolve(states),
       child: Padding(
         padding: .symmetric(vertical: style.contentEdgeSpacing),
         child: Column(
@@ -264,7 +257,7 @@ class ItemContent extends StatelessWidget {
                 applyHeightToFirstAscent: false,
                 applyHeightToLastDescent: false,
               ),
-              style: style.dateTextStyle.resolve(states),
+              style: style.dateTextStyle(context).resolve(states),
               child: Text(date.day.toString()),
             ),
             DefaultTextStyle.merge(
@@ -272,7 +265,7 @@ class ItemContent extends StatelessWidget {
                 applyHeightToFirstAscent: false,
                 applyHeightToLastDescent: false,
               ),
-              style: style.weekdayTextStyle.resolve(states),
+              style: style.weekdayTextStyle(context).resolve(states),
               child: Text(date.weekday.toString()),
             ),
           ],

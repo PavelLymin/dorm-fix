@@ -11,10 +11,32 @@ class AppStyle {
   });
 
   final BorderRadius borderRadius;
-
   final double borderWidth;
-
   final EdgeInsets pagePadding;
-
   final List<BoxShadow> shadow;
+}
+
+class StyleData {
+  const StyleData({
+    required this.appStyle,
+    required this.lineCalendarStyle,
+    required this.groupedListStyle,
+  });
+
+  factory StyleData.defaultStyle(
+    ColorPalette colorPalette,
+    AppTypography typography,
+    AppStyle style,
+  ) {
+    final appStyle = AppStyle();
+    return StyleData(
+      appStyle: appStyle,
+      lineCalendarStyle: LineCalendarStyle(),
+      groupedListStyle: GroupedListStyle(),
+    );
+  }
+
+  final AppStyle appStyle;
+  final LineCalendarStyle lineCalendarStyle;
+  final GroupedListStyle groupedListStyle;
 }

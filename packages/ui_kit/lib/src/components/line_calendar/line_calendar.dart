@@ -12,6 +12,7 @@ class LineCalendar extends StatelessWidget {
     this.physics = const AlwaysScrollableScrollPhysics(),
     required this.controller,
     this.cacheExtent = 100,
+    this.style = const LineCalendarStyle(),
   });
 
   final DateTime start;
@@ -20,13 +21,14 @@ class LineCalendar extends StatelessWidget {
   final ScrollPhysics? physics;
   final LineCalendarController controller;
   final double cacheExtent;
+  final LineCalendarStyle style;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constraints) {
         return LineCalendarLayout(
-          style: context.styles.lineCalendarStyle,
+          style: context.appStyle.lineCalendarStyle,
           controller: controller,
           alignment: .center,
           physics: physics,
@@ -47,72 +49,69 @@ class LineCalendarStyle {
     this.padding = AppPadding.horizontal,
     this.contentEdgeSpacing = 16,
     this.contentSpacing = 8,
-    required this.decoration,
-    required this.dateTextStyle,
-    required this.weekdayTextStyle,
   });
 
   final EdgeInsetsGeometry padding;
   final double contentEdgeSpacing;
   final double contentSpacing;
-  final AppWidgetStateMap<BoxDecoration> decoration;
-  final AppWidgetStateMap<TextStyle> dateTextStyle;
-  final AppWidgetStateMap<TextStyle> weekdayTextStyle;
 
-  factory LineCalendarStyle.defaultStyle(BuildContext context, AppStyle style) {
-    final colorPalette = Theme.of(context).colorPalette;
-    final typography = Theme.of(context).appTypography;
+  AppWidgetStateMap<BoxDecoration> decoration(BuildContext context) {
+    final colorPalette = context.palette;
+    final style = context.appStyle.style;
+    Border border = .all(color: colorPalette.border, width: style.borderWidth);
+    return AppWidgetStateMap<BoxDecoration>({
+      WidgetState.selected: BoxDecoration(
+        color: colorPalette.primary,
+        borderRadius: style.borderRadius,
+      ),
+      WidgetState.disabled: BoxDecoration(
+        color: colorPalette.muted,
+        border: border,
+        borderRadius: style.borderRadius,
+      ),
+      WidgetState.any: BoxDecoration(
+        color: colorPalette.secondary,
+        border: border,
+        borderRadius: style.borderRadius,
+      ),
+    });
+  }
 
-    final border = Border.all(
-      color: colorPalette.border,
-      width: style.borderWidth,
-    );
+  AppWidgetStateMap<TextStyle> dateTextStyle(BuildContext context) {
+    final colorPalette = context.palette;
+    final typography = context.typography;
+    return AppWidgetStateMap<TextStyle>({
+      WidgetState.selected: typography.titleLarge.copyWith(
+        color: colorPalette.foreground,
+        fontWeight: .w500,
+      ),
+      WidgetState.disabled: typography.titleLarge.copyWith(
+        color: colorPalette.mutedForeground,
+        fontWeight: .w500,
+      ),
+      WidgetState.any: typography.titleLarge.copyWith(
+        color: colorPalette.primary,
+        fontWeight: .w500,
+      ),
+    });
+  }
 
-    return .new(
-      decoration: AppWidgetStateMap<BoxDecoration>({
-        WidgetState.selected: BoxDecoration(
-          color: colorPalette.primary,
-          borderRadius: style.borderRadius,
-        ),
-        WidgetState.disabled: BoxDecoration(
-          color: colorPalette.muted,
-          border: border,
-          borderRadius: style.borderRadius,
-        ),
-        WidgetState.any: BoxDecoration(
-          color: colorPalette.secondary,
-          border: border,
-          borderRadius: style.borderRadius,
-        ),
-      }),
-      dateTextStyle: AppWidgetStateMap<TextStyle>({
-        WidgetState.selected: typography.titleLarge.copyWith(
-          color: colorPalette.foreground,
-          fontWeight: .w500,
-        ),
-        WidgetState.disabled: typography.titleLarge.copyWith(
-          color: colorPalette.mutedForeground,
-          fontWeight: .w500,
-        ),
-        WidgetState.any: typography.titleLarge.copyWith(
-          color: colorPalette.primary,
-          fontWeight: .w500,
-        ),
-      }),
-      weekdayTextStyle: AppWidgetStateMap<TextStyle>({
-        WidgetState.selected: typography.titleMedium.copyWith(
-          color: colorPalette.foreground,
-          fontWeight: .w500,
-        ),
-        WidgetState.disabled: typography.titleMedium.copyWith(
-          color: colorPalette.mutedForeground,
-          fontWeight: .w500,
-        ),
-        WidgetState.any: typography.titleMedium.copyWith(
-          color: colorPalette.mutedForeground,
-          fontWeight: .w500,
-        ),
-      }),
-    );
+  AppWidgetStateMap<TextStyle> weekdayTextStyle(BuildContext context) {
+    final colorPalette = context.palette;
+    final typography = context.typography;
+    return AppWidgetStateMap<TextStyle>({
+      WidgetState.selected: typography.titleLarge.copyWith(
+        color: colorPalette.foreground,
+        fontWeight: .w500,
+      ),
+      WidgetState.disabled: typography.titleLarge.copyWith(
+        color: colorPalette.mutedForeground,
+        fontWeight: .w500,
+      ),
+      WidgetState.any: typography.titleLarge.copyWith(
+        color: colorPalette.primary,
+        fontWeight: .w500,
+      ),
+    });
   }
 }

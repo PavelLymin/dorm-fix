@@ -18,12 +18,13 @@ Future<T?> showUiBottomSheet<T>(
   EdgeInsets? padding,
 }) {
   final colorPalette = Theme.of(context).colorPalette;
-  final appStyle = context.styles.appStyle;
   return showModalBottomSheet<T>(
     context: context,
     sheetAnimationStyle: style,
     backgroundColor: backgroundColor ?? colorPalette.secondary,
-    shape: RoundedSuperellipseBorder(borderRadius: appStyle.borderRadius),
+    shape: RoundedSuperellipseBorder(
+      borderRadius: context.appStyle.style.borderRadius,
+    ),
     constraints: BoxConstraints(
       minWidth: minWidth,
       maxWidth: maxWidth,

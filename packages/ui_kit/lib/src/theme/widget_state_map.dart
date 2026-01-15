@@ -147,3 +147,54 @@ class WidgetStateController extends ValueNotifier<Set<WidgetState>> {
     }
   }
 }
+
+class WidgetStateBuilder extends StatefulWidget {
+  const WidgetStateBuilder({
+    super.key,
+    this.isSelected = false,
+    this.autofocus = false,
+    this.isDisabled = false,
+    this.builder = _builder,
+  });
+
+  static Widget _builder(
+    BuildContext context,
+    Set<WidgetState> states,
+    Widget? child,
+  ) => child!;
+
+  final bool isSelected;
+  final bool autofocus;
+  final bool isDisabled;
+  final ValueWidgetBuilder<Set<WidgetState>> builder;
+
+  @override
+  State<WidgetStateBuilder> createState() => _WidgetStateBuilderState();
+}
+
+class _WidgetStateBuilderState extends State<WidgetStateBuilder> {
+  late final WidgetStateController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WidgetStateController({
+      if (widget.isSelected) .selected,
+      if (widget.autofocus) .focused,
+      if (widget.isDisabled) .disabled,
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant WidgetStateBuilder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.update(.selected, widget.isSelected);
+    _controller.update(.focused, widget.autofocus);
+    _controller.update(.disabled, widget.isDisabled);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.builder(context, _controller.value, null);
+  }
+}

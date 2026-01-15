@@ -81,7 +81,7 @@ class AllRepairRequest extends StatelessWidget {
             state.requests,
             context,
           );
-          return GroupedList(items: items);
+          return GroupedList(divider: .indented(), items: items);
         },
         error: (state) => UiText.bodyLarge(state.message),
       ),

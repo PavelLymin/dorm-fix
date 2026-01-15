@@ -68,6 +68,7 @@ class _RoomModalSheetState extends State<RoomModalSheet> {
                   searchPopulated: (state) {
                     final rooms = state.rooms;
                     return GroupedList(
+                      divider: .full(),
                       items: [
                         for (var room in rooms)
                           GroupedListItem(

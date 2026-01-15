@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../../settings.dart';
 
-/// Widget that rebuilds when settings change.
 class SettingsBuilder extends StatefulWidget {
   const SettingsBuilder({required this.builder, super.key});
 

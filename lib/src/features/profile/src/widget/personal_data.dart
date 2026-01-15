@@ -17,7 +17,7 @@ class PersonalData extends StatelessWidget {
           loadedStudent: (state) {
             final student = state.student;
             final items = _createPersonalDataList(context, student, textStyle);
-            return GroupedList(items: items);
+            return GroupedList(divider: .indented(), items: items);
           },
         );
       },

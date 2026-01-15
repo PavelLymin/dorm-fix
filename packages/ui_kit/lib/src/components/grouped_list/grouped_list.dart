@@ -1,5 +1,7 @@
-import 'package:ui_kit/ui.dart';
+import 'dart:async';
 
+import 'package:ui_kit/ui.dart';
+import 'divider_item.dart';
 import 'grouped_list_controller.dart';
 
 part 'grouped_list_item.dart';
@@ -12,6 +14,7 @@ class GroupedListItem<T extends Enum> {
     this.content,
     this.onTap,
     this.selectItems,
+    this.isSelected = false,
   });
 
   final String title;
@@ -20,6 +23,7 @@ class GroupedListItem<T extends Enum> {
   final Widget? content;
   final void Function()? onTap;
   final SelectItem<T>? selectItems;
+  final bool isSelected;
 }
 
 class SelectItem<T extends Enum> {
@@ -27,33 +31,39 @@ class SelectItem<T extends Enum> {
 
   final Map<String, T> items;
   final T initial;
-  final ValueChanged<T>? onChange;
+  final FutureOr<void> Function(T)? onChange;
 }
 
 class GroupedList<T extends Enum> extends StatefulWidget {
-  const GroupedList({super.key, required this.items, this.style});
+  const GroupedList({
+    super.key,
+    required this.items,
+    required this.divider,
+    this.style = const GroupedListStyle(),
+  });
 
   final List<GroupedListItem<T>> items;
-  final GroupedListStyle? style;
+  final ItemDivider divider;
+  final GroupedListStyle style;
 
   @override
   State<GroupedList> createState() => _GroupedListState<T>();
 }
 
 class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
-  late final double _height;
-  late final GroupedListStyle _style;
+  late double _height;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _style = widget.style ?? context.styles.groupedListStyle;
-    _height = height(_style);
+    _height = height(widget.style);
   }
 
   double height(GroupedListStyle style) {
-    final titleHeight = style.titleStyle.fontSize! * style.titleStyle.height!;
-    final dataHeight = style.dataStyle.fontSize! * style.dataStyle.height!;
+    final title = style.titleStyle(context);
+    final data = style.dataStyle(context);
+    final titleHeight = title.fontSize! * title.height!;
+    final dataHeight = data.fontSize! * data.height!;
     final itemPadding = style.spacing;
     final textHeight = (titleHeight + dataHeight).ceil();
     final contentHeight = textHeight > style.iconSize
@@ -69,9 +79,9 @@ class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
     return DecoratedBox(
       position: .foreground,
       decoration: BoxDecoration(
-        borderRadius: .all(.circular(_style.borderRadius)),
+        borderRadius: .all(.circular(widget.style.borderRadius)),
         border: .all(
-          width: context.styles.appStyle.borderWidth,
+          width: context.appStyle.style.borderWidth,
           color: colorPalette.border,
         ),
       ),
@@ -90,18 +100,16 @@ class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
               child: _Item<T>(
                 width: constraints.maxWidth,
                 item: item,
-                style: _style,
+                style: widget.style,
                 borderRadius: .vertical(
-                  top: isFirst ? .circular(_style.borderRadius) : .zero,
-                  bottom: isLast ? .circular(_style.borderRadius) : .zero,
+                  top: isFirst ? .circular(widget.style.borderRadius) : .zero,
+                  bottom: isLast ? .circular(widget.style.borderRadius) : .zero,
                 ),
+                isInitial: item.isSelected,
               ),
             );
           },
-          separatorBuilder: (_, _) => Padding(
-            padding: _style.contentEdgePadding.copyWith(top: .0, bottom: .0),
-            child: const Divider(height: .0, thickness: 1.0),
-          ),
+          separatorBuilder: (_, _) => widget.divider,
         ),
       ),
     );
@@ -110,24 +118,16 @@ class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
 
 class GroupedListStyle {
   const GroupedListStyle({
-    required this.titleStyle,
-    required this.dataStyle,
-    required this.overlayColor,
-    required this.itemColor,
     this.iconSize = 24.0,
     this.contentEdgePadding = const .all(16.0),
     this.spacing = 4.0,
     this.borderRadius = 32.0,
   });
 
-  final TextStyle titleStyle;
-  final TextStyle dataStyle;
   final EdgeInsets contentEdgePadding;
   final double spacing;
   final double iconSize;
   final double borderRadius;
-  final AppWidgetStateMap<Color> overlayColor;
-  final Color itemColor;
 
   GroupedListStyle copyWith({
     TextStyle? titleStyle,
@@ -138,33 +138,32 @@ class GroupedListStyle {
     double? borderRadius,
     AppWidgetStateMap<Color>? overlayColor,
     Color? itemColor,
+    Color? selectItemColor,
   }) => GroupedListStyle(
-    titleStyle: titleStyle ?? this.titleStyle,
-    dataStyle: dataStyle ?? this.dataStyle,
     contentEdgePadding: contentEdgePadding ?? this.contentEdgePadding,
     spacing: spacing ?? this.spacing,
     iconSize: iconSize ?? this.iconSize,
     borderRadius: borderRadius ?? this.borderRadius,
-    overlayColor: overlayColor ?? this.overlayColor,
-    itemColor: itemColor ?? this.itemColor,
   );
 
-  factory GroupedListStyle.defaultStyle(BuildContext context) {
-    final foreground = Theme.of(context).colorPalette.foreground;
-    final colorPalette = Theme.of(context).colorPalette;
-    final typography = Theme.of(context).appTypography;
+  TextStyle titleStyle(BuildContext context) =>
+      context.typography.bodyLarge.copyWith(color: context.palette.foreground);
 
-    return GroupedListStyle(
-      overlayColor: AppWidgetStateMap<Color>({
-        WidgetState.pressed: foreground.withValues(alpha: .2),
-        WidgetState.hovered: foreground.withValues(alpha: .1),
-        WidgetState.focused: foreground.withValues(alpha: 0),
-      }),
-      titleStyle: typography.bodyLarge,
-      dataStyle: typography.bodyMedium.copyWith(
-        color: colorPalette.mutedForeground,
-      ),
-      itemColor: colorPalette.card,
-    );
-  }
+  TextStyle dataStyle(BuildContext context) => context.typography.bodyMedium
+      .copyWith(color: context.palette.mutedForeground);
+
+  AppWidgetStateMap<Color> overlayColor(BuildContext context) =>
+      AppWidgetStateMap<Color>({
+        WidgetState.selected: context.palette.foreground.withValues(alpha: .2),
+        WidgetState.pressed: context.palette.foreground.withValues(alpha: .2),
+        WidgetState.hovered: context.palette.foreground.withValues(alpha: .1),
+        WidgetState.focused: context.palette.foreground.withValues(alpha: 0),
+      });
+
+  AppWidgetStateMap<Color> itemColor(BuildContext context) =>
+      AppWidgetStateMap<Color>({
+        WidgetState.selected: context.palette.secondary,
+        WidgetState.disabled: context.palette.muted,
+        WidgetState.any: context.palette.card,
+      });
 }

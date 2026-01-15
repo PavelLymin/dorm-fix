@@ -26,6 +26,7 @@ final AppTypography defaultTypography = AppTypography(
 ThemeData createThemeData({
   required ColorPalette palette,
   required AppTypography typography,
+  required AppStyleData style,
   required Brightness brightness,
 }) => ThemeData(
   brightness: brightness,
@@ -41,7 +42,7 @@ ThemeData createThemeData({
       fontWeight: .w700,
     ),
   ),
-  extensions: {palette, typography},
+  extensions: {palette, typography, style},
 );
 
 ColorPalette generatePaletteForBrightness(Brightness brightness) {
