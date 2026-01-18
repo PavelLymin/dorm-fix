@@ -121,15 +121,15 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   @override
   WidgetStateProperty<Color?>? get backgroundColor =>
       WidgetStateMapper<Color?>({
-        WidgetState.disabled: colorPalette.muted,
+        WidgetState.disabled: colorPalette.primaryMuted,
         WidgetState.any: colorPalette.primary,
       });
 
   @override
-  WidgetStateProperty<Color?>? get overlayColor => WidgetStateMapper<Color?>({
-    WidgetState.pressed: colorPalette.primary.withValues(alpha: .2),
-    WidgetState.hovered: colorPalette.primary.withValues(alpha: .1),
-    WidgetState.focused: colorPalette.primary.withValues(alpha: .1),
+  WidgetStateProperty<Color?>? get overlayColor => AppWidgetStateMap<Color?>({
+    WidgetState.pressed: colorPalette.foreground.withValues(alpha: .2),
+    WidgetState.hovered: colorPalette.foreground.withValues(alpha: .1),
+    WidgetState.focused: colorPalette.foreground.withValues(alpha: .1),
   });
 
   @override
@@ -164,6 +164,12 @@ class _UiBaseButtonStyle extends ButtonStyle {
       );
 
   @override
+  WidgetStateProperty<BorderSide?>? get side => WidgetStateMapper<BorderSide?>({
+    WidgetState.disabled: BorderSide(color: colorPalette.borderMuted, width: 1),
+    WidgetState.any: BorderSide(color: colorPalette.primaryBorder, width: 1),
+  });
+
+  @override
   MaterialTapTargetSize? get tapTargetSize => .shrinkWrap;
 
   @override
@@ -174,7 +180,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
 
   @override
   WidgetStateProperty<Size?>? get minimumSize =>
-      const WidgetStatePropertyAll(Size(60, 40));
+      const WidgetStatePropertyAll(Size(60, 48));
 
   @override
   WidgetStateProperty<Size?>? get maximumSize =>

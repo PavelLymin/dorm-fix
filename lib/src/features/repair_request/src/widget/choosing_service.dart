@@ -54,13 +54,11 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
       builder: (_, value, _) => ChoiceOptions(
         options: options,
         selected: value,
-        barColor: colorPalette.secondary,
-        selectedColor: colorPalette.primary,
+        barColor: colorPalette.card,
+        selectedColor: colorPalette.secondary,
         onChange: (index) {
           context.read<RequestFormBloc>().add(
-            .updateRequestForm(
-              specializationId: widget.specialization[index].id,
-            ),
+            .update(specializationId: widget.specialization[index].id),
           );
           widget.selectedIndex.value = index;
         },

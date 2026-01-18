@@ -7,12 +7,24 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => CustomScrollView(
-    slivers: [
-      const SliverAppBar(title: Text('Профиль'), pinned: true),
-      SliverPadding(
-        padding: AppPadding.allMedium,
-        sliver: SliverList.list(
+  Widget build(BuildContext context) => Padding(
+    padding: AppPadding.allMedium,
+    child: CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: AppPadding.symmetricIncrement(vertical: 2),
+          sliver: SliverAppBar(
+            title: const Text('Профиль'),
+            pinned: true,
+            actions: [
+              UiButton.filledPrimary(
+                onPressed: () {},
+                label: UiText.bodyMedium('Изм.'),
+              ),
+            ],
+          ),
+        ),
+        SliverList.list(
           children: const [
             PersonalAvatar(),
             SizedBox(height: 24.0),
@@ -21,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
             Settings(),
           ],
         ),
-      ),
-    ],
+      ],
+    ),
   );
 }

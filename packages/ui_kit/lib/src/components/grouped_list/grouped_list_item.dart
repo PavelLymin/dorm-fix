@@ -25,21 +25,26 @@ class _ItemState<T extends Enum> extends State<_Item<T>>
   Widget build(BuildContext context) {
     return WidgetStateBuilder(
       isSelected: widget.isInitial,
-      builder: (context, state, _) => Material(
-        color: widget.style.itemColor(context).resolve(state),
-        borderRadius: widget.borderRadius,
-        child: InkWell(
-          borderRadius: widget.borderRadius,
-          onTap: onTap,
-          overlayColor: widget.style.overlayColor(context),
-          child: CompositedTransformTarget(
-            link: _layerLink,
-            child: _ItemContent<T>(
-              style: widget.style,
-              item: widget.item,
-              hasSelect: _hasSelect,
-              controller: _controller,
-            ),
+      builder: (context, states, _) => TextButton(
+        onPressed: onTap,
+        style: TextButton.styleFrom(
+          padding: .zero,
+          textStyle: widget.style.titleStyle(context),
+          foregroundColor: widget.style.titleStyle(context).color,
+          backgroundColor: widget.style.itemColor(context).resolve(states),
+          overlayColor: widget.style.overlayColor(context).resolve(states),
+          shape: RoundedRectangleBorder(borderRadius: widget.borderRadius),
+          iconColor: widget.style.iconColor(context),
+          iconSize: widget.style.iconSize,
+        ),
+        child: CompositedTransformTarget(
+          link: _layerLink,
+          child: _ItemContent<T>(
+            style: widget.style,
+            item: widget.item,
+            hasSelect: _hasSelect,
+            hasData: _hasData,
+            controller: _controller,
           ),
         ),
       ),
@@ -53,12 +58,14 @@ class _ItemContent<T extends Enum> extends StatelessWidget {
     required this.style,
     required this.item,
     required this.hasSelect,
+    required this.hasData,
     required this.controller,
   });
 
   final GroupedListStyle style;
   final GroupedListItem<T> item;
   final bool hasSelect;
+  final bool hasData;
   final SelectItemsController<T>? controller;
 
   @override
@@ -70,7 +77,7 @@ class _ItemContent<T extends Enum> extends StatelessWidget {
       mainAxisSize: .min,
       children: [
         if (item.prefixIcon != null) ...[
-          Icon(item.prefixIcon, size: style.iconSize),
+          Icon(item.prefixIcon),
           const SizedBox(width: 8.0),
         ],
         Column(
@@ -79,19 +86,17 @@ class _ItemContent<T extends Enum> extends StatelessWidget {
           mainAxisSize: .min,
           spacing: style.spacing,
           children: [
-            Text(item.title, style: style.titleStyle(context), softWrap: true),
+            Text(item.title, softWrap: true),
             if (hasSelect)
               ValueListenableBuilder<T>(
                 valueListenable: controller!,
-                builder: (_, value, _) {
-                  return Text(
-                    value.toString(),
-                    style: style.dataStyle(context),
-                    softWrap: true,
-                  );
-                },
+                builder: (_, value, _) => Text(
+                  value.toString(),
+                  style: style.dataStyle(context),
+                  softWrap: true,
+                ),
               ),
-            if (!hasSelect && item.data != null)
+            if (hasData)
               Text(item.data!, style: style.dataStyle(context), softWrap: true),
           ],
         ),
@@ -106,10 +111,10 @@ mixin _ItemMixinMenuLink<T extends Enum> on State<_Item<T>> {
   final _layerLink = LayerLink();
   SelectItemsController<T>? _controller;
   OverlayEntry? _overlayEntry;
-
   bool get isDisabled => widget.item.onTap == null;
   SelectItem<T>? get selectItems => widget.item.selectItems;
   bool get _hasSelect => selectItems != null && selectItems!.items.isNotEmpty;
+  bool get _hasData => !_hasSelect && widget.item.data != null;
   double get widthMenu => widget.width * .6;
 
   @override
@@ -133,22 +138,28 @@ mixin _ItemMixinMenuLink<T extends Enum> on State<_Item<T>> {
 
   void show() {
     hide();
-    Overlay.of(context).insert(
-      _overlayEntry = OverlayEntry(
-        builder: (context) => _Overlay(
-          widthMenu: widthMenu,
-          layerLink: _layerLink,
+    _overlayEntry = OverlayEntry(
+      builder: (overlayContext) => Positioned(
+        width: widthMenu,
+        child: CompositedTransformFollower(
+          link: _layerLink,
           offset: Offset(-widget.style.contentEdgePadding.left, 4.0),
-          items: _controller!.createItems(),
-          style: widget.style.copyWith(
-            contentEdgePadding: AppPadding.symmetricIncrement(
-              horizontal: 2,
-              vertical: .5,
+          targetAnchor: .bottomRight,
+          followerAnchor: .topRight,
+          child: GroupedList(
+            items: _controller!.createItems(),
+            divider: .full(),
+            style: widget.style.copyWith(
+              contentEdgePadding: AppPadding.symmetricIncrement(
+                horizontal: 2,
+                vertical: 0.5,
+              ),
             ),
           ),
         ),
       ),
     );
+    Overlay.of(context).insert(_overlayEntry!);
   }
 
   void hide() {
@@ -164,32 +175,4 @@ mixin _ItemMixinMenuLink<T extends Enum> on State<_Item<T>> {
       widget.item.onTap?.call();
     }
   }
-}
-
-class _Overlay<T extends Enum> extends StatelessWidget {
-  const _Overlay({
-    required this.widthMenu,
-    required this.layerLink,
-    required this.offset,
-    required this.items,
-    required this.style,
-  });
-
-  final double widthMenu;
-  final LayerLink layerLink;
-  final Offset offset;
-  final List<GroupedListItem<T>> items;
-  final GroupedListStyle style;
-
-  @override
-  Widget build(BuildContext context) => Positioned(
-    width: widthMenu,
-    child: CompositedTransformFollower(
-      link: layerLink,
-      offset: offset,
-      targetAnchor: .bottomRight,
-      followerAnchor: .topRight,
-      child: GroupedList(items: items, divider: .full(), style: style),
-    ),
-  );
 }

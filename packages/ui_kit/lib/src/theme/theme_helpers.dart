@@ -32,15 +32,10 @@ ThemeData createThemeData({
   brightness: brightness,
   fontFamily: 'Inter',
   scaffoldBackgroundColor: palette.background,
-  appBarTheme: AppBarTheme(
-    centerTitle: false,
-    backgroundColor: palette.background,
-    foregroundColor: palette.foreground,
-    surfaceTintColor: palette.background,
-    titleTextStyle: typography.headlineLarge.copyWith(
-      color: palette.primary,
-      fontWeight: .w700,
-    ),
+  appBarTheme: appBarTheme(palette, typography),
+  inputDecorationTheme: inputDecorationTheme(palette, typography, style),
+  dropdownMenuTheme: DropdownMenuThemeData(
+    inputDecorationTheme: inputDecorationTheme(palette, typography, style),
   ),
   extensions: {palette, typography, style},
 );
@@ -55,10 +50,13 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
       mutedForeground: const Color(0xFF888888),
       border: const Color(0xFF2E2E2E),
       borderStrong: const Color(0xFF393939),
+      borderMuted: const Color(0xFF235139),
       borderDestructive: const Color(0xFF551C15),
-      inputPlaceholder: const Color(0xFF393939),
-      primary: const Color(0xFF32C282),
-      primaryLight: const Color(0xFF71E3AD),
+      inputPlaceholder: const Color(0xFF252525),
+      inputBorder: const Color(0xFF393939),
+      primary: const Color(0xFF03623A),
+      primaryForeground: const Color(0xFF3FCE8E),
+      primaryBorder: const Color(0xFF178252),
       primaryMuted: const Color(0xFF1A412C),
       primaryDestructive: const Color(0xFF551C15),
       secondary: const Color(0xFF2E2E2E),
@@ -74,10 +72,13 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
     mutedForeground: const Color(0xFF707070),
     border: const Color(0xFFDFDFDF),
     borderStrong: const Color(0xFFC7C7C7),
+    borderMuted: const Color(0xFFA3E0BF),
     borderDestructive: const Color(0xFFFDD9D3),
     inputPlaceholder: const Color(0xFFF6F6F6),
-    primary: const Color(0xFF32C282),
-    primaryLight: const Color(0xFF71E3AD),
+    inputBorder: const Color(0xFFC6C6C6),
+    primary: const Color(0xFF71E3AD),
+    primaryForeground: const Color(0xFF41CE8E),
+    primaryBorder: const Color(0xFF32C282),
     primaryMuted: const Color(0xFFBAF0D5),
     primaryDestructive: const Color(0xFFFFF0ED),
     secondary: const Color(0xFFF3F3F3),
@@ -110,3 +111,70 @@ final _material2021 = Typography.material2021().tall.apply(
   fontFamily: 'Inter',
   heightFactor: .72,
 );
+
+AppBarTheme appBarTheme(ColorPalette palette, AppTypography typography) {
+  return AppBarTheme(
+    centerTitle: false,
+    titleSpacing: .0,
+    backgroundColor: palette.background,
+    foregroundColor: palette.primaryForeground,
+    surfaceTintColor: palette.background,
+    titleTextStyle: typography.headlineLarge.copyWith(
+      color: palette.primaryForeground,
+      fontWeight: .w700,
+    ),
+  );
+}
+
+InputDecorationTheme inputDecorationTheme(
+  ColorPalette palette,
+  AppTypography typography,
+  AppStyleData style,
+) {
+  return InputDecorationTheme(
+    filled: true,
+    fillColor: palette.inputPlaceholder,
+    labelStyle: typography.bodyMedium,
+    contentPadding: .symmetric(horizontal: 12, vertical: 12),
+    constraints: const BoxConstraints(minHeight: 48),
+    isDense: true,
+    counterStyle: typography.labelSmall.copyWith(
+      color: palette.foreground.withValues(alpha: .58),
+    ),
+    errorStyle: typography.bodySmall.copyWith(
+      color: palette.destructiveForeground,
+    ),
+    hintStyle: WidgetStateTextStyle.resolveWith((states) {
+      if (states.contains(WidgetState.disabled)) {
+        return typography.bodyMedium.copyWith(
+          color: palette.foreground.withValues(alpha: .3),
+        );
+      }
+      return typography.bodyMedium.copyWith(
+        color: palette.foreground.withValues(alpha: .58),
+      );
+    }),
+    helperStyle: typography.bodySmall.copyWith(
+      color: palette.foreground.withValues(alpha: .58),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: const .all(.circular(16.0)),
+      borderSide: BorderSide(color: palette.borderDestructive, width: 1),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: const .all(.circular(16.0)),
+      borderSide: BorderSide(
+        color: palette.borderDestructive.withValues(alpha: .3),
+        width: 1,
+      ),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: const .all(.circular(16.0)),
+      borderSide: BorderSide(color: palette.inputBorder),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderRadius: const .all(.circular(16.0)),
+      borderSide: BorderSide(color: palette.borderMuted),
+    ),
+  );
+}

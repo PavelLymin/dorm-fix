@@ -28,9 +28,7 @@ class _DescriptionTextState extends State<DescriptionText> {
   }
 
   void _onChange() {
-    _requestFormBloc.add(
-      .updateRequestForm(description: widget.controller.text),
-    );
+    _requestFormBloc.add(.update(description: widget.controller.text));
   }
 
   @override

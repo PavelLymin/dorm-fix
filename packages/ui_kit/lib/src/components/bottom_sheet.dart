@@ -5,7 +5,7 @@ Future<T?> showUiBottomSheet<T>(
   required Widget widget,
   AnimationStyle style = const AnimationStyle(
     duration: Duration(milliseconds: 300),
-    reverseDuration: Duration(milliseconds: 100),
+    reverseDuration: Duration(milliseconds: 150),
     curve: Curves.easeIn,
   ),
   Color? backgroundColor,
@@ -21,7 +21,7 @@ Future<T?> showUiBottomSheet<T>(
   return showModalBottomSheet<T>(
     context: context,
     sheetAnimationStyle: style,
-    backgroundColor: backgroundColor ?? colorPalette.secondary,
+    backgroundColor: backgroundColor ?? colorPalette.background,
     shape: RoundedSuperellipseBorder(
       borderRadius: context.appStyle.style.borderRadius,
     ),

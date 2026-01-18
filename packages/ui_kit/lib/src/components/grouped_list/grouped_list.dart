@@ -154,10 +154,12 @@ class GroupedListStyle {
 
   AppWidgetStateMap<Color> overlayColor(BuildContext context) =>
       AppWidgetStateMap<Color>({
+        WidgetState.pressed: context.palette.foreground.withValues(alpha: .1),
+        WidgetState.hovered: context.palette.foreground.withValues(alpha: .08),
+        WidgetState.focused: context.palette.foreground.withValues(alpha: .1),
         WidgetState.selected: context.palette.foreground.withValues(alpha: .2),
-        WidgetState.pressed: context.palette.foreground.withValues(alpha: .2),
-        WidgetState.hovered: context.palette.foreground.withValues(alpha: .1),
-        WidgetState.focused: context.palette.foreground.withValues(alpha: 0),
+        WidgetState.disabled: context.palette.muted.withValues(alpha: .1),
+        WidgetState.any: context.palette.foreground.withValues(alpha: .1),
       });
 
   AppWidgetStateMap<Color> itemColor(BuildContext context) =>
@@ -166,4 +168,6 @@ class GroupedListStyle {
         WidgetState.disabled: context.palette.muted,
         WidgetState.any: context.palette.card,
       });
+
+  Color iconColor(BuildContext context) => context.palette.foreground;
 }

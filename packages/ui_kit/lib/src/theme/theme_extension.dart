@@ -9,10 +9,13 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     required this.mutedForeground,
     required this.border,
     required this.borderStrong,
+    required this.borderMuted,
     required this.borderDestructive,
     required this.inputPlaceholder,
     required this.primary,
-    required this.primaryLight,
+    required this.primaryForeground,
+    required this.inputBorder,
+    required this.primaryBorder,
     required this.primaryMuted,
     required this.primaryDestructive,
     required this.secondary,
@@ -27,10 +30,13 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
   final Color mutedForeground;
   final Color border;
   final Color borderStrong;
+  final Color borderMuted;
   final Color borderDestructive;
   final Color inputPlaceholder;
+  final Color inputBorder;
   final Color primary;
-  final Color primaryLight;
+  final Color primaryForeground;
+  final Color primaryBorder;
   final Color primaryMuted;
   final Color primaryDestructive;
   final Color secondary;
@@ -46,10 +52,13 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     Color? mutedForeground,
     Color? border,
     Color? borderStrong,
+    Color? borderMuted,
     Color? borderDestructive,
     Color? inputPlaceholder,
+    Color? inputBorder,
     Color? primary,
-    Color? primaryLight,
+    Color? primaryForeground,
+    Color? primaryBorder,
     Color? primaryMuted,
     Color? primaryDestructive,
     Color? secondary,
@@ -63,10 +72,13 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     mutedForeground: mutedForeground ?? this.mutedForeground,
     border: border ?? this.border,
     borderStrong: borderStrong ?? this.borderStrong,
+    borderMuted: borderMuted ?? this.borderMuted,
     borderDestructive: borderDestructive ?? this.borderDestructive,
     inputPlaceholder: inputPlaceholder ?? this.inputPlaceholder,
+    inputBorder: inputBorder ?? this.inputBorder,
     primary: primary ?? this.primary,
-    primaryLight: primaryLight ?? this.primaryLight,
+    primaryForeground: primaryForeground ?? this.primaryForeground,
+    primaryBorder: primaryBorder ?? this.primaryBorder,
     primaryMuted: primaryMuted ?? this.primaryMuted,
     primaryDestructive: primaryDestructive ?? this.primaryDestructive,
     secondary: secondary ?? this.secondary,
@@ -91,10 +103,13 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
       mutedForeground: .lerp(mutedForeground, other.mutedForeground, t)!,
       border: .lerp(border, other.border, t)!,
       borderStrong: .lerp(borderStrong, other.borderStrong, t)!,
+      borderMuted: .lerp(borderMuted, other.borderMuted, t)!,
       borderDestructive: .lerp(borderDestructive, other.borderDestructive, t)!,
       inputPlaceholder: .lerp(inputPlaceholder, other.inputPlaceholder, t)!,
+      inputBorder: .lerp(inputBorder, other.inputBorder, t)!,
       primary: .lerp(primary, other.primary, t)!,
-      primaryLight: .lerp(primaryLight, other.primaryLight, t)!,
+      primaryForeground: .lerp(primaryForeground, other.primaryForeground, t)!,
+      primaryBorder: .lerp(primaryBorder, other.primaryBorder, t)!,
       primaryMuted: .lerp(primaryMuted, other.primaryMuted, t)!,
       primaryDestructive: .lerp(
         primaryDestructive,
@@ -119,10 +134,13 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     'Muted Foreground': mutedForeground,
     'Border': border,
     'Border Strong': borderStrong,
+    'Border Muted': borderMuted,
     'Border Destructive': borderDestructive,
     'Input Placeholder': inputPlaceholder,
+    'Input Border': inputBorder,
     'Primary': primary,
-    'Primary Light': primaryLight,
+    'Primary Foreground': primaryForeground,
+    'Primary Border': primaryBorder,
     'Muted Primary': primaryMuted,
     'Primary Destructive': primaryDestructive,
     'Secondary': secondary,

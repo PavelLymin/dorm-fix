@@ -133,7 +133,7 @@ class PinInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = Theme.of(context).colorPalette;
-    Color color = isFocus ? palette.borderStrong : palette.border;
+    Color color = isFocus ? palette.foreground : palette.borderStrong;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -146,7 +146,11 @@ class PinInput extends StatelessWidget {
       ),
       child: Center(
         child: number.isEmpty && isCurrentFocus
-            ? SizedBox(height: 40, width: 1.5, child: ColoredBox(color: color))
+            ? SizedBox(
+                height: 40,
+                width: 1.5,
+                child: ColoredBox(color: palette.foreground),
+              )
             : UiText.bodyLarge(number),
       ),
     );

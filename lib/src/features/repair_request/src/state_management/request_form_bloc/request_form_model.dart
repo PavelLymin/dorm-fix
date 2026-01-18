@@ -19,8 +19,8 @@ class RequestFormModel {
   final Status status;
   final bool studentAbsent;
   final DateTime? date;
-  final String? startTime;
-  final String? endTime;
+  final DateTime? startTime;
+  final DateTime? endTime;
   final List<String> imagePaths;
 
   String get displayDate {
@@ -40,8 +40,8 @@ class RequestFormModel {
     Status? status,
     bool? studentAbsent,
     DateTime? date,
-    String? startTime,
-    String? endTime,
+    DateTime? startTime,
+    DateTime? endTime,
     List<String>? imagePaths,
   }) => RequestFormModel(
     specializationId: specializationId ?? this.specializationId,
@@ -74,8 +74,8 @@ class RequestFormModel {
       status: status,
       studentAbsent: studentAbsent,
       date: date!,
-      startTime: int.parse(startTime!),
-      endTime: int.parse(endTime!),
+      startTime: startTime!.hour,
+      endTime: endTime!.hour,
       imagePaths: imagePaths,
     );
   }

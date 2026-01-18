@@ -64,7 +64,7 @@ class _UiTextFieldState extends State<UiTextField> {
     final typography = theme.appTypography;
 
     final variantStyle = switch (widget.variant) {
-      .standard => _StandardUiTextFieldStyle(
+      .standard => StandardUiTextFieldStyle(
         palette: palette,
         typography: typography,
       ),
@@ -113,8 +113,8 @@ class _UiTextFieldState extends State<UiTextField> {
   }
 }
 
-class _StandardUiTextFieldStyle extends UiTextFieldStyle {
-  const _StandardUiTextFieldStyle({
+class StandardUiTextFieldStyle extends UiTextFieldStyle {
+  const StandardUiTextFieldStyle({
     required this.palette,
     required this.typography,
   });
@@ -126,13 +126,10 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   bool? get filled => true;
 
   @override
-  Color? get fillColor => palette.secondary;
+  Color? get fillColor => palette.inputPlaceholder;
 
   @override
-  TextStyle? get textStyle => typography.bodyMedium.copyWith(
-    color: palette.foreground,
-    fontFamily: 'Proximanova',
-  );
+  TextStyle? get textStyle => typography.bodyMedium;
 
   @override
   TextStyle? get counterStyle => typography.labelSmall.copyWith(
@@ -164,7 +161,7 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   @override
   InputBorder? get focusedBorder => OutlineInputBorder(
     borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.border, width: 1),
+    borderSide: BorderSide(color: palette.foreground, width: 1),
   );
 
   @override
@@ -176,24 +173,27 @@ class _StandardUiTextFieldStyle extends UiTextFieldStyle {
   @override
   InputBorder? get errorBorder => OutlineInputBorder(
     borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.borderDestructive, width: 1),
+    borderSide: BorderSide(
+      color: palette.borderDestructive.withValues(alpha: .3),
+      width: 1,
+    ),
   );
 
   @override
   InputBorder? get enabledBorder => OutlineInputBorder(
     borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.border),
+    borderSide: BorderSide(color: palette.inputBorder),
   );
 
   @override
   InputBorder? get disabledBorder => OutlineInputBorder(
     borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.foreground.withValues(alpha: .08)),
+    borderSide: BorderSide(color: palette.borderMuted),
   );
 
   @override
   EdgeInsetsGeometry? get contentPadding =>
-      const EdgeInsets.symmetric(horizontal: 12, vertical: 16);
+      const .symmetric(horizontal: 12, vertical: 16);
 
   @override
   BoxConstraints? get constraints => const BoxConstraints(minHeight: 32);

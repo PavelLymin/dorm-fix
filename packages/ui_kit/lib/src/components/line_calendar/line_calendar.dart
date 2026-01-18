@@ -58,60 +58,43 @@ class LineCalendarStyle {
   AppWidgetStateMap<BoxDecoration> decoration(BuildContext context) {
     final colorPalette = context.palette;
     final style = context.appStyle.style;
-    Border border = .all(color: colorPalette.border, width: style.borderWidth);
     return AppWidgetStateMap<BoxDecoration>({
       WidgetState.selected: BoxDecoration(
-        color: colorPalette.primary,
+        color: colorPalette.secondary,
         borderRadius: style.borderRadius,
+        border: .all(
+          color: colorPalette.borderStrong,
+          width: style.borderWidth,
+        ),
       ),
       WidgetState.disabled: BoxDecoration(
         color: colorPalette.muted,
-        border: border,
+        border: .all(color: colorPalette.borderMuted, width: style.borderWidth),
         borderRadius: style.borderRadius,
       ),
       WidgetState.any: BoxDecoration(
-        color: colorPalette.secondary,
-        border: border,
+        color: colorPalette.card,
+        border: .all(color: colorPalette.border, width: style.borderWidth),
         borderRadius: style.borderRadius,
       ),
     });
   }
 
   AppWidgetStateMap<TextStyle> dateTextStyle(BuildContext context) {
-    final colorPalette = context.palette;
     final typography = context.typography;
     return AppWidgetStateMap<TextStyle>({
-      WidgetState.selected: typography.titleLarge.copyWith(
-        color: colorPalette.foreground,
-        fontWeight: .w500,
-      ),
-      WidgetState.disabled: typography.titleLarge.copyWith(
-        color: colorPalette.mutedForeground,
-        fontWeight: .w500,
-      ),
-      WidgetState.any: typography.titleLarge.copyWith(
-        color: colorPalette.primary,
-        fontWeight: .w500,
-      ),
+      WidgetState.selected: typography.titleLarge.copyWith(fontWeight: .w500),
+      WidgetState.disabled: typography.titleLarge.copyWith(fontWeight: .w500),
+      WidgetState.any: typography.titleLarge.copyWith(fontWeight: .w500),
     });
   }
 
   AppWidgetStateMap<TextStyle> weekdayTextStyle(BuildContext context) {
-    final colorPalette = context.palette;
     final typography = context.typography;
     return AppWidgetStateMap<TextStyle>({
-      WidgetState.selected: typography.titleLarge.copyWith(
-        color: colorPalette.foreground,
-        fontWeight: .w500,
-      ),
-      WidgetState.disabled: typography.titleLarge.copyWith(
-        color: colorPalette.mutedForeground,
-        fontWeight: .w500,
-      ),
-      WidgetState.any: typography.titleLarge.copyWith(
-        color: colorPalette.primary,
-        fontWeight: .w500,
-      ),
+      WidgetState.selected: typography.titleMedium.copyWith(fontWeight: .w500),
+      WidgetState.disabled: typography.titleMedium.copyWith(fontWeight: .w500),
+      WidgetState.any: typography.titleMedium.copyWith(fontWeight: .w500),
     });
   }
 }

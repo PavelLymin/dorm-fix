@@ -118,15 +118,15 @@ class _SelectedItemOptionState extends State<_SelectedItemOption> {
   @override
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
+    final itemWidth = widget.constraints.maxWidth / widget.options.length;
+
     return AnimatedPositioned(
       duration: widget.duration,
       curve: widget.curve,
-      left:
-          (widget.constraints.maxWidth / widget.options.length) *
-          (widget.selected),
+      left: itemWidth * widget.selected,
       child: SizedBox(
         height: widget.height,
-        width: widget.constraints.maxWidth / widget.options.length,
+        width: itemWidth,
         child: Padding(
           padding: .all(_padding),
           child: DecoratedBox(
@@ -171,8 +171,8 @@ class _ButtonItemOption extends StatelessWidget {
         crossAxisAlignment: .center,
         mainAxisSize: .min,
         children: [
-          item.icon != null ? item.icon! : const SizedBox.shrink(),
-          const SizedBox(width: 4),
+          if (item.icon != null) item.icon!,
+          if (item.icon != null) const SizedBox(width: 4.0),
           UiText.labelLarge(item.title, overflow: .ellipsis),
         ],
       ),

@@ -16,6 +16,7 @@ export 'package:ui_kit/src/components/bottom_sheet.dart';
 export 'package:ui_kit/src/components/choice_options.dart';
 export 'package:ui_kit/src/components/check_box.dart';
 export 'package:ui_kit/src/components/line_calendar/line_calendar.dart';
+export 'package:ui_kit/src/components/drop_down_menu.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

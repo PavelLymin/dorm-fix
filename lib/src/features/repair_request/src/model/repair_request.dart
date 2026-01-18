@@ -78,8 +78,6 @@ sealed class RepairRequestEntity {
     required final List<ProblemEntity> problems,
     required final DateTime createdAt,
   }) = FullRepairRequest;
-
-  RepairRequestEntity copyWith();
 }
 
 final class CreatedRepairRequest extends RepairRequestEntity {
@@ -97,7 +95,6 @@ final class CreatedRepairRequest extends RepairRequestEntity {
 
   final List<String> imagePaths;
 
-  @override
   CreatedRepairRequest copyWith({
     int? specializationId,
     String? description,
@@ -180,7 +177,6 @@ final class FullRepairRequest extends RepairRequestEntity {
   final DateTime createdAt;
   final List<ProblemEntity> problems;
 
-  @override
   FullRepairRequest copyWith({
     int? id,
     String? uid,

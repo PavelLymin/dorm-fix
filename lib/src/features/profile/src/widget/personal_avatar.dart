@@ -58,7 +58,7 @@ class _PersonalAvatarView extends StatelessWidget {
             children: [
               UiText.titleLarge(
                 displayName ?? 'User',
-                style: TextStyle(color: colorPalette.primary),
+                style: TextStyle(color: colorPalette.primaryForeground),
               ),
               UiText.titleMedium(dormitory ?? ''),
               UiText.titleMedium(room ?? ''),

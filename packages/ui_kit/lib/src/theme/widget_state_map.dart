@@ -194,7 +194,6 @@ class _WidgetStateBuilderState extends State<WidgetStateBuilder> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return widget.builder(context, _controller.value, null);
-  }
+  Widget build(BuildContext context) =>
+      widget.builder(context, _controller.value, context.widget);
 }

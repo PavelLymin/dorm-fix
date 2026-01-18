@@ -6,14 +6,14 @@ typedef RequestFormEventMatch<R, E extends RequestFormEvent> =
 sealed class RequestFormEvent {
   const RequestFormEvent();
 
-  const factory RequestFormEvent.updateRequestForm({
+  const factory RequestFormEvent.update({
     int? specializationId,
     String description,
     Priority priority,
     bool studentAbsent,
     DateTime? date,
-    String? startTime,
-    String? endTime,
+    DateTime? startTime,
+    DateTime? endTime,
     List<String> imagePaths,
   }) = _UpadateRequestFormEvent;
 
@@ -59,8 +59,8 @@ final class _UpadateRequestFormEvent extends RequestFormEvent {
   final Priority priority;
   final bool? studentAbsent;
   final DateTime? date;
-  final String? startTime;
-  final String? endTime;
+  final DateTime? startTime;
+  final DateTime? endTime;
   final List<String> imagePaths;
 }
 

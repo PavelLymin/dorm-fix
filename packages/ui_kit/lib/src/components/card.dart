@@ -7,12 +7,14 @@ sealed class UiCard extends StatelessWidget {
     this.color,
     this.gradient,
     this.padding,
+    this.borderRadius,
   });
 
   const factory UiCard.standart({
     Color? color,
     Gradient? gradient,
     EdgeInsets? padding,
+    BorderRadiusGeometry? borderRadius,
     required Widget child,
   }) = UiCardStandart;
 
@@ -20,6 +22,7 @@ sealed class UiCard extends StatelessWidget {
     Color? color,
     Gradient? gradient,
     EdgeInsets? padding,
+    BorderRadiusGeometry? borderRadius,
     required Widget child,
     required Function() onTap,
   }) = UiCardClickable;
@@ -27,6 +30,7 @@ sealed class UiCard extends StatelessWidget {
   final Color? color;
   final Gradient? gradient;
   final EdgeInsets? padding;
+  final BorderRadiusGeometry? borderRadius;
   final Widget child;
 
   T map<T>({
@@ -45,7 +49,7 @@ sealed class UiCard extends StatelessWidget {
       standart: (variant) => DecoratedBox(
         decoration: BoxDecoration(
           color: variant.color ?? colorPalette.card,
-          borderRadius: const .all(.circular(24.0)),
+          borderRadius: variant.borderRadius ?? style.borderRadius,
           border: .all(color: colorPalette.border, width: style.borderWidth),
           gradient: variant.gradient,
         ),
@@ -135,6 +139,7 @@ class UiCardStandart extends UiCard {
     super.color,
     super.gradient,
     super.padding,
+    super.borderRadius,
   });
 }
 
@@ -145,6 +150,7 @@ class UiCardClickable extends UiCard {
     super.color,
     super.gradient,
     super.padding,
+    super.borderRadius,
     required this.onTap,
   });
 

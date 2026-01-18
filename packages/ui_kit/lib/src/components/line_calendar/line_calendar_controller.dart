@@ -9,9 +9,22 @@ extension YearMonthDay on DateTime {
 
 class LineCalendarController extends ValueNotifier<DateTime> {
   LineCalendarController(DateTime date, {this.unUseWeekDays = const []})
-    : super(date.truncateAndStripTimezone());
+    : super(_initDateTime(date, unUseWeekDays));
 
   final List<int> unUseWeekDays;
+
+  static DateTime _initDateTime(
+    DateTime date, [
+    List<int> unUseWeekDays = const [],
+  ]) {
+    date = date.truncateAndStripTimezone();
+    for (var weekDay in unUseWeekDays) {
+      if (weekDay == date.weekday) {
+        date = date.add(const Duration(days: 1));
+      }
+    }
+    return date;
+  }
 
   @override
   set value(DateTime newValue) {
