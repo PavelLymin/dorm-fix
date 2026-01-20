@@ -24,10 +24,11 @@ final AppTypography defaultTypography = AppTypography(
 );
 
 ThemeData createThemeData({
+  required Brightness brightness,
   required ColorPalette palette,
+  required AppGradient gradient,
   required AppTypography typography,
   required AppStyleData style,
-  required Brightness brightness,
 }) => ThemeData(
   brightness: brightness,
   fontFamily: 'Inter',
@@ -37,7 +38,7 @@ ThemeData createThemeData({
   dropdownMenuTheme: DropdownMenuThemeData(
     inputDecorationTheme: inputDecorationTheme(palette, typography, style),
   ),
-  extensions: {palette, typography, style},
+  extensions: {palette, gradient, typography, style},
 );
 
 ColorPalette generatePaletteForBrightness(Brightness brightness) {
@@ -88,22 +89,21 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
 }
 
 AppGradient generateGradientForBrightness(Brightness brightness) {
-  final background = const LinearGradient(
-    begin: .topCenter,
-    end: .bottomCenter,
-    stops: [0, 0.66],
-    colors: [Color(0xFF2E55BB), Color(0xFF0E0E0E)],
-  );
+  List<Color> primary;
 
-  final primary = const LinearGradient(
-    stops: [0, 0.5, 1],
-    colors: [Color(0xFF1E60F7), Color(0xFF7DB3FC), Color(0xFF1E60F7)],
-  );
+  if (brightness == .dark) {
+    primary = const [Color(0xFF000000), Color(0xFF2E2E2E)];
+  } else {
+    primary = const [Color(0xFFFFFFFF), Color(0xFFDFDFDF)];
+  }
 
   return AppGradient(
-    background: background,
-    primary: primary,
-    muted: primary.withOpacity(0.5),
+    primary: LinearGradient(
+      begin: .topLeft,
+      end: .topEnd,
+      stops: [0, 0.5],
+      colors: primary,
+    ),
   );
 }
 

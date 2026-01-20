@@ -35,15 +35,14 @@ class ChoiceOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyleData.style;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: barColor,
         borderRadius: borderRadius,
-        border: .all(
-          color: colorPalette.border,
-          width: context.appStyle.style.borderWidth,
-        ),
+        border: .all(color: palette.border, width: style.borderWidth),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) => Stack(
@@ -117,7 +116,9 @@ class _SelectedItemOptionState extends State<_SelectedItemOption> {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyleData.style;
     final itemWidth = widget.constraints.maxWidth / widget.options.length;
 
     return AnimatedPositioned(
@@ -134,8 +135,8 @@ class _SelectedItemOptionState extends State<_SelectedItemOption> {
               color: widget.selectedColor,
               borderRadius: _borderRadiusItem,
               border: .all(
-                color: colorPalette.borderStrong,
-                width: context.appStyle.style.borderWidth,
+                color: palette.borderStrong,
+                width: style.borderWidth,
               ),
             ),
           ),

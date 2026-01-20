@@ -75,15 +75,14 @@ class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyleData.style;
     return DecoratedBox(
       position: .foreground,
       decoration: BoxDecoration(
         borderRadius: .all(.circular(widget.style.borderRadius)),
-        border: .all(
-          width: context.appStyle.style.borderWidth,
-          color: colorPalette.border,
-        ),
+        border: .all(width: style.borderWidth, color: palette.border),
       ),
       child: LayoutBuilder(
         builder: (_, constraints) => ListView.separated(
@@ -146,28 +145,45 @@ class GroupedListStyle {
     borderRadius: borderRadius ?? this.borderRadius,
   );
 
-  TextStyle titleStyle(BuildContext context) =>
-      context.typography.bodyLarge.copyWith(color: context.palette.foreground);
+  TextStyle titleStyle(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final typography = theme.appTypography;
+    return typography.bodyLarge.copyWith(color: palette.foreground);
+  }
 
-  TextStyle dataStyle(BuildContext context) => context.typography.bodyMedium
-      .copyWith(color: context.palette.mutedForeground);
+  TextStyle dataStyle(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final typography = theme.appTypography;
+    return typography.bodyMedium.copyWith(color: palette.mutedForeground);
+  }
 
-  AppWidgetStateMap<Color> overlayColor(BuildContext context) =>
-      AppWidgetStateMap<Color>({
-        WidgetState.pressed: context.palette.foreground.withValues(alpha: .1),
-        WidgetState.hovered: context.palette.foreground.withValues(alpha: .08),
-        WidgetState.focused: context.palette.foreground.withValues(alpha: .1),
-        WidgetState.selected: context.palette.foreground.withValues(alpha: .2),
-        WidgetState.disabled: context.palette.muted.withValues(alpha: .1),
-        WidgetState.any: context.palette.foreground.withValues(alpha: .1),
-      });
+  AppWidgetStateMap<Color> overlayColor(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    return AppWidgetStateMap<Color>({
+      WidgetState.pressed: palette.foreground.withValues(alpha: .1),
+      WidgetState.hovered: palette.foreground.withValues(alpha: .08),
+      WidgetState.focused: palette.foreground.withValues(alpha: .1),
+      WidgetState.selected: palette.foreground.withValues(alpha: .2),
+      WidgetState.disabled: palette.muted.withValues(alpha: .1),
+      WidgetState.any: palette.foreground.withValues(alpha: .1),
+    });
+  }
 
-  AppWidgetStateMap<Color> itemColor(BuildContext context) =>
-      AppWidgetStateMap<Color>({
-        WidgetState.selected: context.palette.secondary,
-        WidgetState.disabled: context.palette.muted,
-        WidgetState.any: context.palette.card,
-      });
+  AppWidgetStateMap<Color> itemColor(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    return AppWidgetStateMap<Color>({
+      WidgetState.selected: palette.secondary,
+      WidgetState.disabled: palette.muted,
+      WidgetState.any: palette.card,
+    });
+  }
 
-  Color iconColor(BuildContext context) => context.palette.foreground;
+  Color iconColor(BuildContext context) {
+    final palette = Theme.of(context).colorPalette;
+    return palette.foreground;
+  }
 }

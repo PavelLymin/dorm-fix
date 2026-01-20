@@ -16,9 +16,16 @@ class ImageRepositoryImpl implements IImageRepository {
 
   @override
   Future<void> addImages({int limit = 5}) async {
-    _imageList.clear();
-    final images = await _picker.pickMultiImage(limit: limit);
-    images.map((image) => _imageList.add(image.path)).toList();
+    if (_imageList.length >= limit) return;
+    final lim = limit - _imageList.length;
+    if (lim > 1) {
+      final images = await _picker.pickMultiImage(limit: lim);
+      images.map((image) => _imageList.add(image.path)).toList();
+    } else {
+      final image = await _picker.pickImage(source: .gallery);
+      if (image == null) return;
+      _imageList.add(image.path);
+    }
   }
 
   @override

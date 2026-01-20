@@ -3,7 +3,7 @@ import 'package:ui_kit/ui.dart';
 Future<T?> showUiBottomSheet<T>(
   BuildContext context, {
   required Widget widget,
-  AnimationStyle style = const AnimationStyle(
+  AnimationStyle anymation = const AnimationStyle(
     duration: Duration(milliseconds: 300),
     reverseDuration: Duration(milliseconds: 150),
     curve: Curves.easeIn,
@@ -17,14 +17,14 @@ Future<T?> showUiBottomSheet<T>(
   bool useSafeArea = true,
   EdgeInsets? padding,
 }) {
-  final colorPalette = Theme.of(context).colorPalette;
+  final theme = Theme.of(context);
+  final palette = theme.colorPalette;
+  final style = theme.appStyleData.style;
   return showModalBottomSheet<T>(
     context: context,
-    sheetAnimationStyle: style,
-    backgroundColor: backgroundColor ?? colorPalette.background,
-    shape: RoundedSuperellipseBorder(
-      borderRadius: context.appStyle.style.borderRadius,
-    ),
+    sheetAnimationStyle: anymation,
+    backgroundColor: backgroundColor ?? palette.background,
+    shape: RoundedSuperellipseBorder(borderRadius: style.borderRadius),
     constraints: BoxConstraints(
       minWidth: minWidth,
       maxWidth: maxWidth,

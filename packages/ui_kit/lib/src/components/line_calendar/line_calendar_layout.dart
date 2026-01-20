@@ -146,28 +146,26 @@ class Item extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: controller,
       builder: (context, value, child) {
-        return ClickableCard(
+        return UiCard.clickable(
+          padding: .all(0),
           isSelected: date == value,
-          onPress: controller.isWeekDay(date)
+          onTap: controller.isWeekDay(date)
               ? () => controller.value = date
               : null,
-          builder: (context, state, _) => DecoratedBox(
-            decoration: style.decoration(context).resolve(state),
-            child: Column(
-              crossAxisAlignment: .center,
-              mainAxisAlignment: .center,
-              spacing: 16,
-              children: [
-                Text(
-                  date.day.toString(),
-                  style: style.dateTextStyle(context).resolve(state),
-                ),
-                Text(
-                  date.weekday.toString(),
-                  style: style.weekdayTextStyle(context).resolve(state),
-                ),
-              ],
-            ),
+          builder: (context, state, _) => Column(
+            crossAxisAlignment: .center,
+            mainAxisAlignment: .center,
+            spacing: 16,
+            children: [
+              Text(
+                date.day.toString(),
+                style: style.dateTextStyle(context).resolve(state),
+              ),
+              Text(
+                date.weekday.toString(),
+                style: style.weekdayTextStyle(context).resolve(state),
+              ),
+            ],
           ),
         );
       },

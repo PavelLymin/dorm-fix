@@ -233,7 +233,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
       'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
-      'problems': final List<Map<String, Object?>> problems,
+      'problems': final List<dynamic> problems,
       'created_at': final String createdAt,
     }) {
       return FullRepairRequestDto(
@@ -247,7 +247,10 @@ final class FullRepairRequestDto extends RepairRequestDto {
         date: DateTime.parse(date),
         startTime: startTime,
         endTime: endTime,
-        problems: problems.map(ProblemDto.fromJson).toList(),
+        problems: problems
+            .cast<Map<String, Object?>>()
+            .map(ProblemDto.fromJson)
+            .toList(),
         createdAt: DateTime.parse(createdAt),
       );
     } else {

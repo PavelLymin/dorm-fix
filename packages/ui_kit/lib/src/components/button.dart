@@ -312,7 +312,7 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<Color?>? get backgroundColor =>
-      WidgetStatePropertyAll(colorPalette.primary);
+      WidgetStatePropertyAll(colorPalette.card);
 
   @override
   WidgetStateProperty<Color?>? get foregroundColor =>
@@ -334,9 +334,19 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<Size>? get minimumSize =>
-      const WidgetStatePropertyAll<Size>(.square(48));
+      const WidgetStatePropertyAll<Size>(.square(40.0));
 
   @override
   WidgetStateProperty<double>? get iconSize =>
       const WidgetStatePropertyAll<double>(24.0);
+
+  @override
+  WidgetStateProperty<OutlinedBorder?>? get shape =>
+      .all(RoundedRectangleBorder(borderRadius: const .all(.circular(18.0))));
+
+  @override
+  WidgetStateProperty<BorderSide?>? get side => WidgetStateMapper<BorderSide?>({
+    WidgetState.disabled: BorderSide(color: colorPalette.border, width: 1),
+    WidgetState.any: BorderSide(color: colorPalette.borderStrong, width: 1),
+  });
 }

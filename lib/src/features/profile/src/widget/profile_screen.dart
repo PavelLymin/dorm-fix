@@ -11,18 +11,21 @@ class ProfileScreen extends StatelessWidget {
     padding: AppPadding.allMedium,
     child: CustomScrollView(
       slivers: [
-        SliverPadding(
-          padding: AppPadding.symmetricIncrement(vertical: 2),
-          sliver: SliverAppBar(
-            title: const Text('Профиль'),
-            pinned: true,
-            actions: [
+        SliverAppBar(
+          title: Row(
+            crossAxisAlignment: .center,
+            mainAxisAlignment: .spaceBetween,
+            mainAxisSize: .max,
+            children: [
+              const Text('Профиль'),
               UiButton.filledPrimary(
                 onPressed: () {},
                 label: UiText.bodyMedium('Изм.'),
+                style: ButtonStyle(minimumSize: .all(.square(40.0))),
               ),
             ],
           ),
+          pinned: true,
         ),
         SliverList.list(
           children: const [

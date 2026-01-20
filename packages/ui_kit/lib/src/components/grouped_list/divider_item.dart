@@ -12,8 +12,12 @@ class ItemDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final padding = context.appStyle.groupedListStyle.contentEdgePadding
-        .copyWith(top: .0, bottom: .0);
+    final theme = Theme.of(context);
+    final style = theme.appStyleData;
+    final padding = style.groupedListStyle.contentEdgePadding.copyWith(
+      top: .0,
+      bottom: .0,
+    );
     return switch (type) {
       .indented => Padding(
         padding: padding,

@@ -150,26 +150,13 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
 }
 
 class AppGradient extends ThemeExtension<AppGradient> {
-  const AppGradient({
-    required this.background,
-    required this.primary,
-    required this.muted,
-  });
+  const AppGradient({required this.primary});
 
-  final Gradient background;
   final Gradient primary;
-  final Gradient muted;
 
   @override
-  ThemeExtension<AppGradient> copyWith({
-    Gradient? background,
-    Gradient? primary,
-    Gradient? muted,
-  }) => AppGradient(
-    background: background ?? this.background,
-    primary: primary ?? this.primary,
-    muted: muted ?? this.muted,
-  );
+  ThemeExtension<AppGradient> copyWith({Gradient? primary}) =>
+      AppGradient(primary: primary ?? this.primary);
 
   @override
   ThemeExtension<AppGradient> lerp(
@@ -180,18 +167,10 @@ class AppGradient extends ThemeExtension<AppGradient> {
       return this;
     }
 
-    return AppGradient(
-      background: .lerp(background, other.background, t)!,
-      primary: .lerp(primary, other.primary, t)!,
-      muted: .lerp(muted, other.muted, t)!,
-    );
+    return AppGradient(primary: .lerp(primary, other.primary, t)!);
   }
 
-  Map<String, Gradient> toMap() => {
-    'Background': background,
-    'Primary': primary,
-    'Muted': muted,
-  };
+  Map<String, Gradient> toMap() => {'Primary': primary};
 }
 
 class AppTypography extends ThemeExtension<AppTypography> {

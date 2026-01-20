@@ -3,35 +3,40 @@ import 'package:ui_kit/ui.dart';
 sealed class UiCard extends StatelessWidget {
   const UiCard({
     super.key,
-    required this.child,
+    this.child,
     this.color,
     this.gradient,
     this.padding,
-    this.borderRadius,
+    this.borderRadius = const .all(.circular(32.0)),
   });
 
   const factory UiCard.standart({
     Color? color,
     Gradient? gradient,
     EdgeInsets? padding,
-    BorderRadiusGeometry? borderRadius,
-    required Widget child,
+    BorderRadiusGeometry borderRadius,
+    Widget? child,
   }) = UiCardStandart;
 
   const factory UiCard.clickable({
     Color? color,
     Gradient? gradient,
     EdgeInsets? padding,
-    BorderRadiusGeometry? borderRadius,
-    required Widget child,
-    required Function() onTap,
+    BorderRadiusGeometry borderRadius,
+    Widget? child,
+    ValueWidgetBuilder<Set<WidgetState>> builder,
+    Function()? onTap,
+    bool isSelected,
+    bool autofocus,
+    Color? selectedColor,
+    Color? disabledColor,
   }) = UiCardClickable;
 
   final Color? color;
   final Gradient? gradient;
   final EdgeInsets? padding;
-  final BorderRadiusGeometry? borderRadius;
-  final Widget child;
+  final BorderRadiusGeometry borderRadius;
+  final Widget? child;
 
   T map<T>({
     required T Function(UiCardStandart) standart,
@@ -43,14 +48,15 @@ sealed class UiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = context.palette;
-    final style = context.appStyle.style;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyleData.style;
     return map(
       standart: (variant) => DecoratedBox(
         decoration: BoxDecoration(
-          color: variant.color ?? colorPalette.card,
-          borderRadius: variant.borderRadius ?? style.borderRadius,
-          border: .all(color: colorPalette.border, width: style.borderWidth),
+          color: variant.color ?? palette.card,
+          borderRadius: variant.borderRadius,
+          border: .all(color: palette.border, width: style.borderWidth),
           gradient: variant.gradient,
         ),
         child: Padding(
@@ -58,75 +64,30 @@ sealed class UiCard extends StatelessWidget {
           child: variant.child,
         ),
       ),
-      clickable: (variant) => Ink(
-        decoration: BoxDecoration(
-          color: variant.color ?? Theme.of(context).colorPalette.card,
-          borderRadius: const .all(.circular(24)),
-          gradient: variant.gradient,
-        ),
-        child: InkWell(
-          borderRadius: const .all(.circular(24)),
-          onTap: variant.onTap,
-          overlayColor: .resolveWith((Set<WidgetState> states) {
-            final color = colorPalette.card;
-            if (states.contains(WidgetState.pressed)) {
-              return color.withValues(alpha: 0.2);
-            }
-            if (states.contains(WidgetState.hovered)) {
-              return color.withValues(alpha: 0.1);
-            }
-            if (states.contains(WidgetState.focused)) {
-              return color.withValues(alpha: 0);
-            }
-            return null;
-          }),
-          child: Padding(
-            padding: variant.padding ?? AppPadding.allLarge,
-            child: variant.child,
+      clickable: (variant) => GestureDetector(
+        onTap: variant.onTap,
+        child: WidgetStateBuilder(
+          isSelected: variant.isSelected,
+          isDisabled: variant.isDisabled,
+          autofocus: variant.autofocus,
+          builder: (context, states, child) => DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppWidgetStateMap({
+                WidgetState.disabled: variant.disabledColor ?? palette.muted,
+                WidgetState.selected:
+                    variant.selectedColor ?? palette.secondary,
+                WidgetState.any: variant.color ?? palette.card,
+              }).resolve(states),
+              borderRadius: variant.borderRadius,
+              border: .all(color: palette.border, width: style.borderWidth),
+              gradient: variant.gradient,
+            ),
+            child: Padding(
+              padding: variant.padding ?? AppPadding.allLarge,
+              child: variant.builder(context, states, variant.child),
+            ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ClickableCard extends StatefulWidget {
-  const ClickableCard({
-    super.key,
-    this.isSelected = false,
-    this.autofocus = false,
-    this.onPress,
-    this.child,
-    this.builder = _builder,
-  });
-
-  static Widget _builder(
-    BuildContext context,
-    Set<WidgetState> states,
-    Widget? child,
-  ) => child!;
-
-  final bool isSelected;
-  final bool autofocus;
-  final VoidCallback? onPress;
-  final Widget? child;
-  final ValueWidgetBuilder<Set<WidgetState>> builder;
-
-  bool get isDisabled => onPress == null;
-
-  @override
-  State<ClickableCard> createState() => _ClickableCardState();
-}
-
-class _ClickableCardState extends State<ClickableCard> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onPress,
-      child: WidgetStateBuilder(
-        isSelected: widget.isSelected,
-        autofocus: widget.autofocus,
-        builder: widget.builder,
       ),
     );
   }
@@ -135,7 +96,7 @@ class _ClickableCardState extends State<ClickableCard> {
 class UiCardStandart extends UiCard {
   const UiCardStandart({
     super.key,
-    required super.child,
+    super.child,
     super.color,
     super.gradient,
     super.padding,
@@ -146,13 +107,30 @@ class UiCardStandart extends UiCard {
 class UiCardClickable extends UiCard {
   const UiCardClickable({
     super.key,
-    required super.child,
+    super.child,
     super.color,
     super.gradient,
     super.padding,
     super.borderRadius,
-    required this.onTap,
+    this.builder = _builder,
+    this.isSelected = false,
+    this.autofocus = false,
+    this.onTap,
+    this.selectedColor,
+    this.disabledColor,
   });
+  static Widget _builder(
+    BuildContext context,
+    Set<WidgetState> states,
+    Widget? child,
+  ) => child!;
 
-  final Function() onTap;
+  final Function()? onTap;
+  final ValueWidgetBuilder<Set<WidgetState>> builder;
+  final bool isSelected;
+  final bool autofocus;
+  final Color? selectedColor;
+  final Color? disabledColor;
+
+  bool get isDisabled => onTap == null;
 }

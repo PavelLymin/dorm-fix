@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:shelf/shelf.dart';
 import '../../../app/model/application_config.dart';
 import '../../../server/profile/profile.dart';
@@ -14,6 +16,7 @@ abstract class RequireUser {
         },
       );
     }
+    log(uid);
 
     return uid;
   }

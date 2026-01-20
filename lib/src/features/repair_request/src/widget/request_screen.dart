@@ -8,7 +8,6 @@ import 'choosing_service.dart';
 import 'line_calendar_picker.dart';
 import 'description_text.dart';
 import 'photo_picker.dart';
-import 'presence_switch.dart';
 import 'time_picker.dart';
 
 class RequestScreen extends StatefulWidget {
@@ -21,61 +20,55 @@ class RequestScreen extends StatefulWidget {
 class _RequestScreenState extends State<RequestScreen>
     with _RequestScreenStateMixin {
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-    providers: [
-      BlocProvider(create: (context) => _requestFormBloc),
-      BlocProvider.value(value: _specializationBloc),
-    ],
-    child: BlocListener<RepairRequestBloc, RepairRequestState>(
-      listener: (context, state) {
-        state.mapOrNull(
-          error: (state) => ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message))),
-        );
-      },
-      child: Padding(
-        padding: AppPadding.allMedium,
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: AppPadding.symmetricIncrement(vertical: 2),
-              sliver: SliverAppBar(
-                title: const Text('Создание заявки'),
-                pinned: true,
+  Widget build(BuildContext context) => Scaffold(
+    body: MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => _requestFormBloc),
+        BlocProvider.value(value: _specializationBloc),
+      ],
+      child: BlocListener<RepairRequestBloc, RepairRequestState>(
+        listener: (context, state) {
+          state.mapOrNull(
+            error: (state) => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message))),
+          );
+        },
+        child: Padding(
+          padding: AppPadding.allMedium,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(title: const Text('Создание заявки'), pinned: true),
+              SliverList.list(
+                children: [
+                  UiText.titleMedium('Выберите мастера'),
+                  const SizedBox(height: 16.0),
+                  ChoosingService(selectedIndex: _specializationIndex),
+                  const SizedBox(height: 16.0),
+                  UiText.titleMedium('Укажите дату'),
+                  const SizedBox(height: 16.0),
+                  const LineCalendarPicker(),
+                  const SizedBox(height: 16.0),
+                  UiText.titleMedium('Укажите  время'),
+                  const SizedBox(height: 16.0),
+                  const TimePicker(),
+                  const SizedBox(height: 16.0),
+                  UiText.titleMedium('Опишите проблему'),
+                  const SizedBox(height: 16.0),
+                  DescriptionText(controller: _descriptionController),
+                  const SizedBox(height: 16.0),
+                  UiText.titleMedium('Добавьте фото'),
+                  const SizedBox(height: 16.0),
+                  const PhotoPicker(),
+                  const SizedBox(height: 32.0),
+                  UiButton.filledPrimary(
+                    onPressed: _submitForm,
+                    label: UiText.titleMedium('Создать заявку'),
+                  ),
+                ],
               ),
-            ),
-            SliverList.list(
-              children: [
-                UiText.titleMedium('Выберите мастера'),
-                const SizedBox(height: 16.0),
-                ChoosingService(selectedIndex: _specializationIndex),
-                const SizedBox(height: 16.0),
-                UiText.titleMedium('Укажите дату'),
-                const SizedBox(height: 16.0),
-                const LineCalendarPicker(),
-                const SizedBox(height: 16.0),
-                UiText.titleMedium('Укажите  время'),
-                const SizedBox(height: 16.0),
-                const TimePicker(),
-                const SizedBox(height: 16.0),
-                UiText.titleMedium('Опишите проблему'),
-                const SizedBox(height: 16.0),
-                DescriptionText(controller: _descriptionController),
-                const SizedBox(height: 16.0),
-                const PresenceSwitch(),
-                const SizedBox(height: 16.0),
-                UiText.titleMedium('Добавьте фото'),
-                const SizedBox(height: 16.0),
-                const PhotoPicker(),
-                const SizedBox(height: 32.0),
-                UiButton.filledPrimary(
-                  onPressed: _submitForm,
-                  label: UiText.titleMedium('Создать заявку'),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     ),

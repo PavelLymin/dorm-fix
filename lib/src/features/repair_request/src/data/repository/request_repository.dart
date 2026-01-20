@@ -22,7 +22,7 @@ class RequestRepositoryImpl implements IRequestRepository {
   Future<List<FullRepairRequest>> getRequests() async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
     final response = await _client.send(
-      path: '/requests',
+      path: '/repairRequests',
       method: 'GET',
       headers: {'Authorization': 'Bearer $token'},
     );
@@ -45,11 +45,9 @@ class RequestRepositoryImpl implements IRequestRepository {
   @override
   Future<void> createRequest({required CreatedRepairRequest request}) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
-
     final body = CreatedRepairRequestDto.fromEntity(request).toJson();
-
     await _client.send(
-      path: '/requests',
+      path: '/repairRequests',
       method: 'POST',
       body: body,
       headers: {'Authorization': 'Bearer $token'},

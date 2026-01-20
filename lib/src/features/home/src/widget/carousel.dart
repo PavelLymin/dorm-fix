@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../home.dart';
-import 'carousel_indecator.dart';
 
 class SpecializationsCarousel extends StatefulWidget {
   const SpecializationsCarousel({super.key});
@@ -12,8 +11,8 @@ class SpecializationsCarousel extends StatefulWidget {
 }
 
 class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
-  final PageController _controller = PageController(viewportFraction: 1.0);
-  final ValueNotifier<int> _currentPage = ValueNotifier(0);
+  final _controller = PageController(viewportFraction: 1.02);
+  final _currentPage = ValueNotifier<int>(0);
 
   @override
   void dispose() {
@@ -30,7 +29,7 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
             spacing: 8,
             children: [
               SizedBox(
-                height: 164,
+                height: 160,
                 child: state.map(
                   loading: (_) =>
                       const Center(child: CircularProgressIndicator()),
@@ -40,7 +39,10 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
                     onPageChanged: (index) => _currentPage.value = index,
                     itemBuilder: (context, index) {
                       final spec = state.specializations[index];
-                      return _CarouselWrapper(child: _CarouselItem(spec: spec));
+                      return FractionallySizedBox(
+                        widthFactor: 1 / _controller.viewportFraction,
+                        child: _Item(spec: spec),
+                      );
                     },
                   ),
                   error: (state) => UiCard.standart(
@@ -50,7 +52,7 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
                   ),
                 ),
               ),
-              CarouselIndicators(
+              Indicator(
                 countPages: state.specializations.length,
                 currentPage: _currentPage,
                 controller: _controller,
@@ -61,50 +63,94 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
       );
 }
 
-class _CarouselItem extends StatelessWidget {
-  const _CarouselItem({required this.spec});
+class _Item extends StatelessWidget {
+  const _Item({required this.spec});
 
   final SpecializationEntity spec;
 
   @override
-  Widget build(BuildContext context) => Row(
-    mainAxisSize: .max,
-    crossAxisAlignment: .center,
-    children: [
-      Expanded(
-        flex: 3,
-        child: Column(
-          mainAxisSize: .max,
-          crossAxisAlignment: .start,
-          children: [
-            UiText.titleLarge(spec.title),
-            const SizedBox(height: 16),
-            UiText.bodyLarge(spec.description),
-          ],
-        ),
+  Widget build(BuildContext context) {
+    final gradient = Theme.of(context).appGradient;
+
+    return UiCard.standart(
+      padding: AppPadding.symmetricIncrement(horizontal: 2, vertical: 3),
+      gradient: gradient.primary,
+      child: Row(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .center,
+        mainAxisSize: .max,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Column(
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .start,
+              mainAxisSize: .max,
+              children: [
+                UiText.titleLarge(spec.title),
+                const SizedBox(height: 16.0),
+                UiText.bodyLarge(spec.description),
+              ],
+            ),
+          ),
+          const Spacer(),
+          Image.asset(ImagesHelper.specializations + spec.photoUrl, height: 84),
+        ],
       ),
-      const Spacer(),
-      Image.asset(ImagesHelper.specializations + spec.photoUrl, height: 84),
-    ],
-  );
+    );
+  }
 }
 
-class _CarouselWrapper extends StatelessWidget {
-  const _CarouselWrapper({required this.child});
+class Indicator extends StatelessWidget {
+  const Indicator({
+    super.key,
+    required this.countPages,
+    required this.currentPage,
+    required this.controller,
+  });
 
-  final Widget child;
+  final int countPages;
+  final ValueNotifier<int> currentPage;
+  final PageController controller;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const .symmetric(horizontal: 2),
-    child: UiCard.standart(
-      padding: AppPadding.symmetricIncrement(horizontal: 3, vertical: 3),
-      gradient: const LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [Color(0xFF50ACF9), Color(0xFF0064B7)],
-      ),
-      child: child,
-    ),
-  );
+  Widget build(BuildContext context) {
+    final palette = Theme.of(context).colorPalette;
+    return ValueListenableBuilder(
+      valueListenable: currentPage,
+      builder: (context, value, _) {
+        return Row(
+          mainAxisAlignment: .center,
+          crossAxisAlignment: .center,
+          mainAxisSize: .min,
+          spacing: 8.0,
+          children: List.generate(
+            countPages,
+            (index) => GestureDetector(
+              onTap: () => _animateToPage(index),
+              child: SizedBox.square(
+                dimension: 8.0,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: .circle,
+                    color: value == index
+                        ? palette.foreground
+                        : palette.borderStrong,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _animateToPage(int index) {
+    controller.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeIn,
+    );
+  }
 }

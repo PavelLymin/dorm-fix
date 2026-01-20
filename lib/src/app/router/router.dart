@@ -13,7 +13,7 @@ class AppRouter extends RootStackRouter {
   final AuthBloc _authenticationBloc;
 
   @override
-  List<NamedRouteDef> get routes => [
+  List<AutoRoute> get routes => [
     NamedRouteDef(
       name: 'SignIn',
       builder: (context, data) => const SignInScreen(),
@@ -41,11 +41,6 @@ class AppRouter extends RootStackRouter {
       name: 'HistoryScreen',
       builder: (context, data) => const HistoryScreen(),
     ),
-    // NamedRouteDef(
-    //   name: 'RepairRequestDetailsScreen',
-    //   builder: (context, data) =>
-    //       RepairRequestDetailsScreen(request: data.params.get('request')),
-    // ),
     NamedRouteDef(
       initial: true,
       name: 'Root',

@@ -3,92 +3,58 @@ import 'package:ui_kit/ui.dart';
 
 enum HomeCardType { request, history }
 
-sealed class HomeCard extends StatelessWidget {
-  const HomeCard({
-    super.key,
-    required this.nameImage,
+class HomeCard extends StatelessWidget {
+  const HomeCard._({
     required this.title,
     required this.subtitle,
     required this.type,
   });
 
-  final String nameImage;
   final String title;
   final String subtitle;
   final HomeCardType type;
 
-  const factory HomeCard.request() = RequestCard;
-  const factory HomeCard.history() = HistoryCard;
+  factory HomeCard.request() => HomeCard._(
+    title: 'Создать заявку',
+    subtitle: 'Данный поиск осуществляется по тексту, вводимый пользователем',
+    type: .request,
+  );
+
+  factory HomeCard.history() => HomeCard._(
+    title: 'История заявок',
+    subtitle: 'Данный поиск осуществляется по тексту, вводимый пользователем ',
+    type: .history,
+  );
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
-    final isLarge = WindowSizeScope.of(context).isLargeOrLarger;
-    return SizedBox(
-      height: isLarge ? 208 : null,
-      child: UiCard.clickable(
-        onTap: () => switch (type) {
-          HomeCardType.request => context.pushRoute(
-            NamedRoute('RequestScreen'),
-          ),
-          HomeCardType.history => context.pushRoute(
-            NamedRoute('HistoryScreen'),
-          ),
-        },
-        child: Row(
-          crossAxisAlignment: .center,
-          mainAxisAlignment: .start,
-          children: [
-            Image.asset(
-              nameImage,
-              height: isLarge ? 64 : 32,
-              width: isLarge ? 64 : 32,
-            ),
-            const SizedBox(width: 16),
-            Flexible(
-              child: ListTile(
-                title: isLarge
-                    ? UiText.headlineLarge(title)
-                    : UiText.titleMedium(title),
-                subtitle: Padding(
-                  padding: AppPadding.onlyIncrement(top: isLarge ? 2 : 1),
-                  child: isLarge
-                      ? UiText.headlineSmall(
-                          subtitle,
-                          style: TextStyle(color: colorPalette.mutedForeground),
-                        )
-                      : UiText.bodyLarge(
-                          subtitle,
-                          style: TextStyle(color: colorPalette.mutedForeground),
-                        ),
-                ),
+    return UiCard.clickable(
+      padding: AppPadding.onlyIncrement(top: 3, bottom: 5, left: 2, right: 2),
+      onTap: () => switch (type) {
+        .request => context.router.push(const NamedRoute('RequestScreen')),
+        .history => context.router.pushPath(''),
+      },
+      child: Column(
+        mainAxisAlignment: .spaceBetween,
+        crossAxisAlignment: .start,
+        mainAxisSize: .min,
+        spacing: 0.0,
+        children: [
+          Row(
+            mainAxisAlignment: .spaceBetween,
+            crossAxisAlignment: .center,
+            mainAxisSize: .max,
+            children: [
+              UiText.bodyLarge(title, style: TextStyle(fontWeight: .w600)),
+              UiButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.chevron_right_outlined),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          UiText.bodyLarge(subtitle),
+        ],
       ),
     );
   }
-}
-
-final class RequestCard extends HomeCard {
-  const RequestCard({
-    super.key,
-    super.type = HomeCardType.request,
-    super.nameImage = ImagesHelper.request,
-    super.title = 'Создать заявку',
-    super.subtitle =
-        'Данный поиск осуществляется по тексту, вводимый пользователем',
-  });
-}
-
-final class HistoryCard extends HomeCard {
-  const HistoryCard({
-    super.key,
-    super.type = HomeCardType.history,
-    super.nameImage = ImagesHelper.history,
-    super.title = 'История заявок',
-    super.subtitle =
-        'Данный поиск осуществляется по тексту, вводимый пользователем ',
-  });
 }
