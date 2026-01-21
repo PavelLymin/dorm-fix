@@ -1,5 +1,5 @@
 class DormitoryEntity {
-  DormitoryEntity({
+  const DormitoryEntity({
     required this.id,
     required this.number,
     required this.name,
@@ -48,4 +48,16 @@ class DormitoryEntity {
 
   @override
   int get hashCode => Object.hash(id, number, name, long, lat);
+}
+
+class FakeDormitoryEntity extends DormitoryEntity {
+  const FakeDormitoryEntity()
+    : super(
+        id: 0,
+        number: 0,
+        name: 'fake_dorm',
+        address: 'fake_address',
+        long: 0,
+        lat: 0,
+      );
 }

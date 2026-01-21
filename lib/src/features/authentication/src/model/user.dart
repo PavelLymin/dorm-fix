@@ -133,6 +133,18 @@ class AuthenticatedUser implements UserEntity {
   int get hashCode => uid.hashCode;
 }
 
+class FakeAuthenticatedUser extends AuthenticatedUser {
+  const FakeAuthenticatedUser()
+    : super(
+        uid: 'fake_uid',
+        displayName: 'fake_display_name',
+        photoURL: 'fake_photo_url',
+        email: 'fake_email',
+        phoneNumber: 'fake_phone_number',
+        role: .student,
+      );
+}
+
 mixin _UserPatternMatching {
   T map<T>({
     required T Function(NotAuthenticatedUser user) notAuthenticatedUser,

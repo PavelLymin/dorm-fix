@@ -29,7 +29,6 @@ class SpecializationBloc
     try {
       final specializations = await _specializationRepository
           .getSpecializations();
-
       emit(SpecializationState.loaded(specializations: specializations));
     } on RestClientException catch (e, stackTrace) {
       _logger.e(e.message, stackTrace: stackTrace);

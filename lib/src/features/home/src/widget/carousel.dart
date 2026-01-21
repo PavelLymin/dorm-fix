@@ -26,36 +26,43 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
       BlocBuilder<SpecializationBloc, SpecializationState>(
         builder: (context, state) {
           return Column(
-            spacing: 8,
             children: [
-              SizedBox(
-                height: 160,
-                child: state.map(
-                  loading: (_) =>
-                      const Center(child: CircularProgressIndicator()),
-                  loaded: (state) => PageView.builder(
-                    controller: _controller,
-                    itemCount: state.specializations.length,
-                    onPageChanged: (index) => _currentPage.value = index,
-                    itemBuilder: (context, index) {
-                      final spec = state.specializations[index];
-                      return FractionallySizedBox(
-                        widthFactor: 1 / _controller.viewportFraction,
-                        child: _Item(spec: spec),
-                      );
-                    },
-                  ),
-                  error: (state) => UiCard.standart(
-                    child: Center(
-                      child: UiText.bodyLarge(state.message, softWrap: false),
+              state.map(
+                loading: (_) =>
+                    Shimmer(child: SizedBox(width: .infinity, height: 176.0)),
+                loaded: (state) => Column(
+                  mainAxisAlignment: .center,
+                  crossAxisAlignment: .center,
+                  mainAxisSize: .min,
+                  spacing: 8,
+                  children: [
+                    SizedBox(
+                      height: 160.0,
+                      child: PageView.builder(
+                        controller: _controller,
+                        itemCount: state.specializations.length,
+                        onPageChanged: (index) => _currentPage.value = index,
+                        itemBuilder: (context, index) {
+                          final spec = state.specializations[index];
+                          return FractionallySizedBox(
+                            widthFactor: 1 / _controller.viewportFraction,
+                            child: _Item(spec: spec),
+                          );
+                        },
+                      ),
                     ),
+                    Indicator(
+                      countPages: state.specializations.length,
+                      currentPage: _currentPage,
+                      controller: _controller,
+                    ),
+                  ],
+                ),
+                error: (state) => UiCard.standart(
+                  child: Center(
+                    child: UiText.bodyLarge(state.message, softWrap: false),
                   ),
                 ),
-              ),
-              Indicator(
-                countPages: state.specializations.length,
-                currentPage: _currentPage,
-                controller: _controller,
               ),
             ],
           );

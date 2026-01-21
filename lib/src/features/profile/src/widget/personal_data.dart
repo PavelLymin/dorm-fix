@@ -14,6 +14,16 @@ class PersonalData extends StatelessWidget {
       builder: (context, state) {
         return state.maybeMap(
           orElse: () => const SizedBox.shrink(),
+          loading: (_) => Shimmer(
+            child: GroupedList(
+              items: _createPersonalDataList(
+                context,
+                FakeFullStudentEntity(),
+                textStyle,
+              ),
+              divider: .indented(),
+            ),
+          ),
           loadedStudent: (state) {
             final student = state.student;
             final items = _createPersonalDataList(context, student, textStyle);

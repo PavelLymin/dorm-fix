@@ -38,3 +38,13 @@ class SpecializationEntity {
   @override
   int get hashCode => id.hashCode;
 }
+
+class FakeSpecializationEntity extends SpecializationEntity {
+  const FakeSpecializationEntity()
+    : super(
+        id: 0,
+        title: 'title',
+        description: 'description',
+        photoUrl: 'photoUrl',
+      );
+}

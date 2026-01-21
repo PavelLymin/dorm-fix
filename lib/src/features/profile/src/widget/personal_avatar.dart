@@ -9,33 +9,20 @@ class PersonalAvatar extends StatelessWidget {
   Widget build(BuildContext context) => BlocBuilder<ProfileBloc, ProfileState>(
     builder: (context, state) {
       return state.maybeMap(
+        loading: (_) => Shimmer(
+          child: const _PersonalAvatarView(student: FakeFullStudentEntity()),
+        ),
+        loadedStudent: (state) => _PersonalAvatarView(student: state.student),
         orElse: () => const SizedBox.shrink(),
-        loadedStudent: (state) {
-          final student = state.student;
-          return _PersonalAvatarView(
-            photoUrl: student.user.photoURL,
-            displayName: student.user.displayName,
-            dormitory: student.dormitory.name,
-            room: student.room.number,
-          );
-        },
       );
     },
   );
 }
 
 class _PersonalAvatarView extends StatelessWidget {
-  const _PersonalAvatarView({
-    this.photoUrl,
-    this.displayName,
-    this.dormitory,
-    this.room,
-  });
+  const _PersonalAvatarView({required this.student});
 
-  final String? photoUrl;
-  final String? displayName;
-  final String? dormitory;
-  final String? room;
+  final FullStudentEntity student;
 
   @override
   Widget build(BuildContext context) {
@@ -50,18 +37,20 @@ class _PersonalAvatarView extends StatelessWidget {
           CircleAvatar(
             radius: 40.0,
             backgroundColor: colorPalette.secondary,
-            backgroundImage: photoUrl != null ? NetworkImage(photoUrl!) : null,
+            backgroundImage: student.user.photoURL != null
+                ? NetworkImage(student.user.photoURL!)
+                : null,
           ),
           Column(
             mainAxisAlignment: .center,
             crossAxisAlignment: .start,
             children: [
               UiText.titleLarge(
-                displayName ?? 'User',
+                student.user.displayName ?? 'User',
                 style: TextStyle(color: colorPalette.primaryForeground),
               ),
-              UiText.titleMedium(dormitory ?? ''),
-              UiText.titleMedium(room ?? ''),
+              UiText.titleMedium(student.dormitory.name),
+              UiText.titleMedium(student.room.number),
             ],
           ),
         ],

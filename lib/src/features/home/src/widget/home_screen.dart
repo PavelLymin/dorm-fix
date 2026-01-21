@@ -1,8 +1,8 @@
-import 'package:dorm_fix/src/features/home/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../app/widget/dependencies_scope.dart';
 import '../../../profile/profile.dart';
+import '../../home.dart';
 import 'carousel.dart';
 import 'home_card.dart';
 
@@ -13,46 +13,63 @@ class _HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => .fromHeight(100.0);
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    return AppBar(
-      toolbarHeight: 100.0,
-      title: Row(
-        mainAxisAlignment: .spaceBetween,
-        crossAxisAlignment: .start,
-        mainAxisSize: .max,
-        children: [
-          BlocBuilder<ProfileBloc, ProfileState>(
-            builder: (context, state) => state.maybeMap(
-              orElse: () => Text('User'),
-              loadedStudent: (state) => Column(
-                crossAxisAlignment: .start,
-                mainAxisAlignment: .center,
-                mainAxisSize: .min,
-                children: [
-                  Text(
-                    state.student.user.displayName!,
-                    style: TextStyle(color: palette.primaryForeground),
-                  ),
-                  UiText.headlineMedium(
-                    state.student.dormitory.name,
-                    style: TextStyle(fontWeight: .w500),
-                  ),
-                  UiText.headlineMedium(
-                    state.student.room.number,
-                    style: TextStyle(fontWeight: .w500),
-                  ),
-                ],
-              ),
+  Widget build(BuildContext context) => AppBar(
+    toolbarHeight: 100.0,
+    title: Row(
+      mainAxisAlignment: .spaceBetween,
+      crossAxisAlignment: .start,
+      mainAxisSize: .max,
+      children: [
+        BlocBuilder<ProfileBloc, ProfileState>(
+          builder: (context, state) => state.maybeMap(
+            orElse: () => const SizedBox.shrink(),
+            loading: (_) => const Shimmer(child: _UserDisplay()),
+            loadedStudent: (state) => _UserDisplay(
+              name: state.student.user.displayName,
+              dormitory: state.student.dormitory.name,
+              room: state.student.room.number,
             ),
+            error: (state) =>
+                Expanded(child: Text(state.message, overflow: .ellipsis)),
           ),
-          UiButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_on_outlined),
-          ),
-        ],
-      ),
+        ),
+        UiButton.icon(
+          onPressed: () {},
+          icon: const Icon(Icons.notifications_on_outlined),
+        ),
+      ],
+    ),
+  );
+}
+
+class _UserDisplay extends StatelessWidget {
+  const _UserDisplay({this.name, this.dormitory, this.room});
+
+  final String? name;
+  final String? dormitory;
+  final String? room;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = Theme.of(context).colorPalette;
+    return Column(
+      crossAxisAlignment: .start,
+      mainAxisAlignment: .center,
+      mainAxisSize: .min,
+      children: [
+        Text(
+          name ?? 'User',
+          style: TextStyle(color: palette.primaryForeground),
+        ),
+        UiText.headlineMedium(
+          dormitory ?? 'Dormitory number',
+          style: TextStyle(fontWeight: .w500),
+        ),
+        UiText.headlineMedium(
+          room ?? 'Room number',
+          style: TextStyle(fontWeight: .w500),
+        ),
+      ],
     );
   }
 }
@@ -66,6 +83,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final SpecializationBloc _specializationBloc;
+
   @override
   void initState() {
     super.initState();

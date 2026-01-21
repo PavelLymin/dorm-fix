@@ -106,3 +106,13 @@ class StudentEmpty extends StudentEntity {
   @override
   String get uid => '';
 }
+
+final class FakeFullStudentEntity extends FullStudentEntity {
+  const FakeFullStudentEntity()
+    : super(
+        id: 1,
+        user: const FakeAuthenticatedUser(),
+        dormitory: const FakeDormitoryEntity(),
+        room: const FakeRoomEntity(),
+      );
+}

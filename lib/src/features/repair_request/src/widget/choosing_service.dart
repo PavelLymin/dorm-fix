@@ -12,12 +12,18 @@ class ChoosingService extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<SpecializationBloc, SpecializationState>(
         builder: (context, state) => state.maybeMap(
-          orElse: () => const Center(child: CircularProgressIndicator()),
-          error: (state) => UiText.bodyLarge(state.message),
+          orElse: () => const SizedBox.shrink(),
+          loading: (state) => Shimmer(
+            child: _SpecializationOptions(
+              specialization: const [FakeSpecializationEntity()],
+              selectedIndex: selectedIndex,
+            ),
+          ),
           loaded: (state) => _SpecializationOptions(
             specialization: state.specializations,
             selectedIndex: selectedIndex,
           ),
+          error: (state) => UiText.bodyLarge(state.message),
         ),
       );
 }

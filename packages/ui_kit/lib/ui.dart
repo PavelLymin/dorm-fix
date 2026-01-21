@@ -30,3 +30,6 @@ export 'package:ui_kit/src/theme/style.dart';
 
 // Images
 export 'package:ui_kit/src/images/images_helper.dart';
+
+// Shimer
+export 'package:ui_kit/src/shimer/shimer.dart';

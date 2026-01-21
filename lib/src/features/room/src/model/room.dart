@@ -42,3 +42,8 @@ class RoomEntity {
   @override
   int get hashCode => id.hashCode;
 }
+
+class FakeRoomEntity extends RoomEntity {
+  const FakeRoomEntity()
+    : super(id: 1, dormitoryId: 1, floor: 1, number: '1', isOccupied: false);
+}
