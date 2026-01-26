@@ -3,7 +3,7 @@ import 'package:ui_kit/ui.dart';
 
 enum HomeCardType { request, history }
 
-class HomeCard extends StatelessWidget {
+sealed class HomeCard extends StatelessWidget {
   const HomeCard._({
     required this.title,
     required this.subtitle,
@@ -14,47 +14,61 @@ class HomeCard extends StatelessWidget {
   final String subtitle;
   final HomeCardType type;
 
-  factory HomeCard.request() => HomeCard._(
-    title: 'Создать заявку',
-    subtitle: 'Данный поиск осуществляется по тексту, вводимый пользователем',
-    type: .request,
-  );
+  const factory HomeCard.request() = HomeCardRequest;
 
-  factory HomeCard.history() => HomeCard._(
-    title: 'История заявок',
-    subtitle: 'Данный поиск осуществляется по тексту, вводимый пользователем ',
-    type: .history,
-  );
+  const factory HomeCard.history() = HomeCardHistory;
 
   @override
   Widget build(BuildContext context) {
-    return UiCard.clickable(
-      padding: AppPadding.onlyIncrement(top: 3, bottom: 5, left: 2, right: 2),
-      onTap: () => switch (type) {
-        .request => context.router.push(const NamedRoute('RequestScreen')),
-        .history => context.router.pushPath(''),
-      },
-      child: Column(
-        mainAxisAlignment: .spaceBetween,
-        crossAxisAlignment: .start,
-        mainAxisSize: .min,
-        spacing: 0.0,
-        children: [
-          Row(
-            mainAxisAlignment: .spaceBetween,
-            crossAxisAlignment: .center,
-            mainAxisSize: .max,
-            children: [
-              UiText.bodyLarge(title, style: TextStyle(fontWeight: .w600)),
-              UiButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.chevron_right_outlined),
-              ),
-            ],
-          ),
-          UiText.bodyLarge(subtitle),
-        ],
+    return Padding(
+      padding: AppPadding.contentPadding,
+      child: UiCard.clickable(
+        padding: AppPadding.symmetricIncrement(vertical: 3, horizontal: 2),
+        onTap: () => switch (type) {
+          .request => context.router.push(const NamedRoute('RequestScreen')),
+          .history => context.router.pushPath(''),
+        },
+        child: Column(
+          mainAxisAlignment: .spaceBetween,
+          crossAxisAlignment: .start,
+          mainAxisSize: .min,
+          children: [
+            Row(
+              mainAxisAlignment: .spaceBetween,
+              crossAxisAlignment: .center,
+              mainAxisSize: .max,
+              children: [
+                UiText.bodyLarge(title, style: TextStyle(fontWeight: .w600)),
+                UiButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.chevron_right_outlined),
+                ),
+              ],
+            ),
+            UiText.bodyLarge(subtitle),
+          ],
+        ),
       ),
     );
   }
+}
+
+final class HomeCardRequest extends HomeCard {
+  const HomeCardRequest()
+    : super._(
+        title: 'Создать заявку',
+        subtitle:
+            'Данный поиск осуществляется по тексту, вводимый пользователем',
+        type: .request,
+      );
+}
+
+final class HomeCardHistory extends HomeCard {
+  const HomeCardHistory()
+    : super._(
+        title: 'История заявок',
+        subtitle:
+            'Данный поиск осуществляется по тексту, вводимый пользователем ',
+        type: .history,
+      );
 }

@@ -22,52 +22,47 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<SpecializationBloc, SpecializationState>(
-        builder: (context, state) {
-          return Column(
+  Widget build(BuildContext context) => Padding(
+    padding: AppPadding.contentPadding,
+    child: BlocBuilder<SpecializationBloc, SpecializationState>(
+      builder: (context, state) {
+        return state.map(
+          loading: (_) =>
+              const Shimmer(child: SizedBox(width: .infinity, height: 176.0)),
+          loaded: (state) => Column(
+            mainAxisAlignment: .center,
+            mainAxisSize: .min,
+            spacing: 8,
             children: [
-              state.map(
-                loading: (_) =>
-                    Shimmer(child: SizedBox(width: .infinity, height: 176.0)),
-                loaded: (state) => Column(
-                  mainAxisAlignment: .center,
-                  crossAxisAlignment: .center,
-                  mainAxisSize: .min,
-                  spacing: 8,
-                  children: [
-                    SizedBox(
-                      height: 160.0,
-                      child: PageView.builder(
-                        controller: _controller,
-                        itemCount: state.specializations.length,
-                        onPageChanged: (index) => _currentPage.value = index,
-                        itemBuilder: (context, index) {
-                          final spec = state.specializations[index];
-                          return FractionallySizedBox(
-                            widthFactor: 1 / _controller.viewportFraction,
-                            child: _Item(spec: spec),
-                          );
-                        },
-                      ),
-                    ),
-                    Indicator(
-                      countPages: state.specializations.length,
-                      currentPage: _currentPage,
-                      controller: _controller,
-                    ),
-                  ],
-                ),
-                error: (state) => UiCard.standart(
-                  child: Center(
-                    child: UiText.bodyLarge(state.message, softWrap: false),
-                  ),
+              SizedBox(
+                height: 160.0,
+                child: PageView.builder(
+                  controller: _controller,
+                  itemCount: state.specializations.length,
+                  onPageChanged: (index) => _currentPage.value = index,
+                  itemBuilder: (context, index) {
+                    final spec = state.specializations[index];
+                    return FractionallySizedBox(
+                      widthFactor: 1 / _controller.viewportFraction,
+                      child: _Item(spec: spec),
+                    );
+                  },
                 ),
               ),
+              Indicator(
+                countPages: state.specializations.length,
+                currentPage: _currentPage,
+                controller: _controller,
+              ),
             ],
-          );
-        },
-      );
+          ),
+          error: (state) => UiCard.standart(
+            child: Center(child: UiText.bodyLarge(state.message)),
+          ),
+        );
+      },
+    ),
+  );
 }
 
 class _Item extends StatelessWidget {
@@ -77,24 +72,30 @@ class _Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gradient = Theme.of(context).appGradient;
-
+    final theme = Theme.of(context);
+    final gradient = theme.appGradient;
     return UiCard.standart(
       padding: AppPadding.symmetricIncrement(horizontal: 2, vertical: 3),
       gradient: gradient.primary,
       child: Row(
         mainAxisAlignment: .center,
-        crossAxisAlignment: .center,
         mainAxisSize: .max,
         children: [
           Expanded(
             flex: 3,
             child: Column(
-              mainAxisAlignment: .center,
               crossAxisAlignment: .start,
               mainAxisSize: .max,
               children: [
-                UiText.titleLarge(spec.title),
+                Row(
+                  mainAxisAlignment: .center,
+                  mainAxisSize: .min,
+                  spacing: 8.0,
+                  children: [
+                    UiText.titleLarge(spec.title),
+                    const Icon(Icons.info_outline),
+                  ],
+                ),
                 const SizedBox(height: 16.0),
                 UiText.bodyLarge(spec.description),
               ],

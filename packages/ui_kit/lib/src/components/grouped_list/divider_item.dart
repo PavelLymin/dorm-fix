@@ -14,16 +14,16 @@ class ItemDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.appStyleData;
-    final padding = style.groupedListStyle.contentEdgePadding.copyWith(
-      top: .0,
-      bottom: .0,
-    );
+    final padding = style.groupedListStyle.contentEdgePadding;
+
     return switch (type) {
-      .indented => Padding(
-        padding: padding,
-        child: const Divider(height: .0, thickness: 1.0),
+      .indented => Divider(
+        height: 0.0,
+        thickness: 1.0,
+        indent: padding.left,
+        endIndent: padding.right,
       ),
-      .full => const Divider(height: .0, thickness: 1.0),
+      .full => const Divider(height: 0.0, thickness: 1.0),
     };
   }
 }

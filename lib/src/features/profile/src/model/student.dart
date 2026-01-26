@@ -76,6 +76,11 @@ final class FullStudentEntity extends StudentEntity {
   final DormitoryEntity dormitory;
   final RoomEntity room;
 
+  R fullOrFake<R>({
+    required R Function(FullStudentEntity) full,
+    required R Function(FakeFullStudentEntity) fake,
+  }) => full(this);
+
   @override
   String get uid => user.uid;
 
@@ -115,4 +120,10 @@ final class FakeFullStudentEntity extends FullStudentEntity {
         dormitory: const FakeDormitoryEntity(),
         room: const FakeRoomEntity(),
       );
+
+  @override
+  R fullOrFake<R>({
+    required R Function(FullStudentEntity) full,
+    required R Function(FakeFullStudentEntity) fake,
+  }) => fake(this);
 }

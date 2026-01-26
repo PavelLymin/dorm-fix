@@ -4,7 +4,7 @@ class AppStyle {
   const AppStyle({
     this.borderRadius = const .all(.circular(24)),
     this.borderWidth = 1,
-    this.pagePadding = AppPadding.allLarge,
+    this.pagePadding = AppPadding.pagePadding,
     this.shadow = const [
       BoxShadow(color: Color(0x0D000000), offset: Offset(1, 1), blurRadius: 2),
     ],

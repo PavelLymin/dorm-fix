@@ -189,7 +189,7 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
   @override
   InputBorder? get disabledBorder => OutlineInputBorder(
     borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.borderMuted),
+    borderSide: BorderSide(color: palette.inputBorder),
   );
 
   @override

@@ -341,6 +341,10 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
       const WidgetStatePropertyAll<double>(24.0);
 
   @override
+  WidgetStateProperty<Color?>? get iconColor =>
+      WidgetStatePropertyAll<Color?>(colorPalette.mutedForeground);
+
+  @override
   WidgetStateProperty<OutlinedBorder?>? get shape =>
       .all(RoundedRectangleBorder(borderRadius: const .all(.circular(18.0))));
 

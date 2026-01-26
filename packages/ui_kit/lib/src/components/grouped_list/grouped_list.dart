@@ -9,7 +9,7 @@ part 'grouped_list_item.dart';
 class GroupedListItem<T extends Enum> {
   const GroupedListItem({
     required this.title,
-    this.data,
+    this.subTitle,
     this.prefixIcon,
     this.content,
     this.onTap,
@@ -17,9 +17,9 @@ class GroupedListItem<T extends Enum> {
     this.isSelected = false,
   });
 
-  final String title;
-  final String? data;
-  final IconData? prefixIcon;
+  final UiText title;
+  final UiText? subTitle;
+  final Icon? prefixIcon;
   final Widget? content;
   final void Function()? onTap;
   final SelectItem<T>? selectItems;
@@ -51,28 +51,6 @@ class GroupedList<T extends Enum> extends StatefulWidget {
 }
 
 class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
-  late double _height;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _height = height(widget.style);
-  }
-
-  double height(GroupedListStyle style) {
-    final title = style.titleStyle(context);
-    final data = style.dataStyle(context);
-    final titleHeight = title.fontSize! * title.height!;
-    final dataHeight = data.fontSize! * data.height!;
-    final itemPadding = style.spacing;
-    final textHeight = (titleHeight + dataHeight).ceil();
-    final contentHeight = textHeight > style.iconSize
-        ? textHeight
-        : style.iconSize;
-
-    return contentHeight + itemPadding + style.contentEdgePadding.vertical;
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -94,18 +72,15 @@ class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
             final item = widget.items[index];
             final isFirst = index == 0;
             final isLast = index == widget.items.length - 1;
-            return SizedBox(
-              height: _height,
-              child: _Item<T>(
-                width: constraints.maxWidth,
-                item: item,
-                style: widget.style,
-                borderRadius: .vertical(
-                  top: isFirst ? .circular(widget.style.borderRadius) : .zero,
-                  bottom: isLast ? .circular(widget.style.borderRadius) : .zero,
-                ),
-                isInitial: item.isSelected,
+            return _Item<T>(
+              width: constraints.maxWidth,
+              item: item,
+              style: widget.style,
+              borderRadius: .vertical(
+                top: isFirst ? .circular(widget.style.borderRadius) : .zero,
+                bottom: isLast ? .circular(widget.style.borderRadius) : .zero,
               ),
+              isInitial: item.isSelected,
             );
           },
           separatorBuilder: (_, _) => widget.divider,
@@ -145,27 +120,10 @@ class GroupedListStyle {
     borderRadius: borderRadius ?? this.borderRadius,
   );
 
-  TextStyle titleStyle(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final typography = theme.appTypography;
-    return typography.bodyLarge.copyWith(color: palette.foreground);
-  }
-
-  TextStyle dataStyle(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final typography = theme.appTypography;
-    return typography.bodyMedium.copyWith(color: palette.mutedForeground);
-  }
-
   AppWidgetStateMap<Color> overlayColor(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette;
     return AppWidgetStateMap<Color>({
-      WidgetState.pressed: palette.foreground.withValues(alpha: .1),
-      WidgetState.hovered: palette.foreground.withValues(alpha: .08),
-      WidgetState.focused: palette.foreground.withValues(alpha: .1),
       WidgetState.selected: palette.foreground.withValues(alpha: .2),
       WidgetState.disabled: palette.muted.withValues(alpha: .1),
       WidgetState.any: palette.foreground.withValues(alpha: .1),

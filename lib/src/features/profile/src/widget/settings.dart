@@ -45,15 +45,15 @@ class _SettingsState extends State<Settings> {
 
     return <GroupedListItem<ThemeModeVO>>[
       GroupedListItem(
-        title: 'Уведомления',
-        prefixIcon: Icons.notifications_none_outlined,
-        data: 'Выкл.',
+        title: UiText.bodyMedium('Уведомления'),
+        prefixIcon: Icon(Icons.notifications_none_outlined),
+        subTitle: UiText.bodyMedium('Выкл.'),
         onTap: () {},
         content: icon,
       ),
       GroupedListItem<ThemeModeVO>(
-        title: 'Оформление',
-        prefixIcon: Icons.light_mode_outlined,
+        title: UiText.bodyMedium('Оформление'),
+        prefixIcon: Icon(Icons.light_mode_outlined),
         onTap: () {},
         content: icon,
         selectItems: SelectItem<ThemeModeVO>(
@@ -63,15 +63,15 @@ class _SettingsState extends State<Settings> {
         ),
       ),
       GroupedListItem(
-        title: 'Язык',
-        prefixIcon: Icons.language_outlined,
-        data: 'Русский',
+        title: UiText.bodyMedium('Язык'),
+        prefixIcon: Icon(Icons.language_outlined),
+        subTitle: UiText.bodyMedium('Русский'),
         onTap: () {},
         content: icon,
       ),
       GroupedListItem(
-        title: 'Выйти',
-        prefixIcon: Icons.logout_outlined,
+        title: UiText.bodyMedium('Выйти'),
+        prefixIcon: Icon(Icons.logout_outlined),
         onTap: () {
           context.read<AuthBloc>().add(.signOut());
           context.router.replace(const NamedRoute('SignIn'));

@@ -38,6 +38,7 @@ ThemeData createThemeData({
   dropdownMenuTheme: DropdownMenuThemeData(
     inputDecorationTheme: inputDecorationTheme(palette, typography, style),
   ),
+  iconTheme: iconThemeData(palette),
   extensions: {palette, gradient, typography, style},
 );
 
@@ -89,20 +90,36 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
 }
 
 AppGradient generateGradientForBrightness(Brightness brightness) {
-  List<Color> primary;
+  late final List<Color> primary;
+  late final List<Color> appBar;
 
   if (brightness == .dark) {
     primary = const [Color(0xFF000000), Color(0xFF2E2E2E)];
+    appBar = [
+      Color(0xFF171717).withValues(alpha: .9),
+      Color(0xFF171717).withValues(alpha: .2),
+      Color(0xFF171717).withValues(alpha: .06),
+    ];
   } else {
     primary = const [Color(0xFFFFFFFF), Color(0xFFDFDFDF)];
+    appBar = [
+      Color(0xFFFCFCFC).withValues(alpha: .9),
+      Color(0xFFFCFCFC).withValues(alpha: .06),
+    ];
   }
 
   return AppGradient(
     primary: LinearGradient(
       begin: .topLeft,
       end: .topEnd,
-      stops: [0, 0.5],
+      stops: [.5, 1.0],
       colors: primary,
+    ),
+    appBar: LinearGradient(
+      begin: .center,
+      end: .bottomCenter,
+      stops: [.1, .5, 1.0],
+      colors: appBar,
     ),
   );
 }
@@ -116,7 +133,7 @@ AppBarTheme appBarTheme(ColorPalette palette, AppTypography typography) {
   return AppBarTheme(
     centerTitle: false,
     titleSpacing: .0,
-    backgroundColor: palette.background,
+    backgroundColor: Colors.transparent,
     foregroundColor: palette.primaryForeground,
     surfaceTintColor: palette.background,
     titleTextStyle: typography.headlineLarge.copyWith(
@@ -178,3 +195,6 @@ InputDecorationTheme inputDecorationTheme(
     ),
   );
 }
+
+IconThemeData iconThemeData(ColorPalette palette) =>
+    IconThemeData(color: palette.mutedForeground, size: 24.0);

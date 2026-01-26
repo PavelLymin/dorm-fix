@@ -43,9 +43,9 @@ class PersonalData extends StatelessWidget {
 
     return <GroupedListItem>[
       GroupedListItem(
-        title: 'Адрес электронной почты',
-        prefixIcon: Icons.email_outlined,
-        data: student.user.email ?? 'Укажите почту',
+        title: UiText.bodyMedium('Адрес электронной почты'),
+        prefixIcon: Icon(Icons.email_outlined),
+        subTitle: UiText.bodyMedium(student.user.email ?? 'Укажите почту'),
         onTap: () => showUiBottomSheet(
           isScrollControlled: true,
           context,
@@ -54,9 +54,11 @@ class PersonalData extends StatelessWidget {
         content: icon,
       ),
       GroupedListItem(
-        title: 'Номер телефона',
-        prefixIcon: Icons.phone_rounded,
-        data: student.user.phoneNumber ?? 'Укажите телефон',
+        title: UiText.bodyMedium('Номер телефона'),
+        prefixIcon: Icon(Icons.phone_rounded),
+        subTitle: UiText.bodyMedium(
+          student.user.phoneNumber ?? 'Укажите телефон',
+        ),
         onTap: () => showUiBottomSheet(
           isScrollControlled: true,
           context,
@@ -65,16 +67,16 @@ class PersonalData extends StatelessWidget {
         content: icon,
       ),
       GroupedListItem(
-        title: 'Общежитие',
-        prefixIcon: Icons.apartment,
-        data: student.dormitory.name,
+        title: UiText.bodyMedium('Общежитие'),
+        prefixIcon: Icon(Icons.apartment),
+        subTitle: UiText.bodyMedium(student.dormitory.name),
         onTap: () {},
         content: icon,
       ),
       GroupedListItem(
-        title: 'Комната',
-        prefixIcon: Icons.room_outlined,
-        data: student.room.number,
+        title: UiText.bodyMedium('Комната'),
+        prefixIcon: Icon(Icons.room_outlined),
+        subTitle: UiText.bodyMedium(student.room.number),
         onTap: () {},
         content: icon,
       ),

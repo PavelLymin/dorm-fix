@@ -8,7 +8,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: AppPadding.allMedium,
+    padding: AppPadding.pagePadding,
     child: CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -26,14 +26,25 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           pinned: true,
+          flexibleSpace: ClipRect(
+            child: BackdropFilter(
+              filter: .blur(sigmaX: .9, sigmaY: 4.0),
+              child: SizedBox.expand(),
+            ),
+          ),
         ),
         SliverList.list(
-          children: const [
-            PersonalAvatar(),
-            SizedBox(height: 24.0),
-            PersonalData(),
-            SizedBox(height: 24.0),
-            Settings(),
+          children: [
+            const SizedBox(height: 16.0),
+            const PersonalAvatar(),
+            const SizedBox(height: 16.0),
+            UiText.titleMedium('Персональные данные'),
+            const SizedBox(height: 16.0),
+            const PersonalData(),
+            const SizedBox(height: 16.0),
+            UiText.titleMedium('Системные данные'),
+            const SizedBox(height: 16.0),
+            const Settings(),
           ],
         ),
       ],

@@ -39,7 +39,25 @@ class UiPreview extends StatefulWidget {
   State<UiPreview> createState() => _UiPreviewState();
 }
 
-class _UiPreviewState extends State<UiPreview> {
+class _UiPreviewState extends State<UiPreview>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(
+          duration: const Duration(milliseconds: 500),
+          reverseDuration: const Duration(seconds: 9),
+          vsync: this,
+        )..addStatusListener((status) {
+          if (status == .completed) {
+            _controller.reverse();
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -151,6 +169,46 @@ class _UiPreviewState extends State<UiPreview> {
                 const SizedBox(height: 8),
                 const LineCalendarPreview(),
                 const SizedBox(height: 24),
+                UiButton.filledPrimary(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Theme.of(context).colorPalette.card,
+                        duration: const Duration(seconds: 3),
+                        padding: const .all(24.0),
+                        behavior: .floating,
+                        showCloseIcon: true,
+                        content: Column(
+                          mainAxisAlignment: .center,
+                          crossAxisAlignment: .start,
+                          spacing: 8.0,
+                          children: [
+                            UiText.bodyLarge('Button pressed'),
+                            UiText.bodyLarge(
+                              'We recommend placing FToaster in the builder method of MaterialApp/WidgetsApp/CupertinoApp',
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).colorPalette.mutedForeground,
+                              ),
+                            ),
+                          ],
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: .circular(16.0),
+                          side: BorderSide(
+                            color: Theme.of(context).colorPalette.borderStrong,
+                          ),
+                        ),
+                      ),
+                      snackBarAnimationStyle: AnimationStyle(
+                        duration: const Duration(milliseconds: 500),
+                        reverseDuration: const Duration(milliseconds: 2000),
+                        curve: Curves.easeInOut,
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),

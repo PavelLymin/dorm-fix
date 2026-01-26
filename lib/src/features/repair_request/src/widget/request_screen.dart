@@ -35,12 +35,22 @@ class _RequestScreenState extends State<RequestScreen>
           );
         },
         child: Padding(
-          padding: AppPadding.allMedium,
+          padding: AppPadding.pagePadding,
           child: CustomScrollView(
             slivers: [
-              SliverAppBar(title: const Text('Создание заявки'), pinned: true),
+              SliverAppBar(
+                title: const Text('Создание заявки'),
+                pinned: true,
+                flexibleSpace: ClipRect(
+                  child: BackdropFilter(
+                    filter: .blur(sigmaX: .9, sigmaY: 4.0),
+                    child: SizedBox.expand(),
+                  ),
+                ),
+              ),
               SliverList.list(
                 children: [
+                  const SizedBox(height: 16.0),
                   UiText.titleMedium('Выберите мастера'),
                   const SizedBox(height: 16.0),
                   ChoosingService(selectedIndex: _specializationIndex),

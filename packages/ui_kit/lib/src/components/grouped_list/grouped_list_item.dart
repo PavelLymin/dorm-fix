@@ -20,32 +20,55 @@ class _Item<T extends Enum> extends StatefulWidget {
 }
 
 class _ItemState<T extends Enum> extends State<_Item<T>>
-    with _ItemMixinMenuLink<T> {
+    with
+        SingleTickerProviderStateMixin,
+        _ItemStateMixin,
+        _ItemMixinMenuLink<T> {
+  @override
+  void initState() {
+    super.initState();
+    _initStates();
+    if (_hasSelect) {
+      _initSelectItems();
+      _initAnimation(this);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _Item<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _updateStates();
+  }
+
+  @override
+  void dispose() {
+    hide();
+    _selectItemsController?.dispose();
+    _animationController?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return WidgetStateBuilder(
-      isSelected: widget.isInitial,
-      builder: (context, states, _) => TextButton(
-        onPressed: onTap,
-        style: TextButton.styleFrom(
-          padding: .zero,
-          textStyle: widget.style.titleStyle(context),
-          foregroundColor: widget.style.titleStyle(context).color,
-          backgroundColor: widget.style.itemColor(context).resolve(states),
-          overlayColor: widget.style.overlayColor(context).resolve(states),
-          shape: RoundedRectangleBorder(borderRadius: widget.borderRadius),
-          iconColor: widget.style.iconColor(context),
-          iconSize: widget.style.iconSize,
-        ),
-        child: CompositedTransformTarget(
-          link: _layerLink,
-          child: _ItemContent<T>(
-            style: widget.style,
-            item: widget.item,
-            hasSelect: _hasSelect,
-            hasData: _hasData,
-            controller: _controller,
-          ),
+    return TextButton(
+      statesController: _statesController,
+      onPressed: onTap,
+      style: ButtonStyle(
+        padding: .all(.zero),
+        tapTargetSize: .shrinkWrap,
+        backgroundColor: widget.style.itemColor(context),
+        shape: .all(RoundedRectangleBorder(borderRadius: widget.borderRadius)),
+        iconColor: .all(widget.style.iconColor(context)),
+        iconSize: .all(widget.style.iconSize),
+      ),
+      child: CompositedTransformTarget(
+        link: _layerLink,
+        child: _ItemContent<T>(
+          style: widget.style,
+          item: widget.item,
+          hasSelect: _hasSelect,
+          hasData: _hasSubTitle,
+          controller: _selectItemsController,
         ),
       ),
     );
@@ -69,101 +92,119 @@ class _ItemContent<T extends Enum> extends StatelessWidget {
   final SelectItemsController<T>? controller;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: style.contentEdgePadding,
-    child: Row(
-      crossAxisAlignment: .center,
-      mainAxisAlignment: .start,
-      mainAxisSize: .min,
-      children: [
-        if (item.prefixIcon != null) ...[
-          Icon(item.prefixIcon),
-          const SizedBox(width: 8.0),
-        ],
-        Column(
-          mainAxisAlignment: .center,
-          crossAxisAlignment: .start,
-          mainAxisSize: .min,
-          spacing: style.spacing,
-          children: [
-            Text(item.title, softWrap: true),
-            if (hasSelect)
-              ValueListenableBuilder<T>(
-                valueListenable: controller!,
-                builder: (_, value, _) => Text(
-                  value.toString(),
-                  style: style.dataStyle(context),
-                  softWrap: true,
-                ),
-              ),
-            if (hasData)
-              Text(item.data!, style: style.dataStyle(context), softWrap: true),
+  Widget build(BuildContext context) {
+    final palette = Theme.of(context).colorPalette;
+    return Padding(
+      padding: style.contentEdgePadding,
+      child: Row(
+        mainAxisAlignment: .start,
+        crossAxisAlignment: .center,
+        mainAxisSize: .max,
+        children: [
+          if (item.prefixIcon != null) ...[
+            item.prefixIcon!,
+            const SizedBox(width: 8.0),
           ],
-        ),
-        const Spacer(),
-        if (item.content != null) item.content!,
-      ],
-    ),
-  );
+          Column(
+            mainAxisAlignment: .center,
+            crossAxisAlignment: .start,
+            mainAxisSize: .min,
+            spacing: style.spacing,
+            children: [
+              item.title,
+              if (hasSelect)
+                ValueListenableBuilder<T>(
+                  valueListenable: controller!,
+                  builder: (_, value, _) => UiText.bodyMedium(
+                    value.toString(),
+                    color: palette.mutedForeground,
+                  ),
+                ),
+              if (hasData) item.subTitle!,
+            ],
+          ),
+          const Spacer(),
+          if (item.content != null) item.content!,
+        ],
+      ),
+    );
+  }
+}
+
+mixin _ItemStateMixin<T extends Enum> on State<_Item<T>> {
+  late final WidgetStatesController _statesController;
+  bool get _isDisabled => widget.item.onTap == null;
+
+  void _initStates() {
+    _statesController = WidgetStatesController({
+      if (widget.isInitial) .selected,
+      if (_isDisabled) .disabled,
+    });
+  }
+
+  void _updateStates() {
+    _statesController.update(.selected, widget.isInitial);
+    _statesController.update(.disabled, _isDisabled);
+  }
 }
 
 mixin _ItemMixinMenuLink<T extends Enum> on State<_Item<T>> {
   final _layerLink = LayerLink();
-  SelectItemsController<T>? _controller;
   OverlayEntry? _overlayEntry;
-  bool get isDisabled => widget.item.onTap == null;
-  SelectItem<T>? get selectItems => widget.item.selectItems;
-  bool get _hasSelect => selectItems != null && selectItems!.items.isNotEmpty;
-  bool get _hasData => !_hasSelect && widget.item.data != null;
-  double get widthMenu => widget.width * .6;
+  AnimationController? _animationController;
+  SelectItemsController<T>? _selectItemsController;
 
-  @override
-  void initState() {
-    super.initState();
-    if (_hasSelect) {
-      _controller = SelectItemsController<T>(
-        selectItems!.initial,
-        selectItems!,
-        hide,
-      );
-    }
+  SelectItem<T>? get _selectItems => widget.item.selectItems;
+  bool get _hasSelect => _selectItems != null && _selectItems!.items.isNotEmpty;
+  bool get _hasSubTitle => !_hasSelect && widget.item.subTitle != null;
+  double get _widthMenu => widget.width * .6;
+
+  void _initSelectItems() {
+    _selectItemsController = SelectItemsController<T>(
+      _selectItems!.initial,
+      selectItems: _selectItems!,
+      onTap: hide,
+    );
   }
 
-  @override
-  void dispose() {
-    hide();
-    _controller?.dispose();
-    super.dispose();
+  void _initAnimation(TickerProvider vsync) {
+    _animationController = AnimationController(
+      value: 0.0,
+      duration: const Duration(milliseconds: 150),
+      reverseDuration: const Duration(milliseconds: 100),
+      vsync: vsync,
+    );
   }
 
-  void show() {
-    hide();
+  void show() async {
+    await hide();
+    _animationController!.forward();
     _overlayEntry = OverlayEntry(
       builder: (overlayContext) => Positioned(
-        width: widthMenu,
+        width: _widthMenu,
         child: CompositedTransformFollower(
           link: _layerLink,
           offset: Offset(-widget.style.contentEdgePadding.left, 4.0),
           targetAnchor: .bottomRight,
           followerAnchor: .topRight,
-          child: GroupedList(
-            items: _controller!.createItems(),
-            divider: .full(),
-            style: widget.style.copyWith(
-              contentEdgePadding: AppPadding.symmetricIncrement(
-                horizontal: 2,
-                vertical: 0.5,
-              ),
+          child: FadeTransition(
+            opacity: _animationController!,
+            child: GroupedList(
+              items: _selectItemsController!.createItems(),
+              divider: .full(),
             ),
           ),
         ),
       ),
     );
-    Overlay.of(context).insert(_overlayEntry!);
+    if (mounted) {
+      Overlay.of(context).insert(_overlayEntry!);
+    }
   }
 
-  void hide() {
+  Future<void> hide() async {
     if (_overlayEntry == null) return;
+    await _animationController?.reverse();
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
