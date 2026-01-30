@@ -6,9 +6,7 @@ sealed class RestClientException implements Exception {
   });
 
   final String message;
-
   final int? statusCode;
-
   final Object? cause;
 }
 

@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:ui_kit/menu_link_preview.dart';
 import 'package:ui_kit/ui.dart';
 import 'button_previews.dart';
 import 'check_box_preview.dart';
@@ -154,13 +153,6 @@ class _UiPreviewState extends State<UiPreview>
                 Align(alignment: .center, child: UiText.titleLarge('CheckBox')),
                 const SizedBox(height: 8),
                 const CheckBoxPreview(),
-                const SizedBox(height: 24),
-                Align(
-                  alignment: .center,
-                  child: UiText.titleLarge('Menu link'),
-                ),
-                const SizedBox(height: 8),
-                const MenuLinkPreview(),
                 const SizedBox(height: 24),
                 Align(
                   alignment: .center,

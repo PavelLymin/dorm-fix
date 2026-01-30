@@ -18,7 +18,7 @@ sealed class RepairRequestState {
 
   factory RepairRequestState.error({
     required List<FullRepairRequest> requests,
-    required String message,
+    required Object message,
   }) = _RepairRequestError;
 
   R map<R>({
@@ -64,5 +64,5 @@ final class _RepairRequestLoaded extends RepairRequestState {
 final class _RepairRequestError extends RepairRequestState {
   const _RepairRequestError({required super.requests, required this.message});
 
-  final String message;
+  final Object message;
 }

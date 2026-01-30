@@ -71,7 +71,7 @@ class UserDto {
         photoURL: photoURL,
         email: email,
         phoneNumber: phoneNumber,
-        role: role == null ? Role.student : Role.fromString(role),
+        role: role == null ? .student : .fromString(role),
       );
     }
     throw ArgumentError('Invalid JSON data for User: $json');

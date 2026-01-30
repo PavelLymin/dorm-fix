@@ -16,7 +16,7 @@ sealed class PhoneNumberState {
     phoneNumber: phoneNumber,
   );
   factory PhoneNumberState.success() => PhoneSuccessState();
-  factory PhoneNumberState.error({required String message}) =>
+  factory PhoneNumberState.error({required Object message}) =>
       PhoneErrorState(message: message);
 
   R map<R>({
@@ -82,5 +82,5 @@ final class PhoneSuccessState extends PhoneNumberState {}
 final class PhoneErrorState extends PhoneNumberState {
   const PhoneErrorState({required this.message});
 
-  final String message;
+  final Object message;
 }

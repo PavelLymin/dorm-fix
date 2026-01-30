@@ -104,6 +104,7 @@ AppGradient generateGradientForBrightness(Brightness brightness) {
     primary = const [Color(0xFFFFFFFF), Color(0xFFDFDFDF)];
     appBar = [
       Color(0xFFFCFCFC).withValues(alpha: .9),
+      Color(0xFFFCFCFC).withValues(alpha: .2),
       Color(0xFFFCFCFC).withValues(alpha: .06),
     ];
   }

@@ -22,7 +22,7 @@ sealed class AuthState {
 
   const factory AuthState.error({
     required UserEntity user,
-    required String message,
+    required Object message,
   }) = _Error;
 
   bool get isAuthenticated => currentUser.isAuthenticated;
@@ -124,5 +124,5 @@ final class _Loading extends AuthState {
 final class _Error extends AuthState {
   const _Error({required super.user, required this.message});
 
-  final String message;
+  final Object message;
 }

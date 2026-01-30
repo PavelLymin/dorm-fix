@@ -49,9 +49,6 @@ class _SignInScreenState extends State<SignInScreen> {
           signedUp: (_) => context.router.replace(const NamedRoute('Map')),
           loggedIn: (_) => context.router.replace(const NamedRoute('Home')),
           smsCodeSent: (_) => _addSmsCodeSent(true),
-          error: (error) => ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(error.message))),
         );
       },
       child: Scaffold(
@@ -68,13 +65,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: SizedBox(
                     width: 400,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: .center,
+                      mainAxisAlignment: .center,
+                      mainAxisSize: .min,
                       children: [
                         UiText.displayLarge(
                           'Dorm Fix',
-                          style: TextStyle(fontWeight: FontWeight.w900),
+                          style: TextStyle(fontWeight: .w900),
                         ),
                         const SizedBox(height: 96),
                         const SignInForm(),
@@ -91,13 +88,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   vertical: 22,
                 ),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: .center,
+                  mainAxisAlignment: .center,
                   children: [
                     const Spacer(),
                     UiText.displayLarge(
                       'Dorm Fix',
-                      style: TextStyle(fontWeight: FontWeight.w900),
+                      style: TextStyle(fontWeight: .w900),
                     ),
                     const Spacer(),
                     Padding(
@@ -108,7 +105,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: SizedBox(
                         width: 400,
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisSize: .min,
                           children: [
                             const SignInForm(),
                             const SizedBox(height: 32),

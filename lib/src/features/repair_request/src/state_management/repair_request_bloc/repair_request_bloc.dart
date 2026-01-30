@@ -47,7 +47,7 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
       emit(.loaded(requests: requests));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(.error(requests: state.requests, message: e.toString()));
+      emit(.error(requests: state.requests, message: e));
     }
   }
 
@@ -58,9 +58,12 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
     try {
       final request = event.request.toEntity();
       await _requestRepository.createRequest(request: request);
-    } catch (e, stackTrace) {
+    } on ArgumentError catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(.error(requests: state.requests, message: e.toString()));
+      emit(.error(requests: state.requests, message: e.message));
+    } on Object catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      emit(.error(requests: state.requests, message: e));
     }
   }
 

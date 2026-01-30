@@ -12,8 +12,12 @@ class HomeAppBar extends StatelessWidget {
         orElse: () => const SliverToBoxAdapter(),
         loading: (_) => const _Loading(),
         loadedStudent: (state) => _Loadded(student: state.student),
-        error: (state) =>
-            UiText.headlineMedium(state.message, overflow: .ellipsis),
+        error: (state) => SliverPadding(
+          padding: AppPadding.appBar(context: context),
+          sliver: SliverToBoxAdapter(
+            child: UiText.headlineMedium(state.message, overflow: .ellipsis),
+          ),
+        ),
       ),
     );
   }
@@ -83,7 +87,10 @@ class _UserDisplay extends StatelessWidget {
             child: RichText(
               text: TextSpan(
                 text: '${student.dormitory.name}\n',
-                style: typography.headlineLarge.copyWith(fontWeight: .w500),
+                style: typography.headlineLarge.copyWith(
+                  fontWeight: .w500,
+                  color: palette.foreground,
+                ),
                 children: [TextSpan(text: student.room.number)],
               ),
             ),

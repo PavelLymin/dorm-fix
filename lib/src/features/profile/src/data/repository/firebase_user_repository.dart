@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../../../../core/firebase/firebase.dart';
-import '../../../../authentication/src/data/dto/user.dart';
-import '../../helpers/phone_number_helper.dart';
+import '../../../../authentication/authentication.dart';
+import '../../../profile.dart';
 
 abstract interface class IFirebaseUserRepository {
   Future<void> updateEmail({required String email});
@@ -28,7 +27,7 @@ class FirebaseUserRepositoryImpl implements IFirebaseUserRepository {
     if (user == null) {
       throw FirebaseAuthException(
         code: 'no-current-user',
-        message: 'No user is currently signed in.',
+        message: 'Пользователь не найден',
       );
     }
 
@@ -39,12 +38,12 @@ class FirebaseUserRepositoryImpl implements IFirebaseUserRepository {
   Future<PhoneNumberHelper> verifyPhoneNumber({
     required String phoneNumber,
   }) async {
-    Completer<PhoneNumberHelper> completer = Completer<PhoneNumberHelper>();
+    final Completer<PhoneNumberHelper> completer = Completer();
     await _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (credential) =>
           _verificationCompleted(credential, completer),
-      verificationFailed: (ex) => _verificationFailed(ex, completer),
+      verificationFailed: (e) => _verificationFailed(e),
       codeSent: (String verificationId, _) async =>
           codeSent(verificationId, completer),
       codeAutoRetrievalTimeout: (String verificationId) =>
@@ -56,23 +55,33 @@ class FirebaseUserRepositoryImpl implements IFirebaseUserRepository {
 
   Future<void> _verificationCompleted(
     PhoneAuthCredential credential,
-    Completer completer,
+    Completer<PhoneNumberHelper> completer,
   ) async {
     final userCredential = await _firebaseAuth.signInWithCredential(credential);
     final currentUser = userCredential.user;
-    if (currentUser == null) throw AuthException(code: 'no-current-user');
+    if (currentUser == null) {
+      throw FirebaseAuthException(
+        code: 'no-current-user',
+        message: 'Пользователь не найден',
+      );
+    }
+
     final user = UserDto.fromFirebase(currentUser).toEntity();
-    completer.complete(PhoneNumberHelper.verificationCompleted(user: user));
+    completer.complete(.verificationCompleted(user: user));
   }
 
-  void _verificationFailed(FirebaseAuthException error, Completer completer) =>
-      throw AuthException(code: error.code);
+  void _verificationFailed(FirebaseAuthException error) =>
+      Error.throwWithStackTrace(error, .current);
 
-  void codeSent(String verificationId, Completer completer) => completer
-      .complete(PhoneNumberHelper.smsCodeSent(verificationId: verificationId));
+  void codeSent(
+    String verificationId,
+    Completer<PhoneNumberHelper> completer,
+  ) => completer.complete(.smsCodeSent(verificationId: verificationId));
 
-  void _codeAutoRetrievalTimeout(String verificationId, Completer completer) =>
-      completer.complete(PhoneNumberHelper.codeAutoRetrievalTimeout());
+  void _codeAutoRetrievalTimeout(
+    String verificationId,
+    Completer<PhoneNumberHelper> completer,
+  ) => completer.complete(.codeAutoRetrievalTimeout());
 
   @override
   Future<void> updatePhoneNumber({
@@ -85,7 +94,12 @@ class FirebaseUserRepositoryImpl implements IFirebaseUserRepository {
     );
 
     final user = _firebaseAuth.currentUser;
-    if (user == null) throw AuthException(code: 'no-current-user');
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'no-current-user',
+        message: 'Пользователь не найден',
+      );
+    }
 
     await user.updatePhoneNumber(phoneCredential);
     await user.reload();

@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:cronet_http/cronet_http.dart' show CronetClient;
 import 'package:cupertino_http/cupertino_http.dart' show CupertinoClient;
-import 'package:flutter/foundation.dart'
-    show TargetPlatform, defaultTargetPlatform;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:http/http.dart' as http;
 import '../../rest_client.dart';
 import '../exception/check_exception_io.dart';
@@ -14,9 +13,8 @@ http.Client createDefaultHttpClient() {
 
   try {
     client = switch (platform) {
-      TargetPlatform.android => CronetClient.defaultCronetEngine(),
-      TargetPlatform.iOS ||
-      TargetPlatform.macOS => CupertinoClient.defaultSessionConfiguration(),
+      .android => CronetClient.defaultCronetEngine(),
+      .iOS || .macOS => CupertinoClient.defaultSessionConfiguration(),
       _ => null,
     };
   } on Object catch (e, stackTrace) {

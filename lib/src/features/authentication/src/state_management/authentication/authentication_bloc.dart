@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
-import '../../../../../core/firebase/firebase.dart';
-import '../../../../../core/rest_client/rest_client.dart';
 import '../../../../profile/profile.dart';
 import '../../../authentication.dart';
 
@@ -58,20 +56,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
     Emitter<AuthState> emit,
   ) async {
     try {
-      emit(AuthState.loading(user: state.currentUser));
+      emit(.loading(user: state.currentUser));
       final existUser = await _userRepository.checkUserByEmail(email: s.email);
       existUser
           ? await _signInWithEmailAndPassword(s, emit)
           : await _signUpWithEmailAndPassword(s, emit);
-    } on RestClientException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.message));
-    } on AuthException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.message));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.toString()));
+      emit(.error(user: state.currentUser, message: e));
     }
   }
 
@@ -83,7 +75,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
       email: s.email,
       password: s.password,
     );
-    emit(AuthState.loggedIn(user: user));
+    emit(.loggedIn(user: user));
   }
 
   Future<void> _signUpWithEmailAndPassword(
@@ -94,36 +86,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
       email: s.email,
       password: s.password,
     );
-    emit(AuthState.signedUp(user: user));
-  }
-
-  Future<void> _logIn({
-    required Future<({AuthenticatedUser user, bool isNewUser})> Function()
-    logIn,
-    required Emitter<AuthState> emit,
-  }) async {
-    try {
-      final data = await logIn();
-      data.isNewUser
-          ? emit(AuthState.signedUp(user: data.user))
-          : emit(AuthState.loggedIn(user: data.user));
-    } on RestClientException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.message));
-    } on AuthException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.message));
-    } on Object catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.toString()));
-    }
+    emit(.signedUp(user: user));
   }
 
   Future<void> _signInWithPhoneNumber(
     _SignInWithPhoneNumber s,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthState.loading(user: state.currentUser));
+    emit(.loading(user: state.currentUser));
     await _logIn(
       logIn: () => _authRepository.signInWithPhoneNumber(
         verificationId: s.verificationId,
@@ -138,42 +108,56 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
     Emitter<AuthState> emit,
   ) async {
     try {
-      emit(AuthState.loading(user: state.currentUser));
+      emit(.loading(user: state.currentUser));
       final result = await _firebaseUserRepository.verifyPhoneNumber(
         phoneNumber: s.phoneNumber,
       );
       result.maybeMap(
         orElse: () => null,
         smsCodeSent: (verificationId) =>
-            emit(AuthState.smsCodeSent(verificationId: verificationId)),
+            emit(.smsCodeSent(verificationId: verificationId)),
       );
-    } on AuthException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.message));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.toString()));
+      emit(.error(user: state.currentUser, message: e));
     }
   }
 
   Future<void> _signInWithGoogle(Emitter<AuthState> emit) async {
-    emit(AuthState.loading(user: state.currentUser));
+    emit(.loading(user: state.currentUser));
     await _logIn(logIn: () => _authRepository.signInWithGoogle(), emit: emit);
+  }
+
+  Future<void> _logIn({
+    required Future<({AuthenticatedUser user, bool isNewUser})> Function()
+    logIn,
+    required Emitter<AuthState> emit,
+  }) async {
+    try {
+      final data = await logIn();
+      data.isNewUser
+          ? emit(.signedUp(user: data.user))
+          : emit(.loggedIn(user: data.user));
+    } on Object catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      emit(.error(user: state.currentUser, message: e));
+    }
   }
 
   Future<void> _signOut(Emitter<AuthState> emit) async {
     try {
-      emit(AuthState.loading(user: state.currentUser));
+      emit(.loading(user: state.currentUser));
       await _authRepository.signOut();
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(AuthState.error(user: state.currentUser, message: e.toString()));
+      emit(.error(user: state.currentUser, message: e));
     }
   }
 
   @override
   Future<void> close() {
     _streamSubscription?.cancel();
+    _streamSubscription = null;
     return super.close();
   }
 }

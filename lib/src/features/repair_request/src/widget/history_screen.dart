@@ -73,7 +73,8 @@ class AllRepairRequest extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
     return BlocBuilder<RepairRequestBloc, RepairRequestState>(
-      builder: (context, state) => state.map(
+      builder: (context, state) => state.maybeMap(
+        orElse: () => const SizedBox.shrink(),
         loading: (_) => const Center(child: CircularProgressIndicator()),
         loaded: (state) {
           final items = _createGroupedList(
@@ -83,7 +84,6 @@ class AllRepairRequest extends StatelessWidget {
           );
           return GroupedList(divider: .indented(), items: items);
         },
-        error: (state) => UiText.bodyLarge(state.message),
       ),
     );
   }

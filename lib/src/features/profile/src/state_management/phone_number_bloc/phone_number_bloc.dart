@@ -2,10 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
-import '../../../../../core/firebase/firebase.dart';
-import '../../../../../core/rest_client/rest_client.dart';
-import '../../data/repository/firebase_user_repository.dart';
-import '../../data/repository/user_repository.dart';
+import '../../../profile.dart';
 
 part 'phone_number_event.dart';
 part 'phone_number_state.dart';
@@ -31,33 +28,12 @@ class PhoneNumberBloc extends Bloc<PhoneNumberEvent, PhoneNumberState> {
   final IUserRepository _userRepository;
   final Logger _logger;
 
-  Future<void> runSafe(
-    Emitter<PhoneNumberState> emit,
-    Future<void> Function() body,
-  ) async {
-    try {
-      await body();
-    } on AuthException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(PhoneNumberState.error(message: e.message));
-    } on StructuredBackendException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(PhoneNumberState.error(message: e.message));
-    } on RestClientException catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(PhoneNumberState.error(message: e.message));
-    } on Object catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(PhoneNumberState.error(message: e.toString()));
-    }
-  }
-
   Future<void> _verifyPhone(
     _VerifyPhoneEvent event,
     Emitter<PhoneNumberState> emit,
   ) async {
-    emit(PhoneNumberState.loading());
-    await runSafe(emit, () async {
+    try {
+      emit(.loading());
       final result = await _firebaseUserRepository.verifyPhoneNumber(
         phoneNumber: event.phoneNumber,
       );
@@ -65,22 +41,25 @@ class PhoneNumberBloc extends Bloc<PhoneNumberEvent, PhoneNumberState> {
         orElse: () => null,
         smsCodeSent: (verificationId) {
           emit(
-            PhoneNumberState.smsCodeSent(
+            .smsCodeSent(
               verificationId: verificationId,
               phoneNumber: event.phoneNumber,
             ),
           );
         },
       );
-    });
+    } on Object catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      emit(.error(message: e));
+    }
   }
 
   Future<void> _submitSmsCode(
     _SubmitSmsCodeEvent event,
     Emitter<PhoneNumberState> emit,
   ) async {
-    emit(PhoneNumberState.loading());
-    runSafe(emit, () async {
+    try {
+      emit(.loading());
       await Future.wait([
         _firebaseUserRepository.updatePhoneNumber(
           smsCode: event.smsCode,
@@ -88,7 +67,10 @@ class PhoneNumberBloc extends Bloc<PhoneNumberEvent, PhoneNumberState> {
         ),
         _userRepository.updatePhoneNumber(phoneNumber: event.phoneNumber),
       ]);
-      emit(PhoneNumberState.success());
-    });
+      emit(.success());
+    } on Object catch (e, stackTrace) {
+      _logger.e(e, stackTrace: stackTrace);
+      emit(.error(message: e));
+    }
   }
 }

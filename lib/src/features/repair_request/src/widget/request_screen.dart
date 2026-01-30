@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../app/widget/dependencies_scope.dart';
+import '../../../../core/utils/src/error_util.dart';
 import '../../../home/home.dart';
 import '../../request.dart';
 import 'choosing_service.dart';
@@ -29,9 +30,7 @@ class _RequestScreenState extends State<RequestScreen>
       child: BlocListener<RepairRequestBloc, RepairRequestState>(
         listener: (context, state) {
           state.mapOrNull(
-            error: (state) => ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message))),
+            error: (state) => ErrorUtil.showSnackBar(context, state.message),
           );
         },
         child: Padding(

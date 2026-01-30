@@ -1,7 +1,7 @@
-import 'package:dorm_fix/src/features/settings/settings.dart';
 import 'package:ui_kit/ui.dart';
+import '../../settings.dart';
 
-class SettingsScope extends InheritedWidget {
+class SettingsScope extends InheritedNotifier {
   const SettingsScope({
     required this.settingsContainer,
     required super.child,
@@ -17,7 +17,7 @@ class SettingsScope extends InheritedWidget {
     if (settings == null) {
       throw ArgumentError(
         'Out of scope, not found inherited widget '
-            'a $settings of the exact type',
+            'a $settings of the exact type ',
         'out_of_scope',
       );
     }
@@ -30,13 +30,8 @@ class SettingsScope extends InheritedWidget {
   }
 
   static ThemeData ofThemeData(BuildContext context, SettingsEntity settings) {
-    final themeData = settings.themeMode.map(
-      light: (_) => lightTheme,
-      dark: (_) => darkTheme,
-      system: (_) {
-        final brightness = MediaQuery.platformBrightnessOf(context);
-        return brightness == Brightness.dark ? darkTheme : lightTheme;
-      },
+    final themeData = settings.themeMode.resolve(
+      platformBrightness: MediaQuery.platformBrightnessOf(context),
     );
 
     return themeData;

@@ -2,15 +2,21 @@ import 'package:ui_kit/ui.dart';
 
 class AppStyle {
   const AppStyle({
-    this.borderRadius = const .all(.circular(24)),
-    this.borderWidth = 1,
+    this.borderRadius = const .all(.circular(24.0)),
+    this.inputBorderRadius = const .all(.circular(16.0)),
+    this.borderWidth = 1.0,
     this.pagePadding = AppPadding.pagePadding,
     this.shadow = const [
-      BoxShadow(color: Color(0x0D000000), offset: Offset(1, 1), blurRadius: 2),
+      BoxShadow(
+        color: Color(0x0D000000),
+        offset: Offset(1, 1),
+        blurRadius: 2.0,
+      ),
     ],
   });
 
   final BorderRadius borderRadius;
+  final BorderRadius inputBorderRadius;
   final double borderWidth;
   final EdgeInsets pagePadding;
   final List<BoxShadow> shadow;
