@@ -24,7 +24,7 @@ class UserDto {
     photoURL: user.photoURL,
     email: user.email,
     phoneNumber: user.phoneNumber,
-    role: Role.student,
+    role: .student,
   );
 
   AuthenticatedUser toEntity() => AuthenticatedUser(

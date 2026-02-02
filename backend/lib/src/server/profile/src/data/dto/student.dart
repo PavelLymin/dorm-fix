@@ -7,11 +7,11 @@ import '../../../profile.dart';
 sealed class StudentDto {
   const StudentDto();
 
-  factory StudentDto.created({
+  factory StudentDto.partial({
     required int dormitoryId,
     required int roomId,
     required UserDto user,
-  }) => CreatedStudentDto(dormitoryId: dormitoryId, roomId: roomId, user: user);
+  }) => PartialStudentDto(dormitoryId: dormitoryId, roomId: roomId, user: user);
 
   factory StudentDto.full({
     required int id,
@@ -23,8 +23,8 @@ sealed class StudentDto {
   String get uid;
 }
 
-class CreatedStudentDto extends StudentDto {
-  const CreatedStudentDto({
+class PartialStudentDto extends StudentDto {
+  const PartialStudentDto({
     required this.user,
     required this.dormitoryId,
     required this.roomId,
@@ -37,14 +37,14 @@ class CreatedStudentDto extends StudentDto {
   @override
   String get uid => user.uid;
 
-  CreatedStudentEntity toEntity() => CreatedStudentEntity(
+  PartialStudentEntity toEntity() => PartialStudentEntity(
     dormitoryId: dormitoryId,
     roomId: roomId,
     user: user.toEntity(),
   );
 
-  factory CreatedStudentDto.fromEntity(CreatedStudentEntity entity) =>
-      CreatedStudentDto(
+  factory PartialStudentDto.fromEntity(PartialStudentEntity entity) =>
+      PartialStudentDto(
         dormitoryId: entity.dormitoryId,
         roomId: entity.roomId,
         user: .fromEntity(entity.user),
@@ -62,13 +62,13 @@ class CreatedStudentDto extends StudentDto {
     'user': user.toJson(),
   };
 
-  factory CreatedStudentDto.fromJson(Map<String, Object?> json) {
+  factory PartialStudentDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
       'dormitory_id': final int dormitoryId,
       'room_id': final int roomId,
       'user': final Map<String, Object?> userJson,
     }) {
-      return CreatedStudentDto(
+      return PartialStudentDto(
         dormitoryId: dormitoryId,
         roomId: roomId,
         user: .fromJson(userJson),

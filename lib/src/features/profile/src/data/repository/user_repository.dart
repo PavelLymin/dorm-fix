@@ -28,12 +28,14 @@ class UserRepositoryImpl implements IUserRepository {
       method: 'GET',
       headers: {'Authorization': 'Bearer $token'},
     );
+
     if (response?['exist_user'] case final bool existUser) {
       return existUser;
     }
 
     throw StructuredBackendException(
-      error: {'message': 'Invalid response format'},
+      error: {'message': 'Invalid data received from server.'},
+      statusCode: 500,
     );
   }
 
@@ -43,12 +45,14 @@ class UserRepositoryImpl implements IUserRepository {
       path: '/users/check-uid/$uid',
       method: 'GET',
     );
+
     if (response?['exist_user'] case final bool existUser) {
       return existUser;
     }
 
     throw StructuredBackendException(
-      error: {'message': 'Invalid response format'},
+      error: {'message': 'Invalid data received from server.'},
+      statusCode: 500,
     );
   }
 
@@ -66,6 +70,7 @@ class UserRepositoryImpl implements IUserRepository {
     if (response?['status_code'] != 201) {
       throw StructuredBackendException(
         error: {'description': 'Failed to update user profile.'},
+        statusCode: 500,
       );
     }
   }

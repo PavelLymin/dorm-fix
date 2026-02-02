@@ -54,6 +54,7 @@ class _ItemState<T extends Enum> extends State<_Item<T>>
       statesController: _statesController,
       onPressed: onTap,
       style: ButtonStyle(
+        overlayColor: widget.style.overlayColor(context),
         padding: .all(.zero),
         tapTargetSize: .shrinkWrap,
         backgroundColor: widget.style.itemColor(context),

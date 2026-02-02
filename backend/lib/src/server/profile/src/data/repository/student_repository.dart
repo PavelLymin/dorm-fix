@@ -5,7 +5,7 @@ import '../../../profile.dart';
 abstract interface class IStudentRepository {
   Future<void> createStudent({
     required String uid,
-    required CreatedStudentEntity student,
+    required PartialStudentEntity student,
   });
 
   Future<void> deleteStudent({required String uid});
@@ -14,7 +14,7 @@ abstract interface class IStudentRepository {
 
   Future<void> updateStudent({
     required String uid,
-    required CreatedStudentEntity student,
+    required PartialStudentEntity student,
   });
 }
 
@@ -26,7 +26,7 @@ class StudentRepositoryImpl implements IStudentRepository {
   @override
   Future<void> createStudent({
     required String uid,
-    required CreatedStudentEntity student,
+    required PartialStudentEntity student,
   }) async {
     await _database.transaction(() async {
       await _database
@@ -34,7 +34,7 @@ class StudentRepositoryImpl implements IStudentRepository {
           .insert(UserDto.fromEntity(student.user).toCompanion());
       await _database
           .into(_database.students)
-          .insert(CreatedStudentDto.fromEntity(student).toCompanion());
+          .insert(PartialStudentDto.fromEntity(student).toCompanion());
     });
 
     // await _firebaseApp.auth().setCustomUserClaims(uid, {
@@ -87,10 +87,10 @@ class StudentRepositoryImpl implements IStudentRepository {
   @override
   Future<void> updateStudent({
     required String uid,
-    required CreatedStudentEntity student,
+    required PartialStudentEntity student,
   }) async {
     await (_database.update(_database.students)
           ..where((row) => row.uid.equals(uid)))
-        .replace(CreatedStudentDto.fromEntity(student).toCompanion());
+        .replace(PartialStudentDto.fromEntity(student).toCompanion());
   }
 }

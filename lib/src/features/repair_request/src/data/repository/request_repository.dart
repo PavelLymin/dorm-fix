@@ -5,7 +5,7 @@ import '../../../request.dart';
 abstract interface class IRequestRepository {
   Future<List<FullRepairRequest>> getRequests();
 
-  Future<void> createRequest({required CreatedRepairRequest request});
+  Future<void> createRequest({required PartialRepairRequest request});
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
@@ -27,25 +27,28 @@ class RequestRepositoryImpl implements IRequestRepository {
       headers: {'Authorization': 'Bearer $token'},
     );
 
-    final data = response?['requests'];
-    if (data is! List) {
-      throw StructuredBackendException(
-        error: {'description': 'The specializations was not found.'},
-        statusCode: 404,
-      );
+    final data = response?['repair_requests'];
+    if (data case List<Object?> list) {
+      final repairRequests = list
+          .whereType<Map<String, Object?>>()
+          .map<FullRepairRequest>(
+            (json) => FullRepairRequestDto.fromJson(json).toEntity(),
+          )
+          .toList();
+
+      return repairRequests;
     }
 
-    final specializations = data
-        .map((json) => FullRepairRequestDto.fromJson(json).toEntity())
-        .toList();
-
-    return specializations;
+    throw StructuredBackendException(
+      error: {'description': 'Invalid data received from server.'},
+      statusCode: 500,
+    );
   }
 
   @override
-  Future<void> createRequest({required CreatedRepairRequest request}) async {
+  Future<void> createRequest({required PartialRepairRequest request}) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
-    final body = CreatedRepairRequestDto.fromEntity(request).toJson();
+    final body = PartialRepairRequestDto.fromEntity(request).toJson();
     await _client.send(
       path: '/repairRequests',
       method: 'POST',

@@ -27,18 +27,20 @@ class SpecializationRepositoryImpl implements ISpecializationRepository {
     );
 
     final data = response?['specializations'];
+    if (data case List<Object?> list when list.isNotEmpty) {
+      final specializations = list
+          .whereType<Map<String, Object?>>()
+          .map<SpecializationEntity>(
+            (json) => SpecializationDto.fromJson(json).toEntity(),
+          )
+          .toList();
 
-    if (data is! List) {
-      throw StructuredBackendException(
-        error: {'description': 'The specializations was not found.'},
-        statusCode: 404,
-      );
+      return specializations;
     }
 
-    final specializations = data
-        .map((json) => SpecializationDto.fromJson(json).toEntity())
-        .toList();
-
-    return specializations;
+    throw StructuredBackendException(
+      error: {'description': 'Invalid data received from server.'},
+      statusCode: 500,
+    );
   }
 }

@@ -6,6 +6,7 @@ import 'package:logger/web.dart';
 import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
 import '../../core/ws/ws.dart';
+import '../../server/chat/chat.dart';
 import '../../server/dormitory/dormitory.dart';
 import '../../server/profile/profile.dart';
 import '../../server/repair_request/repair_request.dart';
@@ -48,8 +49,10 @@ class CompositionRoot {
     final restApi = RestApiBase();
 
     // WS
-    final wsConnection = WsConnection();
-    final wsRouter = WsRouter(connection: wsConnection);
+    final ws = WebSocketBase();
+
+    final chatUsersRepository = ChatUsersRepositoryImpl(ws: ws);
+    final wsRouter = WsRouter(ws: ws, chatUsersRepository: chatUsersRepository);
 
     // User
     final userRepository = UserRepositoryImpl(database: database);
@@ -76,7 +79,7 @@ class CompositionRoot {
     final repairRequestRouter = RepairRequestRouter(
       requestRepository: requestRepository,
       restApi: restApi,
-      wsConnection: wsConnection,
+      wsConnection: ws,
     );
 
     // Dormitory

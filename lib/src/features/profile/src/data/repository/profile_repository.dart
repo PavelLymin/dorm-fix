@@ -25,6 +25,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
       method: 'GET',
       headers: {'Authorization': 'Bearer $token'},
     );
+
     if (response case <String, Object?>{
       'profile': final Map<String, Object?> profileData,
       'role': final String roleString,
@@ -35,7 +36,8 @@ class ProfileRepositoryImpl implements IProfileRepository {
     }
 
     throw StructuredBackendException(
-      error: {'description': 'Invalid response format.'},
+      error: {'description': 'Invalid data received from server.'},
+      statusCode: 500,
     );
   }
 }

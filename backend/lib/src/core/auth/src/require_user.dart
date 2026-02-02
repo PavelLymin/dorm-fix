@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:shelf/shelf.dart';
 import '../../../app/model/application_config.dart';
 import '../../../server/profile/profile.dart';
 import '../../rest_api/src/rest_api.dart';
 
 abstract class RequireUser {
+  const RequireUser();
+
   static String getUserId(Request request) {
     final uid = request.context['user_id'];
     if (uid is! String || uid.isEmpty) {
@@ -16,7 +16,6 @@ abstract class RequireUser {
         },
       );
     }
-    log(uid);
 
     return uid;
   }

@@ -13,7 +13,7 @@ class SelectItemsController<T extends Enum> extends ValueNotifier<T> {
   List<GroupedListItem> createItems() => selectItems.items.entries.map((e) {
     bool isSelected = value == e.value;
     return GroupedListItem(
-      title: UiText.bodyMedium(e.key),
+      title: UiText.bodyMedium(e.value.toString()),
       onTap: () {
         value = e.value;
         selectItems.onChange?.call(value);

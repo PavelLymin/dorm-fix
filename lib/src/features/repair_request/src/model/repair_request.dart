@@ -1,3 +1,4 @@
+import '../../../home/home.dart';
 import 'problem.dart';
 
 enum Priority {
@@ -33,7 +34,6 @@ enum Status {
 
 sealed class RepairRequestEntity {
   const RepairRequestEntity({
-    required this.specializationId,
     required this.description,
     required this.priority,
     required this.status,
@@ -43,7 +43,6 @@ sealed class RepairRequestEntity {
     required this.endTime,
   });
 
-  final int specializationId;
   final String description;
   final Priority priority;
   final Status status;
@@ -52,7 +51,7 @@ sealed class RepairRequestEntity {
   final int startTime;
   final int endTime;
 
-  const factory RepairRequestEntity.created({
+  const factory RepairRequestEntity.partial({
     required final int specializationId,
     required final String description,
     required final Priority priority,
@@ -62,12 +61,11 @@ sealed class RepairRequestEntity {
     required final int startTime,
     required final int endTime,
     required final List<String> imagePaths,
-  }) = CreatedRepairRequest;
+  }) = PartialRepairRequest;
 
   const factory RepairRequestEntity.full({
     required final int id,
     required final String uid,
-    required final int specializationId,
     required final String description,
     required final Priority priority,
     required final Status status,
@@ -75,14 +73,14 @@ sealed class RepairRequestEntity {
     required final DateTime date,
     required final int startTime,
     required final int endTime,
+    required final SpecializationEntity specialization,
     required final List<ProblemEntity> problems,
     required final DateTime createdAt,
   }) = FullRepairRequest;
 }
 
-final class CreatedRepairRequest extends RepairRequestEntity {
-  const CreatedRepairRequest({
-    required super.specializationId,
+final class PartialRepairRequest extends RepairRequestEntity {
+  const PartialRepairRequest({
     required super.description,
     required super.priority,
     required super.status,
@@ -90,12 +88,14 @@ final class CreatedRepairRequest extends RepairRequestEntity {
     required super.date,
     required super.startTime,
     required super.endTime,
+    required this.specializationId,
     required this.imagePaths,
   });
 
+  final int specializationId;
   final List<String> imagePaths;
 
-  CreatedRepairRequest copyWith({
+  PartialRepairRequest copyWith({
     int? specializationId,
     String? description,
     Priority? priority,
@@ -105,7 +105,7 @@ final class CreatedRepairRequest extends RepairRequestEntity {
     int? startTime,
     int? endTime,
     List<String>? imagePaths,
-  }) => CreatedRepairRequest(
+  }) => PartialRepairRequest(
     specializationId: specializationId ?? this.specializationId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
@@ -132,7 +132,7 @@ final class CreatedRepairRequest extends RepairRequestEntity {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is CreatedRepairRequest &&
+    return other is PartialRepairRequest &&
         other.specializationId == specializationId &&
         other.description == description &&
         other.priority == priority &&
@@ -160,7 +160,6 @@ final class FullRepairRequest extends RepairRequestEntity {
   const FullRepairRequest({
     required this.id,
     required this.uid,
-    required super.specializationId,
     required super.description,
     required super.priority,
     required super.status,
@@ -168,6 +167,7 @@ final class FullRepairRequest extends RepairRequestEntity {
     required super.date,
     required super.startTime,
     required super.endTime,
+    required this.specialization,
     required this.problems,
     required this.createdAt,
   });
@@ -175,12 +175,12 @@ final class FullRepairRequest extends RepairRequestEntity {
   final int id;
   final String uid;
   final DateTime createdAt;
+  final SpecializationEntity specialization;
   final List<ProblemEntity> problems;
 
   FullRepairRequest copyWith({
     int? id,
     String? uid,
-    int? specializationId,
     String? description,
     Priority? priority,
     Status? status,
@@ -188,12 +188,13 @@ final class FullRepairRequest extends RepairRequestEntity {
     DateTime? date,
     int? startTime,
     int? endTime,
+    SpecializationEntity? specialization,
     List<ProblemEntity>? problems,
     DateTime? createdAt,
   }) => FullRepairRequest(
     id: id ?? this.id,
     uid: uid ?? this.uid,
-    specializationId: specializationId ?? this.specializationId,
+    specialization: specialization ?? this.specialization,
     description: description ?? this.description,
     priority: priority ?? this.priority,
     status: status ?? this.status,
@@ -210,7 +211,7 @@ final class FullRepairRequest extends RepairRequestEntity {
       'FullRepairRequest('
       'id: $id,'
       'uid: $uid, '
-      'specializationId: $specializationId, '
+      'specialization: $specialization, '
       'description: $description, '
       'priority: $priority, '
       'status: $status, '

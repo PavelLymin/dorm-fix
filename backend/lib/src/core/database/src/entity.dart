@@ -41,6 +41,13 @@ class Masters extends Table {
   RealColumn get rating => real().named('rating').withDefault(Constant(0.0))();
 }
 
+class Specializations extends Table {
+  IntColumn get id => integer().named('id').autoIncrement()();
+  TextColumn get title => text().named('title')();
+  TextColumn get description => text().named('description')();
+  TextColumn get photoUrl => text().named('photo_url')();
+}
+
 class Dormitories extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
   TextColumn get name => text().named('name')();
@@ -89,13 +96,35 @@ class Assignments extends Table {
   TextColumn get uid => text().named('uid').references(Users, #uid)();
   IntColumn get requestId =>
       integer().named('request_id').references(Requests, #id)();
-  DateTimeColumn get createdAt =>
-      dateTime().named('created_at').withDefault(currentDateAndTime)();
+  TextColumn get createdAt => text()
+      .named('created_at')
+      .map(const DateTimeConverter())
+      .withDefault(currentDateAndTime.datetime)();
 }
 
-class Specializations extends Table {
+class Chats extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
-  TextColumn get title => text().named('title')();
-  TextColumn get description => text().named('description')();
-  TextColumn get photoUrl => text().named('photo_url')();
+  IntColumn get requestId =>
+      integer().named('request_id').references(Requests, #id)();
+  TextColumn get createdAt => text()
+      .named('created_at')
+      .map(const DateTimeConverter())
+      .withDefault(currentDateAndTime.datetime)();
+}
+
+class ChatMembers extends Table {
+  IntColumn get id => integer().named('id').autoIncrement()();
+  IntColumn get chatId => integer().named('chat_id').references(Chats, #id)();
+  TextColumn get uid => text().named('uid').references(Users, #uid)();
+}
+
+class Messages extends Table {
+  IntColumn get id => integer().named('id').autoIncrement()();
+  IntColumn get chatId => integer().named('chat_id').references(Chats, #id)();
+  TextColumn get uid => text().named('uid').references(Users, #uid)();
+  TextColumn get message => text().named('message')();
+  TextColumn get createdAt => text()
+      .named('created_at')
+      .map(const DateTimeConverter())
+      .withDefault(currentDateAndTime.datetime)();
 }

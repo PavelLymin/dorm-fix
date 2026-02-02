@@ -63,11 +63,11 @@ class RequestFormModel {
     return null;
   }
 
-  CreatedRepairRequest toEntity() {
+  PartialRepairRequest toEntity() {
     final messageError = checkError();
     if (messageError != null) throw ArgumentError(messageError);
 
-    return CreatedRepairRequest(
+    return PartialRepairRequest(
       specializationId: specializationId,
       description: description,
       priority: priority,

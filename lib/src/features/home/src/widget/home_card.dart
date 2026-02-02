@@ -28,7 +28,7 @@ sealed class HomeCard extends StatelessWidget {
           padding: AppPadding.symmetricIncrement(vertical: 3, horizontal: 3),
           onTap: () => switch (type) {
             .request => context.router.push(const NamedRoute('RequestScreen')),
-            .history => context.router.pushPath(''),
+            .history => context.router.push(const NamedRoute('HistoryScreen')),
           },
           child: Column(
             mainAxisAlignment: .start,

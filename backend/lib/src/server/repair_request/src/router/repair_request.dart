@@ -8,10 +8,10 @@ import '../../../../core/ws/ws.dart';
 import '../../repair_request.dart';
 
 enum ResponseType {
-  created(value: 'created'),
-  deleted(value: 'deleted'),
-  updated(value: 'updated'),
-  error(value: 'error');
+  created(value: 'request_created'),
+  deleted(value: 'request_deleted'),
+  updated(value: 'request_updated'),
+  error(value: 'request_error');
 
   const ResponseType({required this.value});
   final String value;
@@ -28,14 +28,14 @@ class RepairRequestRouter {
   const RepairRequestRouter({
     required RestApi restApi,
     required IRequestRepository requestRepository,
-    required WsConnection wsConnection,
+    required WebSocketBase wsConnection,
   }) : _restApi = restApi,
        _requestRepository = requestRepository,
        _wsConnection = wsConnection;
 
   final RestApi _restApi;
   final IRequestRepository _requestRepository;
-  final WsConnection _wsConnection;
+  final WebSocketBase _wsConnection;
 
   Handler get handler {
     final router = Router();
@@ -45,7 +45,7 @@ class RepairRequestRouter {
     return router.call;
   }
 
-  Future<Map<String, dynamic>> _readJson(Request request) async {
+  Future<Map<String, Object?>> _readJson(Request request) async {
     final body = await request.readAsString();
     if (body.trim().isEmpty) {
       throw BadRequestException(
@@ -59,18 +59,14 @@ class RepairRequestRouter {
   Future<Response> _createRepairRequest(Request request) async {
     final uid = RequireUser.getUserId(request);
     final json = await _readJson(request);
-
-    final entity = CreatedRepairRequestDto.fromJson(json).toEntity();
+    final entity = PartialRepairRequestDto.fromJson(json).toEntity();
     final createdRequest = await _requestRepository.createRequest(
       uid: uid,
       request: entity,
     );
 
     final message = FullRepairRequestDto.fromEntity(createdRequest).toJson();
-    _wsConnection.sendToUser(
-      uid: uid,
-      message: {'type': ResponseType.created.value, 'payload': message},
-    );
+    _wsConnection.sendToUser(uid: uid, ResponseType.created.value, message);
 
     return _restApi.send(
       statusCode: 201,

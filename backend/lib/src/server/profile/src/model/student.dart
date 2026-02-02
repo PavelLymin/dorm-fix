@@ -5,11 +5,11 @@ import '../../profile.dart';
 sealed class StudentEntity {
   const StudentEntity();
 
-  factory StudentEntity.created({
+  factory StudentEntity.partial({
     required int dormitoryId,
     required int roomId,
     required UserEntity user,
-  }) => CreatedStudentEntity(
+  }) => PartialStudentEntity(
     dormitoryId: dormitoryId,
     roomId: roomId,
     user: user,
@@ -36,8 +36,8 @@ sealed class StudentEntity {
   int get hashCode => uid.hashCode;
 }
 
-final class CreatedStudentEntity extends StudentEntity {
-  const CreatedStudentEntity({
+final class PartialStudentEntity extends StudentEntity {
+  const PartialStudentEntity({
     required this.user,
     required this.dormitoryId,
     required this.roomId,
@@ -51,11 +51,11 @@ final class CreatedStudentEntity extends StudentEntity {
   String get uid => user.uid;
 
   @override
-  CreatedStudentEntity copyWith({
+  PartialStudentEntity copyWith({
     int? dormitoryId,
     int? roomId,
     UserEntity? user,
-  }) => CreatedStudentEntity(
+  }) => PartialStudentEntity(
     dormitoryId: dormitoryId ?? this.dormitoryId,
     roomId: roomId ?? this.roomId,
     user: user ?? this.user,

@@ -5,11 +5,11 @@ sealed class StudentEntity extends ProfileEntity {
 
   factory StudentEntity.empty() => StudentEmpty();
 
-  factory StudentEntity.created({
+  factory StudentEntity.partial({
     required int dormitoryId,
     required int roomId,
     required AuthenticatedUser user,
-  }) => CreatedStudentEntity(
+  }) => PartialStudentEntity(
     dormitoryId: dormitoryId,
     roomId: roomId,
     user: user,
@@ -31,8 +31,8 @@ sealed class StudentEntity extends ProfileEntity {
   int get hashCode => uid.hashCode;
 }
 
-final class CreatedStudentEntity extends StudentEntity {
-  const CreatedStudentEntity({
+final class PartialStudentEntity extends StudentEntity {
+  const PartialStudentEntity({
     required this.user,
     required this.dormitoryId,
     required this.roomId,
@@ -45,11 +45,11 @@ final class CreatedStudentEntity extends StudentEntity {
   @override
   String get uid => user.uid;
 
-  CreatedStudentEntity copyWith({
+  PartialStudentEntity copyWith({
     int? dormitoryId,
     int? roomId,
     AuthenticatedUser? user,
-  }) => CreatedStudentEntity(
+  }) => PartialStudentEntity(
     dormitoryId: dormitoryId ?? this.dormitoryId,
     roomId: roomId ?? this.roomId,
     user: user ?? this.user,

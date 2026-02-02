@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart';
 import '../../../../../core/database/database.dart';
 import '../../../repair_request.dart';
@@ -7,7 +5,7 @@ import '../../../repair_request.dart';
 abstract interface class IRequestRepository {
   Future<FullRepairRequestEntity> createRequest({
     required String uid,
-    required CreatedRepairRequestEntity request,
+    required PartialRepairRequestEntity request,
   });
 
   Future<List<FullRepairRequestEntity>> getRequests({required String uid});
@@ -24,42 +22,32 @@ class RequestRepositoryImpl implements IRequestRepository {
   @override
   Future<FullRepairRequestEntity> createRequest({
     required String uid,
-    required CreatedRepairRequestEntity request,
+    required PartialRepairRequestEntity request,
   }) async {
-    final dto = CreatedRepairRequestDto.fromEntity(request);
-    final data = await _addRequestToDb(uid, dto);
-    final fullRequest = FullRepairRequestDto.fromData(
-      data.request,
-      data.problems,
-    ).toEntity();
-
-    return fullRequest;
-  }
-
-  Future<({Request request, List<Problem> problems})> _addRequestToDb(
-    String uid,
-    CreatedRepairRequestDto dto,
-  ) async {
-    late final Request request;
+    final dto = PartialRepairRequestDto.fromEntity(request);
+    late final Request requestData;
     final problems = <Problem>[];
     await _database.transaction(() async {
-      request = await _database
+      requestData = await _database
           .into(_database.requests)
           .insertReturning(dto.toCompanion(uid: uid));
-
-      for (final problem in dto.imagePaths) {
-        final problemCompanion = ProblemsCompanion(
-          requestId: Value(request.id),
-          photoPath: Value(problem),
-        );
+      for (final problem in dto.problems) {
         final data = await _database
             .into(_database.problems)
-            .insertReturning(problemCompanion);
+            .insertReturning(problem.toCompanion());
         problems.add(data);
       }
     });
+    final specialization = await (_database.select(
+      _database.specializations,
+    )..where((row) => row.id.equals(dto.specializationId))).getSingle();
 
-    return (request: request, problems: problems);
+    final fullRequest = FullRepairRequestDto.fromData(
+      requestData,
+      specialization,
+      problems,
+    ).toEntity();
+    return fullRequest;
   }
 
   @override
@@ -70,6 +58,12 @@ class RequestRepositoryImpl implements IRequestRepository {
         .customSelect(
           '''SELECT 
           r.*,
+          json_object(
+            'id', s.id,
+            'title', s.title,
+            'description', s.description,
+            'photo_url', s.photo_url
+          ) AS specialization,
           COALESCE(
             json_group_array(
               json_object(
@@ -81,23 +75,23 @@ class RequestRepositoryImpl implements IRequestRepository {
             '[]'
           ) AS problems
           FROM requests r
+          INNER JOIN specializations s ON s.id = r.specialization_id
           LEFT JOIN problems p ON p.request_id = r.id
           WHERE r.uid = ?
           GROUP BY r.id;
           ''',
           variables: [Variable<String>(uid)],
-          readsFrom: {_database.requests, _database.problems},
+          readsFrom: {
+            _database.requests,
+            _database.problems,
+            _database.specializations,
+          },
         )
         .get();
 
-    final requests = result.map((row) {
-      final problemsJson = row.data['problems'] as String? ?? '[]';
-      final List<dynamic> parsed = jsonDecode(problemsJson);
-      final problemsList = parsed
-          .map((e) => Map<String, Object?>.from(e))
-          .toList();
-      return FullRepairRequestDto.fromJson(row.data, problemsList).toEntity();
-    }).toList();
+    final requests = result
+        .map((row) => FullRepairRequestDto.fromJson(row.data).toEntity())
+        .toList();
 
     return requests;
   }
@@ -107,36 +101,40 @@ class RequestRepositoryImpl implements IRequestRepository {
     final result = await _database
         .customSelect(
           '''SELECT 
-            r.*,
+          r.*,
+          json_object(
+            'id', s.id,
+            'title', s.title,
+            'description', s.description,
+            'photo_url', s.photo_url
+          ) AS specialization,
+          COALESCE(
             json_group_array(
               json_object(
                 'id', p.id,
                 'request_id', p.request_id,
                 'photo_path', p.photo_path
               )
-            ) AS problems
+            ) FILTER (WHERE p.id IS NOT NULL),
+            '[]'
+          ) AS problems
           FROM requests r
+          INNER JOIN specializations s ON s.id = r.specialization_id
           LEFT JOIN problems p ON p.request_id = r.id
-          WHERE r.id = ?
-          GROUP BY r.id''',
+          WHERE r.uid = ?
+          GROUP BY r.id;
+          ''',
           variables: [Variable<int>(id)],
-          readsFrom: {_database.requests, _database.problems},
+          readsFrom: {
+            _database.requests,
+            _database.problems,
+            _database.specializations,
+          },
         )
         .getSingleOrNull();
 
     if (result == null) return null;
 
-    final problemsJson = result.data['problems'] as String? ?? '[]';
-    final List<dynamic> parsed = jsonDecode(problemsJson);
-    final problemsList = parsed
-        .map((e) => Map<String, Object?>.from(e as Map))
-        .toList();
-
-    final request = FullRepairRequestDto.fromJson(
-      result.data,
-      problemsList,
-    ).toEntity();
-
-    return request;
+    return FullRepairRequestDto.fromJson(result.data).toEntity();
   }
 }

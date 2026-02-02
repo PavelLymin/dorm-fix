@@ -11,11 +11,15 @@ part 'entity.dart';
     Users,
     Students,
     Masters,
-    Dormitories,
     Specializations,
+    Dormitories,
     Rooms,
     Requests,
     Problems,
+    Assignments,
+    Chats,
+    ChatMembers,
+    Messages,
   ],
 )
 class Database extends _$Database {

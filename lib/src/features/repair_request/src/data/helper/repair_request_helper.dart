@@ -2,10 +2,10 @@ import 'package:dorm_fix/src/core/ws/ws.dart';
 import 'package:dorm_fix/src/features/repair_request/request.dart';
 
 enum ResponseType {
-  created(value: 'created'),
-  deleted(value: 'deleted'),
-  updated(value: 'updated'),
-  error(value: 'error');
+  created(value: 'request_created'),
+  deleted(value: 'request_deleted'),
+  updated(value: 'request_updated'),
+  error(value: 'request_error');
 
   const ResponseType({required this.value});
   final String value;

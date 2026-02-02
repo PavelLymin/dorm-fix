@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../request.dart';
@@ -29,7 +28,12 @@ class _HistoryScreenState extends State<HistoryScreen>
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final typography = theme.appTypography;
+    final style = theme.appStyleData.style;
+    final itemBorderRadius = style.borderRadius;
+    final borderRadius = itemBorderRadius + .circular(8.0);
     return Scaffold(
       appBar: AppBar(
         title: UiText.headlineLarge('История заявок'),
@@ -37,11 +41,11 @@ class _HistoryScreenState extends State<HistoryScreen>
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          labelStyle: Theme.of(context).appTypography.labelLarge,
-          unselectedLabelColor: colorPalette.mutedForeground,
-          labelColor: colorPalette.primary,
-          dividerColor: colorPalette.primary,
-          indicatorColor: colorPalette.primary,
+          labelStyle: typography.labelLarge,
+          unselectedLabelColor: palette.mutedForeground,
+          labelColor: palette.primary,
+          dividerColor: palette.primary,
+          indicatorColor: palette.primary,
           tabs: <Widget>[
             Tab(text: 'Все'),
             Tab(text: 'Принятые'),
@@ -50,16 +54,21 @@ class _HistoryScreenState extends State<HistoryScreen>
           ],
         ),
       ),
-      body: Padding(
-        padding: AppPadding.symmetricIncrement(horizontal: 3, vertical: 2),
-        child: TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            const AllRepairRequest(),
-            Center(child: UiText.bodyLarge("Еще ничего нет")),
-            Center(child: UiText.bodyLarge("Еще ничего нет")),
-            Center(child: UiText.bodyLarge("Еще ничего нет")),
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: AppPadding.symmetricIncrement(horizontal: 3, vertical: 2),
+          child: TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              AllRepairRequest(
+                borderRadius: borderRadius,
+                itemBorderRadius: itemBorderRadius,
+              ),
+              Center(child: UiText.bodyLarge("Еще ничего нет")),
+              Center(child: UiText.bodyLarge("Еще ничего нет")),
+              Center(child: UiText.bodyLarge("Еще ничего нет")),
+            ],
+          ),
         ),
       ),
     );
@@ -67,61 +76,55 @@ class _HistoryScreenState extends State<HistoryScreen>
 }
 
 class AllRepairRequest extends StatelessWidget {
-  const AllRepairRequest({super.key});
+  const AllRepairRequest({
+    super.key,
+    required this.borderRadius,
+    required this.itemBorderRadius,
+  });
+
+  final BorderRadius borderRadius;
+  final BorderRadius itemBorderRadius;
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
     return BlocBuilder<RepairRequestBloc, RepairRequestState>(
       builder: (context, state) => state.maybeMap(
         orElse: () => const SizedBox.shrink(),
-        loading: (_) => const Center(child: CircularProgressIndicator()),
         loaded: (state) {
-          final items = _createGroupedList(
-            colorPalette,
-            state.requests,
-            context,
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.requests.length,
+            itemBuilder: (context, index) => _Item(
+              request: state.requests[index],
+              itemBorderRadius: itemBorderRadius,
+            ),
           );
-          return GroupedList(divider: .indented(), items: items);
         },
       ),
     );
   }
+}
 
-  List<GroupedListItem> _createGroupedList(
-    ColorPalette colorPalette,
-    List<RepairRequestEntity> requests,
-    BuildContext context,
-  ) {
-    final items = requests
-        .map(
-          (request) => GroupedListItem(
-            content: DecoratedBox(
-              decoration: BoxDecoration(
-                border: .all(color: colorPalette.primary),
-                borderRadius: const .all(.circular(16)),
-              ),
-              child: Padding(
-                padding: AppPadding.allSmall,
-                child: UiText.labelSmall(
-                  request.status.value,
-                  color: colorPalette.primary,
-                ),
-              ),
-            ),
-            title: UiText.bodyMedium(request.description),
-            subTitle: UiText.bodyMedium(request.date.toLocal().toString()),
-            onTap: () {
-              context.router.push(
-                NamedRoute(
-                  'RepairRequestDetailsScreen',
-                  params: {'request': request},
-                ),
-              );
-            },
-          ),
-        )
-        .toList();
-    return items;
+class _Item extends StatelessWidget {
+  const _Item({required this.request, required this.itemBorderRadius});
+
+  final FullRepairRequest request;
+  final BorderRadius itemBorderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: AppPadding.vertical,
+      child: UiCard.clickable(
+        borderRadius: itemBorderRadius,
+        padding: AppPadding.symmetricIncrement(vertical: 3, horizontal: 2),
+        onTap: () {},
+        child: UiText.bodyLarge(
+          request.description,
+          overflow: .ellipsis,
+          maxLines: 2,
+        ),
+      ),
+    );
   }
 }

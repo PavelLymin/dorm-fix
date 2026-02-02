@@ -1,52 +1,26 @@
-import 'package:backend/src/core/rest_api/src/rest_api.dart';
 import 'package:logger/web.dart';
 import 'package:shelf/shelf.dart';
+import '../rest_api/src/rest_api.dart';
 
 abstract class ErrorMiddleware {
   static Middleware call(Logger logger, RestApi restApi) {
     return createMiddleware(
       errorHandler: (error, stackTrace) {
         logger.e('Error occurred', error: error, stackTrace: stackTrace);
-
         return switch (error) {
           RestApiException ex => restApi.send(
             statusCode: ex.statusCode,
             responseBody: ex.toJson(),
           ),
-          FormatException _ => _createInvalidJsonResponse(restApi: restApi),
-          TypeError _ => _createInvalidJsonResponse(
-            restApi: restApi,
-            message: 'Invalid input type.',
+          _ => restApi.send(
+            statusCode: 500,
+            responseBody: {
+              'message': 'Error processing request.',
+              'error': {'details': {}},
+            },
           ),
-          _ => _createInternalServerResponse(restApi: restApi),
         };
       },
     );
   }
-
-  static Response _createInvalidJsonResponse({
-    required RestApi restApi,
-    String? message,
-    Object? details,
-  }) => restApi.send(
-    statusCode: 400,
-    responseBody: {
-      'message': message ?? 'Invalid JSON format.',
-      'error': {
-        'details': details ?? {'field': 'body'},
-      },
-    },
-  );
-
-  static Response _createInternalServerResponse({
-    required RestApi restApi,
-    String? message,
-    Object? details,
-  }) => restApi.send(
-    statusCode: 500,
-    responseBody: {
-      'message': message ?? 'Error processing request.',
-      'error': details ?? {'details': {}},
-    },
-  );
 }
