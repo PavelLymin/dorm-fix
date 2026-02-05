@@ -3,6 +3,7 @@ import 'package:ui_kit/ui.dart';
 Future<T?> showUiBottomSheet<T>(
   BuildContext context, {
   required Widget widget,
+  required String title,
   AnimationStyle anymation = const AnimationStyle(
     duration: Duration(milliseconds: 300),
     reverseDuration: Duration(milliseconds: 150),
@@ -15,7 +16,6 @@ Future<T?> showUiBottomSheet<T>(
   double maxHeight = .infinity,
   bool isScrollControlled = true,
   bool useSafeArea = true,
-  EdgeInsets? padding,
 }) {
   final theme = Theme.of(context);
   final palette = theme.colorPalette;
@@ -25,19 +25,34 @@ Future<T?> showUiBottomSheet<T>(
     sheetAnimationStyle: anymation,
     backgroundColor: backgroundColor ?? palette.background,
     shape: RoundedSuperellipseBorder(borderRadius: style.borderRadius),
+    useSafeArea: useSafeArea,
+    isScrollControlled: isScrollControlled,
     constraints: BoxConstraints(
       minWidth: minWidth,
       maxWidth: maxWidth,
       minHeight: minHeight,
       maxHeight: maxHeight,
     ),
-    useSafeArea: useSafeArea,
-    isScrollControlled: isScrollControlled,
     builder: (BuildContext context) => Padding(
-      padding:
-          padding ??
-          AppPadding.onlyIncrement(top: 3, left: 3, right: 3, bottom: 8),
-      child: widget,
+      padding: AppPadding.onlyIncrement(top: 2, left: 2, right: 2, bottom: 8),
+      child: Column(
+        mainAxisSize: .min,
+        spacing: 24.0,
+        children: [
+          Row(
+            mainAxisAlignment: .spaceBetween,
+            crossAxisAlignment: .center,
+            children: [
+              UiText.titleMedium(title),
+              UiButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.close_rounded),
+              ),
+            ],
+          ),
+          widget,
+        ],
+      ),
     ),
   );
 }

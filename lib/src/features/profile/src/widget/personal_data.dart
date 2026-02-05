@@ -47,8 +47,9 @@ class PersonalData extends StatelessWidget {
         prefixIcon: Icon(Icons.email_outlined),
         subTitle: UiText.bodyMedium(student.user.email ?? 'Укажите почту'),
         onTap: () => showUiBottomSheet(
-          isScrollControlled: true,
           context,
+          title: 'Адрес электронной почты',
+          isScrollControlled: true,
           widget: EmailAddressEdit(initialText: student.user.email ?? ''),
         ),
         content: icon,
@@ -60,8 +61,9 @@ class PersonalData extends StatelessWidget {
           student.user.phoneNumber ?? 'Укажите телефон',
         ),
         onTap: () => showUiBottomSheet(
-          isScrollControlled: true,
+          title: 'Номер телефона',
           context,
+          isScrollControlled: true,
           widget: PhoneNumberEdit(initialText: student.user.phoneNumber ?? ''),
         ),
         content: icon,

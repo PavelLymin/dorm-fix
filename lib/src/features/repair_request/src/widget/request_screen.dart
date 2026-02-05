@@ -38,7 +38,6 @@ class _RequestScreenState extends State<RequestScreen>
           child: CustomScrollView(
             slivers: [
               SliverAppBar(
-                titleSpacing: 0.0,
                 title: const Text('Создание заявки'),
                 pinned: true,
                 flexibleSpace: ClipRect(

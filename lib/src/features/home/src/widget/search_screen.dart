@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/ui.dart';
 
-class SearcScreen extends StatelessWidget {
-  const SearcScreen({super.key});
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -21,6 +21,9 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     required this.secondary,
     required this.destructiveCard,
     required this.destructiveForeground,
+    required this.completed,
+    required this.inProgress,
+    required this.newRequest,
   });
 
   final Color background;
@@ -42,6 +45,9 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
   final Color secondary;
   final Color destructiveCard;
   final Color destructiveForeground;
+  final Color completed;
+  final Color inProgress;
+  final Color newRequest;
 
   @override
   ThemeExtension<ColorPalette> copyWith({
@@ -64,6 +70,9 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     Color? secondary,
     Color? destructiveCard,
     Color? destructiveForeground,
+    Color? completed,
+    Color? inProgress,
+    Color? newRequest,
   }) => ColorPalette(
     background: background ?? this.background,
     foreground: foreground ?? this.foreground,
@@ -84,6 +93,9 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     secondary: secondary ?? this.secondary,
     destructiveCard: destructiveCard ?? this.destructiveCard,
     destructiveForeground: destructiveForeground ?? this.destructiveForeground,
+    completed: completed ?? this.completed,
+    inProgress: inProgress ?? this.inProgress,
+    newRequest: newRequest ?? this.newRequest,
   );
 
   @override
@@ -123,6 +135,9 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
         other.destructiveForeground,
         t,
       )!,
+      completed: .lerp(completed, other.completed, t)!,
+      inProgress: .lerp(inProgress, other.inProgress, t)!,
+      newRequest: .lerp(newRequest, other.newRequest, t)!,
     );
   }
 
@@ -146,6 +161,9 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     'Secondary': secondary,
     'Destructive Card': destructiveCard,
     'Destructive Foreground': destructiveForeground,
+    'Completed': completed,
+    'In Progress': inProgress,
+    'New Request': newRequest,
   };
 }
 

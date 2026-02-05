@@ -33,10 +33,9 @@ class _EmailPasswordFormState extends State<EmailPasswordForm>
         UiTextField.standard(
           focusNode: widget.emailFocusNode,
           controller: widget.emailController,
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
+          keyboardType: .emailAddress,
+          textInputAction: .next,
           style: UiTextFieldStyle(
-            contentPadding: AppPadding.allMedium,
             hintText: 'name@mail.ru или +71234567890',
             prefixIcon: const Icon(Icons.email_outlined),
             suffixIcon: widget.emailController.text.isEmpty
@@ -52,10 +51,9 @@ class _EmailPasswordFormState extends State<EmailPasswordForm>
         UiTextField.standard(
           controller: widget.passwordController,
           obscureText: _obscureText,
-          keyboardType: TextInputType.visiblePassword,
-          textInputAction: TextInputAction.done,
+          keyboardType: .visiblePassword,
+          textInputAction: .done,
           style: UiTextFieldStyle(
-            contentPadding: AppPadding.allMedium,
             hintText: 'Пароль',
             prefixIcon: const Icon(Icons.password_outlined),
             suffixIcon: IconButton(
@@ -70,15 +68,15 @@ class _EmailPasswordFormState extends State<EmailPasswordForm>
         Align(
           alignment: Alignment.centerRight,
           child: InkWell(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: const .all(.circular(8.0)),
             onTap: () {},
             child: Padding(
-              padding: EdgeInsets.all(1.5),
+              padding: const .all(1.5),
               child: UiText.bodyLarge('Забыли пароль?'),
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 16.0),
       ],
     );
   }

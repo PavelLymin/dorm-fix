@@ -64,6 +64,7 @@ class _DormitoryModalSheetState extends State<DormitoryDetailsModalSheet> {
     );
     showUiBottomSheet(
       context,
+      title: dormitory.name,
       widget: BlocProvider.value(
         value: _roomSearcBloc,
         child: RoomModalSheet(dormitory: dormitory),

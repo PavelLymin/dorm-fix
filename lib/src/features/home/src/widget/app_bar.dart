@@ -81,7 +81,7 @@ class _UserDisplay extends StatelessWidget {
         children: [
           _TitleAppBar(
             title: student.user.displayName ?? 'Name',
-            palette: palette,
+            colorTitle: palette.primaryForeground,
           ),
           Flexible(
             child: RichText(
@@ -102,11 +102,15 @@ class _UserDisplay extends StatelessWidget {
 }
 
 class _TitleAppBar extends StatelessWidget {
-  const _TitleAppBar({required this.title, this.padding = .zero, this.palette});
+  const _TitleAppBar({
+    required this.title,
+    this.padding = .zero,
+    this.colorTitle,
+  });
 
   final String title;
   final EdgeInsetsGeometry padding;
-  final ColorPalette? palette;
+  final Color? colorTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -119,10 +123,7 @@ class _TitleAppBar extends StatelessWidget {
           Flexible(
             child: UiText.headlineLarge(
               title,
-              style: TextStyle(
-                color: palette?.primaryForeground,
-                fontWeight: .w700,
-              ),
+              style: TextStyle(color: colorTitle, fontWeight: .w700),
             ),
           ),
           UiButton.icon(

@@ -64,6 +64,9 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
       secondary: const Color(0xFF2E2E2E),
       destructiveCard: const Color(0xFF1E1412),
       destructiveForeground: const Color(0xFFFFFFFF),
+      completed: const Color(0xFFDB6060),
+      inProgress: const Color(0xFF045B37),
+      newRequest: const Color(0xFFFDFFB9),
     );
   }
   return ColorPalette(
@@ -86,6 +89,9 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
     secondary: const Color(0xFFF3F3F3),
     destructiveCard: const Color(0xFFFFFCFC),
     destructiveForeground: const Color(0xFF000000),
+    completed: const Color(0xFFFF8282),
+    inProgress: const Color(0xFF74E7B1),
+    newRequest: const Color(0xFFEDF275),
   );
 }
 

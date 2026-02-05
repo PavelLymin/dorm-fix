@@ -18,46 +18,45 @@ class EmailAddressEdit extends StatefulWidget {
 class _EmailAddressEditState extends State<EmailAddressEdit>
     with _EmailAddressEditStateMixin {
   @override
-  Widget build(BuildContext context) => Column(
-    spacing: 64,
-    crossAxisAlignment: .center,
-    mainAxisAlignment: .center,
-    mainAxisSize: .min,
-    children: [
-      UiTextField.standard(
-        controller: _controller,
-        autofocus: false,
-        keyboardType: .emailAddress,
-        textInputAction: .done,
-        style: UiTextFieldStyle(
-          contentPadding: AppPadding.allMedium,
-          hintText: 'name@mail.ru',
-          prefixIcon: const Icon(Icons.email_outlined),
-          suffixIcon: ValueListenableBuilder<TextEditingValue>(
-            valueListenable: _controller,
-            builder: (_, value, _) {
-              if (value.text.isEmpty) return const SizedBox.shrink();
-              return IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () => _controller.clear(),
-              );
-            },
+  Widget build(BuildContext context) => Padding(
+    padding: .only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+    child: Column(
+      spacing: 64.0,
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .stretch,
+      mainAxisSize: .min,
+      children: [
+        UiTextField.standard(
+          controller: _controller,
+          autofocus: false,
+          keyboardType: .emailAddress,
+          textInputAction: .done,
+          style: UiTextFieldStyle(
+            contentPadding: AppPadding.allMedium,
+            hintText: 'name@mail.ru',
+            prefixIcon: const Icon(Icons.email_outlined),
+            suffixIcon: ValueListenableBuilder<TextEditingValue>(
+              valueListenable: _controller,
+              builder: (_, value, _) {
+                if (value.text.isEmpty) return const SizedBox.shrink();
+                return IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () => _controller.clear(),
+                );
+              },
+            ),
           ),
         ),
-      ),
-      ValueListenableBuilder(
-        valueListenable: _isEnabled,
-        builder: (_, value, _) => SizedBox(
-          height: 48,
-          width: .infinity,
-          child: UiButton.filledPrimary(
+        ValueListenableBuilder(
+          valueListenable: _isEnabled,
+          builder: (_, value, _) => UiButton.filledPrimary(
             onPressed: () {},
             enabled: value,
             label: UiText.titleMedium('Изменить'),
           ),
         ),
-      ),
-    ],
+      ],
+    ),
   );
 }
 
@@ -123,34 +122,37 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
   @override
   Widget build(BuildContext context) => BlocProvider(
     create: (context) => _phoneNumberBloc,
-    child: Column(
-      spacing: 64,
-      crossAxisAlignment: .center,
-      mainAxisAlignment: .center,
-      mainAxisSize: .min,
-      children: [
-        UiTextField.standard(
-          controller: _controller,
-          autofocus: false,
-          keyboardType: .phone,
-          textInputAction: .done,
-          style: UiTextFieldStyle(
-            hintText: '+71234567890',
-            prefixIcon: Icon(Icons.phone_enabled_outlined),
-            suffixIcon: ValueListenableBuilder<TextEditingValue>(
-              valueListenable: _controller,
-              builder: (_, value, _) {
-                if (value.text.isEmpty) return const SizedBox.shrink();
-                return IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () => _controller.clear(),
-                );
-              },
+    child: Padding(
+      padding: .only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: Column(
+        spacing: 64.0,
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .stretch,
+        mainAxisSize: .min,
+        children: [
+          UiTextField.standard(
+            controller: _controller,
+            autofocus: false,
+            keyboardType: .phone,
+            textInputAction: .done,
+            style: UiTextFieldStyle(
+              hintText: '+71234567890',
+              prefixIcon: Icon(Icons.phone_enabled_outlined),
+              suffixIcon: ValueListenableBuilder<TextEditingValue>(
+                valueListenable: _controller,
+                builder: (_, value, _) {
+                  if (value.text.isEmpty) return const SizedBox.shrink();
+                  return IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () => _controller.clear(),
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        _ButtonPhoneUpdate(controller: _controller),
-      ],
+          _ButtonPhoneUpdate(controller: _controller),
+        ],
+      ),
     ),
   );
 }
@@ -169,25 +171,21 @@ class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
     valueListenable: _isEnabled,
-    builder: (_, value, _) => SizedBox(
-      height: 48,
-      width: .infinity,
-      child: UiButton.filledPrimary(
-        enabled: value,
-        onPressed: _verifyPhone,
-        label: BlocConsumer<PhoneNumberBloc, PhoneNumberState>(
-          listener: (context, state) => state.mapOrNull(
-            smsCodeSent: (_) =>
-                context.router.push(const NamedRoute('UpdatePhoneScreen')),
-          ),
-          builder: (context, state) => state.maybeMap(
-            orElse: () => UiText.titleMedium('Изменить'),
-            loading: (_) => SizedBox.square(
-              dimension: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Theme.of(context).colorPalette.mutedForeground,
-              ),
+    builder: (_, value, _) => UiButton.filledPrimary(
+      enabled: value,
+      onPressed: _verifyPhone,
+      label: BlocConsumer<PhoneNumberBloc, PhoneNumberState>(
+        listener: (context, state) => state.mapOrNull(
+          smsCodeSent: (_) =>
+              context.router.push(const NamedRoute('UpdatePhoneScreen')),
+        ),
+        builder: (context, state) => state.maybeMap(
+          orElse: () => UiText.titleMedium('Изменить'),
+          loading: (_) => SizedBox.square(
+            dimension: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Theme.of(context).colorPalette.mutedForeground,
             ),
           ),
         ),

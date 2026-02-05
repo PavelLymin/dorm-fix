@@ -231,3 +231,18 @@ final class FullRepairRequest extends RepairRequestEntity {
   @override
   int get hashCode => id.hashCode;
 }
+
+final class FakeFullRepairRequest extends FullRepairRequest {
+  FakeFullRepairRequest({
+    super.id = 1,
+    super.uid = 'uid',
+    super.description = 'description',
+    super.priority = .ordinary,
+    super.status = .newRequest,
+    super.studentAbsent = false,
+    super.startTime = 0,
+    super.endTime = 24,
+    super.specialization = const FakeSpecializationEntity(),
+    super.problems = const [],
+  }) : super(date: .now(), createdAt: .now());
+}

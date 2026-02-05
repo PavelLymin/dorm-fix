@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:ui_kit/ui.dart';
 
-import 'searc_screen.dart';
+import 'search_screen.dart';
 
 class Searcher extends StatefulWidget {
   const Searcher({super.key});
@@ -19,13 +19,14 @@ class _SearcherState extends State<Searcher> {
     return Padding(
       padding: AppPadding.contentPadding,
       child: OpenContainer(
-        closedColor: palette.background,
-        openColor: palette.background,
-        openBuilder: (context, _) => SearcScreen(),
+        openElevation: 0.0,
+        closedElevation: 0.0,
         closedShape: RoundedRectangleBorder(
           borderRadius: style.inputBorderRadius,
         ),
-        closedElevation: 0.0,
+        closedColor: palette.background,
+        openColor: palette.background,
+        openBuilder: (context, _) => const SearchScreen(),
         closedBuilder: (context, action) => UiTextField.standard(
           enabled: false,
           style: UiTextFieldStyle(

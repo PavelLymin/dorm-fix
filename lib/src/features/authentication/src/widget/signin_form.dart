@@ -111,7 +111,7 @@ mixin _FormStateMixin on State<SignInForm> {
   void _emailToPhoneNumber() {
     _onChanged(_emailController.text);
     if (_emailController.text.startsWith('+')) {
-      Future.delayed(Duration(milliseconds: 100)).then((_) {
+      Future.delayed(const Duration(milliseconds: 100)).then((_) {
         setState(() {
           _phoneController.text = _emailController.text;
           _emailController.clear();
@@ -126,7 +126,7 @@ mixin _FormStateMixin on State<SignInForm> {
   void _phoneNumberToEmail() {
     _onChanged(_phoneController.text);
     if (!_phoneController.text.startsWith('+')) {
-      Future.delayed(Duration(milliseconds: 100)).then(
+      Future.delayed(const Duration(milliseconds: 100)).then(
         (_) => setState(() {
           _emailController.text = _phoneController.text;
           _pinCodeController.clear();

@@ -39,7 +39,7 @@ sealed class HomeCard extends StatelessWidget {
                 mainAxisAlignment: .spaceBetween,
                 crossAxisAlignment: .start,
                 children: [
-                  UiText.bodyLarge(title, style: TextStyle(fontWeight: .w600)),
+                  UiText.titleMedium(title),
                   const Icon(Icons.chevron_right_outlined),
                 ],
               ),

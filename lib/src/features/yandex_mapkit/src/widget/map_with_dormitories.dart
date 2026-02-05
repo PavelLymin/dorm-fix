@@ -116,6 +116,7 @@ class _MapWithDormitoriesState extends State<MapWithDormitories> {
     );
     showUiBottomSheet(
       context,
+      title: dormitory.name,
       widget: DormitoryDetailsModalSheet(dormitory: dormitory),
       maxHeight: MediaQuery.of(context).size.height * 0.3,
     );
@@ -124,6 +125,7 @@ class _MapWithDormitoriesState extends State<MapWithDormitories> {
   Future<void> _showSearchModalSheet(BuildContext context) async {
     await showUiBottomSheet<DormitoryEntity?>(
       context,
+      title: 'Выбор общежития',
       widget: const DormitorySearchModalSheet(),
       maxHeight: MediaQuery.of(context).size.height * 0.6,
     ).then((selectedDormitory) {
