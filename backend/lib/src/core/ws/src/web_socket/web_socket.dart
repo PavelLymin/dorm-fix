@@ -8,13 +8,12 @@ abstract interface class IWebSocket<T> {
 
   void removeConnection({required String uid, required T socket});
 
-  void send(WebSocketChannel socket, String type, Map<String, Object?> payload);
-
-  void sendToUser(
-    String type,
-    Map<String, Object?> payload, {
-    required String uid,
+  void send({
+    required WebSocketChannel socket,
+    required MessageEnvelope envelope,
   });
+
+  void sendToUser({required String uid, required MessageEnvelope envelope});
 
   Future<MessageEnvelope> decodeRaw(Object? raw);
 }
@@ -31,33 +30,27 @@ class WebSocketBase implements IWebSocket<WebSocketChannel> {
   void removeConnection({
     required String uid,
     required WebSocketChannel socket,
-  }) => _connections[uid]?.remove(socket);
+  }) {
+    _connections[uid]?.remove(socket);
+    if (connections[uid]!.isEmpty) _connections.remove(uid);
+  }
 
   @override
-  void sendToUser(
-    String type,
-    Map<String, Object?> payload, {
-    required String uid,
-  }) {
+  void sendToUser({required String uid, required MessageEnvelope envelope}) {
     final sockets = _connections[uid];
 
     if (sockets == null) return;
 
     for (final socket in sockets) {
-      send(socket, type, payload);
+      send(socket: socket, envelope: envelope);
     }
   }
 
   @override
-  void send(
-    WebSocketChannel socket,
-    String type,
-    Map<String, Object?> payload,
-  ) {
-    final envelope = MessageEnvelope(type: type, payload: payload);
-    final json = jsonEncode(envelope.toJson());
-    socket.sink.add(json);
-  }
+  void send({
+    required WebSocketChannel socket,
+    required MessageEnvelope envelope,
+  }) => socket.sink.add(jsonEncode(envelope.toJson()));
 
   @override
   Future<MessageEnvelope> decodeRaw(Object? raw) async {
@@ -89,7 +82,7 @@ class WebSocketBase implements IWebSocket<WebSocketChannel> {
   Future<Map<String, Object?>> _decodeBytes(List<int> bytesBody) async {
     if (bytesBody.isEmpty) return <String, Object?>{};
 
-    return _parseJsonBytes(bytesBody)!;
+    return _parseJsonBytes(bytesBody) ?? {};
   }
 }
 

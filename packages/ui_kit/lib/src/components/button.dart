@@ -93,14 +93,14 @@ class _ButtonIconAndLabel extends StatelessWidget {
     mainAxisSize: .min,
     children: iconAlignment == .start
         ? [
-            if (icon != null) icon!,
+            ?icon,
             if (icon != null && label != null) const SizedBox(width: 8),
             if (label != null) Flexible(child: label!),
           ]
         : [
             if (label != null) Flexible(child: label!),
             if (icon != null && label != null) const SizedBox(width: 8),
-            if (icon != null) icon!,
+            ?icon,
           ],
   );
 }

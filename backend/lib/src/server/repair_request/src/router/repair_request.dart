@@ -7,23 +7,6 @@ import '../../../../core/rest_api/src/rest_api.dart';
 import '../../../../core/ws/ws.dart';
 import '../../repair_request.dart';
 
-enum ResponseType {
-  created(value: 'request_created'),
-  deleted(value: 'request_deleted'),
-  updated(value: 'request_updated'),
-  error(value: 'request_error');
-
-  const ResponseType({required this.value});
-  final String value;
-
-  factory ResponseType.fromValue(String type) {
-    return values.firstWhere(
-      (element) => element.value == type,
-      orElse: () => throw FormatException('Unknown  response type: $type'),
-    );
-  }
-}
-
 class RepairRequestRouter {
   const RepairRequestRouter({
     required RestApi restApi,
@@ -65,8 +48,13 @@ class RepairRequestRouter {
       request: entity,
     );
 
-    final message = FullRepairRequestDto.fromEntity(createdRequest).toJson();
-    _wsConnection.sendToUser(uid: uid, ResponseType.created.value, message);
+    _wsConnection.sendToUser(
+      uid: uid,
+      envelope: MessageEnvelope(
+        type: .requestCreated,
+        payload: .createdRequest(request: createdRequest),
+      ),
+    );
 
     return _restApi.send(
       statusCode: 201,

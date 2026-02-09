@@ -16,7 +16,7 @@ abstract interface class IWebSocket {
 
   Future<void> close({int code, String? reason});
 
-  void send(String type, Map<String, Object?> payload);
+  void send({required MessageEnvelope envelope});
 }
 
 class WebSocketBase implements IWebSocket {
@@ -55,8 +55,7 @@ class WebSocketBase implements IWebSocket {
   }
 
   @override
-  void send(String type, Map<String, Object?> payload) {
-    final envelope = MessageEnvelope(type: type, payload: payload);
+  void send({required MessageEnvelope envelope}) {
     final json = jsonEncode(envelope.toJson());
 
     if (_socket == null) throw Exception();

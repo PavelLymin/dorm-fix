@@ -68,7 +68,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
   final int specializationId;
   final List<PartialProblemDto> problems;
 
-  PartialRepairRequestEntity toEntity() => PartialRepairRequestEntity(
+  PartialRepairRequest toEntity() => PartialRepairRequest(
     specializationId: specializationId,
     description: description,
     priority: priority,
@@ -80,19 +80,18 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     problems: problems.map((e) => e.toEntity()).toList(),
   );
 
-  factory PartialRepairRequestDto.fromEntity(
-    PartialRepairRequestEntity entity,
-  ) => PartialRepairRequestDto(
-    specializationId: entity.specializationId,
-    description: entity.description,
-    priority: entity.priority,
-    status: entity.status,
-    studentAbsent: entity.studentAbsent,
-    date: entity.date,
-    startTime: entity.startTime,
-    endTime: entity.endTime,
-    problems: entity.problems.map(PartialProblemDto.fromEntity).toList(),
-  );
+  factory PartialRepairRequestDto.fromEntity(PartialRepairRequest entity) =>
+      PartialRepairRequestDto(
+        specializationId: entity.specializationId,
+        description: entity.description,
+        priority: entity.priority,
+        status: entity.status,
+        studentAbsent: entity.studentAbsent,
+        date: entity.date,
+        startTime: entity.startTime,
+        endTime: entity.endTime,
+        problems: entity.problems.map(PartialProblemDto.fromEntity).toList(),
+      );
 
   Map<String, Object?> toJson() => {
     'specialization_id': specializationId,
@@ -174,7 +173,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
   final SpecializationDto specialization;
   final List<FullProblemDto> problems;
 
-  FullRepairRequestEntity toEntity() => FullRepairRequestEntity(
+  FullRepairRequest toEntity() => FullRepairRequest(
     id: id,
     uid: uid,
     specialization: specialization.toEntity(),
@@ -189,7 +188,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
     createdAt: createdAt,
   );
 
-  factory FullRepairRequestDto.fromEntity(FullRepairRequestEntity entity) =>
+  factory FullRepairRequestDto.fromEntity(FullRepairRequest entity) =>
       FullRepairRequestDto(
         id: entity.id,
         uid: entity.uid,

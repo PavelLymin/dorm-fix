@@ -20,11 +20,19 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
        _logger = logger,
        super(.loading(requests: [])) {
     _streamSubscription = _webSocket.stream.listen((data) {
-      final response = RepairRequestResponse.response(data, state.requests);
+      final payload = data.payload;
+      if (payload is! RepairRequestResponse) return;
+      final response = RepairRequestResponse.response(
+        payload as RepairRequestPayload,
+        state.requests,
+      );
       response.map(
         created: (response) => setState(.loaded(requests: response.requests)),
         deleted: (response) => setState(.loaded(requests: response.requests)),
         updated: (response) => setState(.loaded(requests: response.requests)),
+        error: (response) => setState(
+          .error(requests: state.requests, message: response.message),
+        ),
       );
     });
     on<RepairRequestEvent>((event, emit) async {

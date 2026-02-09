@@ -1,27 +1,29 @@
+import '../../ws.dart';
+
+typedef MessageEnvelopeMatch<R, P extends Payload> =
+    R Function(P payload, MessageType type);
+
 final class MessageEnvelope {
   const MessageEnvelope({required this.type, required this.payload});
 
-  final String type;
-  final Map<String, Object?> payload;
+  final MessageType type;
+  final Payload payload;
 
   Map<String, Object?> toJson() => {'type': type, 'payload': payload};
 
-  static MessageEnvelope fromJson(Map<String, Object?> json) {
-    final typeObj = json['type'];
-    if (typeObj is! String) {
-      throw FormatException('Invalid message: "type" is not a String');
+  factory MessageEnvelope.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'type': String typeStr,
+      'payload': Map<String, Object?> payload,
+    }) {
+      final type = MessageType.fromString(typeStr);
+      return MessageEnvelope(
+        type: type,
+        payload: Payload.fromJson(type, payload),
+      );
+    } else {
+      throw FormatException('Invalid message envelope: $json');
     }
-
-    final payloadObj = json['payload'];
-    if (payloadObj == null) {
-      return MessageEnvelope(type: typeObj, payload: {});
-    }
-
-    if (payloadObj is Map<String, Object?>) {
-      return MessageEnvelope(type: typeObj, payload: payloadObj);
-    }
-
-    throw FormatException('Invalid message: "payload" is not a Map');
   }
 
   @override

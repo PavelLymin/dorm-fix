@@ -45,14 +45,11 @@ class CompositionRoot {
     // Database
     final database = Database.lazy(file: File(Config.databasePath));
 
-    // RestApi
-    final restApi = RestApiBase();
-
     // WS
     final ws = WebSocketBase();
 
-    final chatUsersRepository = ChatUsersRepositoryImpl(ws: ws);
-    final wsRouter = WsRouter(ws: ws, chatUsersRepository: chatUsersRepository);
+    // RestApi
+    final restApi = RestApiBase();
 
     // User
     final userRepository = UserRepositoryImpl(database: database);
@@ -103,6 +100,21 @@ class CompositionRoot {
     final specializationRouter = SpecializationRouter(
       specializationRepository: specializationRepository,
       restApi: restApi,
+    );
+
+    // Chat messages
+    final messageRepository = MessageRepositoryImpl(database: database);
+
+    // RealTime
+    final chatRealTimeRepository = ChatRealTimeRepositoryImpl(ws: ws);
+    final messageRealTimeRepository = MessageRealTimeRepositoryImpl(
+      messageRepository: messageRepository,
+      chatRealTimeRepository: chatRealTimeRepository,
+    );
+    final wsRouter = WsRouter(
+      ws: ws,
+      chatRealTimeRepository: chatRealTimeRepository,
+      messageRealTimeRepository: messageRealTimeRepository,
     );
 
     return _DependencyFactory(

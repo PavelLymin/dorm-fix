@@ -3,14 +3,14 @@ import '../../../../../core/database/database.dart';
 import '../../../repair_request.dart';
 
 abstract interface class IRequestRepository {
-  Future<FullRepairRequestEntity> createRequest({
+  Future<FullRepairRequest> createRequest({
     required String uid,
-    required PartialRepairRequestEntity request,
+    required PartialRepairRequest request,
   });
 
-  Future<List<FullRepairRequestEntity>> getRequests({required String uid});
+  Future<List<FullRepairRequest>> getRequests({required String uid});
 
-  Future<FullRepairRequestEntity?> getRequest({required int id});
+  Future<FullRepairRequest?> getRequest({required int id});
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
@@ -20,9 +20,9 @@ class RequestRepositoryImpl implements IRequestRepository {
   final Database _database;
 
   @override
-  Future<FullRepairRequestEntity> createRequest({
+  Future<FullRepairRequest> createRequest({
     required String uid,
-    required PartialRepairRequestEntity request,
+    required PartialRepairRequest request,
   }) async {
     final dto = PartialRepairRequestDto.fromEntity(request);
     late final Request requestData;
@@ -51,9 +51,7 @@ class RequestRepositoryImpl implements IRequestRepository {
   }
 
   @override
-  Future<List<FullRepairRequestEntity>> getRequests({
-    required String uid,
-  }) async {
+  Future<List<FullRepairRequest>> getRequests({required String uid}) async {
     final result = await _database
         .customSelect(
           '''SELECT 
@@ -97,7 +95,7 @@ class RequestRepositoryImpl implements IRequestRepository {
   }
 
   @override
-  Future<FullRepairRequestEntity?> getRequest({required int id}) async {
+  Future<FullRepairRequest?> getRequest({required int id}) async {
     final result = await _database
         .customSelect(
           '''SELECT 

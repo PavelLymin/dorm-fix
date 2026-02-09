@@ -8,12 +8,16 @@ import '../../ws.dart';
 class WsRouter {
   const WsRouter({
     required WebSocketBase ws,
-    required IChatUsersRepository chatUsersRepository,
+    required IChatRealTimeRepository chatRealTimeRepository,
+    required IMessageRealTimeRepository messageRealTimeRepository,
   }) : _ws = ws,
-       _chatUsersRepository = chatUsersRepository;
+       _chatRepository = chatRealTimeRepository,
+       _messageRepository = messageRealTimeRepository;
 
   final WebSocketBase _ws;
-  final IChatUsersRepository _chatUsersRepository;
+  final IChatRealTimeRepository _chatRepository;
+  final IMessageRealTimeRepository _messageRepository;
+
   Handler get handler {
     final router = Router();
 
@@ -29,10 +33,19 @@ class WsRouter {
 
       socket.stream.listen((data) async {
         await _ws.decodeRaw(data).then((message) async {
-          await _chatUsersRepository.fromMessage(
-            message,
-            uid: uid,
-            socket: socket,
+          await message.mapOrNull(
+            joinToChat: (payload, _) => _chatRepository.joinToChat(
+              socket: socket,
+              chatId: payload.chatId,
+            ),
+            leaveFromChat: (payload, _) => _chatRepository.leaveFromChat(
+              socket: socket,
+              chatId: payload.chatId,
+            ),
+            createdMessage: (payload, type) => _messageRepository.sendMessage(
+              message: payload.message,
+              chatId: payload.message.chatId,
+            ),
           );
         }, onError: (error) {});
       }, onDone: () => _ws.removeConnection(uid: uid, socket: socket));

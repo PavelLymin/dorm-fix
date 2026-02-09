@@ -61,7 +61,7 @@ sealed class RepairRequestEntity {
     required final int startTime,
     required final int endTime,
     required final List<PartialProblemEntity> problems,
-  }) = PartialRepairRequestEntity;
+  }) = PartialRepairRequest;
 
   const factory RepairRequestEntity.full({
     required final int id,
@@ -76,11 +76,11 @@ sealed class RepairRequestEntity {
     required final int endTime,
     required final List<FullProblemEntity> problems,
     required final DateTime createdAt,
-  }) = FullRepairRequestEntity;
+  }) = FullRepairRequest;
 }
 
-final class PartialRepairRequestEntity extends RepairRequestEntity {
-  const PartialRepairRequestEntity({
+final class PartialRepairRequest extends RepairRequestEntity {
+  const PartialRepairRequest({
     required super.description,
     required super.priority,
     required super.status,
@@ -95,7 +95,7 @@ final class PartialRepairRequestEntity extends RepairRequestEntity {
   final int specializationId;
   final List<PartialProblemEntity> problems;
 
-  PartialRepairRequestEntity copyWith({
+  PartialRepairRequest copyWith({
     int? specializationId,
     String? description,
     Priority? priority,
@@ -105,7 +105,7 @@ final class PartialRepairRequestEntity extends RepairRequestEntity {
     int? startTime,
     int? endTime,
     List<PartialProblemEntity>? problems,
-  }) => PartialRepairRequestEntity(
+  }) => PartialRepairRequest(
     specializationId: specializationId ?? this.specializationId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
@@ -119,7 +119,7 @@ final class PartialRepairRequestEntity extends RepairRequestEntity {
 
   @override
   String toString() =>
-      'CreatedRequestEntity('
+      'PartialRepairRequest('
       'specializationId: $specializationId, '
       'description: $description, '
       'priority: $priority, '
@@ -132,7 +132,7 @@ final class PartialRepairRequestEntity extends RepairRequestEntity {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is PartialRepairRequestEntity &&
+    return other is PartialRepairRequest &&
         other.specializationId == specializationId &&
         other.description == description &&
         other.priority == priority &&
@@ -156,8 +156,8 @@ final class PartialRepairRequestEntity extends RepairRequestEntity {
   );
 }
 
-final class FullRepairRequestEntity extends RepairRequestEntity {
-  const FullRepairRequestEntity({
+final class FullRepairRequest extends RepairRequestEntity {
+  const FullRepairRequest({
     required this.id,
     required this.uid,
     required super.description,
@@ -178,7 +178,7 @@ final class FullRepairRequestEntity extends RepairRequestEntity {
   final SpecializationEntity specialization;
   final List<FullProblemEntity> problems;
 
-  FullRepairRequestEntity copyWith({
+  FullRepairRequest copyWith({
     int? id,
     String? uid,
     SpecializationEntity? specialization,
@@ -191,7 +191,7 @@ final class FullRepairRequestEntity extends RepairRequestEntity {
     int? endTime,
     List<FullProblemEntity>? problems,
     DateTime? createdAt,
-  }) => FullRepairRequestEntity(
+  }) => FullRepairRequest(
     id: id ?? this.id,
     uid: uid ?? this.uid,
     specialization: specialization ?? this.specialization,
@@ -208,7 +208,7 @@ final class FullRepairRequestEntity extends RepairRequestEntity {
 
   @override
   String toString() =>
-      'RequestEntity('
+      'FullRepairRequest('
       'id: $id,'
       'uid: $uid, '
       'specialization: $specialization, '
@@ -225,7 +225,7 @@ final class FullRepairRequestEntity extends RepairRequestEntity {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is FullRepairRequestEntity && other.id == id;
+    return other is FullRepairRequest && other.id == id;
   }
 
   @override

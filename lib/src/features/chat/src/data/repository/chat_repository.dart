@@ -7,7 +7,7 @@ abstract interface class IChatRepository {
 
   Future<FullChatEntity> getChatByRequestId({required int requestId});
 
-  Future<void> joinChatRoom({required int chatId});
+  Future<void> addMember({required int chatId});
 }
 
 class ChatRepositoryImpl implements IChatRepository {
@@ -54,7 +54,7 @@ class ChatRepositoryImpl implements IChatRepository {
   }
 
   @override
-  Future<void> joinChatRoom({required int chatId}) async {
+  Future<void> addMember({required int chatId}) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
     await _client.send(
       path: '/chats',

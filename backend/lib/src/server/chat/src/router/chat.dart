@@ -10,14 +10,11 @@ class CharRouter {
   const CharRouter({
     required RestApi restApi,
     required IChatRepository chatRepository,
-    required IChatUsersRepository chatUserRepository,
   }) : _restApi = restApi,
-       _chatRepository = chatRepository,
-       _chatUsersRepository = chatUserRepository;
+       _chatRepository = chatRepository;
 
   final RestApi _restApi;
   final IChatRepository _chatRepository;
-  final IChatUsersRepository _chatUsersRepository;
 
   Handler get handler {
     final router = Router();
@@ -41,13 +38,10 @@ class CharRouter {
   }
 
   Future<Response> _createChat(Request request) async {
-    final uid = RequireUser.getUserId(request);
     final json = await _readJson(request);
     final entity = PartialChatDto.fromJson(json).toEntity();
 
-    final createdChat = await _chatRepository.createChat(chat: entity);
-    final chat = FullChatDto.fromEntity(createdChat).toJson();
-    _chatUsersRepository.createChat(uid: uid, chat: chat);
+    await _chatRepository.createChat(chat: entity);
 
     return _restApi.send(
       statusCode: 201,

@@ -1,5 +1,3 @@
-import 'package:drift/drift.dart';
-import '../../../../../core/database/database.dart';
 import '../../../chat.dart';
 
 sealed class MessageDto {
@@ -15,7 +13,6 @@ sealed class MessageDto {
 
   Map<String, Object?> toJson();
   MessageEntity toEntity();
-  MessagesCompanion toCompanion();
 
   factory MessageDto.partial({
     required int chatId,
@@ -51,12 +48,6 @@ sealed class MessageDto {
       'chat_id': final int chatId,
       'uid': final String uid,
       'message': final String message,
-    }) {
-      return PartialMessageDto(chatId: chatId, uid: uid, message: message);
-    } else if (json case <String, Object?>{
-      'chat_id': final int chatId,
-      'uid': final String uid,
-      'message': final String message,
       'id': final int id,
       'created_at': final String createdAt,
     }) {
@@ -67,18 +58,16 @@ sealed class MessageDto {
         id: id,
         createdAt: .parse(createdAt),
       );
+    } else if (json case <String, Object?>{
+      'chat_id': final int chatId,
+      'uid': final String uid,
+      'message': final String message,
+    }) {
+      return PartialMessageDto(chatId: chatId, uid: uid, message: message);
     } else {
       throw FormatException('Invalid JSON format for MessageDto', json);
     }
   }
-
-  factory MessageDto.fromData({required Message message}) => FullMessageDto(
-    chatId: message.chatId,
-    uid: message.uid,
-    message: message.message,
-    id: message.id,
-    createdAt: message.createdAt,
-  );
 }
 
 final class PartialMessageDto extends MessageDto {
@@ -98,13 +87,6 @@ final class PartialMessageDto extends MessageDto {
     'uid': uid,
     'message': message,
   };
-
-  @override
-  MessagesCompanion toCompanion() => MessagesCompanion(
-    chatId: Value(chatId),
-    uid: Value(uid),
-    message: Value(message),
-  );
 }
 
 final class FullMessageDto extends MessageDto {
@@ -136,13 +118,4 @@ final class FullMessageDto extends MessageDto {
     'id': id,
     'created_at': createdAt.toLocal().toString(),
   };
-
-  @override
-  MessagesCompanion toCompanion() => MessagesCompanion(
-    chatId: Value(chatId),
-    uid: Value(uid),
-    message: Value(message),
-    id: Value(id),
-    createdAt: Value(createdAt),
-  );
 }

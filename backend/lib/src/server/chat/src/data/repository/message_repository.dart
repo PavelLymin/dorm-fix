@@ -2,9 +2,9 @@ import '../../../../../core/database/database.dart';
 import '../../../chat.dart';
 
 abstract interface class IMessageRepository {
-  Future<FullMessage> createMessage({required PartialMessage message});
+  Future<MessageEntity> createMessage({required MessageEntity message});
 
-  Future<List<FullMessage>> getMessages({
+  Future<List<MessageEntity>> getMessages({
     required int chatId,
     int? beforeId,
     int limit = 50,
@@ -18,18 +18,19 @@ class MessageRepositoryImpl implements IMessageRepository {
   final Database _database;
 
   @override
-  Future<FullMessage> createMessage({required PartialMessage message}) async {
-    final dto = PartialMessageDto.fromEntity(message);
+  Future<MessageEntity> createMessage({required MessageEntity message}) async {
+    final dto = MessageDto.fromEntity(message);
     final data = await _database
         .into(_database.messages)
         .insertReturning(dto.toCompanion());
 
-    final fullMessage = FullMessageDto.fromData(message: data).toEntity();
+    final fullMessage = MessageDto.fromData(message: data).toEntity();
+
     return fullMessage;
   }
 
   @override
-  Future<List<FullMessage>> getMessages({
+  Future<List<MessageEntity>> getMessages({
     required int chatId,
     int? beforeId,
     int limit = 50,
@@ -41,7 +42,7 @@ class MessageRepositoryImpl implements IMessageRepository {
             .get();
 
     final messages = data
-        .map((e) => FullMessageDto.fromData(message: e).toEntity())
+        .map((e) => MessageDto.fromData(message: e).toEntity())
         .toList();
 
     return messages;
