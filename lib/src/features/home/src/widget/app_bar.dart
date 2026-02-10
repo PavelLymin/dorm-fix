@@ -31,7 +31,7 @@ class _Loading extends StatelessWidget {
     return SliverPadding(
       padding: AppPadding.appBar(context: context),
       sliver: const SliverToBoxAdapter(
-        child: Shimmer(child: _UserDisplay(student: FakeFullStudentEntity())),
+        child: Shimmer(child: _UserDisplay(student: FakeFullStudent())),
       ),
     );
   }
@@ -40,7 +40,7 @@ class _Loading extends StatelessWidget {
 class _Loadded extends StatelessWidget {
   const _Loadded({required this.student});
 
-  final FullStudentEntity student;
+  final FullStudent student;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class _Loadded extends StatelessWidget {
 class _UserDisplay extends StatelessWidget {
   const _UserDisplay({required this.student, this.padding = .zero});
 
-  final FullStudentEntity student;
+  final FullStudent student;
   final EdgeInsetsGeometry padding;
 
   @override

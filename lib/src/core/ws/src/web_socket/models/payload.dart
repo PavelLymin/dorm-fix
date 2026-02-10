@@ -32,6 +32,11 @@ enum MessageType {
 sealed class Payload {
   const Payload();
 
+  const factory Payload.createMessage({required MessageEntity message}) =
+      CreatedMessagePayload;
+
+  const factory Payload.joinToChat({required int chatId}) = JoinToChatPayload;
+
   Map<String, Object?> toJson();
 
   factory Payload.fromJson(MessageType type, Map<String, Object?> json) =>

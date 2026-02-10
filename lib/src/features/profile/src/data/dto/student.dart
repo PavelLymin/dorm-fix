@@ -22,8 +22,52 @@ abstract class StudentDto {
   String get uid;
 
   StudentEntity toEntity();
-
   Map<String, Object> toJson();
+
+  factory StudentDto.fromEntity(StudentEntity entity) => switch (entity) {
+    PartialStudent student => PartialStudentDto(
+      user: .fromEntity(student.user),
+      dormitoryId: student.dormitoryId,
+      roomId: student.roomId,
+    ),
+    FullStudent student => FullStudentDto(
+      id: student.id,
+      user: .fromEntity(student.user),
+      dormitory: .fromEntity(student.dormitory),
+      room: .fromEntity(student.room),
+    ),
+    _ => throw UnsupportedError(
+      'Unsupported student type: ${entity.runtimeType}',
+    ),
+  };
+
+  factory StudentDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'id': final int id,
+      'user': final Map<String, Object?> user,
+      'dormitory': final Map<String, Object?> dormitory,
+      'room': final Map<String, Object?> room,
+    }) {
+      return FullStudentDto(
+        id: id,
+        user: UserDto.fromJson(user),
+        dormitory: DormitoryDto.fromJson(dormitory),
+        room: RoomDto.fromJson(room),
+      );
+    } else if (json case <String, Object?>{
+      'dormitory_id': final int dormitoryId,
+      'room_id': final int roomId,
+      'user': final Map<String, Object?> user,
+    }) {
+      return PartialStudentDto(
+        dormitoryId: dormitoryId,
+        roomId: roomId,
+        user: .fromJson(user),
+      );
+    }
+
+    throw FormatException('Invalid JSON format for StudentDto', json);
+  }
 }
 
 class PartialStudentDto extends StudentDto {
@@ -41,18 +85,11 @@ class PartialStudentDto extends StudentDto {
   String get uid => user.uid;
 
   @override
-  PartialStudentEntity toEntity() => PartialStudentEntity(
+  PartialStudent toEntity() => PartialStudent(
     dormitoryId: dormitoryId,
     roomId: roomId,
     user: user.toEntity(),
   );
-
-  factory PartialStudentDto.fromEntity(PartialStudentEntity entity) =>
-      PartialStudentDto(
-        dormitoryId: entity.dormitoryId,
-        roomId: entity.roomId,
-        user: .fromEntity(entity.user),
-      );
 
   @override
   Map<String, Object> toJson() => {
@@ -60,22 +97,6 @@ class PartialStudentDto extends StudentDto {
     'room_id': roomId,
     'user': user.toJson(),
   };
-
-  factory PartialStudentDto.fromJson(Map<String, Object?> json) {
-    if (json case <String, Object?>{
-      'dormitory_id': final int dormitoryId,
-      'room_id': final int roomId,
-      'user': final Map<String, Object?> user,
-    }) {
-      return PartialStudentDto(
-        dormitoryId: dormitoryId,
-        roomId: roomId,
-        user: .fromJson(user),
-      );
-    } else {
-      throw ArgumentError('Invalid JSON format for CreatedStudentDto: $json');
-    }
-  }
 }
 
 class FullStudentDto extends StudentDto {
@@ -95,18 +116,11 @@ class FullStudentDto extends StudentDto {
   String get uid => user.uid;
 
   @override
-  FullStudentEntity toEntity() => FullStudentEntity(
+  FullStudent toEntity() => FullStudent(
     id: id,
     user: user.toEntity(),
     dormitory: dormitory.toEntity(),
     room: room.toEntity(),
-  );
-
-  factory FullStudentDto.fromEntity(FullStudentEntity entity) => FullStudentDto(
-    id: entity.id,
-    user: .fromEntity(entity.user),
-    dormitory: .fromEntity(entity.dormitory),
-    room: .fromEntity(entity.room),
   );
 
   @override
@@ -116,22 +130,4 @@ class FullStudentDto extends StudentDto {
     'dormitory': dormitory.toJson(),
     'room': room.toJson(),
   };
-
-  factory FullStudentDto.fromJson(Map<String, Object?> json) {
-    if (json case <String, Object?>{
-      'id': final int id,
-      'user': final Map<String, Object?> user,
-      'dormitory': final Map<String, Object?> dormitory,
-      'room': final Map<String, Object?> room,
-    }) {
-      return FullStudentDto(
-        id: id,
-        user: .fromJson(user),
-        dormitory: .fromJson(dormitory),
-        room: .fromJson(room),
-      );
-    } else {
-      throw ArgumentError('Invalid JSON format for FullStudentDto: $json');
-    }
-  }
 }

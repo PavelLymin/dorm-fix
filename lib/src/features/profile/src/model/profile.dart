@@ -17,7 +17,7 @@ sealed class ProfileEntity {
     required Map<String, Object?> json,
   }) {
     final entity = switch (role) {
-      .student => FullStudentDto.fromJson(json).toEntity(),
+      .student => StudentDto.fromJson(json).toEntity(),
       .master => MasterDto.fromJson(json).toEntity(),
     };
 
@@ -25,10 +25,10 @@ sealed class ProfileEntity {
   }
 
   T map<T>({
-    required T Function(FullStudentEntity student) student,
+    required T Function(FullStudent student) student,
     required T Function(MasterEntity master) master,
   }) => switch (this) {
-    FullStudentEntity() => student(this as FullStudentEntity),
+    FullStudent() => student(this as FullStudent),
     MasterEntity() => master(this as MasterEntity),
     _ => throw UnimplementedError('Unknown ProfileEntity type: $runtimeType'),
   };

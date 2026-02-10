@@ -38,7 +38,7 @@ class _DescriptionTextState extends State<DescriptionText> {
       maxLines: 5,
       maxLength: 200,
       showCounter: true,
-      textInputAction: TextInputAction.done,
+      textInputAction: .done,
       style: UiTextFieldStyle(hintText: 'Введите текст'),
     );
   }

@@ -20,7 +20,6 @@ class _LineCalendarPickerState extends State<LineCalendarPicker> {
       _workingDateTime.today,
       unUseWeekDays: _workingDateTime.nonWorkingDaysInt,
     );
-    context.read<RequestFormBloc>().add(.update(date: _controller.value));
     _controller.addListener(_onChange);
   }
 
@@ -37,14 +36,21 @@ class _LineCalendarPickerState extends State<LineCalendarPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return UiCard.standart(
-      padding: AppPadding.allSmall,
-      borderRadius: .all(.circular(16.0)),
-      child: LineCalendar(
-        today: _workingDateTime.today,
-        start: _workingDateTime.today,
-        end: _workingDateTime.endDay,
-        controller: _controller,
+    return BlocListener<RequestFormBloc, RequestFormState>(
+      listenWhen: (previous, current) =>
+          previous.currentFormModel.date != current.currentFormModel.date,
+      listener: (context, state) => state.mapOrNull(
+        initial: (state) => _controller.value = state.currentFormModel.date,
+      ),
+      child: UiCard.standart(
+        padding: AppPadding.allSmall,
+        borderRadius: .all(.circular(16.0)),
+        child: LineCalendar(
+          today: _workingDateTime.today,
+          start: _workingDateTime.today,
+          end: _workingDateTime.endDay,
+          controller: _controller,
+        ),
       ),
     );
   }

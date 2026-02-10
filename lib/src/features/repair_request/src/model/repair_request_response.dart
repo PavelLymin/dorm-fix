@@ -51,9 +51,9 @@ final class CreatedRepairRequestResponse extends RepairRequestResponse {
     List<FullRepairRequest> requests,
   ) {
     final request = payload.request;
-    requests.add(request);
+    final newRequests = List<FullRepairRequest>.from(requests)..add(request);
 
-    return CreatedRepairRequestResponse(requests: requests);
+    return CreatedRepairRequestResponse(requests: newRequests);
   }
 }
 

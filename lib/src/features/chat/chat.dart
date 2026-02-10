@@ -5,3 +5,8 @@ export 'src/model/message.dart';
 export 'src/data/dto/chat.dart';
 export 'src/data/dto/message.dart';
 export 'src/data/repository/chat_repository.dart';
+export 'src/data/repository/chat_realtime_repository.dart';
+export 'src/data/repository/message_repository.dart';
+export 'src/data/repository/message_realtime_repository.dart';
+export 'src/state_management/chat_bloc/chat_bloc.dart';
+export 'src/widget/chat_screen.dart';

@@ -14,7 +14,7 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
     required IImageRepository imageRepository,
     required Logger logger,
   }) : _imageRepository = imageRepository,
-       super(const .form(formModel: RequestFormModel())) {
+       super(.initial(formModel: RequestFormModel())) {
     on<RequestFormEvent>((event, emit) async {
       await event.map(
         updateRequestForm: (e) => _updateRequestForm(emit, e),
@@ -41,11 +41,11 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
       startTime: e.startTime,
       endTime: e.endTime,
     );
-    emit(.form(formModel: form));
+    emit(.updated(formModel: form));
   }
 
   void _clearForm(Emitter<RequestFormState> emit) =>
-      emit(const .form(formModel: RequestFormModel()));
+      emit(.initial(formModel: RequestFormModel()));
 
   Future<void> _loadImages(
     Emitter<RequestFormState> emit,
@@ -53,7 +53,7 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
   ) async {
     final images = await _imageRepository.loadImages();
     final form = state.currentFormModel.copyWith(imagePaths: List.from(images));
-    emit(.form(formModel: form));
+    emit(.updated(formModel: form));
   }
 
   Future<void> _addImages(

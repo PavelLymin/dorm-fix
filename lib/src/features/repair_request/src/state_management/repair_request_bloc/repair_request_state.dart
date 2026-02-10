@@ -8,15 +8,15 @@ sealed class RepairRequestState {
 
   final List<FullRepairRequest> requests;
 
-  factory RepairRequestState.loading({
+  const factory RepairRequestState.loading({
     required List<FullRepairRequest> requests,
   }) = _RepairRequestLoading;
 
-  factory RepairRequestState.loaded({
+  const factory RepairRequestState.loaded({
     required List<FullRepairRequest> requests,
   }) = _RepairRequestLoaded;
 
-  factory RepairRequestState.error({
+  const factory RepairRequestState.error({
     required List<FullRepairRequest> requests,
     required Object message,
   }) = _RepairRequestError;

@@ -9,6 +9,7 @@ import '../../../firebase_options.dart';
 import '../../core/rest_client/rest_client.dart';
 import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
+import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
@@ -130,6 +131,24 @@ class CompositionRoot {
       firebaseAuth: firebaseAuth,
     );
 
+    final chatRepository = ChatRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+
+    final chatRealTimeRepository = ChatRealTimeRepositoryImpl(
+      webSocket: webSocket,
+    );
+
+    final messageRepository = MessageRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+
+    final messageRealTimeRepository = MessageRealTimeRepositoryImpl(
+      webSocket: webSocket,
+    );
+
     // RepairRequest
     final requestRepository = RequestRepositoryImpl(
       client: client,
@@ -138,6 +157,7 @@ class CompositionRoot {
 
     final repairRequestBloc = RepairRequestBloc(
       requestRepository: requestRepository,
+      chatRepository: chatRepository,
       webSocket: webSocket,
       logger: logger,
     );
@@ -157,6 +177,10 @@ class CompositionRoot {
       dormitoryRepository: dormitoryRepository,
       roomRepository: roomRepository,
       requestRepository: requestRepository,
+      chatRepository: chatRepository,
+      chatRealTimeRepository: chatRealTimeRepository,
+      messageRepository: messageRepository,
+      messageRealTimeRepository: messageRealTimeRepository,
       repairRequestBloc: repairRequestBloc,
     ).create();
   }
@@ -175,6 +199,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.roomRepository,
     required this.dormitoryRepository,
     required this.requestRepository,
+    required this.chatRepository,
+    required this.chatRealTimeRepository,
+    required this.messageRepository,
+    required this.messageRealTimeRepository,
     required this.authenticationBloc,
     required this.profileBloc,
     required this.specializationBloc,
@@ -205,6 +233,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final RoomRepository roomRepository;
   final IDormitoryRepository dormitoryRepository;
   final IRequestRepository requestRepository;
+  final IChatRepository chatRepository;
+  final IChatRealTimeRepository chatRealTimeRepository;
+  final IMessageRepository messageRepository;
+  final IMessageRealtimeRepository messageRealTimeRepository;
 
   // BloC
   final AuthBloc authenticationBloc;
@@ -225,6 +257,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     roomRepository: roomRepository,
     dormitoryRepository: dormitoryRepository,
     requestRepository: requestRepository,
+    chatRepository: chatRepository,
+    chatRealTimeRepository: chatRealTimeRepository,
+    messageRepository: messageRepository,
+    messageRealTimeRepository: messageRealTimeRepository,
     authenticationBloc: authenticationBloc,
     profileBloc: profileBloc,
     specializationBloc: specializationBloc,

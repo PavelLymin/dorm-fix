@@ -77,6 +77,16 @@ sealed class RepairRequestEntity {
     required final List<ProblemEntity> problems,
     required final DateTime createdAt,
   }) = FullRepairRequest;
+
+  RepairRequestEntity copyWith({
+    String? description,
+    Priority? priority,
+    Status? status,
+    bool? studentAbsent,
+    DateTime? date,
+    int? startTime,
+    int? endTime,
+  });
 }
 
 final class PartialRepairRequest extends RepairRequestEntity {
@@ -95,6 +105,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
   final int specializationId;
   final List<String> imagePaths;
 
+  @override
   PartialRepairRequest copyWith({
     int? specializationId,
     String? description,
@@ -178,6 +189,7 @@ final class FullRepairRequest extends RepairRequestEntity {
   final SpecializationEntity specialization;
   final List<ProblemEntity> problems;
 
+  @override
   FullRepairRequest copyWith({
     int? id,
     String? uid,

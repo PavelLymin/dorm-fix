@@ -58,7 +58,7 @@ class WebSocketBase implements IWebSocket {
   void send({required MessageEnvelope envelope}) {
     final json = jsonEncode(envelope.toJson());
 
-    if (_socket == null) throw Exception();
+    if (_socket == null) throw Exception('Not connected');
 
     _socket!.add(json);
   }
@@ -67,8 +67,10 @@ class WebSocketBase implements IWebSocket {
   Future<void> close({int code = 1000, String? reason}) async {
     try {
       await _subscription?.cancel();
+      _subscription = null;
 
       await _socket?.close(code, reason);
+      _socket = null;
     } on Object catch (_) {
       rethrow;
     }

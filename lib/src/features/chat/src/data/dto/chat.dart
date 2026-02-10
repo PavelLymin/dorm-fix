@@ -12,24 +12,45 @@ sealed class ChatDto {
     required int id,
     required DateTime createdAt,
   }) = FullChatDto;
+
+  Map<String, Object?> toJson();
+  ChatEntity toEntity();
+
+  factory ChatDto.fromEntity(ChatEntity entity) => switch (entity) {
+    PartialChat chat => ChatDto.partial(requestId: chat.requestId),
+    FullChat chat => ChatDto.full(
+      requestId: chat.requestId,
+      id: chat.id,
+      createdAt: chat.createdAt,
+    ),
+  };
+
+  factory ChatDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'requestId': final int requestId,
+      'id': final int id,
+      'created_at': final String createdAt,
+    }) {
+      return FullChatDto(
+        requestId: requestId,
+        id: id,
+        createdAt: .parse(createdAt),
+      );
+    } else if (json case <String, Object?>{'requestId': final int requestId}) {
+      return PartialChatDto(requestId: requestId);
+    }
+    throw FormatException('Invalid JSON format for MessageDto', json);
+  }
 }
 
 final class PartialChatDto extends ChatDto {
   const PartialChatDto({required super.requestId});
 
-  PartialChatEntity toEntity() => PartialChatEntity(requestId: requestId);
+  @override
+  PartialChat toEntity() => PartialChat(requestId: requestId);
 
-  factory PartialChatDto.fromEntity(PartialChatEntity entity) =>
-      PartialChatDto(requestId: entity.requestId);
-
+  @override
   Map<String, Object?> toJson() => {'requestId': requestId};
-
-  factory PartialChatDto.fromJson(Map<String, Object?> json) {
-    if (json case <String, Object?>{'requestId': int requestId}) {
-      return PartialChatDto(requestId: requestId);
-    }
-    throw FormatException('Invalid JSON format for PartialChatDto', json);
-  }
 }
 
 final class FullChatDto extends ChatDto {
@@ -42,33 +63,14 @@ final class FullChatDto extends ChatDto {
   final int id;
   final DateTime createdAt;
 
-  FullChatEntity toEntity() =>
-      FullChatEntity(requestId: requestId, id: id, createdAt: createdAt);
+  @override
+  FullChat toEntity() =>
+      FullChat(requestId: requestId, id: id, createdAt: createdAt);
 
-  factory FullChatDto.fromEntity(FullChatEntity entity) => FullChatDto(
-    requestId: entity.requestId,
-    id: entity.id,
-    createdAt: entity.createdAt,
-  );
-
+  @override
   Map<String, Object?> toJson() => {
     'requestId': requestId,
     'id': id,
     'createdAt': createdAt.toLocal().toString(),
   };
-
-  factory FullChatDto.fromJson(Map<String, Object?> json) {
-    if (json case <String, Object?>{
-      'requestId': int requestId,
-      'id': int id,
-      'createdAt': String createdAt,
-    }) {
-      return FullChatDto(
-        requestId: requestId,
-        id: id,
-        createdAt: .parse(createdAt),
-      );
-    }
-    throw FormatException('Invalid JSON format for FullChatDto', json);
-  }
 }

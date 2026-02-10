@@ -39,9 +39,11 @@ class CharRouter {
 
   Future<Response> _createChat(Request request) async {
     final json = await _readJson(request);
+    final uid = RequireUser.getUserId(request);
     final entity = PartialChatDto.fromJson(json).toEntity();
 
-    await _chatRepository.createChat(chat: entity);
+    final createdChat = await _chatRepository.createChat(chat: entity);
+    await _chatRepository.addMember(chatId: createdChat.id, uid: uid);
 
     return _restApi.send(
       statusCode: 201,

@@ -5,7 +5,9 @@ import '../../../request.dart';
 abstract interface class IRequestRepository {
   Future<List<FullRepairRequest>> getRequests();
 
-  Future<void> createRequest({required PartialRepairRequest request});
+  Future<FullRepairRequest> createRequest({
+    required PartialRepairRequest request,
+  });
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
@@ -31,8 +33,9 @@ class RequestRepositoryImpl implements IRequestRepository {
     if (data case List<Object?> list) {
       final repairRequests = list
           .whereType<Map<String, Object?>>()
-          .map<FullRepairRequest>(
-            (json) => FullRepairRequestDto.fromJson(json).toEntity(),
+          .map(
+            (json) =>
+                RepairRequestDto.fromJson(json).toEntity() as FullRepairRequest,
           )
           .toList();
 
@@ -46,14 +49,26 @@ class RequestRepositoryImpl implements IRequestRepository {
   }
 
   @override
-  Future<void> createRequest({required PartialRepairRequest request}) async {
+  Future<FullRepairRequest> createRequest({
+    required PartialRepairRequest request,
+  }) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
-    final body = PartialRepairRequestDto.fromEntity(request).toJson();
-    await _client.send(
+    final body = RepairRequestDto.fromEntity(request).toJson();
+    final response = await _client.send(
       path: '/repairRequests',
       method: 'POST',
       body: body,
       headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response case Map<String, Object?> json) {
+      final repairRequest = RepairRequestDto.fromJson(json).toEntity();
+      return repairRequest as FullRepairRequest;
+    }
+
+    throw StructuredBackendException(
+      error: {'description': 'Invalid data received from server.'},
+      statusCode: 500,
     );
   }
 }

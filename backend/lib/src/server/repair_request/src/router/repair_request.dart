@@ -59,7 +59,7 @@ class RepairRequestRouter {
     return _restApi.send(
       statusCode: 201,
       responseBody: {
-        'data': {'message': 'The request was successfully created.'},
+        'data': FullRepairRequestDto.fromEntity(createdRequest).toJson(),
       },
     );
   }

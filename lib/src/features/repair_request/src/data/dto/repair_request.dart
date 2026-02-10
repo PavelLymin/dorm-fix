@@ -21,6 +21,9 @@ sealed class RepairRequestDto {
   final int startTime;
   final int endTime;
 
+  Map<String, Object?> toJson();
+  RepairRequestEntity toEntity();
+
   factory RepairRequestDto.partial({
     required int specializationId,
     required String description,
@@ -70,159 +73,37 @@ sealed class RepairRequestDto {
     problems: problems,
     createdAt: createdAt,
   );
-}
 
-final class PartialRepairRequestDto extends RepairRequestDto {
-  const PartialRepairRequestDto({
-    required super.description,
-    required super.priority,
-    required super.status,
-    required super.studentAbsent,
-    required super.date,
-    required super.startTime,
-    required super.endTime,
-    required this.specializationId,
-    required this.imagePaths,
-  });
+  factory RepairRequestDto.fromEntity(RepairRequestEntity entity) =>
+      switch (entity) {
+        PartialRepairRequest _ => PartialRepairRequestDto(
+          specializationId: entity.specializationId,
+          description: entity.description,
+          priority: entity.priority,
+          status: entity.status,
+          studentAbsent: entity.studentAbsent,
+          date: entity.date,
+          startTime: entity.startTime,
+          endTime: entity.endTime,
+          imagePaths: entity.imagePaths,
+        ),
+        FullRepairRequest _ => FullRepairRequestDto(
+          id: entity.id,
+          uid: entity.uid,
+          specialization: .fromEntity(entity.specialization),
+          description: entity.description,
+          priority: entity.priority,
+          status: entity.status,
+          studentAbsent: entity.studentAbsent,
+          date: entity.date,
+          startTime: entity.startTime,
+          endTime: entity.endTime,
+          problems: entity.problems.map(ProblemDto.fromEntity).toList(),
+          createdAt: entity.createdAt,
+        ),
+      };
 
-  final int specializationId;
-  final List<String> imagePaths;
-
-  PartialRepairRequest toEntity() => PartialRepairRequest(
-    specializationId: specializationId,
-    description: description,
-    priority: priority,
-    status: status,
-    studentAbsent: studentAbsent,
-    date: date,
-    startTime: startTime,
-    endTime: endTime,
-    imagePaths: imagePaths,
-  );
-
-  factory PartialRepairRequestDto.fromEntity(PartialRepairRequest entity) =>
-      PartialRepairRequestDto(
-        specializationId: entity.specializationId,
-        description: entity.description,
-        priority: entity.priority,
-        status: entity.status,
-        studentAbsent: entity.studentAbsent,
-        date: entity.date,
-        startTime: entity.startTime,
-        endTime: entity.endTime,
-        imagePaths: entity.imagePaths,
-      );
-
-  Map<String, Object?> toJson() => {
-    'specialization_id': specializationId,
-    'description': description,
-    'priority': priority.value,
-    'status': status.value,
-    'student_absent': studentAbsent,
-    'date': date.toLocal().toString(),
-    'start_time': startTime,
-    'end_time': endTime,
-    'problems': imagePaths,
-  };
-
-  factory PartialRepairRequestDto.fromJson(Map<String, Object?> json) {
-    if (json case <String, Object?>{
-      'specialization_id': final int specializationId,
-      'description': final String description,
-      'priority': final String priority,
-      'status': final String status,
-      'student_absent': final bool studentAbsent,
-      'date': final String date,
-      'start_time': final int startTime,
-      'end_time': final int endTime,
-      'problems': final List<Object?> imagePaths,
-    }) {
-      return PartialRepairRequestDto(
-        specializationId: specializationId,
-        description: description,
-        priority: .fromValue(priority),
-        status: .fromValue(status),
-        studentAbsent: studentAbsent,
-        date: .parse(date),
-        startTime: startTime,
-        endTime: endTime,
-        imagePaths: imagePaths.whereType<String>().toList(),
-      );
-    } else {
-      throw ArgumentError('Invalid JSON format for FullRequestEntity: $json');
-    }
-  }
-}
-
-final class FullRepairRequestDto extends RepairRequestDto {
-  const FullRepairRequestDto({
-    required this.id,
-    required this.uid,
-    required super.description,
-    required super.priority,
-    required super.status,
-    required super.studentAbsent,
-    required super.date,
-    required super.startTime,
-    required super.endTime,
-    required this.specialization,
-    required this.problems,
-    required this.createdAt,
-  });
-
-  final int id;
-  final String uid;
-  final DateTime createdAt;
-  final SpecializationDto specialization;
-  final List<ProblemDto> problems;
-
-  FullRepairRequest toEntity() => FullRepairRequest(
-    id: id,
-    uid: uid,
-    specialization: specialization.toEntity(),
-    description: description,
-    priority: priority,
-    status: status,
-    studentAbsent: studentAbsent,
-    date: date,
-    startTime: startTime,
-    endTime: endTime,
-    problems: problems.map((e) => e.toEntity()).toList(),
-    createdAt: createdAt,
-  );
-
-  factory FullRepairRequestDto.fromEntity(FullRepairRequest entity) =>
-      FullRepairRequestDto(
-        id: entity.id,
-        uid: entity.uid,
-        specialization: SpecializationDto.fromEntity(entity.specialization),
-        description: entity.description,
-        priority: entity.priority,
-        status: entity.status,
-        studentAbsent: entity.studentAbsent,
-        date: entity.date,
-        startTime: entity.startTime,
-        endTime: entity.endTime,
-        problems: entity.problems.map(ProblemDto.fromEntity).toList(),
-        createdAt: entity.createdAt,
-      );
-
-  Map<String, Object?> toJson() => {
-    'id': id,
-    'uid': uid,
-    'specialization': specialization.toJson(),
-    'description': description,
-    'priority': priority.value,
-    'status': status.value,
-    'student_absent': studentAbsent,
-    'date': date.toLocal().toString(),
-    'start_time': startTime,
-    'end_time': endTime,
-    'problems': problems,
-    'created_at': createdAt,
-  };
-
-  factory FullRepairRequestDto.fromJson(Map<String, Object?> json) {
+  factory RepairRequestDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
       'id': final int id,
       'uid': final String uid,
@@ -254,8 +135,128 @@ final class FullRepairRequestDto extends RepairRequestDto {
             .toList(),
         createdAt: DateTime.parse(createdAt),
       );
-    } else {
-      throw ArgumentError('Invalid JSON format for FullRequestEntity: $json');
+    } else if (json case <String, Object?>{
+      'specialization_id': final int specializationId,
+      'description': final String description,
+      'priority': final String priority,
+      'status': final String status,
+      'student_absent': final bool studentAbsent,
+      'date': final String date,
+      'start_time': final int startTime,
+      'end_time': final int endTime,
+      'problems': final List<Object?> imagePaths,
+    }) {
+      return PartialRepairRequestDto(
+        specializationId: specializationId,
+        description: description,
+        priority: .fromValue(priority),
+        status: .fromValue(status),
+        studentAbsent: studentAbsent,
+        date: .parse(date),
+        startTime: startTime,
+        endTime: endTime,
+        imagePaths: imagePaths.whereType<String>().toList(),
+      );
     }
+
+    throw ArgumentError('Invalid JSON format for RepairRequestDto: $json');
   }
+}
+
+final class PartialRepairRequestDto extends RepairRequestDto {
+  const PartialRepairRequestDto({
+    required super.description,
+    required super.priority,
+    required super.status,
+    required super.studentAbsent,
+    required super.date,
+    required super.startTime,
+    required super.endTime,
+    required this.specializationId,
+    required this.imagePaths,
+  });
+
+  final int specializationId;
+  final List<String> imagePaths;
+
+  @override
+  PartialRepairRequest toEntity() => PartialRepairRequest(
+    specializationId: specializationId,
+    description: description,
+    priority: priority,
+    status: status,
+    studentAbsent: studentAbsent,
+    date: date,
+    startTime: startTime,
+    endTime: endTime,
+    imagePaths: imagePaths,
+  );
+
+  @override
+  Map<String, Object?> toJson() => {
+    'specialization_id': specializationId,
+    'description': description,
+    'priority': priority.value,
+    'status': status.value,
+    'student_absent': studentAbsent,
+    'date': date.toLocal().toString(),
+    'start_time': startTime,
+    'end_time': endTime,
+    'problems': imagePaths,
+  };
+}
+
+final class FullRepairRequestDto extends RepairRequestDto {
+  const FullRepairRequestDto({
+    required this.id,
+    required this.uid,
+    required super.description,
+    required super.priority,
+    required super.status,
+    required super.studentAbsent,
+    required super.date,
+    required super.startTime,
+    required super.endTime,
+    required this.specialization,
+    required this.problems,
+    required this.createdAt,
+  });
+
+  final int id;
+  final String uid;
+  final DateTime createdAt;
+  final SpecializationDto specialization;
+  final List<ProblemDto> problems;
+
+  @override
+  FullRepairRequest toEntity() => FullRepairRequest(
+    id: id,
+    uid: uid,
+    specialization: specialization.toEntity(),
+    description: description,
+    priority: priority,
+    status: status,
+    studentAbsent: studentAbsent,
+    date: date,
+    startTime: startTime,
+    endTime: endTime,
+    problems: problems.map((e) => e.toEntity()).toList(),
+    createdAt: createdAt,
+  );
+
+  @override
+  Map<String, Object?> toJson() => {
+    'id': id,
+    'uid': uid,
+    'specialization': specialization.toJson(),
+    'description': description,
+    'priority': priority.value,
+    'status': status.value,
+    'student_absent': studentAbsent,
+    'date': date.toLocal().toString(),
+    'start_time': startTime,
+    'end_time': endTime,
+    'problems': problems,
+    'created_at': createdAt,
+  };
 }

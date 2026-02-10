@@ -14,7 +14,7 @@ class WorkingDateTime {
   static const int _startHour = 8;
   static const int _countHours = 9;
 
-  DateTime get today => DateTime.now();
+  DateTime get today => .now();
   DateTime get endDay => today.add(const Duration(days: 6));
 
   int get startHour => _startHour;

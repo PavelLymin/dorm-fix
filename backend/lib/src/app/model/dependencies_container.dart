@@ -2,12 +2,14 @@ import 'package:firebase_admin/firebase_admin.dart';
 import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
 import '../../core/ws/ws.dart';
+import '../../server/chat/chat.dart';
+import '../../server/chat/src/router/message.dart';
 import '../../server/repair_request/repair_request.dart';
 import '../../server/dormitory/src/router/dormitory.dart';
 import '../../server/profile/src/router/profile.dart';
 import '../../server/room/src/router/room.dart';
-import '../../server/specialization/src/router/specialization.dart';
 import '../../server/profile/src/router/user.dart';
+import '../../server/specialization/specialization.dart';
 
 class DependencyContainer {
   const DependencyContainer({
@@ -21,6 +23,8 @@ class DependencyContainer {
     required this.dormitoryRouter,
     required this.repairRequestRouter,
     required this.specializationRouter,
+    required this.chatRouter,
+    required this.messageRouter,
   });
 
   final App firebaseAdmin;
@@ -42,4 +46,8 @@ class DependencyContainer {
   final RepairRequestRouter repairRequestRouter;
 
   final SpecializationRouter specializationRouter;
+
+  final CharRouter chatRouter;
+
+  final MessageRouter messageRouter;
 }

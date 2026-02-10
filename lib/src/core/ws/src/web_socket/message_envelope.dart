@@ -9,7 +9,7 @@ final class MessageEnvelope {
   final MessageType type;
   final Payload payload;
 
-  Map<String, Object?> toJson() => {'type': type, 'payload': payload};
+  Map<String, Object?> toJson() => {'type': type.value, 'payload': payload};
 
   factory MessageEnvelope.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{

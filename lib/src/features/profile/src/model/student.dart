@@ -9,30 +9,22 @@ sealed class StudentEntity extends ProfileEntity {
     required int dormitoryId,
     required int roomId,
     required AuthenticatedUser user,
-  }) => PartialStudentEntity(
-    dormitoryId: dormitoryId,
-    roomId: roomId,
-    user: user,
-  );
+  }) => PartialStudent(dormitoryId: dormitoryId, roomId: roomId, user: user);
 
   factory StudentEntity.full({
     required int id,
     required AuthenticatedUser user,
     required DormitoryEntity dormitory,
     required RoomEntity room,
-  }) => FullStudentEntity(id: id, user: user, dormitory: dormitory, room: room);
+  }) => FullStudent(id: id, user: user, dormitory: dormitory, room: room);
 
   String get uid;
 
-  @override
-  bool operator ==(Object other) => other is StudentEntity && uid == other.uid;
-
-  @override
-  int get hashCode => uid.hashCode;
+  StudentEntity copyWith();
 }
 
-final class PartialStudentEntity extends StudentEntity {
-  const PartialStudentEntity({
+final class PartialStudent extends StudentEntity {
+  const PartialStudent({
     required this.user,
     required this.dormitoryId,
     required this.roomId,
@@ -45,11 +37,12 @@ final class PartialStudentEntity extends StudentEntity {
   @override
   String get uid => user.uid;
 
-  PartialStudentEntity copyWith({
+  @override
+  PartialStudent copyWith({
     int? dormitoryId,
     int? roomId,
     AuthenticatedUser? user,
-  }) => PartialStudentEntity(
+  }) => PartialStudent(
     dormitoryId: dormitoryId ?? this.dormitoryId,
     roomId: roomId ?? this.roomId,
     user: user ?? this.user,
@@ -63,8 +56,8 @@ final class PartialStudentEntity extends StudentEntity {
       'user: $user)';
 }
 
-final class FullStudentEntity extends StudentEntity {
-  const FullStudentEntity({
+final class FullStudent extends StudentEntity {
+  const FullStudent({
     required this.id,
     required this.user,
     required this.dormitory,
@@ -77,19 +70,20 @@ final class FullStudentEntity extends StudentEntity {
   final RoomEntity room;
 
   R fullOrFake<R>({
-    required R Function(FullStudentEntity) full,
-    required R Function(FakeFullStudentEntity) fake,
+    required R Function(FullStudent) full,
+    required R Function(FakeFullStudent) fake,
   }) => full(this);
 
   @override
   String get uid => user.uid;
 
-  FullStudentEntity copyWith({
+  @override
+  FullStudent copyWith({
     int? id,
     DormitoryEntity? dormitory,
     RoomEntity? room,
     AuthenticatedUser? user,
-  }) => FullStudentEntity(
+  }) => FullStudent(
     id: id ?? this.id,
     user: user ?? this.user,
     dormitory: dormitory ?? this.dormitory,
@@ -109,11 +103,14 @@ class StudentEmpty extends StudentEntity {
   const StudentEmpty();
 
   @override
+  StudentEntity copyWith() => this;
+
+  @override
   String get uid => '';
 }
 
-final class FakeFullStudentEntity extends FullStudentEntity {
-  const FakeFullStudentEntity()
+final class FakeFullStudent extends FullStudent {
+  const FakeFullStudent()
     : super(
         id: 1,
         user: const FakeAuthenticatedUser(),
@@ -123,7 +120,7 @@ final class FakeFullStudentEntity extends FullStudentEntity {
 
   @override
   R fullOrFake<R>({
-    required R Function(FullStudentEntity) full,
-    required R Function(FakeFullStudentEntity) fake,
+    required R Function(FullStudent) full,
+    required R Function(FakeFullStudent) fake,
   }) => fake(this);
 }

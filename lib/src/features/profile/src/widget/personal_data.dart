@@ -18,7 +18,7 @@ class PersonalData extends StatelessWidget {
             child: GroupedList(
               items: _createPersonalDataList(
                 context,
-                FakeFullStudentEntity(),
+                FakeFullStudent(),
                 textStyle,
               ),
               divider: .indented(),
@@ -36,7 +36,7 @@ class PersonalData extends StatelessWidget {
 
   List<GroupedListItem> _createPersonalDataList(
     BuildContext context,
-    FullStudentEntity student,
+    FullStudent student,
     TextStyle dataStyle,
   ) {
     final icon = const Icon(Icons.chevron_right_rounded);

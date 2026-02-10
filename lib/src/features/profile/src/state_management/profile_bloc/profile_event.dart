@@ -7,9 +7,8 @@ sealed class ProfileEvent {
 
   factory ProfileEvent.get() => _GetProfileEvent();
 
-  factory ProfileEvent.updateStudentProfile({
-    required FullStudentEntity student,
-  }) => _UpdateStudentProfileEvent(student: student);
+  factory ProfileEvent.updateStudentProfile({required FullStudent student}) =>
+      _UpdateStudentProfileEvent(student: student);
 
   R map<R>({
     required ProfileEventMatch<R, _GetProfileEvent> get,
@@ -28,5 +27,5 @@ final class _GetProfileEvent extends ProfileEvent {
 final class _UpdateStudentProfileEvent extends ProfileEvent {
   const _UpdateStudentProfileEvent({required this.student});
 
-  final FullStudentEntity student;
+  final FullStudent student;
 }

@@ -10,8 +10,13 @@ sealed class RequestFormState {
 
   RequestFormModel get currentFormModel => _formModel;
 
-  const factory RequestFormState.form({required RequestFormModel formModel}) =
-      _FormInititalState;
+  const factory RequestFormState.initial({
+    required RequestFormModel formModel,
+  }) = _FormInititalState;
+
+  const factory RequestFormState.updated({
+    required RequestFormModel formModel,
+  }) = _FormUpdatedState;
 
   const factory RequestFormState.error({
     required RequestFormModel formModel,
@@ -19,27 +24,43 @@ sealed class RequestFormState {
   }) = _FormErrorState;
 
   R map<R>({
-    required FormStateMatch<R, _FormInititalState> form,
+    required FormStateMatch<R, _FormInititalState> initial,
+    required FormStateMatch<R, _FormUpdatedState> updated,
     required FormStateMatch<R, _FormErrorState> error,
   }) => switch (this) {
-    _FormInititalState s => form(s),
+    _FormInititalState s => initial(s),
+    _FormUpdatedState s => updated(s),
     _FormErrorState s => error(s),
   };
 
   R maybeMap<R>({
     required R Function() orElse,
-    FormStateMatch<R, _FormInititalState>? form,
+    FormStateMatch<R, _FormInititalState>? initial,
+    FormStateMatch<R, _FormUpdatedState>? updated,
     FormStateMatch<R, _FormErrorState>? error,
-  }) => map<R>(form: form ?? (_) => orElse(), error: error ?? (_) => orElse());
+  }) => map<R>(
+    initial: initial ?? (_) => orElse(),
+    updated: updated ?? (_) => orElse(),
+    error: error ?? (_) => orElse(),
+  );
 
   R? mapOrNull<R>({
-    FormStateMatch<R, _FormInititalState>? form,
+    FormStateMatch<R, _FormInititalState>? initial,
+    FormStateMatch<R, _FormUpdatedState>? updated,
     FormStateMatch<R, _FormErrorState>? error,
-  }) => map<R?>(form: form ?? (_) => null, error: error ?? (_) => null);
+  }) => map<R?>(
+    initial: initial ?? (_) => null,
+    updated: updated ?? (_) => null,
+    error: error ?? (_) => null,
+  );
 }
 
 final class _FormInititalState extends RequestFormState {
   const _FormInititalState({required super.formModel});
+}
+
+final class _FormUpdatedState extends RequestFormState {
+  const _FormUpdatedState({required super.formModel});
 }
 
 final class _FormErrorState extends RequestFormState {

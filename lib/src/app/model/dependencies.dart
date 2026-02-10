@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import '../../core/rest_client/rest_client.dart';
 import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
+import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
@@ -25,6 +26,10 @@ class DependencyContainer {
     required this.roomRepository,
     required this.dormitoryRepository,
     required this.requestRepository,
+    required this.chatRepository,
+    required this.chatRealTimeRepository,
+    required this.messageRepository,
+    required this.messageRealTimeRepository,
     required this.authenticationBloc,
     required this.profileBloc,
     required this.specializationBloc,
@@ -55,6 +60,10 @@ class DependencyContainer {
   final RoomRepository roomRepository;
   final IDormitoryRepository dormitoryRepository;
   final IRequestRepository requestRepository;
+  final IChatRepository chatRepository;
+  final IChatRealTimeRepository chatRealTimeRepository;
+  final IMessageRepository messageRepository;
+  final IMessageRealtimeRepository messageRealTimeRepository;
 
   // BloC
   final AuthBloc authenticationBloc;

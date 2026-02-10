@@ -5,9 +5,8 @@ typedef ProfileStateMatch<R, S extends ProfileState> = R Function(S state);
 sealed class ProfileState {
   const ProfileState();
 
-  const factory ProfileState.loadedStudent({
-    required FullStudentEntity student,
-  }) = _ProfileLoadedStudentState;
+  const factory ProfileState.loadedStudent({required FullStudent student}) =
+      _ProfileLoadedStudentState;
 
   const factory ProfileState.loadedMaster({required MasterEntity master}) =
       _ProfileLoadedMasterState;
@@ -70,7 +69,7 @@ sealed class ProfileState {
 final class _ProfileLoadedStudentState extends ProfileState {
   const _ProfileLoadedStudentState({required this.student});
 
-  final FullStudentEntity student;
+  final FullStudent student;
 }
 
 final class _ProfileLoadedMasterState extends ProfileState {

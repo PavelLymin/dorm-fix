@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../home/src/widget/search_screen.dart';
+import '../../../../chat/chat.dart';
 import '../../../request.dart';
 
 class RepairRequestList extends StatefulWidget {
@@ -129,7 +129,7 @@ class _Item extends StatelessWidget {
       closedShape: RoundedRectangleBorder(borderRadius: style.borderRadius),
       closedColor: palette.background,
       openColor: palette.background,
-      openBuilder: (context, _) => const SearchScreen(),
+      openBuilder: (context, _) => const ChatScreen(),
       closedBuilder: (context, action) => UiCard.standart(
         borderRadius: style.borderRadius,
         padding: _EstimatedSizes.itemPadding,

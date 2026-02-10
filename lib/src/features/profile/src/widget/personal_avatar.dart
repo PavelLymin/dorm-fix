@@ -9,8 +9,7 @@ class PersonalAvatar extends StatelessWidget {
   Widget build(BuildContext context) => BlocBuilder<ProfileBloc, ProfileState>(
     builder: (context, state) {
       return state.maybeMap(
-        loading: (_) =>
-            const _PersonalAvatarView(student: FakeFullStudentEntity()),
+        loading: (_) => const _PersonalAvatarView(student: FakeFullStudent()),
         loadedStudent: (state) => _PersonalAvatarView(student: state.student),
         orElse: () => const SizedBox.shrink(),
       );
@@ -21,7 +20,7 @@ class PersonalAvatar extends StatelessWidget {
 class _PersonalAvatarView extends StatelessWidget {
   const _PersonalAvatarView({required this.student});
 
-  final FullStudentEntity student;
+  final FullStudent student;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +54,7 @@ class _PersonalAvatarView extends StatelessWidget {
 
 class _TitlePersonalAvatar extends StatelessWidget {
   const _TitlePersonalAvatar({required this.student});
-  final FullStudentEntity student;
+  final FullStudent student;
 
   @override
   Widget build(BuildContext context) {

@@ -7,6 +7,7 @@ import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
 import '../../core/ws/ws.dart';
 import '../../server/chat/chat.dart';
+import '../../server/chat/src/router/message.dart';
 import '../../server/dormitory/dormitory.dart';
 import '../../server/profile/profile.dart';
 import '../../server/repair_request/repair_request.dart';
@@ -102,8 +103,17 @@ class CompositionRoot {
       restApi: restApi,
     );
 
-    // Chat messages
+    // Chat
     final messageRepository = MessageRepositoryImpl(database: database);
+    final chatRepository = ChatRepositoryImpl(database: database);
+    final chatRouter = CharRouter(
+      chatRepository: chatRepository,
+      restApi: restApi,
+    );
+    final messageRouter = MessageRouter(
+      messageRepository: messageRepository,
+      restApi: restApi,
+    );
 
     // RealTime
     final chatRealTimeRepository = ChatRealTimeRepositoryImpl(ws: ws);
@@ -128,6 +138,8 @@ class CompositionRoot {
       dormitoryRouter: dormitoryRouter,
       roomRouter: roomRouter,
       specializationRouter: specializationRouter,
+      chatRouter: chatRouter,
+      messageRouter: messageRouter,
     ).create();
   }
 }
@@ -144,6 +156,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.dormitoryRouter,
     required this.roomRouter,
     required this.specializationRouter,
+    required this.chatRouter,
+    required this.messageRouter,
   });
 
   final App firebaseAdmin;
@@ -166,6 +180,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final SpecializationRouter specializationRouter;
 
+  final CharRouter chatRouter;
+
+  final MessageRouter messageRouter;
+
   @override
   DependencyContainer create() => DependencyContainer(
     firebaseAdmin: firebaseAdmin,
@@ -178,6 +196,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     dormitoryRouter: dormitoryRouter,
     roomRouter: roomRouter,
     specializationRouter: specializationRouter,
+    chatRouter: chatRouter,
+    messageRouter: messageRouter,
   );
 }
 

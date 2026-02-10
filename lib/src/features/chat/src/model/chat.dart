@@ -3,21 +3,23 @@ sealed class ChatEntity {
 
   final int requestId;
 
-  const factory ChatEntity.partial({required int requestId}) =
-      PartialChatEntity;
+  const factory ChatEntity.partial({required int requestId}) = PartialChat;
 
   const factory ChatEntity.full({
     required int requestId,
     required int id,
     required DateTime createdAt,
-  }) = FullChatEntity;
+  }) = FullChat;
+
+  ChatEntity copyWith({int? requestId});
 }
 
-final class PartialChatEntity extends ChatEntity {
-  const PartialChatEntity({required super.requestId});
+final class PartialChat extends ChatEntity {
+  const PartialChat({required super.requestId});
 
-  PartialChatEntity copyWith({int? requestId}) =>
-      PartialChatEntity(requestId: requestId ?? this.requestId);
+  @override
+  PartialChat copyWith({int? requestId}) =>
+      PartialChat(requestId: requestId ?? this.requestId);
 
   @override
   String toString() =>
@@ -27,14 +29,14 @@ final class PartialChatEntity extends ChatEntity {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PartialChatEntity && requestId == other.requestId;
+      other is PartialChat && requestId == other.requestId;
 
   @override
   int get hashCode => requestId.hashCode;
 }
 
-final class FullChatEntity extends ChatEntity {
-  const FullChatEntity({
+final class FullChat extends ChatEntity {
+  const FullChat({
     required super.requestId,
     required this.id,
     required this.createdAt,
@@ -43,10 +45,11 @@ final class FullChatEntity extends ChatEntity {
   final int id;
   final DateTime createdAt;
 
-  FullChatEntity copyWith({int? id, DateTime? createdAt}) => FullChatEntity(
+  @override
+  FullChat copyWith({int? requestId, int? id, DateTime? createdAt}) => FullChat(
     id: id ?? this.id,
     createdAt: createdAt ?? this.createdAt,
-    requestId: requestId,
+    requestId: requestId ?? this.requestId,
   );
 
   @override
@@ -58,7 +61,7 @@ final class FullChatEntity extends ChatEntity {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is FullChatEntity && id == other.id;
+      identical(this, other) || other is FullChat && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
