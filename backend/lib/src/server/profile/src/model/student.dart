@@ -3,47 +3,35 @@ import '../../../room/room.dart';
 import '../../profile.dart';
 
 sealed class StudentEntity {
-  const StudentEntity();
+  const StudentEntity({required this.user});
 
-  factory StudentEntity.partial({
+  final UserEntity user;
+
+  const factory StudentEntity.partial({
     required int dormitoryId,
     required int roomId,
     required UserEntity user,
-  }) => PartialStudentEntity(
-    dormitoryId: dormitoryId,
-    roomId: roomId,
-    user: user,
-  );
+  }) = PartialStudent;
 
-  factory StudentEntity.full({
+  const factory StudentEntity.full({
     required int id,
     required UserEntity user,
     required DormitoryEntity dormitory,
     required RoomEntity room,
-  }) => FullStudentEntity(id: id, user: user, dormitory: dormitory, room: room);
+  }) = FullStudent;
 
   String get uid;
 
   StudentEntity copyWith();
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is StudentEntity && uid == other.uid;
-  }
-
-  @override
-  int get hashCode => uid.hashCode;
 }
 
-final class PartialStudentEntity extends StudentEntity {
-  const PartialStudentEntity({
-    required this.user,
+final class PartialStudent extends StudentEntity {
+  const PartialStudent({
+    required super.user,
     required this.dormitoryId,
     required this.roomId,
   });
 
-  final UserEntity user;
   final int dormitoryId;
   final int roomId;
 
@@ -51,34 +39,30 @@ final class PartialStudentEntity extends StudentEntity {
   String get uid => user.uid;
 
   @override
-  PartialStudentEntity copyWith({
-    int? dormitoryId,
-    int? roomId,
-    UserEntity? user,
-  }) => PartialStudentEntity(
-    dormitoryId: dormitoryId ?? this.dormitoryId,
-    roomId: roomId ?? this.roomId,
-    user: user ?? this.user,
-  );
+  PartialStudent copyWith({int? dormitoryId, int? roomId, UserEntity? user}) =>
+      PartialStudent(
+        dormitoryId: dormitoryId ?? this.dormitoryId,
+        roomId: roomId ?? this.roomId,
+        user: user ?? this.user,
+      );
 
   @override
   String toString() =>
-      'UserEntity('
+      'PartialStudent('
       'dormitoryId: $dormitoryId, '
       'roomId: $roomId, '
       'user: $user)';
 }
 
-final class FullStudentEntity extends StudentEntity {
-  const FullStudentEntity({
+final class FullStudent extends StudentEntity {
+  const FullStudent({
     required this.id,
-    required this.user,
+    required super.user,
     required this.dormitory,
     required this.room,
   });
 
   final int id;
-  final UserEntity user;
   final DormitoryEntity dormitory;
   final RoomEntity room;
 
@@ -86,12 +70,12 @@ final class FullStudentEntity extends StudentEntity {
   String get uid => user.uid;
 
   @override
-  FullStudentEntity copyWith({
+  FullStudent copyWith({
     int? id,
     DormitoryEntity? dormitory,
     RoomEntity? room,
     UserEntity? user,
-  }) => FullStudentEntity(
+  }) => FullStudent(
     id: id ?? this.id,
     user: user ?? this.user,
     dormitory: dormitory ?? this.dormitory,
@@ -100,7 +84,7 @@ final class FullStudentEntity extends StudentEntity {
 
   @override
   String toString() =>
-      'UserEntity('
+      'FullStudent('
       'id: $id, '
       'user: $user, '
       'dormitory: $dormitory, '

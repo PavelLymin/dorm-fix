@@ -2,18 +2,23 @@ import 'package:drift/drift.dart';
 import '../../../../../core/database/database.dart';
 import '../../../profile.dart';
 
-abstract interface class IMasterRepository {
-  Future<MasterEntity?> getMaster({required String uid});
+abstract interface class IAssignmentsRepository {
+  Future<MasterEntity?> getAssignment({required int requestId});
 }
 
-class MasterRepository implements IMasterRepository {
-  MasterRepository({required Database database}) : _database = database;
+class AssignmentsRepositoryImpl implements IAssignmentsRepository {
+  AssignmentsRepositoryImpl({required Database database})
+    : _database = database;
 
   final Database _database;
 
   @override
-  Future<MasterEntity?> getMaster({required String uid}) async {
-    final data = await (_database.select(_database.masters).join([
+  Future<MasterEntity?> getAssignment({required int requestId}) async {
+    final query = _database.select(_database.assignments).join([
+      innerJoin(
+        _database.masters,
+        _database.masters.uid.equalsExp(_database.assignments.uid),
+      ),
       innerJoin(
         _database.users,
         _database.users.uid.equalsExp(_database.masters.uid),
@@ -28,10 +33,15 @@ class MasterRepository implements IMasterRepository {
           _database.masters.specializationId,
         ),
       ),
-    ])..where(_database.users.uid.equals(uid))).getSingleOrNull();
+    ]);
+    query.where(_database.assignments.requestId.equals(requestId));
+    query.orderBy([
+      OrderingTerm(expression: _database.assignments.createdAt, mode: .desc),
+    ]);
+    query.limit(1);
 
+    final data = await query.getSingleOrNull();
     if (data == null) return null;
-
     final master = MasterDto.fromData(
       data.readTable(_database.masters),
       data.readTable(_database.users),

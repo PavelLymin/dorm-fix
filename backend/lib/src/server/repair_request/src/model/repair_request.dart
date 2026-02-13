@@ -1,4 +1,3 @@
-import '../../../specialization/specialization.dart';
 import 'problem.dart';
 
 enum Priority {
@@ -60,13 +59,12 @@ sealed class RepairRequestEntity {
     required final DateTime date,
     required final int startTime,
     required final int endTime,
-    required final List<PartialProblemEntity> problems,
+    required final List<PartialProblem> problems,
   }) = PartialRepairRequest;
 
   const factory RepairRequestEntity.full({
     required final int id,
     required final String uid,
-    required final SpecializationEntity specialization,
     required final String description,
     required final Priority priority,
     required final Status status,
@@ -74,7 +72,6 @@ sealed class RepairRequestEntity {
     required final DateTime date,
     required final int startTime,
     required final int endTime,
-    required final List<FullProblemEntity> problems,
     required final DateTime createdAt,
   }) = FullRepairRequest;
 }
@@ -93,7 +90,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
   });
 
   final int specializationId;
-  final List<PartialProblemEntity> problems;
+  final List<PartialProblem> problems;
 
   PartialRepairRequest copyWith({
     int? specializationId,
@@ -104,7 +101,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
     DateTime? date,
     int? startTime,
     int? endTime,
-    List<PartialProblemEntity>? problems,
+    List<PartialProblem>? problems,
   }) => PartialRepairRequest(
     specializationId: specializationId ?? this.specializationId,
     description: description ?? this.description,
@@ -167,21 +164,16 @@ final class FullRepairRequest extends RepairRequestEntity {
     required super.date,
     required super.startTime,
     required super.endTime,
-    required this.specialization,
-    required this.problems,
     required this.createdAt,
   });
 
   final int id;
   final String uid;
   final DateTime createdAt;
-  final SpecializationEntity specialization;
-  final List<FullProblemEntity> problems;
 
   FullRepairRequest copyWith({
     int? id,
     String? uid,
-    SpecializationEntity? specialization,
     String? description,
     Priority? priority,
     Status? status,
@@ -189,12 +181,10 @@ final class FullRepairRequest extends RepairRequestEntity {
     DateTime? date,
     int? startTime,
     int? endTime,
-    List<FullProblemEntity>? problems,
     DateTime? createdAt,
   }) => FullRepairRequest(
     id: id ?? this.id,
     uid: uid ?? this.uid,
-    specialization: specialization ?? this.specialization,
     description: description ?? this.description,
     priority: priority ?? this.priority,
     status: status ?? this.status,
@@ -202,7 +192,6 @@ final class FullRepairRequest extends RepairRequestEntity {
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
-    problems: problems ?? this.problems,
     createdAt: createdAt ?? this.createdAt,
   );
 
@@ -211,7 +200,6 @@ final class FullRepairRequest extends RepairRequestEntity {
       'FullRepairRequest('
       'id: $id,'
       'uid: $uid, '
-      'specialization: $specialization, '
       'description: $description, '
       'priority: $priority, '
       'status: $status, '
@@ -219,7 +207,6 @@ final class FullRepairRequest extends RepairRequestEntity {
       'date: $date, '
       'startTime: $startTime, '
       'endTime: $endTime, '
-      'problems: $problems, '
       'createdAt: $createdAt)';
 
   @override

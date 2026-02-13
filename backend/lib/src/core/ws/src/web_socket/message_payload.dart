@@ -35,7 +35,7 @@ sealed class MessagePayload {
       LeaveFromChatPayload;
 
   const factory MessagePayload.createdRequest({
-    required FullRepairRequest request,
+    required RequestAggregate request,
   }) = CreatedRequestPayload;
 
   const factory MessagePayload.createdMessage({
@@ -107,17 +107,17 @@ final class LeaveFromChatPayload extends MessagePayload {
 final class CreatedRequestPayload extends MessagePayload {
   const CreatedRequestPayload({required this.request});
 
-  final FullRepairRequest request;
+  final RequestAggregate request;
 
   @override
   Map<String, Object?> toJson() => {
-    'request': FullRepairRequestDto.fromEntity(request).toJson(),
+    'request': RequestAggregateDto.fromEntity(request).toJson(),
   };
 
   factory CreatedRequestPayload.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{'request': Map<String, Object?> request}) {
       return CreatedRequestPayload(
-        request: FullRepairRequestDto.fromJson(request).toEntity(),
+        request: RequestAggregateDto.fromJson(request).toEntity(),
       );
     } else {
       throw FormatException('Invalid payload for created request: $json');

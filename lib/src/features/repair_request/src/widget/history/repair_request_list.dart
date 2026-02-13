@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../../chat/chat.dart';
 import '../../../request.dart';
 
@@ -13,6 +14,21 @@ class RepairRequestList extends StatefulWidget {
 
 class _RepairRequestListState extends State<RepairRequestList> {
   late double _height;
+  late final ChatBloc _chatBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    final dependency = DependeciesScope.of(context);
+    dependency.chatRealTimeRepository.joinToChat(chatId: 1);
+
+    _chatBloc = ChatBloc(
+      webSocket: dependency.webSocket,
+      logger: dependency.logger,
+      messageRepository: dependency.messageRepository,
+      messageRealTimeRepository: dependency.messageRealTimeRepository,
+    );
+  }
 
   @override
   void didChangeDependencies() {
@@ -22,43 +38,49 @@ class _RepairRequestListState extends State<RepairRequestList> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SliverPadding(
+  void dispose() {
+    super.dispose();
+    _chatBloc.close();
+  }
+
+  @override
+  Widget build(BuildContext context) => BlocProvider<ChatBloc>.value(
+    value: _chatBloc,
+    child: SliverPadding(
       padding: AppPadding.contentPadding,
       sliver: BlocBuilder<RepairRequestBloc, RepairRequestState>(
         builder: (context, state) => state.maybeMap(
           orElse: () => const SliverToBoxAdapter(),
           loading: (_) => const _LoadingList(),
-          loaded: (state) {
-            return SliverFixedExtentList(
-              itemExtent: _height,
-              delegate: SliverChildBuilderDelegate(
-                childCount: state.requests.length,
-                (context, index) => Padding(
-                  padding: _EstimatedSizes.listPadding,
-                  child: _Item(request: state.requests[index]),
+          loaded: (state) => SliverFixedExtentList(
+            itemExtent: _height,
+            delegate: SliverChildBuilderDelegate(
+              childCount: state.requests.length,
+              (context, index) => Padding(
+                padding: _EstimatedSizes.listPadding,
+                child: _OpenItem(
+                  request: state.requests[index],
+                  chatBloc: _chatBloc,
                 ),
               ),
-            );
-          },
+            ),
+          ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 class _LoadingList extends StatelessWidget {
   const _LoadingList();
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList.separated(
-      itemCount: 5,
-      itemBuilder: (_, _) =>
-          Shimmer(child: _Item(request: FakeFullRepairRequest())),
-      separatorBuilder: (_, _) => Padding(padding: _EstimatedSizes.listPadding),
-    );
-  }
+  Widget build(BuildContext context) => SliverList.separated(
+    itemCount: 5,
+    itemBuilder: (_, _) =>
+        Shimmer(child: _Item(request: FakeFullRepairRequest())),
+    separatorBuilder: (_, _) => Padding(padding: _EstimatedSizes.listPadding),
+  );
 }
 
 abstract class _EstimatedSizes {
@@ -113,6 +135,32 @@ abstract class _EstimatedSizes {
   }
 }
 
+class _OpenItem extends StatelessWidget {
+  const _OpenItem({required this.request, required this.chatBloc});
+
+  final FullRepairRequest request;
+  final ChatBloc chatBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyleData.style;
+    return OpenContainer(
+      openElevation: .0,
+      closedElevation: .0,
+      closedShape: RoundedRectangleBorder(borderRadius: style.borderRadius),
+      closedColor: palette.background,
+      openColor: palette.background,
+      openBuilder: (_, _) => ChatScreen(
+        chat: FullChat(requestId: 1, id: 1, createdAt: .now()),
+        chatBloc: chatBloc,
+      ),
+      closedBuilder: (_, _) => _Item(request: request),
+    );
+  }
+}
+
 class _Item extends StatelessWidget {
   const _Item({required this.request});
 
@@ -123,66 +171,58 @@ class _Item extends StatelessWidget {
     final theme = Theme.of(context);
     final palette = theme.colorPalette;
     final style = theme.appStyleData.style;
-    return OpenContainer(
-      openElevation: 0.0,
-      closedElevation: 0.0,
-      closedShape: RoundedRectangleBorder(borderRadius: style.borderRadius),
-      closedColor: palette.background,
-      openColor: palette.background,
-      openBuilder: (context, _) => const ChatScreen(),
-      closedBuilder: (context, action) => UiCard.standart(
-        borderRadius: style.borderRadius,
-        padding: _EstimatedSizes.itemPadding,
-        child: Column(
-          mainAxisAlignment: .start,
-          crossAxisAlignment: .start,
-          mainAxisSize: .min,
-          spacing: _EstimatedSizes.spacing,
-          children: [
-            Text(
-              'Заявка №${request.id}',
-              style: _EstimatedSizes.titleStyle(context),
+    return UiCard.standart(
+      borderRadius: style.borderRadius,
+      padding: _EstimatedSizes.itemPadding,
+      child: Column(
+        mainAxisAlignment: .start,
+        crossAxisAlignment: .start,
+        mainAxisSize: .min,
+        spacing: _EstimatedSizes.spacing,
+        children: [
+          Text(
+            'Заявка №${request.id}',
+            style: _EstimatedSizes.titleStyle(context),
+          ),
+          SizedBox(
+            height: _EstimatedSizes.heightDescription,
+            child: Text(
+              request.description,
+              style: _EstimatedSizes.titleStyle(
+                context,
+              ).copyWith(color: palette.mutedForeground),
+              softWrap: true,
+              maxLines: 2,
+              overflow: .ellipsis,
             ),
-            SizedBox(
-              height: _EstimatedSizes.heightDescription,
-              child: Text(
-                request.description,
-                style: _EstimatedSizes.titleStyle(
-                  context,
-                ).copyWith(color: palette.mutedForeground),
-                softWrap: true,
-                maxLines: 2,
-                overflow: .ellipsis,
+          ),
+          Divider(
+            height: _EstimatedSizes.dividerHeight,
+            thickness: _EstimatedSizes.thickness,
+          ),
+          Column(
+            mainAxisAlignment: .center,
+            crossAxisAlignment: .center,
+            mainAxisSize: .min,
+            children: [
+              _ItemData(
+                title: 'Дата',
+                value: request.date.toLocal().toString(),
               ),
-            ),
-            Divider(
-              height: _EstimatedSizes.dividerHeight,
-              thickness: _EstimatedSizes.thickness,
-            ),
-            Column(
-              mainAxisAlignment: .center,
-              crossAxisAlignment: .center,
-              mainAxisSize: .min,
-              children: [
-                _ItemData(
-                  title: 'Дата',
-                  value: request.date.toLocal().toString(),
-                ),
-                _ItemData(title: 'Мастер', value: request.specialization.title),
-                _ItemData(title: 'Приоритет', value: request.priority.value),
-                _ItemData(
-                  title: 'Студент отсутствует',
-                  value: request.studentAbsent ? 'Да' : 'Нет',
-                ),
-                _ItemData(
-                  title: 'Время',
-                  value: '${request.startTime}:00 - ${request.endTime}:00',
-                ),
-                _ItemStatus(status: request.status),
-              ],
-            ),
-          ],
-        ),
+              _ItemData(title: 'Мастер', value: request.specialization.title),
+              _ItemData(title: 'Приоритет', value: request.priority.value),
+              _ItemData(
+                title: 'Студент отсутствует',
+                value: request.studentAbsent ? 'Да' : 'Нет',
+              ),
+              _ItemData(
+                title: 'Время',
+                value: '${request.startTime}:00 - ${request.endTime}:00',
+              ),
+              _ItemStatus(status: request.status),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -241,11 +281,9 @@ class _ItemStatus extends StatelessWidget {
       .inProgress => palette.inProgress,
       .newRequest => palette.newRequest,
     };
-
     return Row(
       mainAxisAlignment: .spaceBetween,
       crossAxisAlignment: .center,
-      spacing: 64.0,
       children: [
         Text(
           'Статус',

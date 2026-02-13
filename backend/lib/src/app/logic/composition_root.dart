@@ -36,95 +36,111 @@ class CompositionRoot {
   Future<DependencyContainer> compose() async {
     logger.i('Initializing dependencies...');
 
+    // <--- Services --->
     // Firebase
     final options = AppOptions(
       credential: FirebaseAdmin.instance.certFromPath(Config.serviceAccount),
     );
-
     final app = FirebaseAdmin.instance.initializeApp(options);
 
     // Database
     final database = Database.lazy(file: File(Config.databasePath));
 
-    // WS
-    final ws = WebSocketBase();
-
     // RestApi
     final restApi = RestApiBase();
 
+    // WS
+    final ws = WebSocketBase();
+
+    // <--- Repositories --->
     // User
     final userRepository = UserRepositoryImpl(database: database);
     final userRouter = UserRouter(
       userRepository: userRepository,
       restApi: restApi,
     );
-
     // Student
     final studentRepository = StudentRepositoryImpl(database: database);
-
     // Master
     final masterRepository = MasterRepository(database: database);
-
-    // Profile
-    final profileRouter = ProfileRouter(
-      restApi: restApi,
-      studentRepository: studentRepository,
-      masterRepository: masterRepository,
+    // Problem
+    final problemRepository = ProblemRepositoryImpl(database: database);
+    // Specialization
+    final specializationRepository = SpecializationRepositoryImpl(
+      database: database,
     );
-
-    // Request
-    final requestRepository = RequestRepositoryImpl(database: database);
-    final repairRequestRouter = RepairRequestRouter(
-      requestRepository: requestRepository,
-      restApi: restApi,
-      wsConnection: ws,
-    );
-
     // Dormitory
     final dormitoryRepository = DormitoryRepository(database: database);
     final dormitoryRouter = DormitoryRouter(
       dormitoryRepository: dormitoryRepository,
       restApi: restApi,
     );
-
     // Room
     final roomRepository = RoomRepository(database: database);
-    final roomRouter = RoomRouter(
-      roomRepository: roomRepository,
-      restApi: restApi,
-    );
-
-    // Specialization
-    final specializationRepository = SpecializationRepositoryImpl(
-      database: database,
-    );
-    final specializationRouter = SpecializationRouter(
-      specializationRepository: specializationRepository,
-      restApi: restApi,
-    );
-
-    // Chat
+    // Message
     final messageRepository = MessageRepositoryImpl(database: database);
+    // Chat
     final chatRepository = ChatRepositoryImpl(database: database);
-    final chatRouter = CharRouter(
+    final assignmentsRepository = AssignmentsRepositoryImpl(database: database);
+    // RepairRequest
+    final requestRepository = RequestRepositoryImpl(database: database);
+    final requestFacade = RepairRequestFacadeImpl(
+      database: database,
+      requestRepository: requestRepository,
+      problemRepository: problemRepository,
       chatRepository: chatRepository,
-      restApi: restApi,
-    );
-    final messageRouter = MessageRouter(
-      messageRepository: messageRepository,
-      restApi: restApi,
+      specializationRepository: specializationRepository,
+      assignmentsRepository: assignmentsRepository,
     );
 
-    // RealTime
+    // <--- RealTime Repositories --->
+    // Chat
     final chatRealTimeRepository = ChatRealTimeRepositoryImpl(ws: ws);
+    // Message
     final messageRealTimeRepository = MessageRealTimeRepositoryImpl(
       messageRepository: messageRepository,
       chatRealTimeRepository: chatRealTimeRepository,
     );
+
+    // <--- Routers --->
+    // WS
     final wsRouter = WsRouter(
       ws: ws,
       chatRealTimeRepository: chatRealTimeRepository,
       messageRealTimeRepository: messageRealTimeRepository,
+    );
+    // Profile
+    final profileRouter = ProfileRouter(
+      restApi: restApi,
+      studentRepository: studentRepository,
+      masterRepository: masterRepository,
+    );
+    // Specialization
+    final specializationRouter = SpecializationRouter(
+      specializationRepository: specializationRepository,
+      restApi: restApi,
+    );
+    // Room
+    final roomRouter = RoomRouter(
+      roomRepository: roomRepository,
+      restApi: restApi,
+    );
+    // Message
+    final messageRouter = MessageRouter(
+      messageRepository: messageRepository,
+      restApi: restApi,
+    );
+    // Chat
+    final chatRouter = CharRouter(
+      chatRepository: chatRepository,
+      restApi: restApi,
+    );
+    // RepairRequest
+    final repairRequestRouter = RepairRequestRouter(
+      requestRepository: requestRepository,
+      requestFacade: requestFacade,
+      restApi: restApi,
+      wsConnection: ws,
     );
 
     return _DependencyFactory(

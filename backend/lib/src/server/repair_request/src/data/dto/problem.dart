@@ -7,16 +7,57 @@ sealed class ProblemDto {
 
   final int requestId;
   final String photoPath;
+
+  const factory ProblemDto.partial({
+    required final int requestId,
+    required final String photoPath,
+  }) = PartialProblemDto;
+
   const factory ProblemDto.full({
     required final int id,
     required final int requestId,
     required final String photoPath,
   }) = FullProblemDto;
 
-  const factory ProblemDto.partial({
-    required final int requestId,
-    required final String photoPath,
-  }) = PartialProblemDto;
+  ProblemEntity toEntity();
+
+  Map<String, Object?> toJson();
+}
+
+class PartialProblemDto extends ProblemDto {
+  const PartialProblemDto({required super.requestId, required super.photoPath});
+
+  @override
+  PartialProblem toEntity() =>
+      PartialProblem(requestId: requestId, photoPath: photoPath);
+
+  @override
+  Map<String, Object?> toJson() => {
+    'request_id': requestId,
+    'photo_path': photoPath,
+  };
+
+  ProblemsCompanion toCompanion() => ProblemsCompanion(
+    requestId: Value(requestId),
+    photoPath: Value(photoPath),
+  );
+
+  factory PartialProblemDto.fromEntity(PartialProblem entity) =>
+      PartialProblemDto(
+        requestId: entity.requestId,
+        photoPath: entity.photoPath,
+      );
+
+  factory PartialProblemDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'request_id': final int requestId,
+      'photo_path': final String photoPath,
+    }) {
+      return PartialProblemDto(requestId: requestId, photoPath: photoPath);
+    }
+
+    throw ArgumentError('Invalid JSON format for PartialProblemDto: $json');
+  }
 }
 
 class FullProblemDto extends ProblemDto {
@@ -28,20 +69,28 @@ class FullProblemDto extends ProblemDto {
 
   final int id;
 
-  FullProblemEntity toEntity() =>
-      FullProblemEntity(id: id, requestId: requestId, photoPath: photoPath);
+  @override
+  FullProblem toEntity() =>
+      FullProblem(id: id, requestId: requestId, photoPath: photoPath);
 
-  factory FullProblemDto.fromEntity(FullProblemEntity entity) => FullProblemDto(
-    id: entity.id,
-    requestId: entity.requestId,
-    photoPath: entity.photoPath,
-  );
-
+  @override
   Map<String, Object?> toJson() => {
     'id': id,
     'request_id': requestId,
     'photo_path': photoPath,
   };
+
+  ProblemsCompanion toCompanion() => ProblemsCompanion(
+    id: Value(id),
+    requestId: Value(requestId),
+    photoPath: Value(photoPath),
+  );
+
+  factory FullProblemDto.fromEntity(FullProblem entity) => FullProblemDto(
+    id: entity.id,
+    requestId: entity.requestId,
+    photoPath: entity.photoPath,
+  );
 
   factory FullProblemDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
@@ -50,48 +99,14 @@ class FullProblemDto extends ProblemDto {
       'photo_path': final String photoPath,
     }) {
       return FullProblemDto(id: id, requestId: requestId, photoPath: photoPath);
-    } else {
-      throw ArgumentError('Invalid JSON format for FullProblemDto: $json');
     }
+
+    throw ArgumentError('Invalid JSON format for FullProblemDto: $json');
   }
 
   factory FullProblemDto.fromData(Problem companion) => FullProblemDto(
     id: companion.id,
     requestId: companion.requestId,
     photoPath: companion.photoPath,
-  );
-}
-
-class PartialProblemDto extends ProblemDto {
-  const PartialProblemDto({required super.requestId, required super.photoPath});
-
-  PartialProblemEntity toEntity() =>
-      PartialProblemEntity(requestId: requestId, photoPath: photoPath);
-
-  factory PartialProblemDto.fromEntity(PartialProblemEntity entity) =>
-      PartialProblemDto(
-        requestId: entity.requestId,
-        photoPath: entity.photoPath,
-      );
-
-  Map<String, Object?> toJson() => {
-    'request_id': requestId,
-    'photo_path': photoPath,
-  };
-
-  factory PartialProblemDto.fromJson(Map<String, Object?> json) {
-    if (json case <String, Object?>{
-      'request_id': final int requestId,
-      'photo_path': final String photoPath,
-    }) {
-      return PartialProblemDto(requestId: requestId, photoPath: photoPath);
-    } else {
-      throw ArgumentError('Invalid JSON format for PartialProblemDto: $json');
-    }
-  }
-
-  ProblemsCompanion toCompanion() => ProblemsCompanion(
-    requestId: Value(requestId),
-    photoPath: Value(photoPath),
   );
 }

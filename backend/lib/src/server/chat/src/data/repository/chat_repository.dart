@@ -21,7 +21,9 @@ class ChatRepositoryImpl implements IChatRepository {
         .into(_database.chats)
         .insertReturning(dto.toCompanion());
 
-    return FullChatDto.fromData(chat: data).toEntity();
+    final result = FullChatDto.fromData(chat: data).toEntity();
+
+    return result;
   }
 
   @override
@@ -32,7 +34,9 @@ class ChatRepositoryImpl implements IChatRepository {
 
     if (data == null) return null;
 
-    return FullChatDto.fromData(chat: data).toEntity();
+    final result = FullChatDto.fromData(chat: data).toEntity();
+
+    return result;
   }
 
   @override

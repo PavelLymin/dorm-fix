@@ -157,7 +157,6 @@ class CompositionRoot {
 
     final repairRequestBloc = RepairRequestBloc(
       requestRepository: requestRepository,
-      chatRepository: chatRepository,
       webSocket: webSocket,
       logger: logger,
     );

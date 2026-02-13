@@ -1,4 +1,5 @@
 import '../../../dormitory/dormitory.dart';
+import '../../../specialization/specialization.dart';
 import '../../profile.dart';
 
 final class MasterEntity {
@@ -6,22 +7,26 @@ final class MasterEntity {
     required this.id,
     required this.user,
     required this.dormitory,
+    required this.specialization,
   });
 
   final int id;
   final UserEntity user;
   final DormitoryEntity dormitory;
+  final SpecializationEntity specialization;
 
   String get uid => user.uid;
 
   MasterEntity copyWith({
     int? id,
-    DormitoryEntity? dormitory,
     UserEntity? user,
+    DormitoryEntity? dormitory,
+    SpecializationEntity? specialization,
   }) => MasterEntity(
     id: id ?? this.id,
     user: user ?? this.user,
     dormitory: dormitory ?? this.dormitory,
+    specialization: specialization ?? this.specialization,
   );
 
   @override
@@ -29,7 +34,8 @@ final class MasterEntity {
       'MasterEntity('
       'id: $id, '
       'user: $user, '
-      'dormitory: $dormitory)';
+      'dormitory: $dormitory '
+      'specialization: $specialization)';
 
   @override
   bool operator ==(Object other) {

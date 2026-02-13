@@ -5,16 +5,16 @@ import '../../../profile.dart';
 abstract interface class IStudentRepository {
   Future<void> createStudent({
     required String uid,
-    required PartialStudentEntity student,
+    required PartialStudent student,
   });
 
   Future<void> deleteStudent({required String uid});
 
-  Future<FullStudentEntity?> getStudent({required String uid});
+  Future<FullStudent?> getStudent({required String uid});
 
   Future<void> updateStudent({
     required String uid,
-    required PartialStudentEntity student,
+    required PartialStudent student,
   });
 }
 
@@ -26,7 +26,7 @@ class StudentRepositoryImpl implements IStudentRepository {
   @override
   Future<void> createStudent({
     required String uid,
-    required PartialStudentEntity student,
+    required PartialStudent student,
   }) async {
     await _database.transaction(() async {
       await _database
@@ -56,7 +56,7 @@ class StudentRepositoryImpl implements IStudentRepository {
   }
 
   @override
-  Future<FullStudentEntity?> getStudent({required String uid}) async {
+  Future<FullStudent?> getStudent({required String uid}) async {
     final data = await (_database.select(_database.students).join([
       innerJoin(
         _database.users,
@@ -87,7 +87,7 @@ class StudentRepositoryImpl implements IStudentRepository {
   @override
   Future<void> updateStudent({
     required String uid,
-    required PartialStudentEntity student,
+    required PartialStudent student,
   }) async {
     await (_database.update(_database.students)
           ..where((row) => row.uid.equals(uid)))

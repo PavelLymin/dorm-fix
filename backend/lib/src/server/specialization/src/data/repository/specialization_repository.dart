@@ -3,6 +3,8 @@ import '../../../specialization.dart';
 
 abstract interface class ISpecializationRepository {
   Future<List<SpecializationEntity>> getSpecializations();
+
+  Future<SpecializationEntity> getSpecialization({required int id});
 }
 
 class SpecializationRepositoryImpl implements ISpecializationRepository {
@@ -22,5 +24,18 @@ class SpecializationRepositoryImpl implements ISpecializationRepository {
         .toList();
 
     return specializations;
+  }
+
+  @override
+  Future<SpecializationEntity> getSpecialization({required int id}) async {
+    final specializationData = await (_database.select(
+      _database.specializations,
+    )..where((row) => row.id.equals(id))).getSingle();
+
+    final specialization = SpecializationDto.fromData(
+      specializationData,
+    ).toEntity();
+
+    return specialization;
   }
 }

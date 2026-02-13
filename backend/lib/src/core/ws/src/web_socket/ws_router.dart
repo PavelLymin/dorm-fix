@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:backend/src/server/chat/chat.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -34,7 +32,6 @@ class WsRouter {
       _ws.addConnection(uid: uid, socket: socket);
 
       socket.stream.listen((data) async {
-        log(data);
         await _ws.decodeRaw(data).then((message) async {
           await message.mapOrNull(
             joinToChat: (payload, _) => _chatRepository.joinToChat(

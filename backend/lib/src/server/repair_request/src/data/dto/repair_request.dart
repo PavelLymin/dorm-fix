@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart';
 import '../../../../../core/database/database.dart';
-import '../../../../specialization/specialization.dart';
 import '../../../repair_request.dart';
 
 sealed class RepairRequestDto {
@@ -39,7 +36,6 @@ sealed class RepairRequestDto {
   const factory RepairRequestDto.full({
     required final int id,
     required final String uid,
-    required final SpecializationDto specialization,
     required final String description,
     required final Priority priority,
     required final Status status,
@@ -47,9 +43,12 @@ sealed class RepairRequestDto {
     required final DateTime date,
     required final int startTime,
     required final int endTime,
-    required final List<FullProblemDto> problems,
     required final DateTime createdAt,
   }) = FullRepairRequestDto;
+
+  RepairRequestEntity toEntity();
+
+  Map<String, Object?> toJson();
 }
 
 final class PartialRepairRequestDto extends RepairRequestDto {
@@ -68,6 +67,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
   final int specializationId;
   final List<PartialProblemDto> problems;
 
+  @override
   PartialRepairRequest toEntity() => PartialRepairRequest(
     specializationId: specializationId,
     description: description,
@@ -78,6 +78,31 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     startTime: startTime,
     endTime: endTime,
     problems: problems.map((e) => e.toEntity()).toList(),
+  );
+
+  @override
+  Map<String, Object?> toJson() => {
+    'specialization_id': specializationId,
+    'description': description,
+    'priority': priority.value,
+    'status': status.value,
+    'student_absent': studentAbsent,
+    'date': date.toLocal().toString(),
+    'start_time': startTime,
+    'end_time': endTime,
+    'problems': problems.map((p) => p.toJson()).toList(),
+  };
+
+  RequestsCompanion toCompanion({required String uid}) => RequestsCompanion(
+    uid: Value(uid),
+    specializationId: Value(specializationId),
+    description: Value(description),
+    priority: Value(priority.value),
+    status: Value(status.value),
+    studentAbsent: Value(studentAbsent),
+    date: Value(date),
+    startTime: Value(startTime),
+    endTime: Value(endTime),
   );
 
   factory PartialRepairRequestDto.fromEntity(PartialRepairRequest entity) =>
@@ -92,18 +117,6 @@ final class PartialRepairRequestDto extends RepairRequestDto {
         endTime: entity.endTime,
         problems: entity.problems.map(PartialProblemDto.fromEntity).toList(),
       );
-
-  Map<String, Object?> toJson() => {
-    'specialization_id': specializationId,
-    'description': description,
-    'priority': priority.value,
-    'status': status.value,
-    'student_absent': studentAbsent,
-    'date': date.toLocal().toString(),
-    'start_time': startTime,
-    'end_time': endTime,
-    'problems': problems.map((p) => p.toJson()).toList(),
-  };
 
   factory PartialRepairRequestDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
@@ -132,23 +145,9 @@ final class PartialRepairRequestDto extends RepairRequestDto {
             .toList(),
       );
     } else {
-      throw ArgumentError(
-        'Invalid JSON format for PartialRepairRequestDto: $json',
-      );
+      throw ArgumentError('Invalid JSON format for RepairRequestDto: $json');
     }
   }
-
-  RequestsCompanion toCompanion({required String uid}) => RequestsCompanion(
-    uid: Value(uid),
-    specializationId: Value(specializationId),
-    description: Value(description),
-    priority: Value(priority.value),
-    status: Value(status.value),
-    studentAbsent: Value(studentAbsent),
-    date: Value(date),
-    startTime: Value(startTime),
-    endTime: Value(endTime),
-  );
 }
 
 final class FullRepairRequestDto extends RepairRequestDto {
@@ -162,21 +161,17 @@ final class FullRepairRequestDto extends RepairRequestDto {
     required super.date,
     required super.startTime,
     required super.endTime,
-    required this.specialization,
-    required this.problems,
     required this.createdAt,
   });
 
   final int id;
   final String uid;
   final DateTime createdAt;
-  final SpecializationDto specialization;
-  final List<FullProblemDto> problems;
 
+  @override
   FullRepairRequest toEntity() => FullRepairRequest(
     id: id,
     uid: uid,
-    specialization: specialization.toEntity(),
     description: description,
     priority: priority,
     status: status,
@@ -184,30 +179,13 @@ final class FullRepairRequestDto extends RepairRequestDto {
     date: date,
     startTime: startTime,
     endTime: endTime,
-    problems: problems.map((p) => p.toEntity()).toList(),
     createdAt: createdAt,
   );
 
-  factory FullRepairRequestDto.fromEntity(FullRepairRequest entity) =>
-      FullRepairRequestDto(
-        id: entity.id,
-        uid: entity.uid,
-        specialization: SpecializationDto.fromEntity(entity.specialization),
-        description: entity.description,
-        priority: entity.priority,
-        status: entity.status,
-        studentAbsent: entity.studentAbsent,
-        date: entity.date,
-        startTime: entity.startTime,
-        endTime: entity.endTime,
-        problems: entity.problems.map(FullProblemDto.fromEntity).toList(),
-        createdAt: entity.createdAt,
-      );
-
+  @override
   Map<String, Object?> toJson() => {
     'id': id,
     'uid': uid,
-    'specialization': specialization.toJson(),
     'description': description,
     'priority': priority.value,
     'status': status.value,
@@ -215,15 +193,27 @@ final class FullRepairRequestDto extends RepairRequestDto {
     'date': date.toLocal().toString(),
     'start_time': startTime,
     'end_time': endTime,
-    'problems': problems.map((p) => p.toJson()).toList(),
     'created_at': createdAt.toLocal().toString(),
   };
 
-  factory FullRepairRequestDto.fromJson(Map<String, Object?> requestJson) {
-    if (requestJson case <String, Object?>{
+  factory FullRepairRequestDto.fromEntity(FullRepairRequest entity) =>
+      FullRepairRequestDto(
+        id: entity.id,
+        uid: entity.uid,
+        description: entity.description,
+        priority: entity.priority,
+        status: entity.status,
+        studentAbsent: entity.studentAbsent,
+        date: entity.date,
+        startTime: entity.startTime,
+        endTime: entity.endTime,
+        createdAt: entity.createdAt,
+      );
+
+  factory FullRepairRequestDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
       'id': final int id,
       'uid': final String uid,
-      'specialization': final String specJson,
       'description': final String description,
       'priority': final String priority,
       'status': final String status,
@@ -231,15 +221,11 @@ final class FullRepairRequestDto extends RepairRequestDto {
       'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
-      'problems': final String problemsJson,
       'created_at': final String createdAt,
     }) {
-      final specRaw = jsonDecode(specJson) as Map<String, Object?>;
-      final problemsRaw = jsonDecode(problemsJson) as List<Object?>;
       return FullRepairRequestDto(
         id: id,
         uid: uid,
-        specialization: .fromJson(specRaw),
         description: description,
         priority: .fromValue(priority),
         status: .fromValue(status),
@@ -247,35 +233,26 @@ final class FullRepairRequestDto extends RepairRequestDto {
         date: .parse(date),
         startTime: startTime,
         endTime: endTime,
-        problems: problemsRaw
-            .whereType<Map<String, Object?>>()
-            .map(FullProblemDto.fromJson)
-            .toList(),
         createdAt: .parse(createdAt),
       );
     } else {
       throw ArgumentError(
-        'Invalid JSON format for FullRepairRequestDto: $requestJson',
+        'Invalid JSON format for FullRepairRequestDto: $json',
       );
     }
   }
 
-  factory FullRepairRequestDto.fromData(
-    Request request,
-    Specialization specialization,
-    List<Problem> problem,
-  ) => FullRepairRequestDto(
-    id: request.id,
-    uid: request.uid,
-    specialization: .fromData(specialization),
-    description: request.description,
-    priority: .fromValue(request.priority),
-    status: .fromValue(request.status),
-    studentAbsent: request.studentAbsent,
-    date: request.date,
-    startTime: request.startTime,
-    endTime: request.endTime,
-    problems: problem.map(FullProblemDto.fromData).toList(),
-    createdAt: request.createdAt,
-  );
+  factory FullRepairRequestDto.fromData(Request request) =>
+      FullRepairRequestDto(
+        id: request.id,
+        uid: request.uid,
+        description: request.description,
+        priority: .fromValue(request.priority),
+        status: .fromValue(request.status),
+        studentAbsent: request.studentAbsent,
+        date: request.date,
+        startTime: request.startTime,
+        endTime: request.endTime,
+        createdAt: request.createdAt,
+      );
 }

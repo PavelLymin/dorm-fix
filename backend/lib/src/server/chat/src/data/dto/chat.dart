@@ -14,17 +14,26 @@ sealed class ChatDto {
     required int id,
     required DateTime createdAt,
   }) = FullChatDto;
+
+  ChatEntity toEntity();
+  Map<String, Object?> toJson();
+  ChatsCompanion toCompanion();
 }
 
 final class PartialChatDto extends ChatDto {
   const PartialChatDto({required super.requestId});
 
+  @override
   PartialChat toEntity() => PartialChat(requestId: requestId);
+
+  @override
+  Map<String, Object?> toJson() => {'requestId': requestId};
+
+  @override
+  ChatsCompanion toCompanion() => ChatsCompanion(requestId: Value(requestId));
 
   factory PartialChatDto.fromEntity(PartialChat entity) =>
       PartialChatDto(requestId: entity.requestId);
-
-  Map<String, Object?> toJson() => {'requestId': requestId};
 
   factory PartialChatDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{'requestId': int requestId}) {
@@ -32,8 +41,6 @@ final class PartialChatDto extends ChatDto {
     }
     throw FormatException('Invalid JSON format for PartialChatDto', json);
   }
-
-  ChatsCompanion toCompanion() => ChatsCompanion(requestId: Value(requestId));
 }
 
 final class FullChatDto extends ChatDto {
@@ -46,8 +53,23 @@ final class FullChatDto extends ChatDto {
   final int id;
   final DateTime createdAt;
 
+  @override
   FullChat toEntity() =>
       FullChat(requestId: requestId, id: id, createdAt: createdAt);
+
+  @override
+  Map<String, Object?> toJson() => {
+    'request_id': requestId,
+    'id': id,
+    'created_at': createdAt.toLocal().toString(),
+  };
+
+  @override
+  ChatsCompanion toCompanion() => ChatsCompanion(
+    requestId: Value(requestId),
+    id: Value(id),
+    createdAt: Value(createdAt),
+  );
 
   factory FullChatDto.fromEntity(FullChat entity) => FullChatDto(
     requestId: entity.requestId,
@@ -55,17 +77,11 @@ final class FullChatDto extends ChatDto {
     createdAt: entity.createdAt,
   );
 
-  Map<String, Object?> toJson() => {
-    'requestId': requestId,
-    'id': id,
-    'createdAt': createdAt.toLocal().toString(),
-  };
-
   factory FullChatDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
-      'requestId': int requestId,
+      'request_id': int requestId,
       'id': int id,
-      'createdAt': String createdAt,
+      'created_at': String createdAt,
     }) {
       return FullChatDto(
         requestId: requestId,

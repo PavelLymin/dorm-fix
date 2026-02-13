@@ -11,13 +11,14 @@ class RepairRequestRouter {
   const RepairRequestRouter({
     required RestApi restApi,
     required IRequestRepository requestRepository,
+    required IRepairRequestFacade requestFacade,
     required WebSocketBase wsConnection,
   }) : _restApi = restApi,
-       _requestRepository = requestRepository,
+       _requestFacade = requestFacade,
        _wsConnection = wsConnection;
 
   final RestApi _restApi;
-  final IRequestRepository _requestRepository;
+  final IRepairRequestFacade _requestFacade;
   final WebSocketBase _wsConnection;
 
   Handler get handler {
@@ -43,7 +44,7 @@ class RepairRequestRouter {
     final uid = RequireUser.getUserId(request);
     final json = await _readJson(request);
     final entity = PartialRepairRequestDto.fromJson(json).toEntity();
-    final createdRequest = await _requestRepository.createRequest(
+    final createdRequest = await _requestFacade.createRequest(
       uid: uid,
       request: entity,
     );
@@ -59,16 +60,16 @@ class RepairRequestRouter {
     return _restApi.send(
       statusCode: 201,
       responseBody: {
-        'data': FullRepairRequestDto.fromEntity(createdRequest).toJson(),
+        'data': RequestAggregateDto.fromEntity(createdRequest).toJson(),
       },
     );
   }
 
   Future<Response> _getRepairRequests(Request request) async {
     final uid = RequireUser.getUserId(request);
-    final requests = await _requestRepository.getRequests(uid: uid);
+    final requests = await _requestFacade.getRequests(uid: uid);
     final json = requests
-        .map((request) => FullRepairRequestDto.fromEntity(request).toJson())
+        .map((request) => RequestAggregateDto.fromEntity(request).toJson())
         .toList();
 
     return _restApi.send(

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
 import '../../../../../core/ws/ws.dart';
-import '../../../../chat/chat.dart';
 import '../../../request.dart';
 import '../request_form_bloc/request_form_model.dart';
 
@@ -14,11 +13,9 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
     with _SetStateMixin {
   RepairRequestBloc({
     required IRequestRepository requestRepository,
-    required IChatRepository chatRepository,
     required IWebSocket webSocket,
     required Logger logger,
   }) : _requestRepository = requestRepository,
-       _chatRepository = chatRepository,
        _webSocket = webSocket,
        _logger = logger,
        super(const .loading(requests: [])) {
@@ -44,7 +41,6 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
   }
 
   final IRequestRepository _requestRepository;
-  final IChatRepository _chatRepository;
   final IWebSocket _webSocket;
   final Logger _logger;
 
@@ -66,12 +62,7 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
   ) async {
     try {
       final request = event.request.toEntity();
-      final createdRequest = await _requestRepository.createRequest(
-        request: request,
-      );
-      await _chatRepository.createChat(
-        chat: PartialChat(requestId: createdRequest.id),
-      );
+      await _requestRepository.createRequest(request: request);
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(.error(requests: state.requests, message: e));

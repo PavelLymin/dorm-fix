@@ -21,6 +21,10 @@ sealed class StudentDto {
   }) => FullStudentDto(id: id, user: user, dormitory: dormitory, room: room);
 
   String get uid;
+
+  StudentEntity toEntity();
+  Map<String, Object> toJson();
+  StudentsCompanion toCompanion();
 }
 
 class PartialStudentDto extends StudentDto {
@@ -37,30 +41,33 @@ class PartialStudentDto extends StudentDto {
   @override
   String get uid => user.uid;
 
-  PartialStudentEntity toEntity() => PartialStudentEntity(
+  @override
+  PartialStudent toEntity() => PartialStudent(
     dormitoryId: dormitoryId,
     roomId: roomId,
     user: user.toEntity(),
   );
 
-  factory PartialStudentDto.fromEntity(PartialStudentEntity entity) =>
-      PartialStudentDto(
-        dormitoryId: entity.dormitoryId,
-        roomId: entity.roomId,
-        user: .fromEntity(entity.user),
-      );
+  @override
+  Map<String, Object> toJson() => {
+    'dormitory_id': dormitoryId,
+    'room_id': roomId,
+    'user': user.toJson(),
+  };
 
+  @override
   StudentsCompanion toCompanion() => StudentsCompanion(
     uid: Value(uid),
     dormitoryId: Value(dormitoryId),
     roomId: Value(roomId),
   );
 
-  Map<String, Object> toJson() => {
-    'dormitory_id': dormitoryId,
-    'room_id': roomId,
-    'user': user.toJson(),
-  };
+  factory PartialStudentDto.fromEntity(PartialStudent entity) =>
+      PartialStudentDto(
+        dormitoryId: entity.dormitoryId,
+        roomId: entity.roomId,
+        user: .fromEntity(entity.user),
+      );
 
   factory PartialStudentDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
@@ -73,9 +80,9 @@ class PartialStudentDto extends StudentDto {
         roomId: roomId,
         user: .fromJson(userJson),
       );
-    } else {
-      throw ArgumentError('Invalid JSON format for CreatedStudentDto: $json');
     }
+
+    throw ArgumentError('Invalid JSON format for CreatedStudentDto: $json');
   }
 }
 
@@ -95,14 +102,27 @@ class FullStudentDto extends StudentDto {
   @override
   String get uid => user.uid;
 
-  FullStudentEntity toEntity() => FullStudentEntity(
+  @override
+  FullStudent toEntity() => FullStudent(
     id: id,
     user: user.toEntity(),
     dormitory: dormitory.toEntity(),
     room: room.toEntity(),
   );
 
-  factory FullStudentDto.fromEntity(FullStudentEntity entity) => FullStudentDto(
+  @override
+  Map<String, Object> toJson() => {
+    'id': id,
+    'user': user.toJson(),
+    'dormitory': dormitory.toJson(),
+    'room': room.toJson(),
+  };
+
+  @override
+  StudentsCompanion toCompanion() =>
+      StudentsCompanion(id: Value(id), uid: Value(uid));
+
+  factory FullStudentDto.fromEntity(FullStudent entity) => FullStudentDto(
     id: entity.id,
     user: .fromEntity(entity.user),
     dormitory: .fromEntity(entity.dormitory),
@@ -121,13 +141,6 @@ class FullStudentDto extends StudentDto {
     room: .fromData(room),
   );
 
-  Map<String, Object> toJson() => {
-    'id': id,
-    'user': user.toJson(),
-    'dormitory': dormitory.toJson(),
-    'room': room.toJson(),
-  };
-
   factory FullStudentDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
       'id': final int id,
@@ -141,8 +154,8 @@ class FullStudentDto extends StudentDto {
         dormitory: .fromJson(dormitoryJson),
         room: .fromJson(roomJson),
       );
-    } else {
-      throw ArgumentError('Invalid JSON format for FullStudentDto: $json');
     }
+
+    throw ArgumentError('Invalid JSON format for FullStudentDto: $json');
   }
 }

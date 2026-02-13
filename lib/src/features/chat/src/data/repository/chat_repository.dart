@@ -23,7 +23,7 @@ class ChatRepositoryImpl implements IChatRepository {
   @override
   Future<void> createChat({required PartialChat chat}) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
-    final body = ChatDto.fromEntity(chat).toJson();
+    final body = PartialChatDto.fromEntity(chat).toJson();
     await _client.send(
       path: '/chats',
       method: 'POST',
@@ -43,7 +43,7 @@ class ChatRepositoryImpl implements IChatRepository {
     );
 
     if (response case Map<String, Object?> json) {
-      final chat = ChatDto.fromJson(json).toEntity() as FullChat;
+      final chat = FullChatDto.fromJson(json).toEntity();
       return chat;
     }
 

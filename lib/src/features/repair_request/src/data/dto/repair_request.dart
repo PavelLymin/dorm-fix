@@ -1,3 +1,6 @@
+import 'package:dorm_fix/src/features/chat/chat.dart';
+import 'package:dorm_fix/src/features/profile/profile.dart';
+
 import '../../../../home/home.dart';
 import '../../model/repair_request.dart';
 import 'problem.dart';
@@ -34,17 +37,7 @@ sealed class RepairRequestDto {
     required int startTime,
     required int endTime,
     required List<String> imagePaths,
-  }) => PartialRepairRequestDto(
-    specializationId: specializationId,
-    description: description,
-    priority: priority,
-    status: status,
-    studentAbsent: studentAbsent,
-    date: date,
-    startTime: startTime,
-    endTime: endTime,
-    imagePaths: imagePaths,
-  );
+  }) = PartialRepairRequestDto;
 
   factory RepairRequestDto.full({
     required int id,
@@ -58,109 +51,10 @@ sealed class RepairRequestDto {
     required int startTime,
     required int endTime,
     required List<ProblemDto> problems,
+    required FullChatDto chat,
+    required MasterDto? master,
     required DateTime createdAt,
-  }) => FullRepairRequestDto(
-    id: id,
-    uid: uid,
-    specialization: specialization,
-    description: description,
-    priority: priority,
-    status: status,
-    studentAbsent: studentAbsent,
-    date: date,
-    startTime: startTime,
-    endTime: endTime,
-    problems: problems,
-    createdAt: createdAt,
-  );
-
-  factory RepairRequestDto.fromEntity(RepairRequestEntity entity) =>
-      switch (entity) {
-        PartialRepairRequest _ => PartialRepairRequestDto(
-          specializationId: entity.specializationId,
-          description: entity.description,
-          priority: entity.priority,
-          status: entity.status,
-          studentAbsent: entity.studentAbsent,
-          date: entity.date,
-          startTime: entity.startTime,
-          endTime: entity.endTime,
-          imagePaths: entity.imagePaths,
-        ),
-        FullRepairRequest _ => FullRepairRequestDto(
-          id: entity.id,
-          uid: entity.uid,
-          specialization: .fromEntity(entity.specialization),
-          description: entity.description,
-          priority: entity.priority,
-          status: entity.status,
-          studentAbsent: entity.studentAbsent,
-          date: entity.date,
-          startTime: entity.startTime,
-          endTime: entity.endTime,
-          problems: entity.problems.map(ProblemDto.fromEntity).toList(),
-          createdAt: entity.createdAt,
-        ),
-      };
-
-  factory RepairRequestDto.fromJson(Map<String, Object?> json) {
-    if (json case <String, Object?>{
-      'id': final int id,
-      'uid': final String uid,
-      'specialization': final Map<String, Object?> specialization,
-      'description': final String description,
-      'priority': final String priority,
-      'status': final String status,
-      'student_absent': final bool studentAbsent,
-      'date': final String date,
-      'start_time': final int startTime,
-      'end_time': final int endTime,
-      'problems': final List<Object?> problems,
-      'created_at': final String createdAt,
-    }) {
-      return FullRepairRequestDto(
-        id: id,
-        uid: uid,
-        specialization: .fromJson(specialization),
-        description: description,
-        priority: .fromValue(priority),
-        status: .fromValue(status),
-        studentAbsent: studentAbsent,
-        date: .parse(date),
-        startTime: startTime,
-        endTime: endTime,
-        problems: problems
-            .whereType<Map<String, Object?>>()
-            .map(ProblemDto.fromJson)
-            .toList(),
-        createdAt: DateTime.parse(createdAt),
-      );
-    } else if (json case <String, Object?>{
-      'specialization_id': final int specializationId,
-      'description': final String description,
-      'priority': final String priority,
-      'status': final String status,
-      'student_absent': final bool studentAbsent,
-      'date': final String date,
-      'start_time': final int startTime,
-      'end_time': final int endTime,
-      'problems': final List<Object?> imagePaths,
-    }) {
-      return PartialRepairRequestDto(
-        specializationId: specializationId,
-        description: description,
-        priority: .fromValue(priority),
-        status: .fromValue(status),
-        studentAbsent: studentAbsent,
-        date: .parse(date),
-        startTime: startTime,
-        endTime: endTime,
-        imagePaths: imagePaths.whereType<String>().toList(),
-      );
-    }
-
-    throw ArgumentError('Invalid JSON format for RepairRequestDto: $json');
-  }
+  }) = FullRepairRequestDto;
 }
 
 final class PartialRepairRequestDto extends RepairRequestDto {
@@ -204,6 +98,49 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     'end_time': endTime,
     'problems': imagePaths,
   };
+
+  factory PartialRepairRequestDto.fromEntity(PartialRepairRequest entity) =>
+      PartialRepairRequestDto(
+        specializationId: entity.specializationId,
+        description: entity.description,
+        priority: entity.priority,
+        status: entity.status,
+        studentAbsent: entity.studentAbsent,
+        date: entity.date,
+        startTime: entity.startTime,
+        endTime: entity.endTime,
+        imagePaths: entity.imagePaths,
+      );
+
+  factory PartialRepairRequestDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'specialization_id': final int specializationId,
+      'description': final String description,
+      'priority': final String priority,
+      'status': final String status,
+      'student_absent': final bool studentAbsent,
+      'date': final String date,
+      'start_time': final int startTime,
+      'end_time': final int endTime,
+      'problems': final List<Object?> imagePaths,
+    }) {
+      return PartialRepairRequestDto(
+        specializationId: specializationId,
+        description: description,
+        priority: .fromValue(priority),
+        status: .fromValue(status),
+        studentAbsent: studentAbsent,
+        date: .parse(date),
+        startTime: startTime,
+        endTime: endTime,
+        imagePaths: imagePaths.whereType<String>().toList(),
+      );
+    }
+
+    throw ArgumentError(
+      'Invalid JSON format for PartialRepairRequestDto: $json',
+    );
+  }
 }
 
 final class FullRepairRequestDto extends RepairRequestDto {
@@ -219,6 +156,8 @@ final class FullRepairRequestDto extends RepairRequestDto {
     required super.endTime,
     required this.specialization,
     required this.problems,
+    required this.chat,
+    required this.master,
     required this.createdAt,
   });
 
@@ -227,6 +166,8 @@ final class FullRepairRequestDto extends RepairRequestDto {
   final DateTime createdAt;
   final SpecializationDto specialization;
   final List<ProblemDto> problems;
+  final FullChatDto chat;
+  final MasterDto? master;
 
   @override
   FullRepairRequest toEntity() => FullRepairRequest(
@@ -241,6 +182,8 @@ final class FullRepairRequestDto extends RepairRequestDto {
     startTime: startTime,
     endTime: endTime,
     problems: problems.map((e) => e.toEntity()).toList(),
+    chat: chat.toEntity(),
+    master: master?.toEntity(),
     createdAt: createdAt,
   );
 
@@ -257,6 +200,66 @@ final class FullRepairRequestDto extends RepairRequestDto {
     'start_time': startTime,
     'end_time': endTime,
     'problems': problems,
+    'chat': chat.toJson(),
+    'master': master?.toJson(),
     'created_at': createdAt,
   };
+  factory FullRepairRequestDto.fromEntity(FullRepairRequest entity) =>
+      FullRepairRequestDto(
+        id: entity.id,
+        uid: entity.uid,
+        specialization: .fromEntity(entity.specialization),
+        description: entity.description,
+        priority: entity.priority,
+        status: entity.status,
+        studentAbsent: entity.studentAbsent,
+        date: entity.date,
+        startTime: entity.startTime,
+        endTime: entity.endTime,
+        problems: entity.problems.map(ProblemDto.fromEntity).toList(),
+        chat: .fromEntity(entity.chat),
+        master: entity.master != null ? .fromEntity(entity.master!) : null,
+        createdAt: entity.createdAt,
+      );
+
+  factory FullRepairRequestDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'id': final int id,
+      'uid': final String uid,
+      'specialization': final Map<String, Object?> specialization,
+      'description': final String description,
+      'priority': final String priority,
+      'status': final String status,
+      'student_absent': final bool studentAbsent,
+      'date': final String date,
+      'start_time': final int startTime,
+      'end_time': final int endTime,
+      'problems': final List<Object?> problems,
+      'chat': final Map<String, Object?> chat,
+      'master': final Map<String, Object?>? master,
+      'created_at': final String createdAt,
+    }) {
+      return FullRepairRequestDto(
+        id: id,
+        uid: uid,
+        specialization: .fromJson(specialization),
+        description: description,
+        priority: .fromValue(priority),
+        status: .fromValue(status),
+        studentAbsent: studentAbsent,
+        date: .parse(date),
+        startTime: startTime,
+        endTime: endTime,
+        problems: problems
+            .whereType<Map<String, Object?>>()
+            .map(ProblemDto.fromJson)
+            .toList(),
+        chat: .fromJson(chat),
+        master: master != null ? .fromJson(master) : null,
+        createdAt: DateTime.parse(createdAt),
+      );
+    }
+
+    throw ArgumentError('Invalid JSON format for FullRepairRequestDto: $json');
+  }
 }

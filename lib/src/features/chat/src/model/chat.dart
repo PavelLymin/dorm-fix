@@ -66,3 +66,7 @@ final class FullChat extends ChatEntity {
   @override
   int get hashCode => id.hashCode;
 }
+
+final class FakeFullChat extends FullChat {
+  FakeFullChat({super.requestId = 1, super.id = 1}) : super(createdAt: .now());
+}

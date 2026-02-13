@@ -33,10 +33,7 @@ class RequestRepositoryImpl implements IRequestRepository {
     if (data case List<Object?> list) {
       final repairRequests = list
           .whereType<Map<String, Object?>>()
-          .map(
-            (json) =>
-                RepairRequestDto.fromJson(json).toEntity() as FullRepairRequest,
-          )
+          .map((json) => FullRepairRequestDto.fromJson(json).toEntity())
           .toList();
 
       return repairRequests;
@@ -53,7 +50,7 @@ class RequestRepositoryImpl implements IRequestRepository {
     required PartialRepairRequest request,
   }) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
-    final body = RepairRequestDto.fromEntity(request).toJson();
+    final body = PartialRepairRequestDto.fromEntity(request).toJson();
     final response = await _client.send(
       path: '/repairRequests',
       method: 'POST',
@@ -62,8 +59,8 @@ class RequestRepositoryImpl implements IRequestRepository {
     );
 
     if (response case Map<String, Object?> json) {
-      final repairRequest = RepairRequestDto.fromJson(json).toEntity();
-      return repairRequest as FullRepairRequest;
+      final repairRequest = FullRepairRequestDto.fromJson(json).toEntity();
+      return repairRequest;
     }
 
     throw StructuredBackendException(

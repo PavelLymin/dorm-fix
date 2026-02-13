@@ -25,14 +25,13 @@ final class CreatedRequestPayload extends RepairRequestPayload {
 
   @override
   Map<String, Object?> toJson() => {
-    'request': RepairRequestDto.fromEntity(request).toJson(),
+    'request': FullRepairRequestDto.fromEntity(request).toJson(),
   };
 
   factory CreatedRequestPayload.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{'request': Map<String, Object?> request}) {
       return CreatedRequestPayload(
-        request:
-            RepairRequestDto.fromJson(request).toEntity() as FullRepairRequest,
+        request: FullRepairRequestDto.fromJson(request).toEntity(),
       );
     } else {
       throw FormatException('Invalid payload for created request: $json');
@@ -70,14 +69,13 @@ final class UpdatedRequestPayload extends RepairRequestPayload {
 
   @override
   Map<String, Object?> toJson() => {
-    'request': RepairRequestDto.fromEntity(request).toJson(),
+    'request': FullRepairRequestDto.fromEntity(request).toJson(),
   };
 
   factory UpdatedRequestPayload.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{'request': Map<String, Object?> request}) {
       return UpdatedRequestPayload(
-        request:
-            RepairRequestDto.fromJson(request).toEntity() as FullRepairRequest,
+        request: FullRepairRequestDto.fromJson(request).toEntity(),
       );
     } else {
       throw FormatException('Invalid payload for updated request: $json');

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'src/app/logic/composition_root.dart';
@@ -69,8 +68,6 @@ class _MainAppState extends State<MainApp> {
         BlocProvider(create: (context) => _repairRequestBloc),
       ],
       child: MaterialApp.router(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,
         theme: SettingsScope.ofThemeData(context, widget.settings),

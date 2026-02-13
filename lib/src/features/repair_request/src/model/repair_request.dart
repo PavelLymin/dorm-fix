@@ -1,3 +1,6 @@
+import 'package:dorm_fix/src/features/chat/chat.dart';
+import 'package:dorm_fix/src/features/profile/profile.dart';
+
 import '../../../home/home.dart';
 import 'problem.dart';
 
@@ -75,6 +78,8 @@ sealed class RepairRequestEntity {
     required final int endTime,
     required final SpecializationEntity specialization,
     required final List<ProblemEntity> problems,
+    required final FullChat chat,
+    required final MasterEntity? master,
     required final DateTime createdAt,
   }) = FullRepairRequest;
 
@@ -180,6 +185,8 @@ final class FullRepairRequest extends RepairRequestEntity {
     required super.endTime,
     required this.specialization,
     required this.problems,
+    required this.chat,
+    required this.master,
     required this.createdAt,
   });
 
@@ -188,6 +195,8 @@ final class FullRepairRequest extends RepairRequestEntity {
   final DateTime createdAt;
   final SpecializationEntity specialization;
   final List<ProblemEntity> problems;
+  final FullChat chat;
+  final MasterEntity? master;
 
   @override
   FullRepairRequest copyWith({
@@ -202,6 +211,8 @@ final class FullRepairRequest extends RepairRequestEntity {
     int? endTime,
     SpecializationEntity? specialization,
     List<ProblemEntity>? problems,
+    FullChat? chat,
+    MasterEntity? master,
     DateTime? createdAt,
   }) => FullRepairRequest(
     id: id ?? this.id,
@@ -215,6 +226,8 @@ final class FullRepairRequest extends RepairRequestEntity {
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
     problems: problems ?? this.problems,
+    chat: chat ?? this.chat,
+    master: master ?? this.master,
     createdAt: createdAt ?? this.createdAt,
   );
 
@@ -232,6 +245,8 @@ final class FullRepairRequest extends RepairRequestEntity {
       'startTime: $startTime, '
       'endTime: $endTime, '
       'problems: $problems, '
+      'chat: $chat, '
+      'master: $master, '
       'createdAt: $createdAt)';
 
   @override
@@ -256,5 +271,6 @@ final class FakeFullRepairRequest extends FullRepairRequest {
     super.endTime = 24,
     super.specialization = const FakeSpecializationEntity(),
     super.problems = const [],
-  }) : super(date: .now(), createdAt: .now());
+    super.master,
+  }) : super(date: .now(), chat: FakeFullChat(), createdAt: .now());
 }
