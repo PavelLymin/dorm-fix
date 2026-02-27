@@ -3,7 +3,7 @@ import '../../../chat.dart';
 
 abstract interface class IMessageRealTimeRepository {
   Future<void> sendMessage({
-    required MessageEntity message,
+    required PartialMessage message,
     required int chatId,
   });
 }
@@ -20,7 +20,7 @@ class MessageRealTimeRepositoryImpl implements IMessageRealTimeRepository {
 
   @override
   Future<void> sendMessage({
-    required MessageEntity message,
+    required PartialMessage message,
     required int chatId,
   }) async {
     final createdMessage = await _messageRepository.createMessage(

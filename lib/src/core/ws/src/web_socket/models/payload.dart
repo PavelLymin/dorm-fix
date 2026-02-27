@@ -36,6 +36,8 @@ sealed class Payload {
       CreatedMessagePayload;
 
   const factory Payload.joinToChat({required int chatId}) = JoinToChatPayload;
+  const factory Payload.leaveFromChat({required int chatId}) =
+      LeaveFromChatPayload;
 
   Map<String, Object?> toJson();
 

@@ -11,9 +11,6 @@ sealed class MessageDto {
   final String uid;
   final String message;
 
-  Map<String, Object?> toJson();
-  MessageEntity toEntity();
-
   factory MessageDto.partial({
     required int chatId,
     required String uid,
@@ -28,46 +25,8 @@ sealed class MessageDto {
     required DateTime createdAt,
   }) = FullMessageDto;
 
-  factory MessageDto.fromEntity(MessageEntity entity) => switch (entity) {
-    FullMessage message => MessageDto.full(
-      chatId: message.chatId,
-      uid: message.uid,
-      message: message.message,
-      id: message.id,
-      createdAt: message.createdAt,
-    ),
-    PartialMessage message => MessageDto.partial(
-      chatId: message.chatId,
-      uid: message.uid,
-      message: message.message,
-    ),
-  };
-
-  factory MessageDto.fromJson(Map<String, Object?> json) {
-    if (json case <String, Object?>{
-      'chat_id': final int chatId,
-      'uid': final String uid,
-      'message': final String message,
-      'id': final int id,
-      'created_at': final String createdAt,
-    }) {
-      return FullMessageDto(
-        chatId: chatId,
-        uid: uid,
-        message: message,
-        id: id,
-        createdAt: .parse(createdAt),
-      );
-    } else if (json case <String, Object?>{
-      'chat_id': final int chatId,
-      'uid': final String uid,
-      'message': final String message,
-    }) {
-      return PartialMessageDto(chatId: chatId, uid: uid, message: message);
-    } else {
-      throw FormatException('Invalid JSON format for MessageDto', json);
-    }
-  }
+  Map<String, Object?> toJson();
+  MessageEntity toEntity();
 }
 
 final class PartialMessageDto extends MessageDto {
@@ -87,6 +46,25 @@ final class PartialMessageDto extends MessageDto {
     'uid': uid,
     'message': message,
   };
+
+  factory PartialMessageDto.fromEntity(PartialMessage entity) =>
+      PartialMessageDto(
+        chatId: entity.chatId,
+        uid: entity.uid,
+        message: entity.message,
+      );
+
+  factory PartialMessageDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'chat_id': final int chatId,
+      'uid': final String uid,
+      'message': final String message,
+    }) {
+      return PartialMessageDto(chatId: chatId, uid: uid, message: message);
+    }
+
+    throw FormatException('Invalid JSON format for PartialMessageDto', json);
+  }
 }
 
 final class FullMessageDto extends MessageDto {
@@ -118,4 +96,32 @@ final class FullMessageDto extends MessageDto {
     'id': id,
     'created_at': createdAt.toLocal().toString(),
   };
+
+  factory FullMessageDto.fromEntity(FullMessage entity) => FullMessageDto(
+    chatId: entity.chatId,
+    uid: entity.uid,
+    message: entity.message,
+    id: entity.id,
+    createdAt: entity.createdAt,
+  );
+
+  factory FullMessageDto.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{
+      'chat_id': final int chatId,
+      'uid': final String uid,
+      'message': final String message,
+      'id': final int id,
+      'created_at': final String createdAt,
+    }) {
+      return FullMessageDto(
+        chatId: chatId,
+        uid: uid,
+        message: message,
+        id: id,
+        createdAt: .parse(createdAt),
+      );
+    }
+
+    throw FormatException('Invalid JSON format for FullMessageDto', json);
+  }
 }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
@@ -24,7 +23,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> with _SetStateMixin {
        super(const .loading(messages: [])) {
     _streamSubscription = _webSocket.stream.listen((message) {
       final payload = message.payload;
-      log(payload.toString());
       if (payload is! MessagePayload) return;
 
       final response = MessageResponse.response(payload, state.messages);

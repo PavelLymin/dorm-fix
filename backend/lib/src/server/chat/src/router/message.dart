@@ -35,7 +35,7 @@ class MessageRouter {
     final chatId = int.parse(chatIdParam);
     final messages = await _messageRepository.getMessages(chatId: chatId);
     final messagesJson = messages
-        .map((e) => MessageDto.fromEntity(e).toJson())
+        .map((message) => FullMessageDto.fromEntity(message).toJson())
         .toList();
     return _restApi.send(
       statusCode: 200,

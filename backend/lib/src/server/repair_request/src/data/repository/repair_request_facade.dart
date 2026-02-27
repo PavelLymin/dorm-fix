@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:drift/drift.dart';
 
 import '../../../../../core/database/database.dart';
@@ -173,10 +171,6 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
           },
         )
         .get();
-
-    for (final request in requestsData) {
-      log(request.toString());
-    }
 
     final result = requestsData
         .map((row) => RequestAggregateDto.fromJson(row.data).toEntity())

@@ -31,7 +31,7 @@ class MessageRepositoryImpl implements IMessageRepository {
     if (data case List<Object?> json) {
       final messages = json
           .whereType<Map<String, Object?>>()
-          .map((json) => MessageDto.fromJson(json).toEntity() as FullMessage)
+          .map((json) => FullMessageDto.fromJson(json).toEntity())
           .toList();
       return messages;
     }

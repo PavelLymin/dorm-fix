@@ -135,17 +135,24 @@ final class CreatedMessagePayload extends MessagePayload {
 
   @override
   Map<String, Object?> toJson() => {
-    'message': MessageDto.fromEntity(message).toJson(),
+    'message': message is FullMessage
+        ? FullMessageDto.fromEntity(message as FullMessage).toJson()
+        : PartialMessageDto.fromEntity(message as PartialMessage).toJson(),
   };
 
   factory CreatedMessagePayload.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{'message': Map<String, Object?> message}) {
+      if (message['id'] == null) {
+        return CreatedMessagePayload(
+          message: PartialMessageDto.fromJson(message).toEntity(),
+        );
+      }
       return CreatedMessagePayload(
-        message: MessageDto.fromJson(message).toEntity(),
+        message: FullMessageDto.fromJson(message).toEntity(),
       );
-    } else {
-      throw FormatException('Invalid payload for created message: $json');
     }
+
+    throw FormatException('Invalid payload for created message: $json');
   }
 
   @override

@@ -7,14 +7,12 @@ sealed class MessageResponse {
   factory MessageResponse.response(
     MessagePayload payload,
     List<FullMessage> messages,
-  ) {
-    return switch (payload) {
-      CreatedMessagePayload _ => CreatedMessageResponse.fromPayload(
-        payload,
-        messages,
-      ),
-    };
-  }
+  ) => switch (payload) {
+    CreatedMessagePayload _ => CreatedMessageResponse.fromPayload(
+      payload,
+      messages,
+    ),
+  };
 
   T map<T>({
     required T Function(CreatedMessageResponse) created,
@@ -39,7 +37,7 @@ final class CreatedMessageResponse extends MessageResponse {
     List<FullMessage> messages,
   ) {
     final message = payload.message as FullMessage;
-    messages.add(message);
+    messages.insert(0, message);
 
     return CreatedMessageResponse(messages: messages);
   }
@@ -89,10 +87,6 @@ final class ErrorMessageResponse extends MessageResponse {
     CreatedMessagePayload payload,
     List<FullMessage> messages,
   ) {
-    // final payload = json['payload'] as Map<String, Object?>;
-
-    // final message = payload['message'] as String;
-
     return ErrorMessageResponse(message: 'message', messages: messages);
   }
 }

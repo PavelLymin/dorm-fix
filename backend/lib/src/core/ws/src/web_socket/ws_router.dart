@@ -42,8 +42,8 @@ class WsRouter {
               socket: socket,
               chatId: payload.chatId,
             ),
-            createdMessage: (payload, type) => _messageRepository.sendMessage(
-              message: payload.message,
+            createdMessage: (payload, _) => _messageRepository.sendMessage(
+              message: payload.message as PartialMessage,
               chatId: payload.message.chatId,
             ),
           );

@@ -12,12 +12,11 @@ class MessageRealTimeRepositoryImpl implements IMessageRealtimeRepository {
   final IWebSocket _webSocket;
 
   @override
-  Future<void> sendMessage({required PartialMessage message}) async {
-    _webSocket.send(
-      envelope: MessageEnvelope(
-        type: .messageCreated,
-        payload: .createMessage(message: message),
-      ),
-    );
-  }
+  Future<void> sendMessage({required PartialMessage message}) async =>
+      _webSocket.send(
+        envelope: MessageEnvelope(
+          type: .messageCreated,
+          payload: .createMessage(message: message),
+        ),
+      );
 }

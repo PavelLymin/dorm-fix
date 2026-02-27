@@ -15,13 +15,13 @@ class RepairRequestList extends StatefulWidget {
 class _RepairRequestListState extends State<RepairRequestList> {
   late double _height;
   late final ChatBloc _chatBloc;
+  late final IChatRealTimeRepository _chatRealTimeRepository;
 
   @override
   void initState() {
     super.initState();
     final dependency = DependeciesScope.of(context);
-    dependency.chatRealTimeRepository.joinToChat(chatId: 1);
-
+    _chatRealTimeRepository = dependency.chatRealTimeRepository;
     _chatBloc = ChatBloc(
       webSocket: dependency.webSocket,
       logger: dependency.logger,
@@ -61,6 +61,7 @@ class _RepairRequestListState extends State<RepairRequestList> {
                 child: _OpenItem(
                   request: state.requests[index],
                   chatBloc: _chatBloc,
+                  chatRealTimeRepository: _chatRealTimeRepository,
                 ),
               ),
             ),
@@ -136,27 +137,38 @@ abstract class _EstimatedSizes {
 }
 
 class _OpenItem extends StatelessWidget {
-  const _OpenItem({required this.request, required this.chatBloc});
+  const _OpenItem({
+    required this.request,
+    required this.chatBloc,
+    required this.chatRealTimeRepository,
+  });
 
   final FullRepairRequest request;
   final ChatBloc chatBloc;
+  final IChatRealTimeRepository chatRealTimeRepository;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette;
     final style = theme.appStyleData.style;
-    return OpenContainer(
-      openElevation: .0,
-      closedElevation: .0,
-      closedShape: RoundedRectangleBorder(borderRadius: style.borderRadius),
-      closedColor: palette.background,
-      openColor: palette.background,
-      openBuilder: (_, _) => ChatScreen(
-        chat: FullChat(requestId: 1, id: 1, createdAt: .now()),
-        chatBloc: chatBloc,
+    return BlocProvider.value(
+      value: chatBloc,
+      child: OpenContainer(
+        openElevation: .0,
+        closedElevation: .0,
+        closedShape: RoundedRectangleBorder(borderRadius: style.borderRadius),
+        closedColor: palette.background,
+        openColor: palette.background,
+        openBuilder: (_, _) => GestureDetector(
+          onTap: () =>
+              chatRealTimeRepository.joinToChat(chatId: request.chat.id),
+          child: ChatScreen(chat: request.chat),
+        ),
+        closedBuilder: (_, _) => _Item(request: request),
+        onClosed: (_) =>
+            chatRealTimeRepository.leaveFromChat(chatId: request.chat.id),
       ),
-      closedBuilder: (_, _) => _Item(request: request),
     );
   }
 }
