@@ -87,28 +87,20 @@ class _RoomModalSheetState extends State<RoomModalSheet> {
               },
             ),
             const Spacer(),
-            SizedBox(
-              width: .infinity,
-              height: 48,
-              child: ValueListenableBuilder(
-                valueListenable: _isEnabled,
-                builder: (_, value, _) {
-                  return UiButton.filledPrimary(
-                    onPressed: _onSave,
-                    enabled: value,
-                    label: UiText.titleLarge('Сохранить'),
-                  );
-                },
-              ),
+            ValueListenableBuilder(
+              valueListenable: _isEnabled,
+              builder: (_, value, _) {
+                return UiButton.filledPrimary(
+                  onPressed: _onSave,
+                  enabled: value,
+                  label: UiText.titleLarge('Сохранить'),
+                );
+              },
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              width: .infinity,
-              height: 48,
-              child: UiButton.filledPrimary(
-                onPressed: () => context.router.pop(),
-                label: UiText.titleLarge('Отмена'),
-              ),
+            UiButton.filledPrimary(
+              onPressed: () => context.router.pop(),
+              label: UiText.titleLarge('Отмена'),
             ),
           ],
         ),

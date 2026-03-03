@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../app/widget/dependencies_scope.dart';
 import '../../chat.dart';
 import 'chat_list.dart';
 import 'message_buble.dart';
@@ -7,38 +8,54 @@ import 'message_date.dart';
 import 'message_input.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key, required this.chat});
+  const ChatScreen({super.key});
 
-  final FullChat chat;
+  // final FullChat chat;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late final ChatBloc _chatBloc;
+
   @override
   void initState() {
     super.initState();
-    context.read<ChatBloc>().add(.get(chatId: widget.chat.id));
+    final dependency = DependeciesScope.of(context);
+    _chatBloc = ChatBloc(
+      webSocket: dependency.webSocket,
+      logger: dependency.logger,
+      messageRepository: dependency.messageRepository,
+      messageRealTimeRepository: dependency.messageRealTimeRepository,
+    )..add(.get(chatId: 1));
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Chat')),
-    body: BlocBuilder<ChatBloc, ChatState>(
-      builder: (context, state) => state.maybeMap(
-        orElse: () => const SizedBox.shrink(),
-        loaded: (state) =>
-            _ChatLoaded(chat: widget.chat, messages: state.messages),
+  void dispose() {
+    _chatBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => BlocProvider.value(
+    value: _chatBloc,
+    child: Scaffold(
+      appBar: AppBar(title: const Text('Chat')),
+      body: BlocBuilder<ChatBloc, ChatState>(
+        builder: (context, state) => state.maybeMap(
+          orElse: () => const SizedBox.shrink(),
+          loaded: (state) => _ChatLoaded(messages: state.messages),
+        ),
       ),
     ),
   );
 }
 
 class _ChatLoaded extends StatefulWidget {
-  const _ChatLoaded({required this.chat, required this.messages});
+  const _ChatLoaded({required this.messages});
 
-  final FullChat chat;
+  // final FullChat chat;
   final List<FullMessage> messages;
 
   @override
@@ -83,22 +100,32 @@ class _ChatLoadedState extends State<_ChatLoaded> {
   }
 
   @override
-  Widget build(BuildContext context) => Stack(
-    children: [
-      Padding(
-        padding: AppPadding.pagePadding,
-        child: ChatList(
-          controller: _controller,
-          itemCount: widget.messages.length,
-          itemPositionsNotifier: _itemPositionsNotifier,
-          itemBuilder: (_, index) => MessageBuble(
-            message: widget.messages[index],
-            isFirst: index == 0,
+  Widget build(BuildContext context) => BlocProvider(
+    create: (context) =>
+        RemoteTypingBloc(webSocket: DependeciesScope.of(context).webSocket),
+    child: Stack(
+      children: [
+        Padding(
+          padding: AppPadding.pagePadding,
+          child: ChatList(
+            controller: _controller,
+            itemCount: widget.messages.length,
+            itemPositionsNotifier: _itemPositionsNotifier,
+            itemBuilder: (_, index) => MessageBuble(
+              message: widget.messages[index],
+              isFirst: index == 0,
+            ),
           ),
         ),
-      ),
-      FloatingDateOverlay(floatingDate: _dateFocusNotifier),
-      MessageInput(chat: widget.chat),
-    ],
+        BlocBuilder<RemoteTypingBloc, RemoteTypingState>(
+          builder: (context, state) => state.map(
+            startTyping: (_) => const Text('Печатает...'),
+            stopTyping: (_) => const SizedBox.shrink(),
+          ),
+        ),
+        FloatingDateOverlay(floatingDate: _dateFocusNotifier),
+        MessageInput(),
+      ],
+    ),
   );
 }

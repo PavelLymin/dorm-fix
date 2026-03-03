@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:web_socket_channel/web_socket_channel.dart';
+
 import '../../ws.dart';
 
 abstract interface class IWebSocket<T> {
@@ -14,6 +14,8 @@ abstract interface class IWebSocket<T> {
   });
 
   void sendToUser({required String uid, required MessageEnvelope envelope});
+
+  void sendBroadcast({required MessageEnvelope envelope});
 
   Future<MessageEnvelope> decodeRaw(Object? raw);
 }
@@ -36,6 +38,12 @@ class WebSocketBase implements IWebSocket<WebSocketChannel> {
   }
 
   @override
+  void send({
+    required WebSocketChannel socket,
+    required MessageEnvelope envelope,
+  }) => socket.sink.add(jsonEncode(envelope.toJson()));
+
+  @override
   void sendToUser({required String uid, required MessageEnvelope envelope}) {
     final sockets = _connections[uid];
 
@@ -47,10 +55,13 @@ class WebSocketBase implements IWebSocket<WebSocketChannel> {
   }
 
   @override
-  void send({
-    required WebSocketChannel socket,
-    required MessageEnvelope envelope,
-  }) => socket.sink.add(jsonEncode(envelope.toJson()));
+  void sendBroadcast({required MessageEnvelope envelope}) {
+    for (final sockets in _connections.values) {
+      for (final socket in sockets) {
+        send(socket: socket, envelope: envelope);
+      }
+    }
+  }
 
   @override
   Future<MessageEnvelope> decodeRaw(Object? raw) async {

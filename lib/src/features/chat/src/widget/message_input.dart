@@ -1,3 +1,4 @@
+import 'package:dorm_fix/src/app/widget/dependencies_scope.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../core/utils/utils.dart';
@@ -5,20 +6,26 @@ import '../../../authentication/authentication.dart';
 import '../../chat.dart';
 
 class MessageInput extends StatefulWidget {
-  const MessageInput({super.key, required this.chat});
+  const MessageInput({super.key});
 
-  final FullChat chat;
+  // final FullChat chat;
 
   @override
   State<MessageInput> createState() => _MessageInputState();
 }
 
 class _MessageInputState extends State<MessageInput> {
+  late final TypingBloc _typingBloc;
   late final TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
+    _typingBloc = TypingBloc(
+      typingRepository: TypingRealTimeRepositoryImpl(
+        webSocket: DependeciesScope.of(context).webSocket,
+      ),
+    );
     _controller = TextEditingController();
   }
 
@@ -34,7 +41,7 @@ class _MessageInputState extends State<MessageInput> {
     authenticatedUser: (user) => context.read<ChatBloc>().add(
       .create(
         message: PartialMessage(
-          chatId: widget.chat.id,
+          chatId: 1,
           uid: user.uid,
           message: _controller.text,
         ),
@@ -57,6 +64,8 @@ class _MessageInputState extends State<MessageInput> {
               padding: padding,
               child: UiTextField.standard(
                 controller: _controller,
+                onChanged: (text) =>
+                    _typingBloc.add(.textChanged(chatId: 1, text: text)),
                 style: UiTextFieldStyle(
                   suffixIcon: Padding(
                     padding: AppPadding.allIncrement(increment: 0.5),

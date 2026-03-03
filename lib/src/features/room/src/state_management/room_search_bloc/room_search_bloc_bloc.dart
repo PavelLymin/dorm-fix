@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
 import 'package:rxdart/rxdart.dart';
-import '../../../../../core/rest_client/rest_client.dart';
 import '../../../room.dart';
 
 part 'room_search_event.dart';
@@ -21,9 +20,7 @@ class RoomSearcBloc extends Bloc<RoomSearchEvent, RoomSearchState> {
     _subscription = onTextChanged.stream
         .distinct()
         .debounceTime(const Duration(milliseconds: 500))
-        .listen((text) {
-          add(RoomSearchEvent.textChanged(text: text));
-        });
+        .listen((text) => add(.textChanged(text: text)));
 
     on<RoomSearchEvent>(
       (event, emit) => event.map(
@@ -64,11 +61,11 @@ class RoomSearcBloc extends Bloc<RoomSearchEvent, RoomSearchState> {
     final currentDormitoryId = state.dormitoryId;
 
     if (searchTerm.isEmpty) {
-      emit(RoomSearchState.noTerm(rooms: [], dormitoryId: currentDormitoryId));
+      emit(.noTerm(rooms: [], dormitoryId: currentDormitoryId));
       return;
     }
 
-    emit(RoomSearchState.loading(rooms: [], dormitoryId: currentDormitoryId));
+    emit(.loading(rooms: [], dormitoryId: currentDormitoryId));
 
     try {
       final results = await _roomRepository.searchRoomsByDormitoryId(
@@ -77,28 +74,15 @@ class RoomSearcBloc extends Bloc<RoomSearchEvent, RoomSearchState> {
       );
 
       if (results.isEmpty) {
-        emit(
-          RoomSearchState.searchEmpty(
-            rooms: [],
-            dormitoryId: currentDormitoryId,
-          ),
-        );
+        emit(.searchEmpty(rooms: [], dormitoryId: currentDormitoryId));
       } else {
-        emit(
-          RoomSearchState.searchPopulated(
-            rooms: results,
-            dormitoryId: currentDormitoryId,
-          ),
-        );
+        emit(.searchPopulated(rooms: results, dormitoryId: currentDormitoryId));
       }
-    } on RestClientException catch (e, stackTrace) {
-      _logger.e(e.message, stackTrace: stackTrace);
-      emit(RoomSearchState.error(rooms: state.rooms, message: e.message));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(
         RoomSearchState.error(
-          rooms: [],
+          rooms: state.rooms,
           message: e.toString(),
           dormitoryId: currentDormitoryId,
         ),

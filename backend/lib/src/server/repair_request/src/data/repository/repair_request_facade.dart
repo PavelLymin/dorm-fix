@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-
 import '../../../../../core/database/database.dart';
 import '../../../../chat/chat.dart';
 import '../../../../profile/profile.dart';

@@ -8,5 +8,8 @@ export 'src/data/repository/chat_repository.dart';
 export 'src/data/repository/chat_realtime_repository.dart';
 export 'src/data/repository/message_repository.dart';
 export 'src/data/repository/message_realtime_repository.dart';
+export 'src/data/repository/typing_realtime_repository.dart';
 export 'src/state_management/chat_bloc/chat_bloc.dart';
+export 'src/state_management/typing_bloc/typing_bloc.dart';
+export 'src/state_management/remote_typing_bloc/remote_typing_bloc.dart';
 export 'src/widget/chat_screen.dart';

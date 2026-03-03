@@ -23,7 +23,7 @@ class DormitorySearchBloc
         .distinct()
         .debounceTime(const Duration(milliseconds: 500))
         .listen((text) {
-          add(DormitorySearchEvent.textChanged(text: text));
+          add(.textChanged(text: text));
         });
 
     on<DormitorySearchEvent>(

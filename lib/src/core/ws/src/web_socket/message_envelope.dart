@@ -1,12 +1,12 @@
 import '../../ws.dart';
 
 typedef MessageEnvelopeMatch<R, P extends Payload> =
-    R Function(P payload, MessageType type);
+    R Function(P payload, PayloadType type);
 
 final class MessageEnvelope {
   const MessageEnvelope({required this.type, required this.payload});
 
-  final MessageType type;
+  final PayloadType type;
   final Payload payload;
 
   Map<String, Object?> toJson() => {'type': type.value, 'payload': payload};
@@ -16,7 +16,7 @@ final class MessageEnvelope {
       'type': String typeStr,
       'payload': Map<String, Object?> payload,
     }) {
-      final type = MessageType.fromString(typeStr);
+      final type = PayloadType.fromString(typeStr);
       return MessageEnvelope(
         type: type,
         payload: Payload.fromJson(type, payload),

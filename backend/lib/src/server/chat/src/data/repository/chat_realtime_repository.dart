@@ -15,6 +15,7 @@ abstract interface class IChatRealTimeRepository {
   Future<void> broadcastToChat({
     required MessageEnvelope envelope,
     required int chatId,
+    WebSocketChannel? skipSocket,
   });
 }
 
@@ -46,10 +47,12 @@ class ChatRealTimeRepositoryImpl implements IChatRealTimeRepository {
   Future<void> broadcastToChat({
     required MessageEnvelope envelope,
     required int chatId,
+    WebSocketChannel? skipSocket,
   }) async {
     final sockets = _chatOnlineUsers[chatId];
     if (sockets == null) return;
     for (final socket in sockets) {
+      if (socket == skipSocket) continue;
       _ws.send(socket: socket, envelope: envelope);
     }
   }
