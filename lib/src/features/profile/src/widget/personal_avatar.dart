@@ -26,7 +26,7 @@ class _PersonalAvatarView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
     return UiCard.standart(
-      padding: AppPadding.allMedium,
+      padding: context.appStyle.appPadding.allMedium,
       child: Row(
         crossAxisAlignment: .center,
         mainAxisAlignment: .start,

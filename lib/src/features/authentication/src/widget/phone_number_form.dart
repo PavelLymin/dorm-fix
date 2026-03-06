@@ -30,7 +30,7 @@ class _PhoneNumberFormState extends State<PhoneNumberForm>
     with _PhoneNumberFormStateMixin {
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorPalette;
+    final palette = context.colorPalette;
     return Column(
       children: [
         UiTextField.standard(
@@ -49,34 +49,34 @@ class _PhoneNumberFormState extends State<PhoneNumberForm>
                   ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 16.0),
         PinCode(
-          height: 60,
+          height: 60.0,
           length: 6,
           isEnable: widget.isEnabledPinCode,
           isFocus: widget.isEnabledPinCode,
           controller: widget.pinCodeController,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 8.0),
         Align(
-          alignment: Alignment.centerRight,
+          alignment: .centerRight,
           child: InkWell(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: const .all(.circular(8.0)),
             onTap: widget.onTap,
             child: Padding(
-              padding: EdgeInsets.all(1.5),
+              padding: const .all(1.5),
               child: UiText.bodyLarge(
                 'Изменить номер?',
                 style: TextStyle(
                   color: widget.isEnabledPinCode
-                      ? color.foreground
-                      : color.mutedForeground,
+                      ? palette.foreground
+                      : palette.mutedForeground,
                 ),
               ),
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 16.0),
       ],
     );
   }

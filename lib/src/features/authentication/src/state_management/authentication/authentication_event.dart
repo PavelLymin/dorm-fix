@@ -5,10 +5,15 @@ typedef AuthEventMatch<R, E extends AuthEvent> = FutureOr<R> Function(E event);
 sealed class AuthEvent {
   const AuthEvent();
 
-  const factory AuthEvent.logIn({
+  const factory AuthEvent.signInWithEmailAndPassword({
     required String email,
     required String password,
-  }) = _LogIn;
+  }) = _SignInWithEmailAndPassword;
+
+  const factory AuthEvent.signUpWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) = _SignUpWithEmailAndPassword;
 
   const factory AuthEvent.verifyPhoneNumber({required String phoneNumber}) =
       _VerifyPhoneNumber;
@@ -23,22 +28,39 @@ sealed class AuthEvent {
   const factory AuthEvent.signOut() = _SignOut;
 
   FutureOr<R> map<R>({
-    required AuthEventMatch<R, _LogIn> logIn,
+    required AuthEventMatch<R, _SignInWithEmailAndPassword>
+    signInWithEmailAndPassword,
+    required AuthEventMatch<R, _SignUpWithEmailAndPassword>
+    signUpWithEmailAndPassword,
     required AuthEventMatch<R, _VerifyPhoneNumber> verifyPhoneNumber,
     required AuthEventMatch<R, _SignInWithPhoneNumber> signInWithPhoneNumber,
     required AuthEventMatch<R, _SignInWithGoogle> signInWithGoogle,
     required AuthEventMatch<R, _SignOut> signOut,
   }) => switch (this) {
-    _LogIn s => logIn(s),
-    _VerifyPhoneNumber s => verifyPhoneNumber(s),
-    _SignInWithPhoneNumber s => signInWithPhoneNumber(s),
-    _SignInWithGoogle s => signInWithGoogle(s),
-    _SignOut s => signOut(s),
+    _SignInWithEmailAndPassword e => signInWithEmailAndPassword(e),
+    _SignUpWithEmailAndPassword e => signUpWithEmailAndPassword(e),
+    _VerifyPhoneNumber e => verifyPhoneNumber(e),
+    _SignInWithPhoneNumber e => signInWithPhoneNumber(e),
+    _SignInWithGoogle e => signInWithGoogle(e),
+    _SignOut e => signOut(e),
   };
 }
 
-final class _LogIn extends AuthEvent {
-  const _LogIn({required this.email, required this.password});
+final class _SignInWithEmailAndPassword extends AuthEvent {
+  const _SignInWithEmailAndPassword({
+    required this.email,
+    required this.password,
+  });
+
+  final String email;
+  final String password;
+}
+
+final class _SignUpWithEmailAndPassword extends AuthEvent {
+  const _SignUpWithEmailAndPassword({
+    required this.email,
+    required this.password,
+  });
 
   final String email;
   final String password;

@@ -32,7 +32,7 @@ class _EmailAddressEditState extends State<EmailAddressEdit>
           keyboardType: .emailAddress,
           textInputAction: .done,
           style: UiTextFieldStyle(
-            contentPadding: AppPadding.allMedium,
+            contentPadding: context.appStyle.appPadding.allMedium,
             hintText: 'name@mail.ru',
             prefixIcon: const Icon(Icons.email_outlined),
             suffixIcon: ValueListenableBuilder<TextEditingValue>(

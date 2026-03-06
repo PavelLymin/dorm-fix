@@ -13,7 +13,7 @@ class _CheckBoxPreviewState extends State<CheckBoxPreview> {
   @override
   Widget build(BuildContext context) => UiCard.standart(
     child: Padding(
-      padding: AppPadding.allSmall,
+      padding: context.appStyle.appPadding.allSmall,
       child: UiCheckBox(
         value: _value,
         onChanged: (value) => setState(() {

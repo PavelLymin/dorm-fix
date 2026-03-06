@@ -34,10 +34,14 @@ class _RoomModalSheetState extends State<RoomModalSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorPalette;
+    final palette = context.colorPalette;
     return SafeArea(
       child: Padding(
-        padding: AppPadding.onlyIncrement(right: 2, left: 2, bottom: 4),
+        padding: context.appStyle.appPadding.onlyIncrement(
+          right: 2,
+          left: 2,
+          bottom: 4,
+        ),
         child: Column(
           children: [
             const SizedBox(height: 16),
@@ -61,7 +65,7 @@ class _RoomModalSheetState extends State<RoomModalSheet> {
                     dimension: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: color.primary.withValues(alpha: .38),
+                      color: palette.primary.withValues(alpha: .38),
                     ),
                   ),
                   error: (state) => Text(state.message),

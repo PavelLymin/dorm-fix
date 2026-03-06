@@ -8,7 +8,6 @@ class EmailPasswordForm extends StatefulWidget {
     required this.passwordController,
     required this.emailFocusNode,
     required this.passwordFocusNode,
-    required this.onTap,
     super.key,
   });
 
@@ -16,7 +15,6 @@ class EmailPasswordForm extends StatefulWidget {
   final TextEditingController passwordController;
   final FocusNode emailFocusNode;
   final FocusNode passwordFocusNode;
-  final Function() onTap;
 
   @override
   State<EmailPasswordForm> createState() => _EmailPasswordFormState();

@@ -24,15 +24,6 @@ class UserRouter {
     return router.call;
   }
 
-  Handler get publicHandler {
-    final router = Router();
-
-    router.get('/users/check_email', _checkUserByEmail);
-    router.get('/users/check-uid/<uid>', _checkUserByUid);
-
-    return router.call;
-  }
-
   Future<Map<String, Object>> _readJson(Request request) async {
     final body = await request.readAsString();
     if (body.trim().isEmpty) {
@@ -43,19 +34,6 @@ class UserRouter {
 
     final json = jsonDecode(body);
     return json;
-  }
-
-  String _checkUid(Request request) {
-    final uid = request.params['uid'];
-    if (uid == null) {
-      throw BadRequestException(
-        error: {
-          'description': 'Missing or invalid user id in request context.',
-          'query_param': 'uid',
-        },
-      );
-    }
-    return uid;
   }
 
   Future<Response> _updateUser(Request request) async {
@@ -69,28 +47,6 @@ class UserRouter {
       statusCode: 201,
       responseBody: {
         'data': {'message': 'The user was successfully updated.'},
-      },
-    );
-  }
-
-  Future<Response> _checkUserByEmail(Request request) async {
-    final email = RequireUser.getUserEmail(request);
-    final existUser = await _userRepository.checkUserByEmail(email: email);
-    return _restApi.send(
-      statusCode: 200,
-      responseBody: {
-        'data': {'exist_user': existUser},
-      },
-    );
-  }
-
-  Future<Response> _checkUserByUid(Request request) async {
-    final uid = _checkUid(request);
-    final existUser = await _userRepository.checkUserByUid(uid: uid);
-    return _restApi.send(
-      statusCode: 200,
-      responseBody: {
-        'data': {'exist_user': existUser},
       },
     );
   }

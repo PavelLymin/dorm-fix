@@ -6,7 +6,7 @@ class PinCodePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) => UiCard.standart(
     child: Padding(
-      padding: AppPadding.allSmall,
+      padding: context.appStyle.appPadding.allSmall,
       child: PinCode(
         isFocus: true,
         length: 6,

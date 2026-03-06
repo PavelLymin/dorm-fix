@@ -34,7 +34,7 @@ class _RequestScreenState extends State<RequestScreen>
           );
         },
         child: Padding(
-          padding: AppPadding.pagePadding,
+          padding: context.appStyle.appPadding.pagePadding,
           child: CustomScrollView(
             slivers: [
               SliverAppBar(

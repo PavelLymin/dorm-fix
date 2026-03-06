@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/ui.dart';
 
-import '../../../../app/widget/dependencies_scope.dart';
-
 enum HomeCardType { request, history }
 
 sealed class HomeCard extends StatelessWidget {
@@ -25,19 +23,15 @@ sealed class HomeCard extends StatelessWidget {
     return SizedBox(
       height: 160.0,
       child: Padding(
-        padding: AppPadding.contentPadding,
+        padding: context.appStyle.appPadding.contentPadding,
         child: UiCard.clickable(
-          padding: AppPadding.symmetricIncrement(vertical: 3, horizontal: 3),
-          onTap: () {
-            DependeciesScope.of(
-              context,
-            ).chatRealTimeRepository.joinToChat(chatId: 1);
-            final r = switch (type) {
-              .request => context.router.push(
-                const NamedRoute('RequestScreen'),
-              ),
-              .history => context.router.push(const NamedRoute('ChatScreen')),
-            };
+          padding: context.appStyle.appPadding.symmetricIncrement(
+            vertical: 3,
+            horizontal: 3,
+          ),
+          onTap: () => switch (type) {
+            .request => context.router.push(const NamedRoute('RequestScreen')),
+            .history => context.router.push(const NamedRoute('HistoryScreen')),
           },
           child: Column(
             mainAxisAlignment: .start,

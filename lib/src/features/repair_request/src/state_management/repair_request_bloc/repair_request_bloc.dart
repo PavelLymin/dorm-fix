@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
@@ -20,6 +21,8 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
        _logger = logger,
        super(const .loading(requests: [])) {
     _streamSubscription = _webSocket.stream.listen((message) {
+      log(message.type.value);
+
       final payload = message.payload;
       if (payload is! RepairRequestPayload) return;
       final response = RepairRequestResponse.response(payload, state.requests);

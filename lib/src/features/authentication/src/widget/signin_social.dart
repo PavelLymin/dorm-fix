@@ -6,74 +6,54 @@ class AuthWithSocial extends StatelessWidget {
   const AuthWithSocial({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                child: Divider(thickness: 3),
+  Widget build(BuildContext context) => Column(
+    mainAxisAlignment: .center,
+    crossAxisAlignment: .center,
+    mainAxisSize: .min,
+    children: [
+      Row(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .center,
+        mainAxisSize: .min,
+        children: [
+          const Flexible(child: Divider(thickness: 3.0)),
+          const SizedBox(width: 8.0),
+          UiText.bodyLarge('ИЛИ'),
+          const SizedBox(width: 8.0),
+          const Flexible(child: Divider(thickness: 3.0)),
+        ],
+      ),
+      const SizedBox(height: 16.0),
+      Row(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .center,
+        mainAxisSize: .min,
+        children: [
+          Expanded(
+            child: UiButton.icon(
+              icon: Image.asset(
+                ImagesHelper.googleLogo,
+                height: 32.0,
+                width: 32.0,
               ),
+              onPressed: () =>
+                  context.read<AuthBloc>().add(AuthEvent.signInWithGoogle()),
             ),
-            const SizedBox(width: 8),
-            UiText.bodyLarge('ИЛИ'),
-            const SizedBox(width: 8),
-            const Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                child: Divider(thickness: 3),
+          ),
+          const SizedBox(width: 16.0),
+          Expanded(
+            child: UiButton.icon(
+              icon: Image.asset(
+                ImagesHelper.googleLogo,
+                height: 32.0,
+                width: 32.0,
               ),
+              onPressed: () =>
+                  context.read<AuthBloc>().add(AuthEvent.signInWithGoogle()),
             ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: UiButton.icon(
-                icon: Image.asset(
-                  ImagesHelper.googleLogo,
-                  height: 32,
-                  width: 32,
-                ),
-                onPressed: () =>
-                    context.read<AuthBloc>().add(AuthEvent.signInWithGoogle()),
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll<Color>(
-                    Colors.transparent,
-                  ),
-                  side: WidgetStatePropertyAll<BorderSide>(
-                    BorderSide(color: Theme.of(context).colorPalette.border),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: UiButton.icon(
-                icon: Image.asset(
-                  ImagesHelper.googleLogo,
-                  height: 32,
-                  width: 32,
-                ),
-                onPressed: () =>
-                    context.read<AuthBloc>().add(AuthEvent.signInWithGoogle()),
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll<Color>(
-                    Colors.transparent,
-                  ),
-                  side: WidgetStatePropertyAll<BorderSide>(
-                    BorderSide(color: Theme.of(context).colorPalette.border),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+          ),
+        ],
+      ),
+    ],
+  );
 }

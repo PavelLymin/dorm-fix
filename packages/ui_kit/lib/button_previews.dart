@@ -12,9 +12,9 @@ class _ButtonsPreview extends State<ButtonsPreview> {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: UiCard.standart(
-        child: const Padding(
-          padding: AppPadding.allSmall,
-          child: Wrap(
+        child: Padding(
+          padding: context.appStyle.appPadding.allSmall,
+          child: const Wrap(
             spacing: 16,
             runSpacing: 16,
             children: [_FilledPrimaryButton()],

@@ -1,61 +1,55 @@
 import 'package:ui_kit/ui.dart';
 
 class AppPadding {
-  static const double defaultPadding = 8.0;
+  const AppPadding();
 
-  static const EdgeInsets pagePadding = .symmetric(
-    horizontal: defaultPadding * 2,
-    vertical: 0.0,
-  );
+  double get defaultPadding => 8.0;
 
-  static const EdgeInsets contentPadding = .symmetric(
-    horizontal: defaultPadding * 2,
-    vertical: defaultPadding,
-  );
+  EdgeInsets get pagePadding =>
+      .symmetric(horizontal: defaultPadding * 2, vertical: 0.0);
 
-  static const EdgeInsets allSmall = .all(defaultPadding);
-  static const EdgeInsets allMedium = .all(defaultPadding * 2);
-  static const EdgeInsets allLarge = .all(defaultPadding * 3);
+  EdgeInsets get contentPadding =>
+      .symmetric(horizontal: defaultPadding * 2, vertical: defaultPadding);
 
-  static const EdgeInsets horizontal = .symmetric(horizontal: defaultPadding);
-  static const EdgeInsets vertical = .symmetric(vertical: defaultPadding);
-  static const EdgeInsets symmetric = .symmetric(
-    horizontal: defaultPadding,
-    vertical: defaultPadding,
-  );
+  EdgeInsets get allSmall => .all(defaultPadding);
+  EdgeInsets get allMedium => .all(defaultPadding * 2);
+  EdgeInsets get allLarge => .all(defaultPadding * 3);
 
-  static const EdgeInsets only = .only(
+  EdgeInsets get horizontal => .symmetric(horizontal: defaultPadding);
+  EdgeInsets get vertical => .symmetric(vertical: defaultPadding);
+  EdgeInsets get symmetric =>
+      .symmetric(horizontal: defaultPadding, vertical: defaultPadding);
+
+  EdgeInsets get only => .only(
     top: defaultPadding,
     right: defaultPadding,
     bottom: defaultPadding,
     left: defaultPadding,
   );
 
-  static EdgeInsets appBar({required BuildContext context}) => .only(
+  EdgeInsets appBar({required BuildContext context}) => .only(
     top: MediaQuery.of(context).padding.top,
     bottom: defaultPadding * 2,
     right: defaultPadding * 2,
     left: defaultPadding * 2,
   );
 
-  static EdgeInsets allIncrement({required double increment}) =>
+  EdgeInsets allIncrement({required double increment}) =>
       .all(defaultPadding * increment);
 
-  static EdgeInsets horizontalIncrement({required double increment}) =>
+  EdgeInsets horizontalIncrement({required double increment}) =>
       .symmetric(horizontal: defaultPadding * increment, vertical: .0);
 
-  static EdgeInsets verticalIncrement({required double increment}) =>
+  EdgeInsets verticalIncrement({required double increment}) =>
       .symmetric(horizontal: .0, vertical: defaultPadding * increment);
 
-  static EdgeInsets symmetricIncrement({
-    double horizontal = 0,
-    double vertical = 0,
-  }) => .symmetric(
-    horizontal: defaultPadding * horizontal,
-    vertical: defaultPadding * vertical,
-  );
+  EdgeInsets symmetricIncrement({double horizontal = 0, double vertical = 0}) =>
+      .symmetric(
+        horizontal: defaultPadding * horizontal,
+        vertical: defaultPadding * vertical,
+      );
 
-  static EdgeInsets onlyIncrement({
+  EdgeInsets onlyIncrement({
     double top = 0,
     double right = 0,
     double bottom = 0,

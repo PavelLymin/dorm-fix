@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:firebase_admin/firebase_admin.dart';
 import '../../../../../core/database/database.dart';
 import '../../../profile.dart';
 
@@ -19,9 +20,12 @@ abstract interface class IStudentRepository {
 }
 
 class StudentRepositoryImpl implements IStudentRepository {
-  StudentRepositoryImpl({required Database database}) : _database = database;
+  StudentRepositoryImpl({required Database database, required App firebaseApp})
+    : _database = database,
+      _firebaseApp = firebaseApp;
 
   final Database _database;
+  final App _firebaseApp;
 
   @override
   Future<void> createStudent({
@@ -37,9 +41,9 @@ class StudentRepositoryImpl implements IStudentRepository {
           .insert(PartialStudentDto.fromEntity(student).toCompanion());
     });
 
-    // await _firebaseApp.auth().setCustomUserClaims(uid, {
-    //   'role': Role.student.name,
-    // });
+    await _firebaseApp.auth().setCustomUserClaims(uid, {
+      'role': Role.student.name,
+    });
   }
 
   @override

@@ -4,9 +4,9 @@ import '../../../request.dart';
 abstract class EstimatedSizes {
   const EstimatedSizes();
 
-  static EdgeInsets get listPadding => AppPadding.vertical;
+  static EdgeInsets get listPadding => .symmetric(vertical: 8.0);
   static EdgeInsets get itemPadding =>
-      AppPadding.symmetricIncrement(horizontal: 2, vertical: 3);
+      .symmetric(horizontal: 16.0, vertical: 24.0);
   static double get spacing => 4.0;
   static double get thickness => 1.0;
   static double get dividerHeight => 32.0;
@@ -29,7 +29,7 @@ abstract class EstimatedSizes {
         )..layout(
           maxWidth:
               MediaQuery.sizeOf(context).width -
-              AppPadding.pagePadding.horizontal,
+              context.appStyle.appPadding.pagePadding.horizontal,
         );
 
     return heightDescription = twoLineText.height;
@@ -60,9 +60,8 @@ class Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyleData.style;
+    final palette = context.colorPalette;
+    final style = context.appStyle.style;
     return UiCard.standart(
       borderRadius: style.borderRadius,
       padding: EstimatedSizes.itemPadding,
@@ -165,9 +164,8 @@ class _ItemStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyleData.style;
+    final palette = context.colorPalette;
+    final style = context.appStyle.style;
     Color statusColor = switch (status) {
       .completed => palette.completed,
       .inProgress => palette.inProgress,

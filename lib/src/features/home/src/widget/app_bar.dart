@@ -13,7 +13,7 @@ class HomeAppBar extends StatelessWidget {
         loading: (_) => const _Loading(),
         loadedStudent: (state) => _Loadded(student: state.student),
         error: (state) => SliverPadding(
-          padding: AppPadding.appBar(context: context),
+          padding: context.appStyle.appPadding.appBar(context: context),
           sliver: SliverToBoxAdapter(
             child: UiText.headlineMedium(state.message, overflow: .ellipsis),
           ),
@@ -27,14 +27,12 @@ class _Loading extends StatelessWidget {
   const _Loading();
 
   @override
-  Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: AppPadding.appBar(context: context),
-      sliver: const SliverToBoxAdapter(
-        child: Shimmer(child: _UserDisplay(student: FakeFullStudent())),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SliverPadding(
+    padding: context.appStyle.appPadding.appBar(context: context),
+    sliver: const SliverToBoxAdapter(
+      child: Shimmer(child: _UserDisplay(student: FakeFullStudent())),
+    ),
+  );
 }
 
 class _Loadded extends StatelessWidget {
@@ -44,7 +42,7 @@ class _Loadded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final padding = AppPadding.appBar(context: context);
+    final padding = context.appStyle.appPadding.appBar(context: context);
     return SliverResizingHeader(
       minExtentPrototype: _TitleAppBar(
         title: student.user.displayName ?? 'Name',
@@ -113,25 +111,23 @@ class _TitleAppBar extends StatelessWidget {
   final Color? colorTitle;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: Row(
-        mainAxisAlignment: .spaceBetween,
-        crossAxisAlignment: .center,
-        children: [
-          Flexible(
-            child: UiText.headlineLarge(
-              title,
-              style: TextStyle(color: colorTitle, fontWeight: .w700),
-            ),
+  Widget build(BuildContext context) => Padding(
+    padding: padding,
+    child: Row(
+      mainAxisAlignment: .spaceBetween,
+      crossAxisAlignment: .center,
+      children: [
+        Flexible(
+          child: UiText.headlineLarge(
+            title,
+            style: TextStyle(color: colorTitle, fontWeight: .w700),
           ),
-          UiButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_on_outlined),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        UiButton.icon(
+          onPressed: () {},
+          icon: const Icon(Icons.notifications_on_outlined),
+        ),
+      ],
+    ),
+  );
 }

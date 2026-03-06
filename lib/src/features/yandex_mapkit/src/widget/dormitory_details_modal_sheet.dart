@@ -37,7 +37,9 @@ class _DormitoryModalSheetState extends State<DormitoryDetailsModalSheet> {
       child: SizedBox(
         width: .infinity,
         child: Padding(
-          padding: AppPadding.symmetricIncrement(horizontal: 2),
+          padding: context.appStyle.appPadding.symmetricIncrement(
+            horizontal: 2,
+          ),
           child: Column(
             children: [
               const SizedBox(height: 16),

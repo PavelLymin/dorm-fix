@@ -12,7 +12,9 @@ class MapTitle extends StatelessWidget {
         child: SizedBox(
           width: MediaQuery.sizeOf(context).width,
           child: Padding(
-            padding: AppPadding.horizontalIncrement(increment: 1),
+            padding: context.appStyle.appPadding.horizontalIncrement(
+              increment: 1,
+            ),
             child: UiText.displayLarge(
               'Найдите свое общежитие',
               softWrap: true,

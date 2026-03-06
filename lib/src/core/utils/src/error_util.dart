@@ -64,7 +64,7 @@ abstract final class ErrorUtil {
       SnackBar(
         backgroundColor: Theme.of(context).colorPalette.destructiveCard,
         duration: const Duration(seconds: 3),
-        padding: AppPadding.allMedium,
+        padding: context.appStyle.appPadding.allMedium,
         behavior: .floating,
         content: Column(
           mainAxisAlignment: .center,

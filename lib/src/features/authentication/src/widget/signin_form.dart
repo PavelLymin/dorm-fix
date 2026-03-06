@@ -6,6 +6,25 @@ import 'auth_button.dart';
 import 'email_password_form.dart';
 import 'phone_number_form.dart';
 
+class _ChoiceLogIn extends StatelessWidget {
+  const _ChoiceLogIn({required this.isSignIn});
+
+  final ValueNotifier<bool> isSignIn;
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder(
+    valueListenable: isSignIn,
+    builder: (_, value, _) => ChoiceOptions(
+      options: <ChoiceItem>[
+        ChoiceItem(title: 'Регистрация'),
+        ChoiceItem(title: 'Вход'),
+      ],
+      selected: value ? 1 : 0,
+      onChange: (_) => isSignIn.value = !value,
+    ),
+  );
+}
+
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
 
@@ -16,14 +35,12 @@ class SignInForm extends StatefulWidget {
 class _SignInFormState extends State<SignInForm> with _FormStateMixin {
   @override
   Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: .center,
+    crossAxisAlignment: .stretch,
+    mainAxisSize: .min,
+    spacing: 32.0,
     children: [
-      const SizedBox(height: 16),
-      UiText.titleLarge(
-        'Начните использовать приложение',
-        style: TextStyle(fontWeight: FontWeight.w700),
-      ),
-      const SizedBox(height: 32),
+      _ChoiceLogIn(isSignIn: _isSignIn),
       ValueListenableBuilder(
         valueListenable: _isPhoneNumber,
         builder: (context, value, _) => !value
@@ -32,7 +49,6 @@ class _SignInFormState extends State<SignInForm> with _FormStateMixin {
                 passwordController: _passwordController,
                 emailFocusNode: _emailFocusNode,
                 passwordFocusNode: _passwordFocusNode,
-                onTap: () {},
               )
             : BlocBuilder<AuthButtonBloc, AuthButtonState>(
                 buildWhen: (previous, current) {
@@ -65,14 +81,12 @@ class _SignInFormState extends State<SignInForm> with _FormStateMixin {
                 ),
               ),
       ),
-      const SizedBox(height: 32),
       AuthButton(
-        signInWithEmailAndPassword: () => _logInWithEmailAndPassword(
+        emailAndPassword: () => _logInWithEmailAndPassword(
           _emailController.text,
           _passwordController.text,
         ),
-        signInWithPhoneNumber: () =>
-            _signInWithPhoneNumber(_pinCodeController.text),
+        phoneNumber: () => _signInWithPhoneNumber(_pinCodeController.text),
         verifyPhoneNumber: () => _verifyPhoneNumber(_phoneController.text),
       ),
     ],
@@ -80,29 +94,33 @@ class _SignInFormState extends State<SignInForm> with _FormStateMixin {
 }
 
 mixin _FormStateMixin on State<SignInForm> {
-  late AuthBloc _authBloc;
-  bool _clearText = false;
-  final _isPhoneNumber = ValueNotifier<bool>(false);
+  late final AuthBloc _authBloc;
+  late final ValueNotifier<bool> _isSignIn;
+  late final ValueNotifier<bool> _isPhoneNumber;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _emailFocusNode = FocusNode();
-  final _passwordFocusNode = FocusNode();
-
   final _phoneController = TextEditingController();
   final _pinCodeController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
   final _phoneFocusNode = FocusNode();
+
+  bool _clearText = false;
 
   @override
   void initState() {
     super.initState();
     _authBloc = DependeciesScope.of(context).authenticationBloc;
+    _isSignIn = ValueNotifier<bool>(true);
+    _isPhoneNumber = ValueNotifier<bool>(false);
     _emailController.addListener(_emailToPhoneNumber);
     _phoneController.addListener(_phoneNumberToEmail);
   }
 
   @override
   void dispose() {
+    _isSignIn.dispose();
     _emailController.removeListener(_emailToPhoneNumber);
     _phoneController.removeListener(_phoneNumberToEmail);
     super.dispose();
@@ -111,15 +129,15 @@ mixin _FormStateMixin on State<SignInForm> {
   void _emailToPhoneNumber() {
     _onChanged(_emailController.text);
     if (_emailController.text.startsWith('+')) {
-      Future.delayed(const Duration(milliseconds: 100)).then((_) {
-        setState(() {
+      Future.delayed(const Duration(milliseconds: 100)).then(
+        (_) => setState(() {
           _phoneController.text = _emailController.text;
           _emailController.clear();
           _isPhoneNumber.value = true;
           _emailFocusNode.unfocus();
           _phoneFocusNode.requestFocus();
-        });
-      });
+        }),
+      );
     }
   }
 
@@ -141,32 +159,30 @@ mixin _FormStateMixin on State<SignInForm> {
 
   void _onChanged(String text) {
     if (text.isNotEmpty && !_clearText) {
-      setState(() {
-        _clearText = true;
-      });
+      setState(() => _clearText = true);
     } else if (text.isEmpty && _clearText) {
-      setState(() {
-        _clearText = false;
-      });
+      setState(() => _clearText = false);
     }
   }
 
-  void _logInWithEmailAndPassword(String email, String password) {
-    _authBloc.add(AuthEvent.logIn(email: email, password: password));
-  }
+  void _logInWithEmailAndPassword(String email, String password) =>
+      _isSignIn.value
+      ? _authBloc.add(
+          .signInWithEmailAndPassword(email: email, password: password),
+        )
+      : _authBloc.add(
+          .signUpWithEmailAndPassword(email: email, password: password),
+        );
 
-  void _verifyPhoneNumber(String phoneNumber) {
-    _authBloc.add(AuthEvent.verifyPhoneNumber(phoneNumber: phoneNumber));
-  }
+  void _verifyPhoneNumber(String phoneNumber) =>
+      _authBloc.add(.verifyPhoneNumber(phoneNumber: phoneNumber));
 
-  void _signInWithPhoneNumber(String smsCode) {
-    _authBloc.state.mapOrNull(
-      smsCodeSent: (state) => context.read<AuthBloc>().add(
-        AuthEvent.signInWithPhoneNumber(
-          verificationId: state.verificationId,
-          smsCode: smsCode,
-        ),
+  void _signInWithPhoneNumber(String smsCode) => _authBloc.state.mapOrNull(
+    smsCodeSent: (state) => _authBloc.add(
+      .signInWithPhoneNumber(
+        verificationId: state.verificationId,
+        smsCode: smsCode,
       ),
-    );
-  }
+    ),
+  );
 }

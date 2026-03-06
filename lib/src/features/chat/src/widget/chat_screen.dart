@@ -8,31 +8,35 @@ import 'message_date.dart';
 import 'message_input.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({super.key, required this.chatId});
 
-  // final FullChat chat;
+  final int chatId;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late final IChatRealTimeRepository _chatRealTimeRepository;
   late final ChatBloc _chatBloc;
 
   @override
   void initState() {
     super.initState();
     final dependency = DependeciesScope.of(context);
+    _chatRealTimeRepository = dependency.chatRealTimeRepository
+      ..joinToChat(chatId: widget.chatId);
     _chatBloc = ChatBloc(
       webSocket: dependency.webSocket,
       logger: dependency.logger,
       messageRepository: dependency.messageRepository,
       messageRealTimeRepository: dependency.messageRealTimeRepository,
-    )..add(.get(chatId: 1));
+    )..add(.get(chatId: widget.chatId));
   }
 
   @override
   void dispose() {
+    _chatRealTimeRepository.leaveFromChat(chatId: widget.chatId);
     _chatBloc.close();
     super.dispose();
   }
@@ -45,7 +49,8 @@ class _ChatScreenState extends State<ChatScreen> {
       body: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) => state.maybeMap(
           orElse: () => const SizedBox.shrink(),
-          loaded: (state) => _ChatLoaded(messages: state.messages),
+          loaded: (state) =>
+              _ChatLoaded(messages: state.messages, chatId: widget.chatId),
         ),
       ),
     ),
@@ -53,9 +58,9 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class _ChatLoaded extends StatefulWidget {
-  const _ChatLoaded({required this.messages});
+  const _ChatLoaded({required this.messages, required this.chatId});
 
-  // final FullChat chat;
+  final int chatId;
   final List<FullMessage> messages;
 
   @override
@@ -106,7 +111,7 @@ class _ChatLoadedState extends State<_ChatLoaded> {
     child: Stack(
       children: [
         Padding(
-          padding: AppPadding.pagePadding,
+          padding: context.appStyle.appPadding.pagePadding,
           child: ChatList(
             controller: _controller,
             itemCount: widget.messages.length,
@@ -124,7 +129,7 @@ class _ChatLoadedState extends State<_ChatLoaded> {
           ),
         ),
         FloatingDateOverlay(floatingDate: _dateFocusNotifier),
-        MessageInput(),
+        MessageInput(chatId: widget.chatId),
       ],
     ),
   );

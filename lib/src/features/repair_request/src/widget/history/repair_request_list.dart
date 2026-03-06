@@ -1,7 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../../chat/chat.dart';
 import '../../../request.dart';
 import 'item_list.dart';
@@ -15,15 +14,6 @@ class RepairRequestList extends StatefulWidget {
 
 class _RepairRequestListState extends State<RepairRequestList> {
   late double _height;
-  late final IChatRealTimeRepository _chatRealTimeRepository;
-
-  @override
-  void initState() {
-    super.initState();
-    _chatRealTimeRepository = DependeciesScope.of(
-      context,
-    ).chatRealTimeRepository;
-  }
 
   @override
   void didChangeDependencies() {
@@ -34,7 +24,7 @@ class _RepairRequestListState extends State<RepairRequestList> {
 
   @override
   Widget build(BuildContext context) => SliverPadding(
-    padding: AppPadding.contentPadding,
+    padding: context.appStyle.appPadding.contentPadding,
     sliver: BlocBuilder<RepairRequestBloc, RepairRequestState>(
       builder: (context, state) => state.maybeMap(
         orElse: () => const SliverToBoxAdapter(),
@@ -45,10 +35,7 @@ class _RepairRequestListState extends State<RepairRequestList> {
             childCount: state.requests.length,
             (context, index) => Padding(
               padding: EstimatedSizes.listPadding,
-              child: _OpenItem(
-                request: state.requests[index],
-                chatRealTimeRepository: _chatRealTimeRepository,
-              ),
+              child: _OpenItem(request: state.requests[index]),
             ),
           ),
         ),
@@ -70,32 +57,22 @@ class _LoadingList extends StatelessWidget {
 }
 
 class _OpenItem extends StatelessWidget {
-  const _OpenItem({
-    required this.request,
-    required this.chatRealTimeRepository,
-  });
+  const _OpenItem({required this.request});
 
   final FullRepairRequest request;
-  final IChatRealTimeRepository chatRealTimeRepository;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyleData.style;
+    final palette = context.colorPalette;
+    final style = context.appStyle.style;
     return OpenContainer(
       openElevation: .0,
       closedElevation: .0,
       closedShape: RoundedRectangleBorder(borderRadius: style.borderRadius),
       closedColor: palette.background,
       openColor: palette.background,
-      openBuilder: (_, _) => GestureDetector(
-        onTap: () => chatRealTimeRepository.joinToChat(chatId: request.chat.id),
-        child: ChatScreen(),
-      ),
+      openBuilder: (_, _) => ChatScreen(chatId: request.chat.id),
       closedBuilder: (_, _) => Item(request: request),
-      onClosed: (_) =>
-          chatRealTimeRepository.leaveFromChat(chatId: request.chat.id),
     );
   }
 }

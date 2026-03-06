@@ -6,7 +6,7 @@ class BottomSheetPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) => UiCard.standart(
     child: Padding(
-      padding: AppPadding.allSmall,
+      padding: context.appStyle.appPadding.allSmall,
       child: UiButton.filledPrimary(
         onPressed: () => showUiBottomSheet(
           context,

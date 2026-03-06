@@ -5,39 +5,34 @@ import '../../authentication.dart';
 class AuthButton extends StatelessWidget {
   const AuthButton({
     super.key,
-    required this.signInWithEmailAndPassword,
+    required this.emailAndPassword,
     required this.verifyPhoneNumber,
-    required this.signInWithPhoneNumber,
+    required this.phoneNumber,
   });
 
-  final Function signInWithEmailAndPassword;
+  final Function emailAndPassword;
   final Function verifyPhoneNumber;
-  final Function signInWithPhoneNumber;
+  final Function phoneNumber;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    height: 48,
-    width: .infinity,
-    child: BlocBuilder<AuthButtonBloc, AuthButtonState>(
-      builder: (context, state) => UiButton.filledPrimary(
-        onPressed: () => state.mapOrNull(
-          isEmailPassword: () => signInWithEmailAndPassword(),
-          isPhoneNumber: () => verifyPhoneNumber(),
-          isPin: () => signInWithPhoneNumber(),
+  Widget build(BuildContext context) =>
+      BlocBuilder<AuthButtonBloc, AuthButtonState>(
+        builder: (context, state) => UiButton.filledPrimary(
+          onPressed: () => state.mapOrNull(
+            isEmailPassword: () => emailAndPassword(),
+            isPhoneNumber: () => verifyPhoneNumber(),
+            isPin: () => phoneNumber(),
+          ),
+          enabled: state.isEnabled,
+          label: state.isLoading
+              ? SizedBox.square(
+                  dimension: 20.0,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: context.colorPalette.primary.withValues(alpha: .38),
+                  ),
+                )
+              : const Text('Далее'),
         ),
-        enabled: state.isEnabled,
-        label: state.isLoading
-            ? SizedBox.square(
-                dimension: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Theme.of(
-                    context,
-                  ).colorPalette.primary.withValues(alpha: .38),
-                ),
-              )
-            : const Text('Далее'),
-      ),
-    ),
-  );
+      );
 }

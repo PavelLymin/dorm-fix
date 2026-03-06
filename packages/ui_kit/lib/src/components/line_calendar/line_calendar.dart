@@ -46,7 +46,7 @@ class LineCalendar extends StatelessWidget {
 
 class LineCalendarStyle {
   const LineCalendarStyle({
-    this.padding = AppPadding.horizontal,
+    this.padding = const .symmetric(horizontal: 8.0),
     this.contentEdgeSpacing = 16,
     this.contentSpacing = 8,
   });
@@ -56,9 +56,8 @@ class LineCalendarStyle {
   final double contentSpacing;
 
   AppWidgetStateMap<BoxDecoration> decoration(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyleData.style;
+    final palette = context.colorPalette;
+    final style = context.appStyle.style;
     return AppWidgetStateMap<BoxDecoration>({
       WidgetState.selected: BoxDecoration(
         color: palette.secondary,

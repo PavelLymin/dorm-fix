@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
@@ -7,13 +8,16 @@ import '../../ws.dart';
 
 class WsRouter {
   const WsRouter({
+    required Logger logger,
     required WebSocketBase ws,
     required IChatRealTimeRepository chatRealTimeRepository,
     required IMessageRealTimeRepository messageRealTimeRepository,
-  }) : _ws = ws,
+  }) : _logger = logger,
+       _ws = ws,
        _chatRepository = chatRealTimeRepository,
        _messageRepository = messageRealTimeRepository;
 
+  final Logger _logger;
   final WebSocketBase _ws;
   final IChatRealTimeRepository _chatRepository;
   final IMessageRealTimeRepository _messageRepository;
@@ -38,11 +42,11 @@ class WsRouter {
 
     return webSocketHandler((socket, _) {
       _ws.addConnection(uid: uid, socket: socket);
-
       socket.stream.listen(
         (data) async {
           try {
             final message = await _ws.decodeRaw(data);
+            _logger.i(message);
             await message.mapOrNull(
               joinToChat: (payload, _) => _chatRepository.joinToChat(
                 socket: socket,

@@ -13,7 +13,7 @@ class _SwitchPreviewState extends State<SwitchPreview> {
   @override
   Widget build(BuildContext context) => UiCard.standart(
     child: Padding(
-      padding: AppPadding.allSmall,
+      padding: context.appStyle.appPadding.allSmall,
       child: UiSwitch(
         value: _value,
         onChanged: (value) => setState(() {

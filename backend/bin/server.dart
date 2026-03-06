@@ -23,10 +23,6 @@ void main(List<String> args) async {
 
       final ip = InternetAddress.anyIPv4;
 
-      final publicRoutes = Pipeline().addHandler(
-        Cascade().add(dependency.userRouter.publicHandler).handler,
-      );
-
       final protectedRoutes = Pipeline()
           .addMiddleware(corsHeaders())
           .addMiddleware(
@@ -51,7 +47,7 @@ void main(List<String> args) async {
       final handlers = Pipeline()
           .addMiddleware(logRequests())
           .addMiddleware(ErrorMiddleware.call(logger, dependency.restApi))
-          .addHandler(Cascade().add(publicRoutes).add(protectedRoutes).handler);
+          .addHandler(Cascade().add(protectedRoutes).handler);
 
       final port = int.parse(Config.port);
       await serve(handlers, ip, port);

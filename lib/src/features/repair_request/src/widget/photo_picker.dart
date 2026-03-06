@@ -12,7 +12,7 @@ class PhotoPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UiCard.standart(
-      padding: AppPadding.allMedium,
+      padding: context.appStyle.appPadding.allMedium,
       child: BlocBuilder<RequestFormBloc, RequestFormState>(
         buildWhen: (previous, current) =>
             previous.currentFormModel.imagePaths.length !=
@@ -67,7 +67,7 @@ class _ButtonAdd extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette;
-    final style = theme.appStyleData.style;
+    final style = theme.appStyle.style;
     return UiButton.icon(
       statesController: controller,
       onPressed: onPressed,
@@ -226,9 +226,9 @@ class _Item extends StatelessWidget {
       context.read<RequestFormBloc>().add(.deleteImage(index: index));
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyleData.style;
+    final palette = context.colorPalette;
+    final style = context.appStyle.style;
+    final padding = context.appStyle.appPadding;
     return Padding(
       padding: pickerStyle.photoPadding,
       child: Stack(
@@ -244,7 +244,7 @@ class _Item extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: AppPadding.allSmall,
+            padding: padding.allSmall,
             child: UiButton.icon(
               onPressed: () => _onPressed(context),
               icon: Icon(
@@ -255,7 +255,7 @@ class _Item extends StatelessWidget {
               ),
               style: ButtonStyle(
                 minimumSize: .all(.square(8.0)),
-                padding: .all(AppPadding.allIncrement(increment: .5)),
+                padding: .all(padding.allIncrement(increment: .5)),
                 backgroundColor: .all(Theme.of(context).colorPalette.secondary),
                 side: .all(
                   BorderSide(
@@ -279,7 +279,7 @@ class PhotoPickerStyle {
     this.iconAddSize = 32.0,
     this.iconClearSize = 8.0,
     this.buttonAddPadding = const .symmetric(horizontal: 32, vertical: 32),
-    this.photoPadding = AppPadding.horizontal,
+    this.photoPadding = const .symmetric(horizontal: 8),
   });
 
   final double spacing;

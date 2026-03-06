@@ -7,7 +7,7 @@ class TypographyPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return UiCard.standart(
       child: Padding(
-        padding: AppPadding.allSmall,
+        padding: context.appStyle.appPadding.allSmall,
         child: Column(
           crossAxisAlignment: .start,
           mainAxisSize: .min,

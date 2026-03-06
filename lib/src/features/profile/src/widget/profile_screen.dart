@@ -8,7 +8,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: AppPadding.pagePadding,
+    padding: context.appStyle.appPadding.pagePadding,
     child: CustomScrollView(
       slivers: [
         SliverAppBar(

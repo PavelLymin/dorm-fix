@@ -53,9 +53,8 @@ class GroupedList<T extends Enum> extends StatefulWidget {
 class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyleData.style;
+    final palette = context.colorPalette;
+    final style = context.appStyle.style;
     return DecoratedBox(
       position: .foreground,
       decoration: BoxDecoration(

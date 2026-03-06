@@ -65,6 +65,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appPading = context.appStyle.appPadding;
     return BlocProvider(
       create: (context) => _studentBloc,
       child: BlocListener<ProfileBloc, ProfileState>(
@@ -76,10 +77,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         child: Scaffold(
           body: SafeArea(
             child: Padding(
-              padding: AppPadding.symmetricIncrement(
-                horizontal: 3,
-                vertical: 2,
-              ),
+              padding: appPading.symmetricIncrement(horizontal: 3, vertical: 2),
               child: Column(
                 crossAxisAlignment: .stretch,
                 children: [
@@ -95,7 +93,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                     keyboardType: .name,
                     textInputAction: .next,
                     style: UiTextFieldStyle(
-                      contentPadding: AppPadding.allMedium,
+                      contentPadding: appPading.allMedium,
                       hintText: 'Иван Иванов',
                       prefixIcon: const Icon(Icons.person),
                     ),
@@ -106,7 +104,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                     keyboardType: .emailAddress,
                     textInputAction: .next,
                     style: UiTextFieldStyle(
-                      contentPadding: AppPadding.allMedium,
+                      contentPadding: appPading.allMedium,
                       hintText: 'name@mail.ru',
                       prefixIcon: const Icon(Icons.email_outlined),
                     ),

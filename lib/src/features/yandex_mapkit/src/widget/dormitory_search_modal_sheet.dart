@@ -34,7 +34,7 @@ class _DormitorySearchModalSheetState extends State<DormitorySearchModalSheet> {
     return BlocProvider.value(
       value: _dormitorySearchBloc,
       child: Padding(
-        padding: AppPadding.symmetricIncrement(horizontal: 2),
+        padding: context.appStyle.appPadding.symmetricIncrement(horizontal: 2),
         child: Column(
           children: [
             const SizedBox(height: 16),

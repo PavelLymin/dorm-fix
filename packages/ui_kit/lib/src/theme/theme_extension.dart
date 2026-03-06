@@ -103,10 +103,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     covariant ThemeExtension<ColorPalette>? other,
     double t,
   ) {
-    if (other == null || other is! ColorPalette) {
-      return this;
-    }
-
+    if (other == null || other is! ColorPalette) return this;
     return ColorPalette(
       background: .lerp(background, other.background, t)!,
       foreground: .lerp(foreground, other.foreground, t)!,
@@ -165,37 +162,6 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     'In Progress': inProgress,
     'New Request': newRequest,
   };
-}
-
-class AppGradient extends ThemeExtension<AppGradient> {
-  const AppGradient({required this.primary, required this.appBar});
-
-  final Gradient primary;
-  final Gradient appBar;
-
-  @override
-  ThemeExtension<AppGradient> copyWith({Gradient? primary, Gradient? appBar}) =>
-      AppGradient(
-        primary: primary ?? this.primary,
-        appBar: appBar ?? this.appBar,
-      );
-
-  @override
-  ThemeExtension<AppGradient> lerp(
-    covariant ThemeExtension<AppGradient>? other,
-    double t,
-  ) {
-    if (other == null || other is! AppGradient) {
-      return this;
-    }
-
-    return AppGradient(
-      primary: .lerp(primary, other.primary, t)!,
-      appBar: .lerp(appBar, other.appBar, t)!,
-    );
-  }
-
-  Map<String, Gradient> toMap() => {'Primary': primary};
 }
 
 class AppTypography extends ThemeExtension<AppTypography> {
@@ -273,10 +239,7 @@ class AppTypography extends ThemeExtension<AppTypography> {
     covariant ThemeExtension<AppTypography>? other,
     double t,
   ) {
-    if (other == null || other is! AppTypography) {
-      return this;
-    }
-
+    if (other == null || other is! AppTypography) return this;
     return AppTypography(
       displayLarge: .lerp(displayLarge, other.displayLarge, t)!,
       displayMedium: .lerp(displayMedium, other.displayMedium, t)!,
@@ -300,21 +263,25 @@ class AppTypography extends ThemeExtension<AppTypography> {
 class AppStyleData extends ThemeExtension<AppStyleData> {
   const AppStyleData({
     this.style = const AppStyle(),
+    this.appPadding = const AppPadding(),
     this.lineCalendarStyle = const LineCalendarStyle(),
     this.groupedListStyle = const GroupedListStyle(),
   });
 
   final AppStyle style;
+  final AppPadding appPadding;
   final LineCalendarStyle lineCalendarStyle;
   final GroupedListStyle groupedListStyle;
 
   @override
   ThemeExtension<AppStyleData> copyWith({
     AppStyle? style,
+    AppPadding? appPadding,
     LineCalendarStyle? lineCalendarStyle,
     GroupedListStyle? groupedListStyle,
   }) => AppStyleData(
     style: style ?? this.style,
+    appPadding: appPadding ?? this.appPadding,
     lineCalendarStyle: lineCalendarStyle ?? this.lineCalendarStyle,
     groupedListStyle: groupedListStyle ?? this.groupedListStyle,
   );
@@ -323,20 +290,16 @@ class AppStyleData extends ThemeExtension<AppStyleData> {
   ThemeExtension<AppStyleData> lerp(
     covariant ThemeExtension<AppStyleData>? other,
     double t,
-  ) {
-    return this;
-  }
+  ) => this;
 }
 
 extension ThemeDataExtensions on ThemeData {
   ColorPalette get colorPalette =>
       extension<ColorPalette>() ?? lightColorPalette;
 
-  AppGradient get appGradient => extension<AppGradient>() ?? lightGradient;
-
   AppTypography get appTypography =>
       extension<AppTypography>() ?? defaultTypography;
 
-  AppStyleData get appStyleData =>
+  AppStyleData get appStyle =>
       extension<AppStyleData>() ?? const AppStyleData();
 }

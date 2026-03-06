@@ -60,7 +60,10 @@ class CompositionRoot {
       restApi: restApi,
     );
     // Student
-    final studentRepository = StudentRepositoryImpl(database: database);
+    final studentRepository = StudentRepositoryImpl(
+      database: database,
+      firebaseApp: app,
+    );
     // Master
     final masterRepository = MasterRepository(database: database);
     // Problem
@@ -105,6 +108,7 @@ class CompositionRoot {
     // <--- Routers --->
     // WS
     final wsRouter = WsRouter(
+      logger: logger,
       ws: ws,
       chatRealTimeRepository: chatRealTimeRepository,
       messageRealTimeRepository: messageRealTimeRepository,

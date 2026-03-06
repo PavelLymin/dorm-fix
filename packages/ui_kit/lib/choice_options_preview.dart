@@ -16,7 +16,7 @@ class _ChoiceOptionsPreviewState extends State<ChoiceOptionsPreview> {
     final colorPalette = Theme.of(context).colorPalette;
     return UiCard.standart(
       child: Padding(
-        padding: AppPadding.allSmall,
+        padding: context.appStyle.appPadding.allSmall,
         child: Column(
           children: [
             ChoiceOptions(

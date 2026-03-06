@@ -6,9 +6,9 @@ import '../../../authentication/authentication.dart';
 import '../../chat.dart';
 
 class MessageInput extends StatefulWidget {
-  const MessageInput({super.key});
+  const MessageInput({super.key, required this.chatId});
 
-  // final FullChat chat;
+  final int chatId;
 
   @override
   State<MessageInput> createState() => _MessageInputState();
@@ -51,8 +51,9 @@ class _MessageInputState extends State<MessageInput> {
 
   @override
   Widget build(BuildContext context) {
+    final appPading = context.appStyle.appPadding;
     final padding =
-        AppPadding.pagePadding +
+        appPading.pagePadding +
         .only(bottom: MediaQuery.paddingOf(context).bottom);
     return Align(
       alignment: .bottomCenter,
@@ -68,7 +69,7 @@ class _MessageInputState extends State<MessageInput> {
                     _typingBloc.add(.textChanged(chatId: 1, text: text)),
                 style: UiTextFieldStyle(
                   suffixIcon: Padding(
-                    padding: AppPadding.allIncrement(increment: 0.5),
+                    padding: appPading.allIncrement(increment: 0.5),
                     child: UiButton.icon(
                       onPressed: _onSend,
                       icon: const Icon(Icons.arrow_upward_outlined),

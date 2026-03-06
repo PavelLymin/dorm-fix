@@ -12,16 +12,15 @@ class ItemDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.appStyleData;
-    final padding = style.groupedListStyle.contentEdgePadding;
+    final style = context.appStyle;
+    final appPadding = style.groupedListStyle.contentEdgePadding;
 
     return switch (type) {
       .indented => Divider(
         height: 0.0,
         thickness: 1.0,
-        indent: padding.left,
-        endIndent: padding.right,
+        indent: appPadding.left,
+        endIndent: appPadding.right,
       ),
       .full => const Divider(height: 0.0, thickness: 1.0),
     };

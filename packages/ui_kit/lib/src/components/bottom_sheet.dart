@@ -17,9 +17,9 @@ Future<T?> showUiBottomSheet<T>(
   bool isScrollControlled = true,
   bool useSafeArea = true,
 }) {
-  final theme = Theme.of(context);
-  final palette = theme.colorPalette;
-  final style = theme.appStyleData.style;
+  final palette = context.colorPalette;
+  final style = context.appStyle.style;
+  final appPadding = context.appStyle.appPadding;
   return showModalBottomSheet<T>(
     context: context,
     sheetAnimationStyle: anymation,
@@ -34,7 +34,7 @@ Future<T?> showUiBottomSheet<T>(
       maxHeight: maxHeight,
     ),
     builder: (BuildContext context) => Padding(
-      padding: AppPadding.onlyIncrement(top: 2, left: 2, right: 2, bottom: 8),
+      padding: appPadding.onlyIncrement(top: 2, left: 2, right: 2, bottom: 8),
       child: Column(
         mainAxisSize: .min,
         spacing: 24.0,

@@ -15,7 +15,7 @@ class SidebarNavigation extends StatelessWidget {
           child: ColoredBox(
             color: Theme.of(context).colorPalette.secondary,
             child: Padding(
-              padding: AppPadding.onlyIncrement(top: 16),
+              padding: context.appStyle.appPadding.onlyIncrement(top: 16),
               child: ListView(
                 children: List.generate(AppPage.pages.length, (index) {
                   final page = AppPage.pages[index];
@@ -43,7 +43,7 @@ class MenuNavigation extends StatelessWidget {
   Widget build(BuildContext context) => ColoredBox(
     color: Theme.of(context).colorPalette.secondary,
     child: Padding(
-      padding: AppPadding.onlyIncrement(top: 16),
+      padding: context.appStyle.appPadding.onlyIncrement(top: 16),
       child: ListView(
         children: List.generate(AppPage.pages.length, (index) {
           final page = AppPage.pages[index];
@@ -87,33 +87,36 @@ class _TabItemState extends State<_TabItem> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: AppPadding.symmetricIncrement(horizontal: 3),
-    child: GestureDetector(
-      onTap: () => AutoTabsRouter.of(context).setActiveIndex(widget.index),
-      child: DecoratedBox(
-        decoration: _isActive
-            ? BoxDecoration(
-                color: Theme.of(context).colorPalette.secondary,
-                borderRadius: BorderRadius.circular(16),
-              )
-            : BoxDecoration(),
-        child: Padding(
-          padding: AppPadding.allMedium,
-          child: Row(
-            spacing: 16,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(_isActive ? widget.activeIcon : widget.icon),
-              Text(widget.title),
-            ],
+  Widget build(BuildContext context) {
+    final appPadding = context.appStyle.appPadding;
+    return Padding(
+      padding: appPadding.symmetricIncrement(horizontal: 3),
+      child: GestureDetector(
+        onTap: () => AutoTabsRouter.of(context).setActiveIndex(widget.index),
+        child: DecoratedBox(
+          decoration: _isActive
+              ? BoxDecoration(
+                  color: Theme.of(context).colorPalette.secondary,
+                  borderRadius: BorderRadius.circular(16),
+                )
+              : BoxDecoration(),
+          child: Padding(
+            padding: appPadding.allMedium,
+            child: Row(
+              spacing: 16,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(_isActive ? widget.activeIcon : widget.icon),
+                Text(widget.title),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class Burger extends StatelessWidget {
@@ -131,7 +134,7 @@ class Burger extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: AppPadding.symmetricIncrement(
+              padding: context.appStyle.appPadding.symmetricIncrement(
                 horizontal: 2,
                 vertical: 7,
               ),

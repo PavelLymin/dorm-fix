@@ -7,20 +7,21 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorPalette;
+    final palette = context.colorPalette;
+    final appPadding = context.appStyle.appPadding;
     return Positioned(
       bottom: 0.0,
       child: SafeArea(
         child: SizedBox(
           width: MediaQuery.sizeOf(context).width,
           child: Padding(
-            padding: AppPadding.allMedium,
+            padding: appPadding.allMedium,
             child: GestureDetector(
               onTap: onTap,
               child: Container(
-                padding: AppPadding.allMedium,
+                padding: appPadding.allMedium,
                 decoration: BoxDecoration(
-                  color: theme.secondary.withValues(alpha: 0.2),
+                  color: palette.secondary.withValues(alpha: 0.2),
                   borderRadius: const .all(.circular(16)),
                 ),
                 child: Row(

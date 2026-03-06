@@ -23,7 +23,7 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: AppPadding.contentPadding,
+    padding: context.appStyle.appPadding.contentPadding,
     child: BlocBuilder<SpecializationBloc, SpecializationState>(
       builder: (context, state) {
         return state.map(
@@ -72,11 +72,19 @@ class _Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final gradient = theme.appGradient;
+    final palette = context.colorPalette;
+    final gradient = LinearGradient(
+      begin: .topLeft,
+      end: .topEnd,
+      stops: [.5, 1.0],
+      colors: [palette.background, palette.border],
+    );
     return UiCard.standart(
-      padding: AppPadding.symmetricIncrement(horizontal: 2, vertical: 3),
-      gradient: gradient.primary,
+      padding: context.appStyle.appPadding.symmetricIncrement(
+        horizontal: 2,
+        vertical: 3,
+      ),
+      gradient: gradient,
       child: Row(
         mainAxisAlignment: .center,
         mainAxisSize: .max,

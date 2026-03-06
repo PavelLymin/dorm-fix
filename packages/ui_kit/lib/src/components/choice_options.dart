@@ -13,11 +13,11 @@ class ChoiceOptions extends StatelessWidget {
     required this.options,
     required this.selected,
     required this.onChange,
-    required this.barColor,
-    required this.selectedColor,
+    this.barColor,
+    this.selectedColor,
     this.borderRadius = const .all(.circular(16.0)),
-    this.iconSize = 32,
-    this.height = 48,
+    this.iconSize = 32.0,
+    this.height = 48.0,
     this.duration = const Duration(milliseconds: 300),
     this.curve = Curves.easeIn,
   });
@@ -25,8 +25,8 @@ class ChoiceOptions extends StatelessWidget {
   final List<ChoiceItem> options;
   final int selected;
   final void Function(int) onChange;
-  final Color barColor;
-  final Color selectedColor;
+  final Color? barColor;
+  final Color? selectedColor;
   final BorderRadius borderRadius;
   final double iconSize;
   final double height;
@@ -35,12 +35,11 @@ class ChoiceOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyleData.style;
+    final palette = context.colorPalette;
+    final style = context.appStyle.style;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: barColor,
+        color: barColor ?? palette.card,
         borderRadius: borderRadius,
         border: .all(color: palette.border, width: style.borderWidth),
       ),
@@ -52,7 +51,7 @@ class ChoiceOptions extends StatelessWidget {
               options: options,
               selected: selected,
               constraints: constraints,
-              selectedColor: selectedColor,
+              selectedColor: selectedColor ?? palette.secondary,
               borderRadius: borderRadius,
               height: height,
               duration: duration,
@@ -116,9 +115,8 @@ class _SelectedItemOptionState extends State<_SelectedItemOption> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyleData.style;
+    final palette = context.colorPalette;
+    final style = context.appStyle.style;
     final itemWidth = widget.constraints.maxWidth / widget.options.length;
 
     return AnimatedPositioned(

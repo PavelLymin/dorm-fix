@@ -8,7 +8,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: AppPadding.pagePadding,
+        padding: context.appStyle.appPadding.pagePadding,
         child: Column(
           children: [
             Center(child: UiTextField.standard()),

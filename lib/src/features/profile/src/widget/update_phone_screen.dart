@@ -62,7 +62,7 @@ class _UpdatePhoneScreenState extends State<UpdatePhoneScreen> {
   Widget build(BuildContext context) => Scaffold(
     resizeToAvoidBottomInset: true,
     body: Padding(
-      padding: AppPadding.horizontalIncrement(increment: 3),
+      padding: context.appStyle.appPadding.horizontalIncrement(increment: 3),
       child: Center(
         child: SizedBox(
           width: 400,

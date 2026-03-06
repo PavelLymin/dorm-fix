@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:dorm_fix/src/features/chat/src/widget/chat_screen.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/home/home.dart';
 import '../../features/profile/profile.dart';
@@ -41,10 +40,6 @@ class AppRouter extends RootStackRouter {
     NamedRouteDef(
       name: 'HistoryScreen',
       builder: (context, data) => const HistoryScreen(),
-    ),
-    NamedRouteDef(
-      name: 'ChatScreen',
-      builder: (context, data) => const ChatScreen(),
     ),
     NamedRouteDef(
       initial: true,
