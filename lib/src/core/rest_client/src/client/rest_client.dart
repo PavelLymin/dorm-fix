@@ -31,4 +31,11 @@ abstract interface class RestClient {
     Map<String, String>? headers,
     Map<String, String?>? queryParams,
   });
+
+  Stream<Map<String, Object?>> stream({
+    required String path,
+    required String method,
+    Map<String, String?>? queryParams,
+    Map<String, String>? headers,
+  });
 }

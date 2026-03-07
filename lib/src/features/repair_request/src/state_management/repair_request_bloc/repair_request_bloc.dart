@@ -50,13 +50,13 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
   StreamSubscription? _streamSubscription;
 
   Future<void> _getRequest(Emitter<RepairRequestState> emit) async {
-    try {
-      final requests = await _requestRepository.getRequests();
-      emit(.loaded(requests: requests));
-    } on Object catch (e, stackTrace) {
-      _logger.e(e, stackTrace: stackTrace);
-      emit(.error(requests: state.requests, message: e));
-    }
+    // try {
+    //   final requests = await _requestRepository.getRequests();
+    //   emit(.loaded(requests: requests));
+    // } on Object catch (e, stackTrace) {
+    //   _logger.e(e, stackTrace: stackTrace);
+    //   emit(.error(requests: state.requests, message: e));
+    // }
   }
 
   Future<void> _create(

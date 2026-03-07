@@ -30,6 +30,7 @@ base class RestApiBase implements RestApi {
     required int statusCode,
     Map<String, String>? headers,
     Map<String, Object?>? responseBody,
+    Map<String, Object>? context,
   }) {
     Response response = Response(statusCode, encoding: utf8);
 
@@ -37,9 +38,9 @@ base class RestApiBase implements RestApi {
       response = response.change(body: encodeBody(responseBody));
     }
 
-    if (headers != null) {
-      response.headers.addAll(headers);
-    }
+    if (headers != null) response.headers.addAll(headers);
+
+    if (context != null) response = response.change(context: context);
 
     return response;
   }

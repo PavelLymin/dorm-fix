@@ -5,5 +5,6 @@ abstract interface class RestApi {
     required int statusCode,
     Map<String, String>? headers,
     Map<String, Object?>? responseBody,
+    Map<String, Object>? context,
   });
 }

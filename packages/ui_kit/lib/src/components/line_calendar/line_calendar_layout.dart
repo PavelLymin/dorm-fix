@@ -107,7 +107,7 @@ class _LineCalendarLayoutState extends State<LineCalendarLayout> {
           scrollDirection: .horizontal,
           padding: .zero,
           physics: widget.physics,
-          cacheExtent: widget.cacheExtent,
+          scrollCacheExtent: .pixels(widget.cacheExtent ?? 0),
           itemExtent: _width,
           itemCount: widget.end == null
               ? null

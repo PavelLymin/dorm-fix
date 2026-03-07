@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:shelf/shelf.dart';
@@ -14,18 +15,16 @@ class RepairRequestRouter {
     required IRepairRequestFacade requestFacade,
     required WebSocketBase wsConnection,
   }) : _restApi = restApi,
-       _requestFacade = requestFacade,
-       _wsConnection = wsConnection;
+       _requestFacade = requestFacade;
 
   final RestApi _restApi;
   final IRepairRequestFacade _requestFacade;
-  final WebSocketBase _wsConnection;
 
   Handler get handler {
     final router = Router();
 
-    router.post('/repairRequests', _createRepairRequest);
-    router.get('/repairRequests', _getRepairRequests);
+    router.post('/requests', _createRepairRequest);
+    router.get('/requests/stream', _watchRepairRequests);
     return router.call;
   }
 
@@ -49,14 +48,6 @@ class RepairRequestRouter {
       request: entity,
     );
 
-    _wsConnection.sendToUser(
-      uid: uid,
-      envelope: MessageEnvelope(
-        type: .requestCreated,
-        payload: .createdRequest(request: createdRequest),
-      ),
-    );
-
     return _restApi.send(
       statusCode: 201,
       responseBody: {
@@ -65,18 +56,39 @@ class RepairRequestRouter {
     );
   }
 
-  Future<Response> _getRepairRequests(Request request) async {
+  Future<Response> _watchRepairRequests(Request request) async {
     final uid = RequireUser.getUserId(request);
-    final requests = await _requestFacade.getRequests(uid: uid);
-    final json = requests
-        .map((request) => RequestAggregateDto.fromEntity(request).toJson())
-        .toList();
 
-    return _restApi.send(
-      statusCode: 200,
-      responseBody: {
-        'data': {'repair_requests': json},
+    late final StreamSubscription<List<RequestAggregate>> subscription;
+    final controller = StreamController<List<int>>(
+      onCancel: () => subscription.cancel(),
+    );
+
+    subscription = _requestFacade
+        .watchStudentRequests(uid: uid)
+        .listen(
+          (requests) {
+            final jsonList = requests
+                .map((r) => RequestAggregateDto.fromEntity(r).toJson())
+                .toList();
+            final data = jsonEncode({'repair_requests': jsonList});
+            controller.add(utf8.encode('$data\n\n'));
+          },
+          onError: (error) {
+            controller.add(utf8.encode('error: $error\n\n'));
+            controller.close();
+          },
+          onDone: () => controller.close(),
+        );
+
+    return Response.ok(
+      controller.stream,
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
       },
+      context: {'shelf.io.buffer_output': false},
     );
   }
 }

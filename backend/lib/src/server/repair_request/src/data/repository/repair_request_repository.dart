@@ -7,7 +7,9 @@ abstract interface class IRequestRepository {
     required PartialRepairRequest request,
   });
 
-  Future<List<FullRepairRequest>> getRequests({required String uid});
+  // Stream<List<FullRepairRequest>> watchRequests({
+  //   required int specializationId,
+  // });
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
@@ -31,16 +33,13 @@ class RequestRepositoryImpl implements IRequestRepository {
     return result;
   }
 
-  @override
-  Future<List<FullRepairRequest>> getRequests({required String uid}) async {
-    final requestData = await (_database.select(
-      _database.requests,
-    )..where((row) => row.uid.equals(uid))).get();
-
-    final result = requestData
-        .map((row) => FullRepairRequestDto.fromData(row).toEntity())
-        .toList();
-
-    return result;
-  }
+  // @override
+  // Stream<List<FullRepairRequest>> watchRequests({
+  //   required int specializationId,
+  // }) async* {
+  //   yield* (_database.select(_database.requests)
+  //         ..where((row) => row.specializationId.equals(specializationId)))
+  //       .map((row) => FullRepairRequestDto.fromData(row).toEntity())
+  //       .watch();
+  // }
 }

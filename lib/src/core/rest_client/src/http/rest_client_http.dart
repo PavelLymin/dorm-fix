@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cronet_http/cronet_http.dart' show CronetClient;
 import 'package:cupertino_http/cupertino_http.dart' show CupertinoClient;
@@ -72,6 +73,78 @@ final class RestClientHttp extends RestClientBase {
         Error.throwWithStackTrace(checkedException, stack);
       }
 
+      Error.throwWithStackTrace(
+        ClientException(message: e.message, cause: e),
+        stack,
+      );
+    }
+  }
+
+  @override
+  Stream<Map<String, Object?>> stream({
+    required String path,
+    required String method,
+    Map<String, String?>? queryParams,
+    Map<String, String>? headers,
+  }) async* {
+    try {
+      final uri = buildUri(path: path, queryParams: queryParams);
+      final request = http.Request(method, uri);
+
+      if (headers != null) request.headers.addAll(headers);
+      request.headers['Accept'] = 'text/event-stream';
+
+      final streamedResponse = await _client.send(request);
+
+      if (streamedResponse.statusCode != 200) {
+        final errorBody = await streamedResponse.stream.bytesToString();
+        try {
+          final errorJson = jsonDecode(errorBody) as Map<String, Object?>;
+          throw StructuredBackendException(
+            error: errorJson,
+            statusCode: streamedResponse.statusCode,
+          );
+        } catch (_) {
+          throw ClientException(
+            message: 'HTTP error ${streamedResponse.statusCode}',
+            statusCode: streamedResponse.statusCode,
+          );
+        }
+      }
+
+      final lines = streamedResponse.stream
+          .transform(utf8.decoder)
+          .transform(const LineSplitter());
+
+      String? currentData;
+      String? currentEvent;
+      await for (final line in lines) {
+        if (line.startsWith('error: ')) {
+          currentEvent = line.substring(7);
+        } else if (line.isEmpty) {
+          if (currentEvent == 'error') {
+            throw Exception('SSE error: ${currentData ?? 'Unknown error'}');
+          }
+          if (currentData != null) {
+            final jsonStr = currentData;
+            currentData = null;
+            currentEvent = null;
+            final data = jsonDecode(jsonStr) as Map<String, Object?>;
+            yield data;
+          }
+          currentData = null;
+          currentEvent = null;
+        } else if (currentData != null) {
+          currentData += '\n$line';
+        }
+      }
+    } on RestClientException {
+      rethrow;
+    } on http.ClientException catch (e, stack) {
+      final checkedException = checkHttpException(e);
+      if (checkedException != null) {
+        Error.throwWithStackTrace(checkedException, stack);
+      }
       Error.throwWithStackTrace(
         ClientException(message: e.message, cause: e),
         stack,

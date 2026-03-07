@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dorm_fix/src/app/widget/dependencies_scope.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../chat/chat.dart';
 import '../../../request.dart';
@@ -25,21 +25,42 @@ class _RepairRequestListState extends State<RepairRequestList> {
   @override
   Widget build(BuildContext context) => SliverPadding(
     padding: context.appStyle.appPadding.contentPadding,
-    sliver: BlocBuilder<RepairRequestBloc, RepairRequestState>(
-      builder: (context, state) => state.maybeMap(
-        orElse: () => const SliverToBoxAdapter(),
-        loading: (_) => const _LoadingList(),
-        loaded: (state) => SliverFixedExtentList(
+    // sliver: BlocBuilder<RepairRequestBloc, RepairRequestState>(
+    //   builder: (context, state) => state.maybeMap(
+    //     orElse: () => const SliverToBoxAdapter(),
+    //     loading: (_) => const _LoadingList(),
+    // loaded: (state) => SliverFixedExtentList(
+    //   itemExtent: _height,
+    //   delegate: SliverChildBuilderDelegate(
+    //     childCount: state.requests.length,
+    //     (context, index) => Padding(
+    //       padding: EstimatedSizes.listPadding,
+    //       child: _OpenItem(request: state.requests[index]),
+    //     ),
+    //   ),
+    // ),
+    //   ),
+    // ),
+    sliver: StreamBuilder<List<FullRepairRequest>>(
+      stream: DependeciesScope.of(context).requestRepository.getRequests(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return SliverToBoxAdapter(child: Text('Ошибка: ${snapshot.error}'));
+        }
+        if (!snapshot.hasData) return const _LoadingList();
+
+        final requests = snapshot.data!;
+        return SliverFixedExtentList(
           itemExtent: _height,
           delegate: SliverChildBuilderDelegate(
-            childCount: state.requests.length,
+            childCount: requests.length,
             (context, index) => Padding(
               padding: EstimatedSizes.listPadding,
-              child: _OpenItem(request: state.requests[index]),
+              child: _OpenItem(request: requests[index]),
             ),
           ),
-        ),
-      ),
+        );
+      },
     ),
   );
 }
