@@ -46,7 +46,7 @@ class WsRouter {
         (data) async {
           try {
             final message = await _ws.decodeRaw(data);
-            _logger.i(message.type);
+            _logger.i(message);
             await message.mapOrNull(
               joinToChat: (payload, _) => _chatRepository.joinToChat(
                 socket: socket,

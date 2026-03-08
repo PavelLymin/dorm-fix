@@ -1,4 +1,5 @@
-import 'package:drift/drift.dart';
+import 'package:rxdart/rxdart.dart';
+
 import '../../../../../core/database/database.dart';
 import '../../../../chat/chat.dart';
 import '../../../../profile/profile.dart';
@@ -6,17 +7,12 @@ import '../../../../specialization/specialization.dart';
 import '../../../repair_request.dart';
 
 abstract interface class IRepairRequestFacade {
-  Future<RequestAggregate> createRequest({
+  Future<void> createRequest({
     required String uid,
     required PartialRepairRequest request,
   });
 
   Stream<List<RequestAggregate>> watchStudentRequests({required String uid});
-
-  Stream<List<RequestAggregate>> watchMasterRequests({
-    required int specId,
-    required int dormId,
-  });
 }
 
 class RepairRequestFacadeImpl implements IRepairRequestFacade {
@@ -42,209 +38,227 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
   final IAssignmentsRepository _assignmentsRepository;
 
   @override
-  Future<RequestAggregate> createRequest({
+  Future<void> createRequest({
     required String uid,
     required PartialRepairRequest request,
   }) async {
     late final FullRepairRequest requestData;
-    late final List<FullProblem> problems;
     late final FullChat chat;
-    late final SpecializationEntity specialization;
-    late final MasterEntity? master;
     await _database.transaction(() async {
       requestData = await _requestRepository.createRequest(
         uid: uid,
         request: request,
       );
-      problems = await _problemRepository.createProblems(
-        problems: request.problems,
-      );
       chat = await _chatRepository.createChat(
         chat: PartialChat(requestId: requestData.id),
       );
       await _chatRepository.addMember(chatId: chat.id, uid: uid);
-      specialization = await _specializationRepository.getSpecialization(
-        id: request.specializationId,
-      );
-      master = await _assignmentsRepository.getAssignment(
-        requestId: requestData.id,
-      );
     });
+  }
 
-    final result = RequestAggregate(
-      request: requestData,
-      problems: problems,
-      chat: chat,
-      specialization: specialization,
-      master: master,
+  Stream<RequestAggregate> _watchRequestAggregate(int requestId) {
+    final request = _requestRepository.watchRequest(id: requestId);
+    final problems = _problemRepository.watchProblems(requestId: requestId);
+    final master = _assignmentsRepository.watchAssignment(requestId: requestId);
+    final specialization = _specializationRepository.watchSpecialization(
+      requestId: requestId,
     );
-
-    return result;
+    final chat = _chatRepository.watchChat(requestId: requestId);
+    return Rx.combineLatest5(
+      request,
+      problems,
+      master,
+      specialization,
+      chat,
+      (request, problems, master, specialization, chat) => RequestAggregate(
+        request: request,
+        problems: problems,
+        master: master,
+        specialization: specialization,
+        chat: chat,
+      ),
+    );
   }
 
   @override
-  Stream<List<RequestAggregate>> watchStudentRequests({
-    required String uid,
-  }) async* {
-    yield* _database
-        .customSelect(
-          '''SELECT 
-            json_object(
-              'id', r.id,
-              'uid', r.uid,
-              'description', r.description,
-              'priority', r.priority,
-              'status', r.status,
-              'student_absent', r.student_absent,
-              'date', r.date,
-              'start_time', r.start_time,
-              'end_time', r.end_time,
-              'created_at', r.created_at
-            ) AS request,
-            json_object(
-              'id', s.id,
-              'title', s.title,
-              'description', s.description,
-              'photo_url', s.photo_url
-            ) AS specialization,
-            COALESCE(
-              json_group_array(
-                json_object(
-                  'id', p.id,
-                  'request_id', p.request_id,
-                  'photo_path', p.photo_path
-                )
-              ) FILTER (WHERE p.id IS NOT NULL),
-              '[]'
-            ) AS problems,
-            json_object(
-              'id', c.id,
-              'request_id', c.request_id,
-              'created_at', c.created_at
-            ) AS chat,
-            (
-              SELECT json_object(
-                'id', m.id,
-                'user', json_object(
-                  'uid', u.uid,
-                  'display_name', u.display_name,
-                  'photo_url', u.photo_url,
-                  'email', u.email,
-                  'phone_number', u.phone_number,
-                  'role', u.role
-                ),
-                'dormitory', json_object(
-                  'id', d.id,
-                  'number', d.number,
-                  'name', d.name,
-                  'address', d.address,
-                  'long', d.long,
-                  'lat', d.lat
-                ),
-                'specialization', json_object(
-                  'id', spec.id,
-                  'title', spec.title,
-                  'description', spec.description,
-                  'photo_url', spec.photo_url
-                )
-              )
-              FROM assignments a
-              INNER JOIN masters m ON m.uid = a.uid
-              INNER JOIN users u ON u.uid = m.uid
-              INNER JOIN dormitories d ON d.id = m.dormitory_id
-              INNER JOIN specializations spec ON spec.id = m.specialization_id
-              WHERE a.request_id = r.id
-              ORDER BY a.created_at DESC
-              LIMIT 1
-            ) AS master
-          FROM requests r
-          INNER JOIN specializations s ON s.id = r.specialization_id
-          LEFT JOIN problems p ON p.request_id = r.id
-          LEFT JOIN chats c ON c.request_id = r.id
-          WHERE r.uid = ?
-          GROUP BY r.id, c.id
-          ''',
-          variables: [Variable<String>(uid)],
-          readsFrom: {
-            _database.requests,
-            _database.specializations,
-            _database.problems,
-            _database.chats,
-            _database.assignments,
-            _database.masters,
-            _database.users,
-            _database.dormitories,
-          },
-        )
-        .map((row) => RequestAggregateDto.fromJson(row.data).toEntity())
-        .watch();
+  Stream<List<RequestAggregate>> watchStudentRequests({required String uid}) {
+    return _requestRepository.watchRequests(uid: uid).switchMap((requests) {
+      if (requests.isEmpty) return Stream.empty();
+
+      final streams = requests
+          .map((r) => _watchRequestAggregate(r.id))
+          .toList();
+
+      return Rx.combineLatestList(streams);
+    });
   }
 
-  @override
-  Stream<List<RequestAggregate>> watchMasterRequests({
-    required int specId,
-    required int dormId,
-  }) async* {
-    yield* _database
-        .customSelect(
-          '''SELECT 
-            json_object(
-              'id', r.id,
-              'uid', r.uid,
-              'description', r.description,
-              'priority', r.priority,
-              'status', r.status,
-              'student_absent', r.student_absent,
-              'date', r.date,
-              'start_time', r.start_time,
-              'end_time', r.end_time,
-              'created_at', r.created_at
-            ) AS request,
-            json_object(
-              'id', s.id,
-              'title', s.title,
-              'description', s.description,
-              'photo_url', s.photo_url
-            ) AS specialization,
-            COALESCE(
-              json_group_array(
-                json_object(
-                  'id', p.id,
-                  'request_id', p.request_id,
-                  'photo_path', p.photo_path
-                )
-              ) FILTER (WHERE p.id IS NOT NULL),
-              '[]'
-            ) AS problems,
-            json_object(
-              'id', c.id,
-              'request_id', c.request_id,
-              'created_at', c.created_at
-            ) AS chat,
-          FROM requests r
-          INNER JOIN specializations s ON s.id = r.specialization_id
-          INNER JOIN users u ON u.uid = r.uid
-          LEFT JOIN problems p ON p.request_id = r.id
-          LEFT JOIN chats c ON c.request_id = r.id
-          WHERE s.id = ?
-            AND u.dormitory_id = ?
-            AND NOT EXISTS (
-              SELECT 1 FROM assignments a
-              WHERE a.request_id = r.id
-            )
-          GROUP BY r.id, c.id
-          ''',
-          variables: [Variable<int>(specId), Variable<int>(dormId)],
-          readsFrom: {
-            _database.requests,
-            _database.specializations,
-            _database.problems,
-            _database.chats,
-            _database.users,
-            _database.dormitories,
-          },
-        )
-        .map((row) => RequestAggregateDto.fromJson(row.data).toEntity())
-        .watch();
-  }
+  // @override
+  // Stream<List<RequestAggregate>> watchStudentRequests({
+  //   required String uid,
+  // }) async* {
+  //   yield* _database
+  //       .customSelect(
+  //         '''SELECT
+  //           json_object(
+  //             'id', r.id,
+  //             'uid', r.uid,
+  //             'description', r.description,
+  //             'priority', r.priority,
+  //             'status', r.status,
+  //             'student_absent', r.student_absent,
+  //             'date', r.date,
+  //             'start_time', r.start_time,
+  //             'end_time', r.end_time,
+  //             'created_at', r.created_at
+  //           ) AS request,
+  //           json_object(
+  //             'id', s.id,
+  //             'title', s.title,
+  //             'description', s.description,
+  //             'photo_url', s.photo_url
+  //           ) AS specialization,
+  //           (
+  //           SELECT COALESCE(
+  //             json_group_array(
+  //               json_object(
+  //                 'id', p.id,
+  //                 'request_id', p.request_id,
+  //                 'photo_path', p.photo_path
+  //               )
+  //             ),
+  //             '[]'
+  //           )
+  //           FROM problems p
+  //           WHERE p.request_id = r.id
+  //           ) AS problems,
+  //           json_object(
+  //             'id', c.id,
+  //             'request_id', c.request_id,
+  //             'created_at', c.created_at
+  //           ) AS chat,
+  //           (
+  //             SELECT json_object(
+  //               'id', m.id,
+  //               'user', json_object(
+  //                 'uid', u.uid,
+  //                 'display_name', u.display_name,
+  //                 'photo_url', u.photo_url,
+  //                 'email', u.email,
+  //                 'phone_number', u.phone_number,
+  //                 'role', u.role
+  //               ),
+  //               'dormitory', json_object(
+  //                 'id', d.id,
+  //                 'number', d.number,
+  //                 'name', d.name,
+  //                 'address', d.address,
+  //                 'long', d.long,
+  //                 'lat', d.lat
+  //               ),
+  //               'specialization', json_object(
+  //                 'id', spec.id,
+  //                 'title', spec.title,
+  //                 'description', spec.description,
+  //                 'photo_url', spec.photo_url
+  //               )
+  //             )
+  //             FROM assignments a
+  //             INNER JOIN masters m ON m.uid = a.uid
+  //             INNER JOIN users u ON u.uid = m.uid
+  //             INNER JOIN dormitories d ON d.id = m.dormitory_id
+  //             INNER JOIN specializations spec ON spec.id = m.specialization_id
+  //             WHERE a.request_id = r.id
+  //             ORDER BY a.created_at DESC
+  //             LIMIT 1
+  //           ) AS master
+  //         FROM requests r
+  //         INNER JOIN specializations s ON s.id = r.specialization_id
+  //         LEFT JOIN chats c ON c.request_id = r.id
+  //         WHERE r.uid = ?
+  //         GROUP BY r.id, c.id
+  //         ''',
+  //         variables: [Variable<String>(uid)],
+  //         readsFrom: {
+  //           _database.requests,
+  //           _database.specializations,
+  //           _database.problems,
+  //           _database.chats,
+  //           _database.assignments,
+  //           _database.masters,
+  //           _database.users,
+  //           _database.dormitories,
+  //         },
+  //       )
+  //       .map((row) => RequestAggregateDto.fromJson(row.data).toEntity())
+  //       .watch();
+  // }
+
+  // @override
+  // Stream<List<RequestAggregate>> watchMasterRequests({
+  //   required int specId,
+  //   required int dormId,
+  // }) async* {
+  //   yield* _database
+  //       .customSelect(
+  //         '''SELECT
+  //           json_object(
+  //             'id', r.id,
+  //             'uid', r.uid,
+  //             'description', r.description,
+  //             'priority', r.priority,
+  //             'status', r.status,
+  //             'student_absent', r.student_absent,
+  //             'date', r.date,
+  //             'start_time', r.start_time,
+  //             'end_time', r.end_time,
+  //             'created_at', r.created_at
+  //           ) AS request,
+  //           json_object(
+  //             'id', s.id,
+  //             'title', s.title,
+  //             'description', s.description,
+  //             'photo_url', s.photo_url
+  //           ) AS specialization,
+  //           COALESCE(
+  //             json_group_array(
+  //               json_object(
+  //                 'id', p.id,
+  //                 'request_id', p.request_id,
+  //                 'photo_path', p.photo_path
+  //               )
+  //             ) FILTER (WHERE p.id IS NOT NULL),
+  //             '[]'
+  //           ) AS problems,
+  //           json_object(
+  //             'id', c.id,
+  //             'request_id', c.request_id,
+  //             'created_at', c.created_at
+  //           ) AS chat,
+  //         FROM requests r
+  //         INNER JOIN specializations s ON s.id = r.specialization_id
+  //         INNER JOIN users u ON u.uid = r.uid
+  //         LEFT JOIN problems p ON p.request_id = r.id
+  //         LEFT JOIN chats c ON c.request_id = r.id
+  //         WHERE s.id = ?
+  //           AND u.dormitory_id = ?
+  //           AND NOT EXISTS (
+  //             SELECT 1 FROM assignments a
+  //             WHERE a.request_id = r.id
+  //           )
+  //         GROUP BY r.id, c.id
+  //         ''',
+  //         variables: [Variable<int>(specId), Variable<int>(dormId)],
+  //         readsFrom: {
+  //           _database.requests,
+  //           _database.specializations,
+  //           _database.problems,
+  //           _database.chats,
+  //           _database.users,
+  //           _database.dormitories,
+  //         },
+  //       )
+  //       .map((row) => RequestAggregateDto.fromJson(row.data).toEntity())
+  //       .watch();
+  // }
 }

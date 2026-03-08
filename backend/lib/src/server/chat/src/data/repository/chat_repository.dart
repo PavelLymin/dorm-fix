@@ -4,7 +4,9 @@ import '../../../chat.dart';
 abstract interface class IChatRepository {
   Future<FullChat> createChat({required PartialChat chat});
 
-  Future<FullChat?> getChatByRequestId({required int requestId});
+  Stream<FullChat> watchChat({required int requestId});
+
+  Future<FullChat?> getChat({required int requestId});
 
   Future<void> addMember({required int chatId, required String uid});
 }
@@ -27,16 +29,23 @@ class ChatRepositoryImpl implements IChatRepository {
   }
 
   @override
-  Future<FullChat?> getChatByRequestId({required int requestId}) async {
+  Stream<FullChat> watchChat({required int requestId}) =>
+      (_database.select(_database.chats)
+            ..where((row) => row.requestId.equals(requestId)))
+          .watchSingle()
+          .map((row) => FullChatDto.fromData(chat: row).toEntity());
+
+  @override
+  Future<FullChat?> getChat({required int requestId}) async {
     final data = await (_database.select(
       _database.chats,
     )..where((row) => row.requestId.equals(requestId))).getSingleOrNull();
 
     if (data == null) return null;
 
-    final result = FullChatDto.fromData(chat: data).toEntity();
+    final chat = FullChatDto.fromData(chat: data).toEntity();
 
-    return result;
+    return chat;
   }
 
   @override

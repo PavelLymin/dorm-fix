@@ -43,39 +43,34 @@ class RepairRequestRouter {
     final uid = RequireUser.getUserId(request);
     final json = await _readJson(request);
     final entity = PartialRepairRequestDto.fromJson(json).toEntity();
-    final createdRequest = await _requestFacade.createRequest(
-      uid: uid,
-      request: entity,
-    );
+    await _requestFacade.createRequest(uid: uid, request: entity);
 
-    return _restApi.send(
-      statusCode: 201,
-      responseBody: {
-        'data': RequestAggregateDto.fromEntity(createdRequest).toJson(),
-      },
-    );
+    return _restApi.send(statusCode: 201);
   }
 
   Future<Response> _watchRepairRequests(Request request) async {
     final uid = RequireUser.getUserId(request);
 
-    late final StreamSubscription<List<RequestAggregate>> subscription;
-    final controller = StreamController<List<int>>(
-      onCancel: () => subscription.cancel(),
+    StreamSubscription? subscription;
+    final controller = StreamController.broadcast(
+      onCancel: () => subscription?.cancel(),
     );
 
     subscription = _requestFacade
         .watchStudentRequests(uid: uid)
         .listen(
-          (requests) {
-            final jsonList = requests
-                .map((r) => RequestAggregateDto.fromEntity(r).toJson())
-                .toList();
-            final data = jsonEncode({'repair_requests': jsonList});
-            controller.add(utf8.encode('$data\n\n'));
+          (rows) {
+            final payload = {
+              'data': {
+                'requests': rows
+                    .map((row) => RequestAggregateDto.fromEntity(row).toJson())
+                    .toList(),
+              },
+            };
+            controller.add(utf8.encode('data: ${jsonEncode(payload)}\n\n'));
           },
-          onError: (error) {
-            controller.add(utf8.encode('error: $error\n\n'));
+          onError: (erorr) {
+            controller.add(utf8.encode('error: $erorr\n\n'));
             controller.close();
           },
           onDone: () => controller.close(),

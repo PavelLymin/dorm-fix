@@ -66,7 +66,7 @@ class CharRouter {
     }
 
     final requestId = int.parse(requestIdParam);
-    final chat = await _chatRepository.getChatByRequestId(requestId: requestId);
+    final chat = await _chatRepository.getChat(requestId: requestId);
     if (chat == null) {
       throw NotFoundException(
         error: {'message': 'Chat not found for the given request_id.'},

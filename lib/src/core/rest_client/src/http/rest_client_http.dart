@@ -83,68 +83,62 @@ final class RestClientHttp extends RestClientBase {
   @override
   Stream<Map<String, Object?>> stream({
     required String path,
-    required String method,
     Map<String, String?>? queryParams,
     Map<String, String>? headers,
-  }) async* {
+  }) {
     try {
       final uri = buildUri(path: path, queryParams: queryParams);
-      final request = http.Request(method, uri);
+      final request = http.Request('GET', uri);
 
-      if (headers != null) request.headers.addAll(headers);
-      request.headers['Accept'] = 'text/event-stream';
+      request.headers.addAll({
+        ...?headers,
+        'Accept': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+      });
 
-      final streamedResponse = await _client.send(request);
+      StreamSubscription? subscription;
+      StreamSubscription? dataSubscription;
+      final streamController = StreamController<Map<String, Object?>>(
+        onCancel: () {
+          subscription?.cancel();
+          dataSubscription?.cancel();
+        },
+      );
 
-      if (streamedResponse.statusCode != 200) {
-        final errorBody = await streamedResponse.stream.bytesToString();
-        try {
-          final errorJson = jsonDecode(errorBody) as Map<String, Object?>;
-          throw StructuredBackendException(
-            error: errorJson,
-            statusCode: streamedResponse.statusCode,
-          );
-        } catch (_) {
-          throw ClientException(
-            message: 'HTTP error ${streamedResponse.statusCode}',
-            statusCode: streamedResponse.statusCode,
-          );
-        }
-      }
+      String buffer = '';
+      Future<http.StreamedResponse> response = _client.send(request);
+      subscription = response.asStream().listen((data) {
+        dataSubscription = data.stream
+            .transform(const Utf8Decoder())
+            .transform(const LineSplitter())
+            .listen((line) {
+              if (line.isEmpty) {
+                if (buffer.isNotEmpty) {
+                  try {
+                    final json = jsonDecode(buffer) as Map<String, Object?>;
+                    streamController.add(json);
+                  } catch (e) {
+                    streamController.addError(e);
+                  } finally {
+                    buffer = '';
+                  }
+                }
+                return;
+              }
 
-      final lines = streamedResponse.stream
-          .transform(utf8.decoder)
-          .transform(const LineSplitter());
+              if (line.startsWith('data: ')) buffer += line.substring(6).trim();
+              if (line.startsWith('error: ')) {
+                streamController.addError(
+                  ClientException(message: line.substring(7).trim()),
+                );
+              }
+            });
+      });
 
-      String? currentData;
-      String? currentEvent;
-      await for (final line in lines) {
-        if (line.startsWith('error: ')) {
-          currentEvent = line.substring(7);
-        } else if (line.isEmpty) {
-          if (currentEvent == 'error') {
-            throw Exception('SSE error: ${currentData ?? 'Unknown error'}');
-          }
-          if (currentData != null) {
-            final jsonStr = currentData;
-            currentData = null;
-            currentEvent = null;
-            final data = jsonDecode(jsonStr) as Map<String, Object?>;
-            yield data;
-          }
-          currentData = null;
-          currentEvent = null;
-        } else if (currentData != null) {
-          currentData += '\n$line';
-        }
-      }
+      return streamController.stream;
     } on RestClientException {
       rethrow;
     } on http.ClientException catch (e, stack) {
-      final checkedException = checkHttpException(e);
-      if (checkedException != null) {
-        Error.throwWithStackTrace(checkedException, stack);
-      }
       Error.throwWithStackTrace(
         ClientException(message: e.message, cause: e),
         stack,

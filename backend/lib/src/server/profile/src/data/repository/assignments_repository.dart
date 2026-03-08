@@ -3,7 +3,7 @@ import '../../../../../core/database/database.dart';
 import '../../../profile.dart';
 
 abstract interface class IAssignmentsRepository {
-  Future<MasterEntity?> getAssignment({required int requestId});
+  Stream<MasterEntity?> watchAssignment({required int requestId});
 }
 
 class AssignmentsRepositoryImpl implements IAssignmentsRepository {
@@ -13,7 +13,7 @@ class AssignmentsRepositoryImpl implements IAssignmentsRepository {
   final Database _database;
 
   @override
-  Future<MasterEntity?> getAssignment({required int requestId}) async {
+  Stream<MasterEntity?> watchAssignment({required int requestId}) {
     final query = _database.select(_database.assignments).join([
       innerJoin(
         _database.masters,
@@ -35,20 +35,15 @@ class AssignmentsRepositoryImpl implements IAssignmentsRepository {
       ),
     ]);
     query.where(_database.assignments.requestId.equals(requestId));
-    query.orderBy([
-      OrderingTerm(expression: _database.assignments.createdAt, mode: .desc),
-    ]);
-    query.limit(1);
 
-    final data = await query.getSingleOrNull();
-    if (data == null) return null;
-    final master = MasterDto.fromData(
-      data.readTable(_database.masters),
-      data.readTable(_database.users),
-      data.readTable(_database.dormitories),
-      data.readTable(_database.specializations),
-    ).toEntity();
-
-    return master;
+    return query.watchSingleOrNull().map((row) {
+      if (row == null) return null;
+      return MasterDto.fromData(
+        row.readTable(_database.masters),
+        row.readTable(_database.users),
+        row.readTable(_database.dormitories),
+        row.readTable(_database.specializations),
+      ).toEntity();
+    });
   }
 }

@@ -49,7 +49,7 @@ abstract final class ErrorUtil {
         413 => 'Слишком большой запрос (Payload Too Large)',
         422 => 'Невозможно обработать (Unprocessable Entity)',
         429 => 'Слишком много запросов (Too Many Requests)',
-        500 => 'Внутренняя ошибка сервера (Internal Server Error)',
+        500 => exception.message,
         501 => 'Не реализовано (Not Implemented)',
         502 => 'Плохой шлюз (Bad Gateway)',
         503 => 'Сервис недоступен (Service Unavailable)',

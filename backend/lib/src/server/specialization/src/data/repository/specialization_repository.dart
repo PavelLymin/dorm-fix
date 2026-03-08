@@ -1,10 +1,12 @@
+import 'package:drift/drift.dart';
+
 import '../../../../../core/database/database.dart';
 import '../../../specialization.dart';
 
 abstract interface class ISpecializationRepository {
   Future<List<SpecializationEntity>> getSpecializations();
 
-  Future<SpecializationEntity> getSpecialization({required int id});
+  Stream<SpecializationEntity> watchSpecialization({required int requestId});
 }
 
 class SpecializationRepositoryImpl implements ISpecializationRepository {
@@ -27,15 +29,17 @@ class SpecializationRepositoryImpl implements ISpecializationRepository {
   }
 
   @override
-  Future<SpecializationEntity> getSpecialization({required int id}) async {
-    final specializationData = await (_database.select(
-      _database.specializations,
-    )..where((row) => row.id.equals(id))).getSingle();
-
-    final specialization = SpecializationDto.fromData(
-      specializationData,
-    ).toEntity();
-
-    return specialization;
-  }
+  Stream<SpecializationEntity> watchSpecialization({required int requestId}) =>
+      (_database.select(_database.specializations).join([
+        innerJoin(
+          _database.requests,
+          _database.specializations.id.equalsExp(
+            _database.requests.specializationId,
+          ),
+        ),
+      ])..where(_database.requests.id.equals(requestId))).watchSingle().map(
+        (row) => SpecializationDto.fromData(
+          row.readTable(_database.specializations),
+        ).toEntity(),
+      );
 }

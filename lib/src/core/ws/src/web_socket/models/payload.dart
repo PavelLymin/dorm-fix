@@ -1,9 +1,7 @@
 import 'dart:developer';
 
 import '../../../../../features/chat/chat.dart';
-import '../../../../../features/repair_request/request.dart';
 
-part 'repair_request.dart';
 part 'message.dart';
 part 'chat.dart';
 part 'typing.dart';
@@ -13,9 +11,6 @@ enum PayloadType {
   error(value: 'error'),
   chatJoin(value: 'chat_join'),
   chatLeave(value: 'chat_leave'),
-  requestCreated(value: 'request_created'),
-  requestDeleted(value: 'request_deleted'),
-  requestUpdated(value: 'request_updated'),
   messageCreated(value: 'message_created'),
   messageDeleted(value: 'message_deleted'),
   messageUpdated(value: 'message_updated'),
@@ -44,9 +39,6 @@ sealed class Payload {
   const factory Payload.createMessage({required MessageEntity message}) =
       CreatedMessagePayload;
 
-  const factory Payload.createRequest({required FullRepairRequest request}) =
-      CreatedRequestPayload;
-
   Map<String, Object?> toJson();
 
   factory Payload.fromJson(PayloadType type, Map<String, Object?> json) =>
@@ -58,8 +50,5 @@ sealed class Payload {
         .messageCreated => CreatedMessagePayload.fromJson(json),
         .messageDeleted => throw UnimplementedError(),
         .messageUpdated => throw UnimplementedError(),
-        .requestCreated => CreatedRequestPayload.fromJson(json),
-        .requestDeleted => throw UnimplementedError(),
-        .requestUpdated => throw UnimplementedError(),
       };
 }

@@ -7,9 +7,9 @@ abstract interface class IRequestRepository {
     required PartialRepairRequest request,
   });
 
-  // Stream<List<FullRepairRequest>> watchRequests({
-  //   required int specializationId,
-  // });
+  Stream<List<FullRepairRequest>> watchRequests({required String uid});
+
+  Stream<FullRepairRequest> watchRequest({required int id});
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
@@ -33,13 +33,19 @@ class RequestRepositoryImpl implements IRequestRepository {
     return result;
   }
 
-  // @override
-  // Stream<List<FullRepairRequest>> watchRequests({
-  //   required int specializationId,
-  // }) async* {
-  //   yield* (_database.select(_database.requests)
-  //         ..where((row) => row.specializationId.equals(specializationId)))
-  //       .map((row) => FullRepairRequestDto.fromData(row).toEntity())
-  //       .watch();
-  // }
+  @override
+  Stream<List<FullRepairRequest>> watchRequests({required String uid}) =>
+      (_database.select(
+        _database.requests,
+      )..where((row) => row.uid.equals(uid))).watch().map(
+        (rows) => rows
+            .map((row) => FullRepairRequestDto.fromData(row).toEntity())
+            .toList(),
+      );
+
+  @override
+  Stream<FullRepairRequest> watchRequest({required int id}) =>
+      (_database.select(_database.requests)..where((row) => row.id.equals(id)))
+          .watchSingle()
+          .map((row) => FullRepairRequestDto.fromData(row).toEntity());
 }

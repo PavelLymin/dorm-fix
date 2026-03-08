@@ -6,7 +6,7 @@ abstract interface class IProblemRepository {
     required List<PartialProblem> problems,
   });
 
-  Future<List<FullProblem>> getProblems({required int requestId});
+  Stream<List<FullProblem>> watchProblems({required int requestId});
 }
 
 class ProblemRepositoryImpl implements IProblemRepository {
@@ -33,15 +33,11 @@ class ProblemRepositoryImpl implements IProblemRepository {
   }
 
   @override
-  Future<List<FullProblem>> getProblems({required int requestId}) async {
-    final problems = await (_database.select(
-      _database.problems,
-    )..where((row) => row.requestId.equals(requestId))).get();
-
-    final result = problems
-        .map((row) => FullProblemDto.fromData(row).toEntity())
-        .toList();
-
-    return result;
-  }
+  Stream<List<FullProblem>> watchProblems({required int requestId}) =>
+      (_database.select(
+        _database.problems,
+      )..where((row) => row.requestId.equals(requestId))).watch().map(
+        (rows) =>
+            rows.map((row) => FullProblemDto.fromData(row).toEntity()).toList(),
+      );
 }

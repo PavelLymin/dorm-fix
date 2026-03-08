@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
@@ -17,24 +16,8 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
     required IWebSocket webSocket,
     required Logger logger,
   }) : _requestRepository = requestRepository,
-       _webSocket = webSocket,
        _logger = logger,
        super(const .loading(requests: [])) {
-    _streamSubscription = _webSocket.stream.listen((message) {
-      log(message.type.value);
-
-      final payload = message.payload;
-      if (payload is! RepairRequestPayload) return;
-      final response = RepairRequestResponse.response(payload, state.requests);
-      response.map(
-        created: (response) => setState(.loaded(requests: response.requests)),
-        deleted: (response) => setState(.loaded(requests: response.requests)),
-        updated: (response) => setState(.loaded(requests: response.requests)),
-        error: (response) => setState(
-          .error(requests: state.requests, message: response.message),
-        ),
-      );
-    });
     on<RepairRequestEvent>((event, emit) async {
       await event.map(
         get: (_) => _getRequest(emit),
@@ -44,10 +27,7 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
   }
 
   final IRequestRepository _requestRepository;
-  final IWebSocket _webSocket;
   final Logger _logger;
-
-  StreamSubscription? _streamSubscription;
 
   Future<void> _getRequest(Emitter<RepairRequestState> emit) async {
     // try {
@@ -70,12 +50,6 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
       _logger.e(e, stackTrace: stackTrace);
       emit(.error(requests: state.requests, message: e));
     }
-  }
-
-  @override
-  Future<void> close() {
-    _streamSubscription?.cancel();
-    return super.close();
   }
 }
 

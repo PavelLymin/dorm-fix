@@ -34,7 +34,6 @@ abstract interface class RestClient {
 
   Stream<Map<String, Object?>> stream({
     required String path,
-    required String method,
     Map<String, String?>? queryParams,
     Map<String, String>? headers,
   });

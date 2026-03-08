@@ -25,22 +25,6 @@ class _RepairRequestListState extends State<RepairRequestList> {
   @override
   Widget build(BuildContext context) => SliverPadding(
     padding: context.appStyle.appPadding.contentPadding,
-    // sliver: BlocBuilder<RepairRequestBloc, RepairRequestState>(
-    //   builder: (context, state) => state.maybeMap(
-    //     orElse: () => const SliverToBoxAdapter(),
-    //     loading: (_) => const _LoadingList(),
-    // loaded: (state) => SliverFixedExtentList(
-    //   itemExtent: _height,
-    //   delegate: SliverChildBuilderDelegate(
-    //     childCount: state.requests.length,
-    //     (context, index) => Padding(
-    //       padding: EstimatedSizes.listPadding,
-    //       child: _OpenItem(request: state.requests[index]),
-    //     ),
-    //   ),
-    // ),
-    //   ),
-    // ),
     sliver: StreamBuilder<List<FullRepairRequest>>(
       stream: DependeciesScope.of(context).requestRepository.getRequests(),
       builder: (context, snapshot) {

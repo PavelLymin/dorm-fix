@@ -5,9 +5,7 @@ import '../../../request.dart';
 abstract interface class IRequestRepository {
   Stream<List<FullRepairRequest>> getRequests();
 
-  Future<FullRepairRequest> createRequest({
-    required PartialRepairRequest request,
-  });
+  Future<void> createRequest({required PartialRepairRequest request});
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
@@ -26,18 +24,19 @@ class RequestRepositoryImpl implements IRequestRepository {
     yield* _client
         .stream(
           path: '/requests/stream',
-          method: 'GET',
           headers: {'Authorization': 'Bearer $token'},
         )
         .map((response) {
-          final data = response['repair_requests'];
-          if (data case List<Object?> list) {
-            return list
-                .whereType<Map<String, Object?>>()
-                .map((json) => FullRepairRequestDto.fromJson(json).toEntity())
-                .toList();
+          final data = response['data'];
+          if (data case Map<String, Object?> map) {
+            final requests = map['requests'];
+            if (requests case List<Object?> list) {
+              return list
+                  .whereType<Map<String, Object?>>()
+                  .map((json) => FullRepairRequestDto.fromJson(json).toEntity())
+                  .toList();
+            }
           }
-
           throw StructuredBackendException(
             error: {'description': 'Invalid data received from server.'},
             statusCode: 500,
@@ -46,26 +45,14 @@ class RequestRepositoryImpl implements IRequestRepository {
   }
 
   @override
-  Future<FullRepairRequest> createRequest({
-    required PartialRepairRequest request,
-  }) async {
+  Future<void> createRequest({required PartialRepairRequest request}) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
     final body = PartialRepairRequestDto.fromEntity(request).toJson();
-    final response = await _client.send(
+    await _client.send(
       path: '/requests',
       method: 'POST',
       body: body,
       headers: {'Authorization': 'Bearer $token'},
-    );
-
-    if (response case Map<String, Object?> json) {
-      final repairRequest = FullRepairRequestDto.fromJson(json).toEntity();
-      return repairRequest;
-    }
-
-    throw StructuredBackendException(
-      error: {'description': 'Invalid data received from server.'},
-      statusCode: 500,
     );
   }
 }
