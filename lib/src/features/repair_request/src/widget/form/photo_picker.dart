@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../request.dart';
+import '../../../request.dart';
 
 class PhotoPicker extends StatelessWidget {
   const PhotoPicker({super.key, this.style = const PhotoPickerStyle()});

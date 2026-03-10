@@ -28,7 +28,7 @@ sealed class RepairRequestDto {
   RepairRequestEntity toEntity();
 
   factory RepairRequestDto.partial({
-    required int specializationId,
+    required int specId,
     required String description,
     required Priority priority,
     required Status status,
@@ -66,16 +66,16 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     required super.date,
     required super.startTime,
     required super.endTime,
-    required this.specializationId,
+    required this.specId,
     required this.imagePaths,
   });
 
-  final int specializationId;
+  final int specId;
   final List<String> imagePaths;
 
   @override
   PartialRepairRequest toEntity() => PartialRepairRequest(
-    specializationId: specializationId,
+    specId: specId,
     description: description,
     priority: priority,
     status: status,
@@ -88,7 +88,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
 
   @override
   Map<String, Object?> toJson() => {
-    'specialization_id': specializationId,
+    'spec_id': specId,
     'description': description,
     'priority': priority.value,
     'status': status.value,
@@ -101,7 +101,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
 
   factory PartialRepairRequestDto.fromEntity(PartialRepairRequest entity) =>
       PartialRepairRequestDto(
-        specializationId: entity.specializationId,
+        specId: entity.specId,
         description: entity.description,
         priority: entity.priority,
         status: entity.status,
@@ -114,7 +114,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
 
   factory PartialRepairRequestDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
-      'specialization_id': final int specializationId,
+      'spec_id': final int specId,
       'description': final String description,
       'priority': final String priority,
       'status': final String status,
@@ -125,7 +125,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
       'problems': final List<Object?> imagePaths,
     }) {
       return PartialRepairRequestDto(
-        specializationId: specializationId,
+        specId: specId,
         description: description,
         priority: .fromValue(priority),
         status: .fromValue(status),

@@ -57,7 +57,7 @@ class RequestFormModel {
     if (messageError != null) throw ArgumentError(messageError);
 
     return PartialRepairRequest(
-      specializationId: specializationId,
+      specId: specializationId,
       description: description,
       priority: priority,
       status: status,

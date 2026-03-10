@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../authentication/authentication.dart';
 import '../../../profile/profile.dart';
 
 class HomeAppBar extends StatelessWidget {
@@ -7,17 +8,11 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(
+    return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) => state.maybeMap(
         orElse: () => const SliverToBoxAdapter(),
         loading: (_) => const _Loading(),
-        loadedStudent: (state) => _Loadded(student: state.student),
-        error: (state) => SliverPadding(
-          padding: context.appStyle.appPadding.appBar(context: context),
-          sliver: SliverToBoxAdapter(
-            child: UiText.headlineMedium(state.message, overflow: .ellipsis),
-          ),
-        ),
+        authenticated: (state) => _Loadded(user: state.authUser),
       ),
     );
   }
@@ -30,29 +25,29 @@ class _Loading extends StatelessWidget {
   Widget build(BuildContext context) => SliverPadding(
     padding: context.appStyle.appPadding.appBar(context: context),
     sliver: const SliverToBoxAdapter(
-      child: Shimmer(child: _UserDisplay(student: FakeFullStudent())),
+      child: Shimmer(child: _UserDisplay(user: .fake())),
     ),
   );
 }
 
 class _Loadded extends StatelessWidget {
-  const _Loadded({required this.student});
+  const _Loadded({required this.user});
 
-  final FullStudent student;
+  final AuthenticatedUser user;
 
   @override
   Widget build(BuildContext context) {
     final padding = context.appStyle.appPadding.appBar(context: context);
     return SliverResizingHeader(
       minExtentPrototype: _TitleAppBar(
-        title: student.user.displayName ?? 'Name',
+        title: user.displayName ?? 'Name',
         padding: padding,
       ),
       child: BackdropGroup(
         child: ClipRRect(
           child: BackdropFilter.grouped(
             filter: .blur(sigmaX: .9, sigmaY: 4.0),
-            child: _UserDisplay(student: student, padding: padding),
+            child: _UserDisplay(user: user, padding: padding),
           ),
         ),
       ),
@@ -61,9 +56,9 @@ class _Loadded extends StatelessWidget {
 }
 
 class _UserDisplay extends StatelessWidget {
-  const _UserDisplay({required this.student, this.padding = .zero});
+  const _UserDisplay({required this.user, this.padding = .zero});
 
-  final FullStudent student;
+  final AuthenticatedUser user;
   final EdgeInsetsGeometry padding;
 
   @override
@@ -71,6 +66,13 @@ class _UserDisplay extends StatelessWidget {
     final theme = Theme.of(context);
     final palette = theme.colorPalette;
     final typography = theme.appTypography;
+    final title = user.mapAuthUser(
+      firebase: (u) => u.email,
+      profile: (u) => u.mapRoleUser(
+        student: (u) => u.dormitory.name,
+        master: (u) => u.dormitory.name,
+      ),
+    );
     return Padding(
       padding: padding,
       child: Column(
@@ -78,18 +80,28 @@ class _UserDisplay extends StatelessWidget {
         mainAxisSize: .min,
         children: [
           _TitleAppBar(
-            title: student.user.displayName ?? 'Name',
+            title: user.displayName ?? 'Name',
             colorTitle: palette.primaryForeground,
           ),
           Flexible(
             child: RichText(
               text: TextSpan(
-                text: '${student.dormitory.name}\n',
+                text: '$title\n',
                 style: typography.headlineLarge.copyWith(
                   fontWeight: .w500,
                   color: palette.foreground,
                 ),
-                children: [TextSpan(text: student.room.number)],
+                children: [
+                  TextSpan(
+                    text: user.mapAuthUser(
+                      firebase: (u) => u.phoneNumber,
+                      profile: (u) => u.mapRoleUser(
+                        student: (u) => u.room.number,
+                        master: (u) => u.dormitory.address,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

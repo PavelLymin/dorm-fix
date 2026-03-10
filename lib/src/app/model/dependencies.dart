@@ -31,7 +31,6 @@ class DependencyContainer {
     required this.messageRepository,
     required this.messageRealTimeRepository,
     required this.authenticationBloc,
-    required this.profileBloc,
     required this.specializationBloc,
     required this.repairRequestBloc,
   });
@@ -67,7 +66,6 @@ class DependencyContainer {
 
   // BloC
   final AuthBloc authenticationBloc;
-  final ProfileBloc profileBloc;
   final SpecializationBloc specializationBloc;
   final RepairRequestBloc repairRequestBloc;
 }

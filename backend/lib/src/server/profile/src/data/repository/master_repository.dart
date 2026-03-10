@@ -24,9 +24,7 @@ class MasterRepository implements IMasterRepository {
       ),
       innerJoin(
         _database.specializations,
-        _database.specializations.id.equalsExp(
-          _database.masters.specializationId,
-        ),
+        _database.specializations.id.equalsExp(_database.masters.specId),
       ),
     ])..where(_database.users.uid.equals(uid))).getSingleOrNull();
 

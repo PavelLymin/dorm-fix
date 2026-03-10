@@ -16,8 +16,7 @@ abstract interface class IFirebaseUserRepository {
 }
 
 class FirebaseUserRepositoryImpl implements IFirebaseUserRepository {
-  FirebaseUserRepositoryImpl({required FirebaseAuth firebaseAuth})
-    : _firebaseAuth = firebaseAuth;
+  FirebaseUserRepositoryImpl({required this._firebaseAuth});
 
   final FirebaseAuth _firebaseAuth;
 
@@ -66,7 +65,7 @@ class FirebaseUserRepositoryImpl implements IFirebaseUserRepository {
       );
     }
 
-    final user = UserDto.fromFirebase(currentUser).toEntity();
+    final user = FirebaseUserDto.fromFirebase(currentUser).toEntity();
     completer.complete(.verificationCompleted(user: user));
   }
 

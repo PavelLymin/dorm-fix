@@ -38,9 +38,16 @@ class ProfileRouter {
 
   Future<Response> _getStudent(String uid) async {
     final student = await _studentRepository.getStudent(uid: uid);
+
     if (student == null) {
-      throw NotFoundException(error: {'description': 'Student not found.'});
+      return _restApi.send(
+        statusCode: 200,
+        responseBody: {
+          'data': {'profile': null},
+        },
+      );
     }
+
     final json = FullStudentDto.fromEntity(student).toJson();
     return _restApi.send(
       statusCode: 200,
@@ -53,7 +60,12 @@ class ProfileRouter {
   Future<Response> _getMaster(String uid) async {
     final master = await _masterRepository.getMaster(uid: uid);
     if (master == null) {
-      throw NotFoundException(error: {'description': 'Master not found.'});
+      return _restApi.send(
+        statusCode: 200,
+        responseBody: {
+          'data': {'profile': null},
+        },
+      );
     }
     final json = MasterDto.fromEntity(master).toJson();
     return _restApi.send(

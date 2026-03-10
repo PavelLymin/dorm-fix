@@ -22,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     final dependency = DependeciesScope.of(context);
-    dependency.profileBloc.add(.get());
     _specializationBloc = dependency.specializationBloc
       ..add(.getSpecializations());
   }

@@ -6,11 +6,7 @@ abstract interface class IUserRepository {
 }
 
 class UserRepositoryImpl implements IUserRepository {
-  UserRepositoryImpl({
-    required RestClientHttp client,
-    required FirebaseAuth firebaseAuth,
-  }) : _client = client,
-       _firebaseAuth = firebaseAuth;
+  UserRepositoryImpl({required this._client, required this._firebaseAuth});
 
   final RestClientHttp _client;
   final FirebaseAuth _firebaseAuth;

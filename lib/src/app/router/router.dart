@@ -7,8 +7,7 @@ import '../../features/root/widget/root_screen.dart';
 import '../../features/yandex_mapkit/yandex_mapkit.dart';
 
 class AppRouter extends RootStackRouter {
-  AppRouter({required AuthBloc authenticationBloc})
-    : _authenticationBloc = authenticationBloc;
+  AppRouter({required this._authenticationBloc});
 
   final AuthBloc _authenticationBloc;
 
@@ -27,7 +26,7 @@ class AppRouter extends RootStackRouter {
       builder: (context, data) => const UpdatePhoneScreen(),
     ),
     NamedRouteDef(
-      name: 'ExtraPersonDataScreen',
+      name: 'PersonalDataScreen',
       builder: (context, data) => PersonalDataScreen(
         dormitoryId: data.params.getInt('dormitoryId'),
         roomId: data.params.getInt('roomId'),
@@ -62,8 +61,7 @@ class AppRouter extends RootStackRouter {
 }
 
 class AuthGuard extends AutoRouteGuard {
-  const AuthGuard({required AuthBloc authenticationBloc})
-    : _authenticationBloc = authenticationBloc;
+  const AuthGuard({required this._authenticationBloc});
 
   final AuthBloc _authenticationBloc;
 

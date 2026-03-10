@@ -1,12 +1,13 @@
 import 'package:animations/animations.dart';
-import 'package:dorm_fix/src/app/widget/dependencies_scope.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../chat/chat.dart';
 import '../../../request.dart';
 import 'item_list.dart';
 
 class RepairRequestList extends StatefulWidget {
-  const RepairRequestList({super.key});
+  const RepairRequestList({super.key, required this.requests});
+
+  final Stream<List<FullRepairRequest>> requests;
 
   @override
   State<RepairRequestList> createState() => _RepairRequestListState();
@@ -26,13 +27,12 @@ class _RepairRequestListState extends State<RepairRequestList> {
   Widget build(BuildContext context) => SliverPadding(
     padding: context.appStyle.appPadding.contentPadding,
     sliver: StreamBuilder<List<FullRepairRequest>>(
-      stream: DependeciesScope.of(context).requestRepository.getRequests(),
+      stream: widget.requests,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return SliverToBoxAdapter(child: Text('Ошибка: ${snapshot.error}'));
         }
         if (!snapshot.hasData) return const _LoadingList();
-
         final requests = snapshot.data!;
         return SliverFixedExtentList(
           itemExtent: _height,

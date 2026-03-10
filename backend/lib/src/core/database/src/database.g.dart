@@ -1862,12 +1862,10 @@ class $MastersTable extends Masters with TableInfo<$MastersTable, Master> {
       'REFERENCES users (uid)',
     ),
   );
-  static const VerificationMeta _specializationIdMeta = const VerificationMeta(
-    'specializationId',
-  );
+  static const VerificationMeta _specIdMeta = const VerificationMeta('specId');
   @override
-  late final GeneratedColumn<int> specializationId = GeneratedColumn<int>(
-    'specialization_id',
+  late final GeneratedColumn<int> specId = GeneratedColumn<int>(
+    'spec_id',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -1901,13 +1899,7 @@ class $MastersTable extends Masters with TableInfo<$MastersTable, Master> {
     defaultValue: Constant(0.0),
   );
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    uid,
-    specializationId,
-    dormitoryId,
-    rating,
-  ];
+  List<GeneratedColumn> get $columns => [id, uid, specId, dormitoryId, rating];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1931,16 +1923,13 @@ class $MastersTable extends Masters with TableInfo<$MastersTable, Master> {
     } else if (isInserting) {
       context.missing(_uidMeta);
     }
-    if (data.containsKey('specialization_id')) {
+    if (data.containsKey('spec_id')) {
       context.handle(
-        _specializationIdMeta,
-        specializationId.isAcceptableOrUnknown(
-          data['specialization_id']!,
-          _specializationIdMeta,
-        ),
+        _specIdMeta,
+        specId.isAcceptableOrUnknown(data['spec_id']!, _specIdMeta),
       );
     } else if (isInserting) {
-      context.missing(_specializationIdMeta);
+      context.missing(_specIdMeta);
     }
     if (data.containsKey('dormitory_id')) {
       context.handle(
@@ -1976,9 +1965,9 @@ class $MastersTable extends Masters with TableInfo<$MastersTable, Master> {
         DriftSqlType.string,
         data['${effectivePrefix}uid'],
       )!,
-      specializationId: attachedDatabase.typeMapping.read(
+      specId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}specialization_id'],
+        data['${effectivePrefix}spec_id'],
       )!,
       dormitoryId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -2000,13 +1989,13 @@ class $MastersTable extends Masters with TableInfo<$MastersTable, Master> {
 class Master extends DataClass implements Insertable<Master> {
   final int id;
   final String uid;
-  final int specializationId;
+  final int specId;
   final int dormitoryId;
   final double rating;
   const Master({
     required this.id,
     required this.uid,
-    required this.specializationId,
+    required this.specId,
     required this.dormitoryId,
     required this.rating,
   });
@@ -2015,7 +2004,7 @@ class Master extends DataClass implements Insertable<Master> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['uid'] = Variable<String>(uid);
-    map['specialization_id'] = Variable<int>(specializationId);
+    map['spec_id'] = Variable<int>(specId);
     map['dormitory_id'] = Variable<int>(dormitoryId);
     map['rating'] = Variable<double>(rating);
     return map;
@@ -2025,7 +2014,7 @@ class Master extends DataClass implements Insertable<Master> {
     return MastersCompanion(
       id: Value(id),
       uid: Value(uid),
-      specializationId: Value(specializationId),
+      specId: Value(specId),
       dormitoryId: Value(dormitoryId),
       rating: Value(rating),
     );
@@ -2039,7 +2028,7 @@ class Master extends DataClass implements Insertable<Master> {
     return Master(
       id: serializer.fromJson<int>(json['id']),
       uid: serializer.fromJson<String>(json['uid']),
-      specializationId: serializer.fromJson<int>(json['specializationId']),
+      specId: serializer.fromJson<int>(json['specId']),
       dormitoryId: serializer.fromJson<int>(json['dormitoryId']),
       rating: serializer.fromJson<double>(json['rating']),
     );
@@ -2050,7 +2039,7 @@ class Master extends DataClass implements Insertable<Master> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'uid': serializer.toJson<String>(uid),
-      'specializationId': serializer.toJson<int>(specializationId),
+      'specId': serializer.toJson<int>(specId),
       'dormitoryId': serializer.toJson<int>(dormitoryId),
       'rating': serializer.toJson<double>(rating),
     };
@@ -2059,13 +2048,13 @@ class Master extends DataClass implements Insertable<Master> {
   Master copyWith({
     int? id,
     String? uid,
-    int? specializationId,
+    int? specId,
     int? dormitoryId,
     double? rating,
   }) => Master(
     id: id ?? this.id,
     uid: uid ?? this.uid,
-    specializationId: specializationId ?? this.specializationId,
+    specId: specId ?? this.specId,
     dormitoryId: dormitoryId ?? this.dormitoryId,
     rating: rating ?? this.rating,
   );
@@ -2073,9 +2062,7 @@ class Master extends DataClass implements Insertable<Master> {
     return Master(
       id: data.id.present ? data.id.value : this.id,
       uid: data.uid.present ? data.uid.value : this.uid,
-      specializationId: data.specializationId.present
-          ? data.specializationId.value
-          : this.specializationId,
+      specId: data.specId.present ? data.specId.value : this.specId,
       dormitoryId: data.dormitoryId.present
           ? data.dormitoryId.value
           : this.dormitoryId,
@@ -2088,7 +2075,7 @@ class Master extends DataClass implements Insertable<Master> {
     return (StringBuffer('Master(')
           ..write('id: $id, ')
           ..write('uid: $uid, ')
-          ..write('specializationId: $specializationId, ')
+          ..write('specId: $specId, ')
           ..write('dormitoryId: $dormitoryId, ')
           ..write('rating: $rating')
           ..write(')'))
@@ -2096,15 +2083,14 @@ class Master extends DataClass implements Insertable<Master> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, uid, specializationId, dormitoryId, rating);
+  int get hashCode => Object.hash(id, uid, specId, dormitoryId, rating);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Master &&
           other.id == this.id &&
           other.uid == this.uid &&
-          other.specializationId == this.specializationId &&
+          other.specId == this.specId &&
           other.dormitoryId == this.dormitoryId &&
           other.rating == this.rating);
 }
@@ -2112,36 +2098,36 @@ class Master extends DataClass implements Insertable<Master> {
 class MastersCompanion extends UpdateCompanion<Master> {
   final Value<int> id;
   final Value<String> uid;
-  final Value<int> specializationId;
+  final Value<int> specId;
   final Value<int> dormitoryId;
   final Value<double> rating;
   const MastersCompanion({
     this.id = const Value.absent(),
     this.uid = const Value.absent(),
-    this.specializationId = const Value.absent(),
+    this.specId = const Value.absent(),
     this.dormitoryId = const Value.absent(),
     this.rating = const Value.absent(),
   });
   MastersCompanion.insert({
     this.id = const Value.absent(),
     required String uid,
-    required int specializationId,
+    required int specId,
     required int dormitoryId,
     this.rating = const Value.absent(),
   }) : uid = Value(uid),
-       specializationId = Value(specializationId),
+       specId = Value(specId),
        dormitoryId = Value(dormitoryId);
   static Insertable<Master> custom({
     Expression<int>? id,
     Expression<String>? uid,
-    Expression<int>? specializationId,
+    Expression<int>? specId,
     Expression<int>? dormitoryId,
     Expression<double>? rating,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (uid != null) 'uid': uid,
-      if (specializationId != null) 'specialization_id': specializationId,
+      if (specId != null) 'spec_id': specId,
       if (dormitoryId != null) 'dormitory_id': dormitoryId,
       if (rating != null) 'rating': rating,
     });
@@ -2150,14 +2136,14 @@ class MastersCompanion extends UpdateCompanion<Master> {
   MastersCompanion copyWith({
     Value<int>? id,
     Value<String>? uid,
-    Value<int>? specializationId,
+    Value<int>? specId,
     Value<int>? dormitoryId,
     Value<double>? rating,
   }) {
     return MastersCompanion(
       id: id ?? this.id,
       uid: uid ?? this.uid,
-      specializationId: specializationId ?? this.specializationId,
+      specId: specId ?? this.specId,
       dormitoryId: dormitoryId ?? this.dormitoryId,
       rating: rating ?? this.rating,
     );
@@ -2172,8 +2158,8 @@ class MastersCompanion extends UpdateCompanion<Master> {
     if (uid.present) {
       map['uid'] = Variable<String>(uid.value);
     }
-    if (specializationId.present) {
-      map['specialization_id'] = Variable<int>(specializationId.value);
+    if (specId.present) {
+      map['spec_id'] = Variable<int>(specId.value);
     }
     if (dormitoryId.present) {
       map['dormitory_id'] = Variable<int>(dormitoryId.value);
@@ -2189,7 +2175,7 @@ class MastersCompanion extends UpdateCompanion<Master> {
     return (StringBuffer('MastersCompanion(')
           ..write('id: $id, ')
           ..write('uid: $uid, ')
-          ..write('specializationId: $specializationId, ')
+          ..write('specId: $specId, ')
           ..write('dormitoryId: $dormitoryId, ')
           ..write('rating: $rating')
           ..write(')'))
@@ -2227,12 +2213,10 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
       'REFERENCES users (uid)',
     ),
   );
-  static const VerificationMeta _specializationIdMeta = const VerificationMeta(
-    'specializationId',
-  );
+  static const VerificationMeta _specIdMeta = const VerificationMeta('specId');
   @override
-  late final GeneratedColumn<int> specializationId = GeneratedColumn<int>(
-    'specialization_id',
+  late final GeneratedColumn<int> specId = GeneratedColumn<int>(
+    'spec_id',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -2331,7 +2315,7 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
   List<GeneratedColumn> get $columns => [
     id,
     uid,
-    specializationId,
+    specId,
     description,
     priority,
     status,
@@ -2364,16 +2348,13 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
     } else if (isInserting) {
       context.missing(_uidMeta);
     }
-    if (data.containsKey('specialization_id')) {
+    if (data.containsKey('spec_id')) {
       context.handle(
-        _specializationIdMeta,
-        specializationId.isAcceptableOrUnknown(
-          data['specialization_id']!,
-          _specializationIdMeta,
-        ),
+        _specIdMeta,
+        specId.isAcceptableOrUnknown(data['spec_id']!, _specIdMeta),
       );
     } else if (isInserting) {
-      context.missing(_specializationIdMeta);
+      context.missing(_specIdMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
@@ -2446,9 +2427,9 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
         DriftSqlType.string,
         data['${effectivePrefix}uid'],
       )!,
-      specializationId: attachedDatabase.typeMapping.read(
+      specId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}specialization_id'],
+        data['${effectivePrefix}spec_id'],
       )!,
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -2503,7 +2484,7 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
 class Request extends DataClass implements Insertable<Request> {
   final int id;
   final String uid;
-  final int specializationId;
+  final int specId;
   final String description;
   final String priority;
   final String status;
@@ -2515,7 +2496,7 @@ class Request extends DataClass implements Insertable<Request> {
   const Request({
     required this.id,
     required this.uid,
-    required this.specializationId,
+    required this.specId,
     required this.description,
     required this.priority,
     required this.status,
@@ -2530,7 +2511,7 @@ class Request extends DataClass implements Insertable<Request> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['uid'] = Variable<String>(uid);
-    map['specialization_id'] = Variable<int>(specializationId);
+    map['spec_id'] = Variable<int>(specId);
     map['description'] = Variable<String>(description);
     map['priority'] = Variable<String>(priority);
     map['status'] = Variable<String>(status);
@@ -2552,7 +2533,7 @@ class Request extends DataClass implements Insertable<Request> {
     return RequestsCompanion(
       id: Value(id),
       uid: Value(uid),
-      specializationId: Value(specializationId),
+      specId: Value(specId),
       description: Value(description),
       priority: Value(priority),
       status: Value(status),
@@ -2572,7 +2553,7 @@ class Request extends DataClass implements Insertable<Request> {
     return Request(
       id: serializer.fromJson<int>(json['id']),
       uid: serializer.fromJson<String>(json['uid']),
-      specializationId: serializer.fromJson<int>(json['specializationId']),
+      specId: serializer.fromJson<int>(json['specId']),
       description: serializer.fromJson<String>(json['description']),
       priority: serializer.fromJson<String>(json['priority']),
       status: serializer.fromJson<String>(json['status']),
@@ -2589,7 +2570,7 @@ class Request extends DataClass implements Insertable<Request> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'uid': serializer.toJson<String>(uid),
-      'specializationId': serializer.toJson<int>(specializationId),
+      'specId': serializer.toJson<int>(specId),
       'description': serializer.toJson<String>(description),
       'priority': serializer.toJson<String>(priority),
       'status': serializer.toJson<String>(status),
@@ -2604,7 +2585,7 @@ class Request extends DataClass implements Insertable<Request> {
   Request copyWith({
     int? id,
     String? uid,
-    int? specializationId,
+    int? specId,
     String? description,
     String? priority,
     String? status,
@@ -2616,7 +2597,7 @@ class Request extends DataClass implements Insertable<Request> {
   }) => Request(
     id: id ?? this.id,
     uid: uid ?? this.uid,
-    specializationId: specializationId ?? this.specializationId,
+    specId: specId ?? this.specId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
     status: status ?? this.status,
@@ -2630,9 +2611,7 @@ class Request extends DataClass implements Insertable<Request> {
     return Request(
       id: data.id.present ? data.id.value : this.id,
       uid: data.uid.present ? data.uid.value : this.uid,
-      specializationId: data.specializationId.present
-          ? data.specializationId.value
-          : this.specializationId,
+      specId: data.specId.present ? data.specId.value : this.specId,
       description: data.description.present
           ? data.description.value
           : this.description,
@@ -2653,7 +2632,7 @@ class Request extends DataClass implements Insertable<Request> {
     return (StringBuffer('Request(')
           ..write('id: $id, ')
           ..write('uid: $uid, ')
-          ..write('specializationId: $specializationId, ')
+          ..write('specId: $specId, ')
           ..write('description: $description, ')
           ..write('priority: $priority, ')
           ..write('status: $status, ')
@@ -2670,7 +2649,7 @@ class Request extends DataClass implements Insertable<Request> {
   int get hashCode => Object.hash(
     id,
     uid,
-    specializationId,
+    specId,
     description,
     priority,
     status,
@@ -2686,7 +2665,7 @@ class Request extends DataClass implements Insertable<Request> {
       (other is Request &&
           other.id == this.id &&
           other.uid == this.uid &&
-          other.specializationId == this.specializationId &&
+          other.specId == this.specId &&
           other.description == this.description &&
           other.priority == this.priority &&
           other.status == this.status &&
@@ -2700,7 +2679,7 @@ class Request extends DataClass implements Insertable<Request> {
 class RequestsCompanion extends UpdateCompanion<Request> {
   final Value<int> id;
   final Value<String> uid;
-  final Value<int> specializationId;
+  final Value<int> specId;
   final Value<String> description;
   final Value<String> priority;
   final Value<String> status;
@@ -2712,7 +2691,7 @@ class RequestsCompanion extends UpdateCompanion<Request> {
   const RequestsCompanion({
     this.id = const Value.absent(),
     this.uid = const Value.absent(),
-    this.specializationId = const Value.absent(),
+    this.specId = const Value.absent(),
     this.description = const Value.absent(),
     this.priority = const Value.absent(),
     this.status = const Value.absent(),
@@ -2725,7 +2704,7 @@ class RequestsCompanion extends UpdateCompanion<Request> {
   RequestsCompanion.insert({
     this.id = const Value.absent(),
     required String uid,
-    required int specializationId,
+    required int specId,
     required String description,
     required String priority,
     required String status,
@@ -2735,7 +2714,7 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     required int endTime,
     this.createdAt = const Value.absent(),
   }) : uid = Value(uid),
-       specializationId = Value(specializationId),
+       specId = Value(specId),
        description = Value(description),
        priority = Value(priority),
        status = Value(status),
@@ -2746,7 +2725,7 @@ class RequestsCompanion extends UpdateCompanion<Request> {
   static Insertable<Request> custom({
     Expression<int>? id,
     Expression<String>? uid,
-    Expression<int>? specializationId,
+    Expression<int>? specId,
     Expression<String>? description,
     Expression<String>? priority,
     Expression<String>? status,
@@ -2759,7 +2738,7 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (uid != null) 'uid': uid,
-      if (specializationId != null) 'specialization_id': specializationId,
+      if (specId != null) 'spec_id': specId,
       if (description != null) 'description': description,
       if (priority != null) 'priority': priority,
       if (status != null) 'status': status,
@@ -2774,7 +2753,7 @@ class RequestsCompanion extends UpdateCompanion<Request> {
   RequestsCompanion copyWith({
     Value<int>? id,
     Value<String>? uid,
-    Value<int>? specializationId,
+    Value<int>? specId,
     Value<String>? description,
     Value<String>? priority,
     Value<String>? status,
@@ -2787,7 +2766,7 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     return RequestsCompanion(
       id: id ?? this.id,
       uid: uid ?? this.uid,
-      specializationId: specializationId ?? this.specializationId,
+      specId: specId ?? this.specId,
       description: description ?? this.description,
       priority: priority ?? this.priority,
       status: status ?? this.status,
@@ -2808,8 +2787,8 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     if (uid.present) {
       map['uid'] = Variable<String>(uid.value);
     }
-    if (specializationId.present) {
-      map['specialization_id'] = Variable<int>(specializationId.value);
+    if (specId.present) {
+      map['spec_id'] = Variable<int>(specId.value);
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
@@ -2847,7 +2826,7 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     return (StringBuffer('RequestsCompanion(')
           ..write('id: $id, ')
           ..write('uid: $uid, ')
-          ..write('specializationId: $specializationId, ')
+          ..write('specId: $specId, ')
           ..write('description: $description, ')
           ..write('priority: $priority, ')
           ..write('status: $status, ')
@@ -6499,17 +6478,14 @@ final class $$SpecializationsTableReferences
     _$Database db,
   ) => MultiTypedResultKey.fromTable(
     db.masters,
-    aliasName: $_aliasNameGenerator(
-      db.specializations.id,
-      db.masters.specializationId,
-    ),
+    aliasName: $_aliasNameGenerator(db.specializations.id, db.masters.specId),
   );
 
   $$MastersTableProcessedTableManager get mastersRefs {
     final manager = $$MastersTableTableManager(
       $_db,
       $_db.masters,
-    ).filter((f) => f.specializationId.id.sqlEquals($_itemColumn<int>('id')!));
+    ).filter((f) => f.specId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_mastersRefsTable($_db));
     return ProcessedTableManager(
@@ -6521,17 +6497,14 @@ final class $$SpecializationsTableReferences
     _$Database db,
   ) => MultiTypedResultKey.fromTable(
     db.requests,
-    aliasName: $_aliasNameGenerator(
-      db.specializations.id,
-      db.requests.specializationId,
-    ),
+    aliasName: $_aliasNameGenerator(db.specializations.id, db.requests.specId),
   );
 
   $$RequestsTableProcessedTableManager get requestsRefs {
     final manager = $$RequestsTableTableManager(
       $_db,
       $_db.requests,
-    ).filter((f) => f.specializationId.id.sqlEquals($_itemColumn<int>('id')!));
+    ).filter((f) => f.specId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_requestsRefsTable($_db));
     return ProcessedTableManager(
@@ -6576,7 +6549,7 @@ class $$SpecializationsTableFilterComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.masters,
-      getReferencedColumn: (t) => t.specializationId,
+      getReferencedColumn: (t) => t.specId,
       builder:
           (
             joinBuilder, {
@@ -6601,7 +6574,7 @@ class $$SpecializationsTableFilterComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.requests,
-      getReferencedColumn: (t) => t.specializationId,
+      getReferencedColumn: (t) => t.specId,
       builder:
           (
             joinBuilder, {
@@ -6680,7 +6653,7 @@ class $$SpecializationsTableAnnotationComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.masters,
-      getReferencedColumn: (t) => t.specializationId,
+      getReferencedColumn: (t) => t.specId,
       builder:
           (
             joinBuilder, {
@@ -6705,7 +6678,7 @@ class $$SpecializationsTableAnnotationComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.requests,
-      getReferencedColumn: (t) => t.specializationId,
+      getReferencedColumn: (t) => t.specId,
       builder:
           (
             joinBuilder, {
@@ -6808,9 +6781,7 @@ class $$SpecializationsTableTableManager
                             p0,
                           ).mastersRefs,
                       referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where(
-                            (e) => e.specializationId == item.id,
-                          ),
+                          referencedItems.where((e) => e.specId == item.id),
                       typedResults: items,
                     ),
                   if (requestsRefs)
@@ -6829,9 +6800,7 @@ class $$SpecializationsTableTableManager
                             p0,
                           ).requestsRefs,
                       referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where(
-                            (e) => e.specializationId == item.id,
-                          ),
+                          referencedItems.where((e) => e.specId == item.id),
                       typedResults: items,
                     ),
                 ];
@@ -6860,7 +6829,7 @@ typedef $$MastersTableCreateCompanionBuilder =
     MastersCompanion Function({
       Value<int> id,
       required String uid,
-      required int specializationId,
+      required int specId,
       required int dormitoryId,
       Value<double> rating,
     });
@@ -6868,7 +6837,7 @@ typedef $$MastersTableUpdateCompanionBuilder =
     MastersCompanion Function({
       Value<int> id,
       Value<String> uid,
-      Value<int> specializationId,
+      Value<int> specId,
       Value<int> dormitoryId,
       Value<double> rating,
     });
@@ -6894,22 +6863,19 @@ final class $$MastersTableReferences
     );
   }
 
-  static $SpecializationsTable _specializationIdTable(_$Database db) =>
+  static $SpecializationsTable _specIdTable(_$Database db) =>
       db.specializations.createAlias(
-        $_aliasNameGenerator(
-          db.masters.specializationId,
-          db.specializations.id,
-        ),
+        $_aliasNameGenerator(db.masters.specId, db.specializations.id),
       );
 
-  $$SpecializationsTableProcessedTableManager get specializationId {
-    final $_column = $_itemColumn<int>('specialization_id')!;
+  $$SpecializationsTableProcessedTableManager get specId {
+    final $_column = $_itemColumn<int>('spec_id')!;
 
     final manager = $$SpecializationsTableTableManager(
       $_db,
       $_db.specializations,
     ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_specializationIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_specIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -6977,10 +6943,10 @@ class $$MastersTableFilterComposer extends Composer<_$Database, $MastersTable> {
     return composer;
   }
 
-  $$SpecializationsTableFilterComposer get specializationId {
+  $$SpecializationsTableFilterComposer get specId {
     final $$SpecializationsTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.specializationId,
+      getCurrentColumn: (t) => t.specId,
       referencedTable: $db.specializations,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -7066,10 +7032,10 @@ class $$MastersTableOrderingComposer
     return composer;
   }
 
-  $$SpecializationsTableOrderingComposer get specializationId {
+  $$SpecializationsTableOrderingComposer get specId {
     final $$SpecializationsTableOrderingComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.specializationId,
+      getCurrentColumn: (t) => t.specId,
       referencedTable: $db.specializations,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -7151,10 +7117,10 @@ class $$MastersTableAnnotationComposer
     return composer;
   }
 
-  $$SpecializationsTableAnnotationComposer get specializationId {
+  $$SpecializationsTableAnnotationComposer get specId {
     final $$SpecializationsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.specializationId,
+      getCurrentColumn: (t) => t.specId,
       referencedTable: $db.specializations,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -7211,11 +7177,7 @@ class $$MastersTableTableManager
           $$MastersTableUpdateCompanionBuilder,
           (Master, $$MastersTableReferences),
           Master,
-          PrefetchHooks Function({
-            bool uid,
-            bool specializationId,
-            bool dormitoryId,
-          })
+          PrefetchHooks Function({bool uid, bool specId, bool dormitoryId})
         > {
   $$MastersTableTableManager(_$Database db, $MastersTable table)
     : super(
@@ -7232,13 +7194,13 @@ class $$MastersTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> uid = const Value.absent(),
-                Value<int> specializationId = const Value.absent(),
+                Value<int> specId = const Value.absent(),
                 Value<int> dormitoryId = const Value.absent(),
                 Value<double> rating = const Value.absent(),
               }) => MastersCompanion(
                 id: id,
                 uid: uid,
-                specializationId: specializationId,
+                specId: specId,
                 dormitoryId: dormitoryId,
                 rating: rating,
               ),
@@ -7246,13 +7208,13 @@ class $$MastersTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required String uid,
-                required int specializationId,
+                required int specId,
                 required int dormitoryId,
                 Value<double> rating = const Value.absent(),
               }) => MastersCompanion.insert(
                 id: id,
                 uid: uid,
-                specializationId: specializationId,
+                specId: specId,
                 dormitoryId: dormitoryId,
                 rating: rating,
               ),
@@ -7265,7 +7227,7 @@ class $$MastersTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({uid = false, specializationId = false, dormitoryId = false}) {
+              ({uid = false, specId = false, dormitoryId = false}) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [],
@@ -7298,15 +7260,15 @@ class $$MastersTableTableManager
                                   )
                                   as T;
                         }
-                        if (specializationId) {
+                        if (specId) {
                           state =
                               state.withJoin(
                                     currentTable: table,
-                                    currentColumn: table.specializationId,
+                                    currentColumn: table.specId,
                                     referencedTable: $$MastersTableReferences
-                                        ._specializationIdTable(db),
+                                        ._specIdTable(db),
                                     referencedColumn: $$MastersTableReferences
-                                        ._specializationIdTable(db)
+                                        ._specIdTable(db)
                                         .id,
                                   )
                                   as T;
@@ -7348,17 +7310,13 @@ typedef $$MastersTableProcessedTableManager =
       $$MastersTableUpdateCompanionBuilder,
       (Master, $$MastersTableReferences),
       Master,
-      PrefetchHooks Function({
-        bool uid,
-        bool specializationId,
-        bool dormitoryId,
-      })
+      PrefetchHooks Function({bool uid, bool specId, bool dormitoryId})
     >;
 typedef $$RequestsTableCreateCompanionBuilder =
     RequestsCompanion Function({
       Value<int> id,
       required String uid,
-      required int specializationId,
+      required int specId,
       required String description,
       required String priority,
       required String status,
@@ -7372,7 +7330,7 @@ typedef $$RequestsTableUpdateCompanionBuilder =
     RequestsCompanion Function({
       Value<int> id,
       Value<String> uid,
-      Value<int> specializationId,
+      Value<int> specId,
       Value<String> description,
       Value<String> priority,
       Value<String> status,
@@ -7404,22 +7362,19 @@ final class $$RequestsTableReferences
     );
   }
 
-  static $SpecializationsTable _specializationIdTable(_$Database db) =>
+  static $SpecializationsTable _specIdTable(_$Database db) =>
       db.specializations.createAlias(
-        $_aliasNameGenerator(
-          db.requests.specializationId,
-          db.specializations.id,
-        ),
+        $_aliasNameGenerator(db.requests.specId, db.specializations.id),
       );
 
-  $$SpecializationsTableProcessedTableManager get specializationId {
-    final $_column = $_itemColumn<int>('specialization_id')!;
+  $$SpecializationsTableProcessedTableManager get specId {
+    final $_column = $_itemColumn<int>('spec_id')!;
 
     final manager = $$SpecializationsTableTableManager(
       $_db,
       $_db.specializations,
     ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_specializationIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_specIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -7562,10 +7517,10 @@ class $$RequestsTableFilterComposer
     return composer;
   }
 
-  $$SpecializationsTableFilterComposer get specializationId {
+  $$SpecializationsTableFilterComposer get specId {
     final $$SpecializationsTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.specializationId,
+      getCurrentColumn: (t) => t.specId,
       referencedTable: $db.specializations,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -7738,10 +7693,10 @@ class $$RequestsTableOrderingComposer
     return composer;
   }
 
-  $$SpecializationsTableOrderingComposer get specializationId {
+  $$SpecializationsTableOrderingComposer get specId {
     final $$SpecializationsTableOrderingComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.specializationId,
+      getCurrentColumn: (t) => t.specId,
       referencedTable: $db.specializations,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -7825,10 +7780,10 @@ class $$RequestsTableAnnotationComposer
     return composer;
   }
 
-  $$SpecializationsTableAnnotationComposer get specializationId {
+  $$SpecializationsTableAnnotationComposer get specId {
     final $$SpecializationsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.specializationId,
+      getCurrentColumn: (t) => t.specId,
       referencedTable: $db.specializations,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -7939,7 +7894,7 @@ class $$RequestsTableTableManager
           Request,
           PrefetchHooks Function({
             bool uid,
-            bool specializationId,
+            bool specId,
             bool problemsRefs,
             bool assignmentsRefs,
             bool chatsRefs,
@@ -7960,7 +7915,7 @@ class $$RequestsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> uid = const Value.absent(),
-                Value<int> specializationId = const Value.absent(),
+                Value<int> specId = const Value.absent(),
                 Value<String> description = const Value.absent(),
                 Value<String> priority = const Value.absent(),
                 Value<String> status = const Value.absent(),
@@ -7972,7 +7927,7 @@ class $$RequestsTableTableManager
               }) => RequestsCompanion(
                 id: id,
                 uid: uid,
-                specializationId: specializationId,
+                specId: specId,
                 description: description,
                 priority: priority,
                 status: status,
@@ -7986,7 +7941,7 @@ class $$RequestsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required String uid,
-                required int specializationId,
+                required int specId,
                 required String description,
                 required String priority,
                 required String status,
@@ -7998,7 +7953,7 @@ class $$RequestsTableTableManager
               }) => RequestsCompanion.insert(
                 id: id,
                 uid: uid,
-                specializationId: specializationId,
+                specId: specId,
                 description: description,
                 priority: priority,
                 status: status,
@@ -8019,7 +7974,7 @@ class $$RequestsTableTableManager
           prefetchHooksCallback:
               ({
                 uid = false,
-                specializationId = false,
+                specId = false,
                 problemsRefs = false,
                 assignmentsRefs = false,
                 chatsRefs = false,
@@ -8060,15 +8015,15 @@ class $$RequestsTableTableManager
                                   )
                                   as T;
                         }
-                        if (specializationId) {
+                        if (specId) {
                           state =
                               state.withJoin(
                                     currentTable: table,
-                                    currentColumn: table.specializationId,
+                                    currentColumn: table.specId,
                                     referencedTable: $$RequestsTableReferences
-                                        ._specializationIdTable(db),
+                                        ._specIdTable(db),
                                     referencedColumn: $$RequestsTableReferences
-                                        ._specializationIdTable(db)
+                                        ._specIdTable(db)
                                         .id,
                                   )
                                   as T;
@@ -8163,7 +8118,7 @@ typedef $$RequestsTableProcessedTableManager =
       Request,
       PrefetchHooks Function({
         bool uid,
-        bool specializationId,
+        bool specId,
         bool problemsRefs,
         bool assignmentsRefs,
         bool chatsRefs,

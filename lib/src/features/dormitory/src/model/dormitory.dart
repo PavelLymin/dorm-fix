@@ -15,6 +15,16 @@ class DormitoryEntity {
   final double long;
   final double lat;
 
+  const DormitoryEntity.fake()
+    : this(
+        id: 0,
+        number: 0,
+        name: 'fake_dorm',
+        address: 'fake_address',
+        long: 0.0,
+        lat: 0.0,
+      );
+
   DormitoryEntity copyWith({
     int? id,
     int? number,

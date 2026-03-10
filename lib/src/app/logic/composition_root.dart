@@ -61,10 +61,10 @@ class CompositionRoot {
     Bloc.observer = AppBlocObserver(logger: logger);
 
     // User
-    final userPerository = UserRepositoryImpl(
-      client: client,
-      firebaseAuth: firebaseAuth,
-    );
+    // final userPerository = UserRepositoryImpl(
+    //   client: client,
+    //   firebaseAuth: firebaseAuth,
+    // );
 
     // Firebase User
     final firebaseUserRepository = FirebaseUserRepositoryImpl(
@@ -74,15 +74,21 @@ class CompositionRoot {
     final googleSignIn = GoogleSignIn.instance;
     // await googleSignIn.initialize(clientId: Config.googleClientId);
 
+    // Profile
+    final profileRepository = ProfileRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+
     // Authentication
     final authRepository = AuthRepository(
       firebaseAuth: firebaseAuth,
+      profileRepository: profileRepository,
       googleSignIn: googleSignIn,
       webSocket: webSocket,
     );
     final authenticationBloc = AuthBloc(
       authRepository: authRepository,
-      userRepository: userPerository,
       firebaseUserRepository: firebaseUserRepository,
       logger: logger,
     );
@@ -92,16 +98,6 @@ class CompositionRoot {
 
     // Settings
     final settingsContainer = await _CreateSettings().create();
-
-    // Profile
-    final profileRepository = ProfileRepositoryImpl(
-      client: client,
-      firebaseAuth: firebaseAuth,
-    );
-    final profileBloc = ProfileBloc(
-      logger: logger,
-      profileRepository: profileRepository,
-    );
 
     final userRepository = UserRepositoryImpl(
       client: client,
@@ -169,7 +165,6 @@ class CompositionRoot {
       logger: logger,
       settingsContainer: settingsContainer,
       authenticationBloc: authenticationBloc,
-      profileBloc: profileBloc,
       userRepository: userRepository,
       firebaseUserRepository: firebaseUserRepository,
       specializationBloc: specializationBloc,
@@ -203,7 +198,6 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.messageRepository,
     required this.messageRealTimeRepository,
     required this.authenticationBloc,
-    required this.profileBloc,
     required this.specializationBloc,
     required this.repairRequestBloc,
   });
@@ -239,7 +233,6 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   // BloC
   final AuthBloc authenticationBloc;
-  final ProfileBloc profileBloc;
   final SpecializationBloc specializationBloc;
   final RepairRequestBloc repairRequestBloc;
 
@@ -261,7 +254,6 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     messageRepository: messageRepository,
     messageRealTimeRepository: messageRealTimeRepository,
     authenticationBloc: authenticationBloc,
-    profileBloc: profileBloc,
     specializationBloc: specializationBloc,
     repairRequestBloc: repairRequestBloc,
   );

@@ -13,6 +13,13 @@ class RoomEntity {
   final String number;
   final bool isOccupied;
 
+  const RoomEntity.fake()
+    : id = 0,
+      dormitoryId = 0,
+      floor = 0,
+      number = '0',
+      isOccupied = false;
+
   RoomEntity copyWith({
     int? id,
     int? dormitoryId,
@@ -41,9 +48,4 @@ class RoomEntity {
 
   @override
   int get hashCode => id.hashCode;
-}
-
-class FakeRoomEntity extends RoomEntity {
-  const FakeRoomEntity()
-    : super(id: 1, dormitoryId: 1, floor: 1, number: '1', isOccupied: false);
 }

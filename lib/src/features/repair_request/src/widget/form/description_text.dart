@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../request.dart';
+import '../../../request.dart';
 
 class DescriptionText extends StatefulWidget {
   const DescriptionText({super.key, required this.controller});

@@ -36,12 +36,12 @@ class _MessageInputState extends State<MessageInput> {
   }
 
   void _onSend() => context.read<AuthBloc>().state.currentUser.map(
-    notAuthenticatedUser: (_) =>
+    notAuthenticated: (_) =>
         ErrorUtil.showSnackBar(context, 'Вы не авторизованы'),
-    authenticatedUser: (user) => context.read<ChatBloc>().add(
+    authenticated: (user) => context.read<ChatBloc>().add(
       .create(
         message: PartialMessage(
-          chatId: 1,
+          chatId: widget.chatId,
           uid: user.uid,
           message: _controller.text,
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../home/home.dart';
-import '../../request.dart';
+import '../../../../home/home.dart';
+import '../../../request.dart';
 
 class ChoosingService extends StatelessWidget {
   const ChoosingService({super.key, required this.selectedIndex});

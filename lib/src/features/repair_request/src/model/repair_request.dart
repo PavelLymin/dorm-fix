@@ -55,7 +55,7 @@ sealed class RepairRequestEntity {
   final int endTime;
 
   const factory RepairRequestEntity.partial({
-    required final int specializationId,
+    required final int specId,
     required final String description,
     required final Priority priority,
     required final Status status,
@@ -79,7 +79,7 @@ sealed class RepairRequestEntity {
     required final SpecializationEntity specialization,
     required final List<ProblemEntity> problems,
     required final FullChat chat,
-    required final MasterEntity? master,
+    required final MasterUser? master,
     required final DateTime createdAt,
   }) = FullRepairRequest;
 
@@ -103,16 +103,16 @@ final class PartialRepairRequest extends RepairRequestEntity {
     required super.date,
     required super.startTime,
     required super.endTime,
-    required this.specializationId,
+    required this.specId,
     required this.imagePaths,
   });
 
-  final int specializationId;
+  final int specId;
   final List<String> imagePaths;
 
   @override
   PartialRepairRequest copyWith({
-    int? specializationId,
+    int? specId,
     String? description,
     Priority? priority,
     Status? status,
@@ -122,7 +122,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
     int? endTime,
     List<String>? imagePaths,
   }) => PartialRepairRequest(
-    specializationId: specializationId ?? this.specializationId,
+    specId: specId ?? this.specId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
     status: status ?? this.status,
@@ -136,7 +136,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
   @override
   String toString() =>
       'CreatedRepairRequest('
-      'specializationId: $specializationId, '
+      'specId: $specId, '
       'description: $description, '
       'priority: $priority, '
       'studentAbsent: $studentAbsent, '
@@ -149,7 +149,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is PartialRepairRequest &&
-        other.specializationId == specializationId &&
+        other.specId == specId &&
         other.description == description &&
         other.priority == priority &&
         other.studentAbsent == studentAbsent &&
@@ -161,7 +161,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
 
   @override
   int get hashCode => Object.hash(
-    specializationId,
+    specId,
     description,
     priority,
     studentAbsent,
@@ -196,7 +196,7 @@ final class FullRepairRequest extends RepairRequestEntity {
   final SpecializationEntity specialization;
   final List<ProblemEntity> problems;
   final FullChat chat;
-  final MasterEntity? master;
+  final MasterUser? master;
 
   @override
   FullRepairRequest copyWith({
@@ -212,7 +212,7 @@ final class FullRepairRequest extends RepairRequestEntity {
     SpecializationEntity? specialization,
     List<ProblemEntity>? problems,
     FullChat? chat,
-    MasterEntity? master,
+    MasterUser? master,
     DateTime? createdAt,
   }) => FullRepairRequest(
     id: id ?? this.id,

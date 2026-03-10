@@ -1,7 +1,9 @@
-import '../../../authentication/src/model/user.dart';
+import '../../profile.dart';
 
 sealed class PhoneNumberHelper {
   const PhoneNumberHelper({required this.user});
+
+  final UserEntity user;
 
   const factory PhoneNumberHelper.smsCodeSent({
     required String verificationId,
@@ -13,8 +15,6 @@ sealed class PhoneNumberHelper {
   const factory PhoneNumberHelper.verificationCompleted({
     required AuthenticatedUser user,
   }) = VerificationCompleted;
-
-  final UserEntity user;
 
   T map<T>({
     required T Function(VerificationCompleted user) verificationCompleted,

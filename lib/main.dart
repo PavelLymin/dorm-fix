@@ -5,7 +5,6 @@ import 'package:ui_kit/ui.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
 import 'src/features/authentication/authentication.dart';
-import 'src/features/profile/profile.dart';
 import 'src/features/repair_request/request.dart';
 import 'src/features/settings/settings.dart';
 
@@ -47,14 +46,12 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   late final AuthBloc _authenticationBloc;
-  late final ProfileBloc _profileBloc;
   late final RepairRequestBloc _repairRequestBloc;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = DependeciesScope.of(context).authenticationBloc;
-    _profileBloc = DependeciesScope.of(context).profileBloc;
     _repairRequestBloc = DependeciesScope.of(context).repairRequestBloc;
   }
 
@@ -64,7 +61,6 @@ class _MainAppState extends State<MainApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => _authenticationBloc),
-        BlocProvider(create: (context) => _profileBloc),
         BlocProvider(create: (context) => _repairRequestBloc),
       ],
       child: MaterialApp.router(

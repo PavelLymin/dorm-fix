@@ -29,9 +29,7 @@ class AssignmentsRepositoryImpl implements IAssignmentsRepository {
       ),
       innerJoin(
         _database.specializations,
-        _database.specializations.id.equalsExp(
-          _database.masters.specializationId,
-        ),
+        _database.specializations.id.equalsExp(_database.masters.specId),
       ),
     ]);
     query.where(_database.assignments.requestId.equals(requestId));

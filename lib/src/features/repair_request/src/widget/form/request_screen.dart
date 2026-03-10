@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../app/widget/dependencies_scope.dart';
-import '../../../../core/utils/src/error_util.dart';
-import '../../../home/home.dart';
-import '../../request.dart';
+import '../../../../../app/widget/dependencies_scope.dart';
+import '../../../../../core/utils/src/error_util.dart';
+import '../../../../home/home.dart';
+import '../../../request.dart';
 import 'choosing_service.dart';
 import 'line_calendar_picker.dart';
 import 'description_text.dart';

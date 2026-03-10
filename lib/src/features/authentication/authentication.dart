@@ -1,6 +1,5 @@
 library;
 
-export 'src/model/user.dart';
 export 'src/data/dto/user.dart';
 export 'src/model/email_password.dart';
 export 'src/model/phone_number.dart';

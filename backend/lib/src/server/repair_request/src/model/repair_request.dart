@@ -51,7 +51,7 @@ sealed class RepairRequestEntity {
   final int endTime;
 
   const factory RepairRequestEntity.partial({
-    required final int specializationId,
+    required final int specId,
     required final String description,
     required final Priority priority,
     required final Status status,
@@ -85,15 +85,15 @@ final class PartialRepairRequest extends RepairRequestEntity {
     required super.date,
     required super.startTime,
     required super.endTime,
-    required this.specializationId,
+    required this.specId,
     required this.problems,
   });
 
-  final int specializationId;
+  final int specId;
   final List<PartialProblem> problems;
 
   PartialRepairRequest copyWith({
-    int? specializationId,
+    int? specId,
     String? description,
     Priority? priority,
     Status? status,
@@ -103,7 +103,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
     int? endTime,
     List<PartialProblem>? problems,
   }) => PartialRepairRequest(
-    specializationId: specializationId ?? this.specializationId,
+    specId: specId ?? this.specId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
     status: status ?? this.status,
@@ -117,7 +117,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
   @override
   String toString() =>
       'PartialRepairRequest('
-      'specializationId: $specializationId, '
+      'specId: $specId, '
       'description: $description, '
       'priority: $priority, '
       'studentAbsent: $studentAbsent, '
@@ -130,7 +130,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is PartialRepairRequest &&
-        other.specializationId == specializationId &&
+        other.specId == specId &&
         other.description == description &&
         other.priority == priority &&
         other.studentAbsent == studentAbsent &&
@@ -142,7 +142,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
 
   @override
   int get hashCode => Object.hash(
-    specializationId,
+    specId,
     description,
     priority,
     studentAbsent,

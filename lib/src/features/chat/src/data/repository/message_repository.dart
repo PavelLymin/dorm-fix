@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../../../../core/rest_client/rest_client.dart';
 import '../../../chat.dart';
 

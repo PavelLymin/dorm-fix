@@ -49,15 +49,19 @@ class RepairRequestRouter {
   }
 
   Future<Response> _watchRepairRequests(Request request) async {
-    final uid = RequireUser.getUserId(request);
+    final qp = request.url.queryParameters;
+    final useUid = bool.parse(qp['use_uid'] ?? 'false');
+    final specId = int.tryParse(qp['specId'] ?? '');
+    final dormId = int.tryParse(qp['dormId'] ?? '');
+    final status = qp['status'];
+
+    final uid = useUid ? RequireUser.getUserId(request) : null;
 
     StreamSubscription? subscription;
-    final controller = StreamController.broadcast(
-      onCancel: () => subscription?.cancel(),
-    );
+    final controller = StreamController(onCancel: () => subscription?.cancel());
 
     subscription = _requestFacade
-        .watchStudentRequests(uid: uid)
+        .watchRequests(uid: uid, specId: specId, dormId: dormId, status: status)
         .listen(
           (rows) {
             final payload = {

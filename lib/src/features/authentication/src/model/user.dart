@@ -1,3 +1,12 @@
+import '../../../dormitory/dormitory.dart';
+import '../../../room/room.dart';
+import '../../../profile/profile.dart';
+
+part 'firebase_user.dart';
+part 'profile.dart';
+part 'student.dart';
+part 'master.dart';
+
 enum Role {
   student(name: 'student'),
   master(name: 'master');
@@ -13,141 +22,71 @@ enum Role {
 
   T map<T>({required T Function() student, required T Function() master}) =>
       switch (this) {
-        Role.student => student(),
-        Role.master => master(),
+        .student => student(),
+        .master => master(),
       };
 }
 
-sealed class UserEntity with _UserPatternMatching {
+typedef UserEntityrMatch<R, U extends UserEntity> = R Function(U user);
+
+sealed class UserEntity {
   const UserEntity();
 
-  const factory UserEntity.notAuthenticated() = NotAuthenticatedUser;
-
-  const factory UserEntity.authenticated({
-    required final String uid,
-    required final String? displayName,
-    required final String? photoURL,
-    required final String? email,
-    required final String? phoneNumber,
-    required final Role role,
-  }) = AuthenticatedUser;
-
   bool get isAuthenticated;
-
   bool get isNotAuthenticated;
-
   AuthenticatedUser? get authenticatedOrNull;
+
+  R map<R>({
+    required UserEntityrMatch<R, NotAuthenticatedUser> notAuthenticated,
+    required UserEntityrMatch<R, AuthenticatedUser> authenticated,
+  }) => switch (this) {
+    NotAuthenticatedUser u => notAuthenticated(u),
+    AuthenticatedUser u => authenticated(u),
+  };
 }
 
-class NotAuthenticatedUser implements UserEntity {
+class NotAuthenticatedUser extends UserEntity {
   const NotAuthenticatedUser();
+
+  @override
+  AuthenticatedUser? get authenticatedOrNull => null;
 
   @override
   bool get isAuthenticated => false;
 
   @override
   bool get isNotAuthenticated => true;
-
-  @override
-  AuthenticatedUser? get authenticatedOrNull => null;
-
-  @override
-  T map<T>({
-    required T Function(NotAuthenticatedUser user) notAuthenticatedUser,
-    required T Function(AuthenticatedUser user) authenticatedUser,
-  }) => notAuthenticatedUser(this);
-
-  @override
-  String toString() => 'User is not authenticated';
-
-  @override
-  bool operator ==(final Object other) => other is NotAuthenticatedUser;
-
-  @override
-  int get hashCode => 0;
 }
 
-class AuthenticatedUser implements UserEntity {
-  const AuthenticatedUser({
-    required this.uid,
-    required this.displayName,
-    required this.photoURL,
-    required this.email,
-    required this.phoneNumber,
-    this.role = Role.student,
-  });
+typedef AuthenticatedUserMatch<R, U extends AuthenticatedUser> =
+    R Function(U user);
 
-  final String uid;
-  final String? displayName;
-  final String? photoURL;
-  final String? email;
-  final String? phoneNumber;
-  final Role role;
+sealed class AuthenticatedUser extends UserEntity {
+  const AuthenticatedUser();
 
-  @override
-  bool get isAuthenticated => !isNotAuthenticated;
+  const factory AuthenticatedUser.firebase({
+    required String uid,
+    required String? displayName,
+    required String? photoURL,
+    required String? email,
+    required String? phoneNumber,
+    required Role role,
+  }) = FirebaseUser;
 
-  @override
-  bool get isNotAuthenticated => uid.isEmpty;
+  const factory AuthenticatedUser.fake() = FirebaseUser.fake;
 
-  @override
-  AuthenticatedUser? get authenticatedOrNull =>
-      isNotAuthenticated ? null : this;
+  R mapAuthUser<R>({
+    required AuthenticatedUserMatch<R, FirebaseUser> firebase,
+    required AuthenticatedUserMatch<R, ProfileUser> profile,
+  }) => switch (this) {
+    FirebaseUser u => firebase(u),
+    ProfileUser u => profile(u),
+  };
 
-  AuthenticatedUser copyWith({
-    String? uid,
-    String? displayName,
-    String? photoURL,
-    String? email,
-    String? phoneNumber,
-    Role? role,
-  }) => AuthenticatedUser(
-    uid: uid ?? this.uid,
-    displayName: displayName ?? this.displayName,
-    photoURL: photoURL ?? this.photoURL,
-    email: email ?? this.email,
-    phoneNumber: phoneNumber ?? this.phoneNumber,
-    role: role ?? this.role,
-  );
-
-  @override
-  T map<T>({
-    required T Function(NotAuthenticatedUser user) notAuthenticatedUser,
-    required T Function(AuthenticatedUser user) authenticatedUser,
-  }) => authenticatedUser(this);
-
-  @override
-  String toString() =>
-      'UserEntity('
-      'uid: $uid, '
-      'name: $displayName, '
-      'email: $email, '
-      'phone: $phoneNumber, '
-      'role: $role)';
-
-  @override
-  bool operator ==(final Object other) =>
-      other is AuthenticatedUser && uid == other.uid;
-
-  @override
-  int get hashCode => uid.hashCode;
-}
-
-class FakeAuthenticatedUser extends AuthenticatedUser {
-  const FakeAuthenticatedUser()
-    : super(
-        uid: 'fake_uid',
-        displayName: 'fake_display_name',
-        photoURL: 'fake_photo_url',
-        email: 'fake_email',
-        phoneNumber: 'fake_phone_number',
-        role: .student,
-      );
-}
-
-mixin _UserPatternMatching {
-  T map<T>({
-    required T Function(NotAuthenticatedUser user) notAuthenticatedUser,
-    required T Function(AuthenticatedUser user) authenticatedUser,
-  });
+  String get uid;
+  String? get displayName;
+  String? get photoURL;
+  String? get email;
+  String? get phoneNumber;
+  Role get role;
 }

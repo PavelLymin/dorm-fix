@@ -34,8 +34,8 @@ class Students extends Table {
 class Masters extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
   TextColumn get uid => text().named('uid').references(Users, #uid)();
-  IntColumn get specializationId =>
-      integer().named('specialization_id').references(Specializations, #id)();
+  IntColumn get specId =>
+      integer().named('spec_id').references(Specializations, #id)();
   IntColumn get dormitoryId =>
       integer().named('dormitory_id').references(Dormitories, #id)();
   RealColumn get rating => real().named('rating').withDefault(Constant(0.0))();
@@ -69,8 +69,8 @@ class Rooms extends Table {
 class Requests extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
   TextColumn get uid => text().named('uid').references(Users, #uid)();
-  IntColumn get specializationId =>
-      integer().named('specialization_id').references(Specializations, #id)();
+  IntColumn get specId =>
+      integer().named('spec_id').references(Specializations, #id)();
   TextColumn get description => text().named('description')();
   TextColumn get priority => text().named('priority')();
   TextColumn get status => text().named('status')();

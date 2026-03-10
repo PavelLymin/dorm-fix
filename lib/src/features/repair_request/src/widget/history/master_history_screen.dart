@@ -1,6 +1,5 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../request.dart';
 import 'search_appbar.dart';
 
@@ -12,22 +11,23 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  late final Stream<List<FullRepairRequest>> requests;
+
   @override
   void initState() {
     super.initState();
-    context.read<RepairRequestBloc>().add(.get());
+    final requestRepository = DependeciesScope.of(context).requestRepository;
+    requests = requestRepository.getRequests();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: UiButton.filledPrimary(
-        onPressed: () => context.router.push(const NamedRoute('RequestScreen')),
-        icon: const Icon(Icons.add_outlined),
-        label: UiText.titleMedium('Создать заявку'),
-      ),
       body: CustomScrollView(
-        slivers: const [SearchAppBar(), RepairRequestList()],
+        slivers: [
+          const SearchAppBar(),
+          RepairRequestList(requests: requests),
+        ],
       ),
     );
   }

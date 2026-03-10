@@ -6,7 +6,7 @@ import '../../../specialization.dart';
 abstract interface class ISpecializationRepository {
   Future<List<SpecializationEntity>> getSpecializations();
 
-  Stream<SpecializationEntity> watchSpecialization({required int requestId});
+  Stream<SpecializationEntity> watchSpec({required int requestId});
 }
 
 class SpecializationRepositoryImpl implements ISpecializationRepository {
@@ -29,13 +29,11 @@ class SpecializationRepositoryImpl implements ISpecializationRepository {
   }
 
   @override
-  Stream<SpecializationEntity> watchSpecialization({required int requestId}) =>
+  Stream<SpecializationEntity> watchSpec({required int requestId}) =>
       (_database.select(_database.specializations).join([
         innerJoin(
           _database.requests,
-          _database.specializations.id.equalsExp(
-            _database.requests.specializationId,
-          ),
+          _database.specializations.id.equalsExp(_database.requests.specId),
         ),
       ])..where(_database.requests.id.equals(requestId))).watchSingle().map(
         (row) => SpecializationDto.fromData(

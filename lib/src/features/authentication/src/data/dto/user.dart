@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../../authentication.dart';
+import '../../../../profile/profile.dart';
 
-class UserDto {
-  const UserDto({
+class FirebaseUserDto {
+  const FirebaseUserDto({
     required this.uid,
     required this.displayName,
     required this.photoURL,
@@ -18,7 +18,7 @@ class UserDto {
   final String? phoneNumber;
   final Role role;
 
-  factory UserDto.fromFirebase(User user) => UserDto(
+  factory FirebaseUserDto.fromFirebase(User user) => FirebaseUserDto(
     uid: user.uid,
     displayName: user.displayName,
     photoURL: user.photoURL,
@@ -27,7 +27,7 @@ class UserDto {
     role: .student,
   );
 
-  AuthenticatedUser toEntity() => AuthenticatedUser(
+  FirebaseUser toEntity() => FirebaseUser(
     uid: uid,
     displayName: displayName,
     photoURL: photoURL,
@@ -36,7 +36,7 @@ class UserDto {
     role: role,
   );
 
-  factory UserDto.fromEntity(AuthenticatedUser user) => UserDto(
+  factory FirebaseUserDto.fromEntity(FirebaseUser user) => FirebaseUserDto(
     uid: user.uid,
     displayName: user.displayName,
     photoURL: user.photoURL,
@@ -56,7 +56,7 @@ class UserDto {
     };
   }
 
-  factory UserDto.fromJson(Map<String, Object?> json) {
+  factory FirebaseUserDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
       'uid': final String uid,
       'display_name': final String? displayName,
@@ -65,7 +65,7 @@ class UserDto {
       'phone_number': final String? phoneNumber,
       'role': final String? role,
     }) {
-      return UserDto(
+      return FirebaseUserDto(
         uid: uid,
         displayName: displayName,
         photoURL: photoURL,

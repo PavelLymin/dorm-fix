@@ -1,6 +1,7 @@
-import '../../../../authentication/src/data/dto/user.dart';
+import 'package:dorm_fix/src/features/profile/profile.dart';
+
+import 'user.dart';
 import '../../../../dormitory/src/data/dto/dormitory.dart';
-import '../../model/profile.dart';
 
 class MasterDto {
   const MasterDto({
@@ -10,16 +11,16 @@ class MasterDto {
   });
 
   final int id;
-  final UserDto user;
+  final FirebaseUserDto user;
   final DormitoryDto dormitory;
 
-  MasterEntity toEntity() => MasterEntity(
+  MasterUser toEntity() => MasterUser(
     id: id,
     user: user.toEntity(),
     dormitory: dormitory.toEntity(),
   );
 
-  factory MasterDto.fromEntity(MasterEntity entity) => MasterDto(
+  factory MasterDto.fromEntity(MasterUser entity) => MasterDto(
     id: entity.id,
     user: .fromEntity(entity.user),
     dormitory: .fromEntity(entity.dormitory),
