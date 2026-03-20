@@ -3,8 +3,7 @@ part of 'request_form_bloc.dart';
 typedef FormStateMatch<R, S extends RequestFormState> = R Function(S state);
 
 sealed class RequestFormState {
-  const RequestFormState({required RequestFormModel formModel})
-    : _formModel = formModel;
+  const RequestFormState({required this._formModel});
 
   final RequestFormModel _formModel;
 

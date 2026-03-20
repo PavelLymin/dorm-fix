@@ -7,8 +7,7 @@ abstract interface class IAssignmentsRepository {
 }
 
 class AssignmentsRepositoryImpl implements IAssignmentsRepository {
-  AssignmentsRepositoryImpl({required Database database})
-    : _database = database;
+  AssignmentsRepositoryImpl({required this._database});
 
   final Database _database;
 

@@ -10,10 +10,9 @@ abstract interface class IMessageRealTimeRepository {
 
 class MessageRealTimeRepositoryImpl implements IMessageRealTimeRepository {
   MessageRealTimeRepositoryImpl({
-    required IChatRealTimeRepository chatRealTimeRepository,
-    required IMessageRepository messageRepository,
-  }) : _chatRealTimeRepository = chatRealTimeRepository,
-       _messageRepository = messageRepository;
+    required this._chatRealTimeRepository,
+    required this._messageRepository,
+  });
 
   final IChatRealTimeRepository _chatRealTimeRepository;
   final IMessageRepository _messageRepository;

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import '../../../../../features/chat/chat.dart';
 
 part 'message.dart';

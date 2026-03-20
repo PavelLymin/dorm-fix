@@ -10,12 +10,11 @@ import '../../repair_request.dart';
 
 class RepairRequestRouter {
   const RepairRequestRouter({
-    required RestApi restApi,
+    required this._restApi,
     required IRequestRepository requestRepository,
-    required IRepairRequestFacade requestFacade,
+    required this._requestFacade,
     required WebSocketBase wsConnection,
-  }) : _restApi = restApi,
-       _requestFacade = requestFacade;
+  });
 
   final RestApi _restApi;
   final IRepairRequestFacade _requestFacade;

@@ -6,7 +6,7 @@ import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
-import '../../features/home/home.dart';
+import '../../features/students/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
 import '../../features/room/room.dart';

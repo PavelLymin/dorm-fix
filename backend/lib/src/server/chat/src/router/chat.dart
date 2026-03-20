@@ -7,11 +7,7 @@ import '../../../../core/rest_api/src/rest_api.dart';
 import '../../chat.dart';
 
 class CharRouter {
-  const CharRouter({
-    required RestApi restApi,
-    required IChatRepository chatRepository,
-  }) : _restApi = restApi,
-       _chatRepository = chatRepository;
+  const CharRouter({required this._restApi, required this._chatRepository});
 
   final RestApi _restApi;
   final IChatRepository _chatRepository;

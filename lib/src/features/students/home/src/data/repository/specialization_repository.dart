@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../../../../core/rest_client/rest_client.dart';
+import '../../../../../../core/rest_client/rest_client.dart';
 import '../../../home.dart';
 
 abstract interface class ISpecializationRepository {
@@ -8,10 +8,9 @@ abstract interface class ISpecializationRepository {
 
 class SpecializationRepositoryImpl implements ISpecializationRepository {
   SpecializationRepositoryImpl({
-    required RestClientHttp client,
-    required FirebaseAuth firebaseAuth,
-  }) : _client = client,
-       _firebaseAuth = firebaseAuth;
+    required this._client,
+    required this._firebaseAuth,
+  });
 
   final RestClientHttp _client;
   final FirebaseAuth _firebaseAuth;

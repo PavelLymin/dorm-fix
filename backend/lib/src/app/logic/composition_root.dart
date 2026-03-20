@@ -92,8 +92,8 @@ class CompositionRoot {
       requestRepository: requestRepository,
       problemRepository: problemRepository,
       chatRepository: chatRepository,
-      specializationRepository: specializationRepository,
       assignmentsRepository: assignmentsRepository,
+      specRepository: specializationRepository,
     );
 
     // <--- RealTime Repositories --->
@@ -110,8 +110,8 @@ class CompositionRoot {
     final wsRouter = WsRouter(
       logger: logger,
       ws: ws,
-      chatRealTimeRepository: chatRealTimeRepository,
-      messageRealTimeRepository: messageRealTimeRepository,
+      chatRepository: chatRealTimeRepository,
+      messageRepository: messageRealTimeRepository,
     );
     // Profile
     final profileRouter = ProfileRouter(

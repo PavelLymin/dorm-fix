@@ -12,7 +12,7 @@ abstract interface class IChatRepository {
 }
 
 class ChatRepositoryImpl implements IChatRepository {
-  const ChatRepositoryImpl({required Database database}) : _database = database;
+  const ChatRepositoryImpl({required this._database});
 
   final Database _database;
 

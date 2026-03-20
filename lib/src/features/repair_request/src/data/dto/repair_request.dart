@@ -1,7 +1,7 @@
 import 'package:dorm_fix/src/features/chat/chat.dart';
 import 'package:dorm_fix/src/features/profile/profile.dart';
 
-import '../../../../home/home.dart';
+import '../../../../students/home/home.dart';
 import '../../model/repair_request.dart';
 import 'problem.dart';
 

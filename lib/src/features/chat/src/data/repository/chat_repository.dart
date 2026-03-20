@@ -12,10 +12,9 @@ abstract interface class IChatRepository {
 
 class ChatRepositoryImpl implements IChatRepository {
   const ChatRepositoryImpl({
-    required RestClientHttp client,
-    required FirebaseAuth firebaseAuth,
-  }) : _client = client,
-       _firebaseAuth = firebaseAuth;
+    required this._client,
+    required this._firebaseAuth,
+  });
 
   final RestClientHttp _client;
   final FirebaseAuth _firebaseAuth;

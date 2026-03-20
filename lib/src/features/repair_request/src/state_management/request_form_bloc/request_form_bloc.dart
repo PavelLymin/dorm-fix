@@ -11,10 +11,9 @@ part 'form_event.dart';
 class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
   RequestFormBloc({
     required IRequestRepository requestRepository,
-    required IImageRepository imageRepository,
+    required this._imageRepository,
     required Logger logger,
-  }) : _imageRepository = imageRepository,
-       super(.initial(formModel: RequestFormModel())) {
+  }) : super(.initial(formModel: RequestFormModel())) {
     on<RequestFormEvent>((event, emit) async {
       await event.map(
         updateRequestForm: (e) => _updateRequestForm(emit, e),

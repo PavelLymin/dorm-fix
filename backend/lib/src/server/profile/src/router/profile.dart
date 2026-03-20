@@ -6,12 +6,10 @@ import '../../profile.dart';
 
 class ProfileRouter {
   ProfileRouter({
-    required RestApi restApi,
-    required IStudentRepository studentRepository,
-    required IMasterRepository masterRepository,
-  }) : _restApi = restApi,
-       _studentRepository = studentRepository,
-       _masterRepository = masterRepository;
+    required this._restApi,
+    required this._studentRepository,
+    required this._masterRepository,
+  });
 
   final RestApi _restApi;
   final IStudentRepository _studentRepository;
@@ -28,7 +26,7 @@ class ProfileRouter {
   Future<Response> _getProfile(Request request) async {
     final uid = RequireUser.getUserId(request);
     // final role = RequireUser.getUserRole(request);
-    final response = switch (Role.fromString('student')) {
+    final response = switch (Role.fromString('master')) {
       .student => await _getStudent(uid),
       .master => await _getMaster(uid),
     };

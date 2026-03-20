@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:ui_kit/ui.dart';
 
 class GroupedListPreview extends StatelessWidget {
@@ -42,7 +40,7 @@ class GroupedListPreview extends StatelessWidget {
                 'Option 3': .option3,
               },
               initial: .option1,
-              onChange: (value) => log(value.name),
+              onChange: (value) {},
             ),
           ),
         ],

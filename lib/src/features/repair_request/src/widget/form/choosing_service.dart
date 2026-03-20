@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../home/home.dart';
+import '../../../../students/home/home.dart';
 import '../../../request.dart';
 
 class ChoosingService extends StatelessWidget {
@@ -15,7 +15,7 @@ class ChoosingService extends StatelessWidget {
           orElse: () => const SizedBox.shrink(),
           loading: (state) => Shimmer(
             child: _SpecializationOptions(
-              specialization: const [FakeSpecializationEntity()],
+              specialization: const [.fake()],
               selectedIndex: selectedIndex,
             ),
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
-import '../../../../../core/rest_client/rest_client.dart';
+import '../../../../../../core/rest_client/rest_client.dart';
 import '../../../home.dart';
 
 part 'specialization_event.dart';
@@ -9,11 +9,9 @@ part 'specialization_state.dart';
 class SpecializationBloc
     extends Bloc<SpecializationEvent, SpecializationState> {
   SpecializationBloc({
-    required ISpecializationRepository specializationRepository,
-    required Logger logger,
-  }) : _specializationRepository = specializationRepository,
-       _logger = logger,
-       super(SpecializationState.loading(specializations: [])) {
+    required this._specializationRepository,
+    required this._logger,
+  }) : super(SpecializationState.loading(specializations: [])) {
     on<SpecializationEvent>((event, emit) async {
       await event.map(getSpecializations: (e) => _getSpecializations(e, emit));
     });

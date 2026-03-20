@@ -8,9 +8,7 @@ part 'remote_typing_state.dart';
 
 class RemoteTypingBloc extends Bloc<RemoteTypingEvent, RemoteTypingState>
     with _SetStateMixin {
-  RemoteTypingBloc({required IWebSocket webSocket})
-    : _webSocket = webSocket,
-      super(const .stopTyping()) {
+  RemoteTypingBloc({required this._webSocket}) : super(const .stopTyping()) {
     _subscription = _webSocket.stream.listen((message) {
       if (message.type == .typing) {
         final typingPayload = message.payload as TypingPayload;

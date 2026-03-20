@@ -62,18 +62,16 @@ class _SignInScreenState extends State<SignInScreen> {
           if (!state.isSmsCodeSent) _addSmsCodeSent(false);
           state.mapOrNull(
             loading: (_) => _addLoading(true),
-            authenticated: (user) {
-              user.authUser.mapAuthUser(
-                firebase: (_) =>
-                    context.router.replace(const NamedRoute('Map')),
-                profile: (user) => user.mapRoleUser(
-                  student: (_) =>
-                      context.router.replace(const NamedRoute('Home')),
-                  master: (_) =>
-                      context.router.replace(const NamedRoute('Home')),
+            authenticated: (state) => state.authUser.mapAuthUser(
+              firebase: (_) => context.router.replace(const NamedRoute('Map')),
+              profile: (user) => user.mapRoleUser(
+                student: (_) => context.router.replace(
+                  const NamedRoute('StudentRootSreen'),
                 ),
-              );
-            },
+                master: (m) =>
+                    context.router.replace(const NamedRoute('MasterRootSreen')),
+              ),
+            ),
             smsCodeSent: (_) => _addSmsCodeSent(true),
             error: (state) => ErrorUtil.showSnackBar(context, state.message),
           );

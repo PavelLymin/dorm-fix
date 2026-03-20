@@ -9,7 +9,7 @@ abstract interface class IImageRepository {
 }
 
 class ImageRepositoryImpl implements IImageRepository {
-  ImageRepositoryImpl({required ImagePicker picker}) : _picker = picker;
+  ImageRepositoryImpl({required this._picker});
   final ImagePicker _picker;
 
   final List<String> _imageList = <String>[];

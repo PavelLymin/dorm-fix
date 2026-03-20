@@ -8,7 +8,6 @@ final class ErrorPayload extends Payload {
   Map<String, Object?> toJson() => {'message': message};
 
   factory ErrorPayload.fromJson(Map<String, Object?> json) {
-    log(json.toString());
     if (json case <String, Object?>{'message': String message}) {
       return ErrorPayload(message: message);
     }

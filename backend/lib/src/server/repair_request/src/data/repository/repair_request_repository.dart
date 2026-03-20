@@ -19,8 +19,7 @@ abstract interface class IRequestRepository {
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
-  const RequestRepositoryImpl({required Database database})
-    : _database = database;
+  const RequestRepositoryImpl({required this._database});
 
   final Database _database;
 

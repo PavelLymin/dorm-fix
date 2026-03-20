@@ -12,11 +12,9 @@ part 'dormitory_search_event.dart';
 class DormitorySearchBloc
     extends Bloc<DormitorySearchEvent, DormitorySearchState> {
   DormitorySearchBloc({
-    required IDormitoryRepository dormitoryRepository,
-    required Logger logger,
-  }) : _dormitoryRepository = dormitoryRepository,
-       _logger = logger,
-       super(const DormitorySearchState.noTerm(dormitories: [])) {
+    required this._dormitoryRepository,
+    required this._logger,
+  }) : super(const DormitorySearchState.noTerm(dormitories: [])) {
     onTextChanged = BehaviorSubject<String>();
 
     _subscription = onTextChanged.stream

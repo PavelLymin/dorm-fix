@@ -12,12 +12,10 @@ part 'repair_request_state.dart';
 class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
     with _SetStateMixin {
   RepairRequestBloc({
-    required IRequestRepository requestRepository,
+    required this._requestRepository,
     required IWebSocket webSocket,
-    required Logger logger,
-  }) : _requestRepository = requestRepository,
-       _logger = logger,
-       super(const .loading(requests: [])) {
+    required this._logger,
+  }) : super(const .loading(requests: [])) {
     on<RepairRequestEvent>((event, emit) async {
       await event.map(
         get: (_) => _getRequest(emit),

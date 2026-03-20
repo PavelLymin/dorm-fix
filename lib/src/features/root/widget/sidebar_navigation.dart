@@ -1,8 +1,13 @@
 part of 'root_screen.dart';
 
 class SidebarNavigation extends StatelessWidget {
-  const SidebarNavigation({super.key, required this.child});
+  const SidebarNavigation({
+    super.key,
+    required this.pages,
+    required this.child,
+  });
 
+  final List<AppPage> pages;
   final Widget child;
 
   @override
@@ -17,8 +22,8 @@ class SidebarNavigation extends StatelessWidget {
             child: Padding(
               padding: context.appStyle.appPadding.onlyIncrement(top: 16),
               child: ListView(
-                children: List.generate(AppPage.pages.length, (index) {
-                  final page = AppPage.pages[index];
+                children: List.generate(pages.length, (index) {
+                  final page = pages[index];
                   return _TabItem(
                     index: index,
                     title: page.title,
@@ -37,7 +42,9 @@ class SidebarNavigation extends StatelessWidget {
 }
 
 class MenuNavigation extends StatelessWidget {
-  const MenuNavigation({super.key});
+  const MenuNavigation({super.key, required this.pages});
+
+  final List<AppPage> pages;
 
   @override
   Widget build(BuildContext context) => ColoredBox(
@@ -45,8 +52,8 @@ class MenuNavigation extends StatelessWidget {
     child: Padding(
       padding: context.appStyle.appPadding.onlyIncrement(top: 16),
       child: ListView(
-        children: List.generate(AppPage.pages.length, (index) {
-          final page = AppPage.pages[index];
+        children: List.generate(pages.length, (index) {
+          final page = pages[index];
           return _TabItem(
             index: index,
             title: page.title,

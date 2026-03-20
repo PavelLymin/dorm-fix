@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../authentication/authentication.dart';
-import '../../../profile/profile.dart';
+import '../../../../authentication/authentication.dart';
+import '../../../../profile/profile.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});

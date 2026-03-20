@@ -21,18 +21,13 @@ abstract interface class IRepairRequestFacade {
 
 class RepairRequestFacadeImpl implements IRepairRequestFacade {
   RepairRequestFacadeImpl({
-    required Database database,
-    required IRequestRepository requestRepository,
-    required IProblemRepository problemRepository,
-    required ISpecializationRepository specializationRepository,
-    required IChatRepository chatRepository,
-    required IAssignmentsRepository assignmentsRepository,
-  }) : _database = database,
-       _requestRepository = requestRepository,
-       _problemRepository = problemRepository,
-       _specRepository = specializationRepository,
-       _chatRepository = chatRepository,
-       _assignmentsRepository = assignmentsRepository;
+    required this._database,
+    required this._requestRepository,
+    required this._problemRepository,
+    required this._specRepository,
+    required this._assignmentsRepository,
+    required this._chatRepository,
+  });
 
   final Database _database;
   final IRequestRepository _requestRepository;

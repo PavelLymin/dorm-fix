@@ -7,7 +7,7 @@ abstract interface class IMasterRepository {
 }
 
 class MasterRepository implements IMasterRepository {
-  MasterRepository({required Database database}) : _database = database;
+  MasterRepository({required this._database});
 
   final Database _database;
 

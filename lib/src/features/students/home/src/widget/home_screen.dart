@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../app/widget/dependencies_scope.dart';
+import '../../../../../app/widget/dependencies_scope.dart';
 import '../../home.dart';
 import 'advices.dart';
 import 'app_bar.dart';
@@ -8,14 +8,14 @@ import 'carousel.dart';
 import 'home_card.dart';
 import 'searcher.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class StudentHomeScreen extends StatefulWidget {
+  const StudentHomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<StudentHomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<StudentHomeScreen> {
   late final SpecializationBloc _specializationBloc;
 
   @override

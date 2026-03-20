@@ -7,8 +7,7 @@ abstract interface class ITypingRealTimeRepository {
 }
 
 class TypingRealTimeRepositoryImpl implements ITypingRealTimeRepository {
-  const TypingRealTimeRepositoryImpl({required IWebSocket webSocket})
-    : _webSocket = webSocket;
+  const TypingRealTimeRepositoryImpl({required this._webSocket});
 
   final IWebSocket _webSocket;
 

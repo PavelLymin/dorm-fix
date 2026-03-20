@@ -4,11 +4,7 @@ import '../../../../core/rest_api/src/rest_api.dart';
 import '../../dormitory.dart';
 
 class DormitoryRouter {
-  DormitoryRouter({
-    required RestApi restApi,
-    required IDormitoryRepository dormitoryRepository,
-  }) : _restApi = restApi,
-       _dormitoryRepository = dormitoryRepository;
+  DormitoryRouter({required this._restApi, required this._dormitoryRepository});
 
   final RestApi _restApi;
   final IDormitoryRepository _dormitoryRepository;

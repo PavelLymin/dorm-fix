@@ -5,10 +5,9 @@ import '../../specialization.dart';
 
 class SpecializationRouter {
   SpecializationRouter({
-    required RestApi restApi,
-    required ISpecializationRepository specializationRepository,
-  }) : _restApi = restApi,
-       _specializationRepository = specializationRepository;
+    required this._restApi,
+    required this._specializationRepository,
+  });
 
   final RestApi _restApi;
   final ISpecializationRepository _specializationRepository;

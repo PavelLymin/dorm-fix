@@ -10,8 +10,7 @@ abstract interface class IProblemRepository {
 }
 
 class ProblemRepositoryImpl implements IProblemRepository {
-  const ProblemRepositoryImpl({required Database database})
-    : _database = database;
+  const ProblemRepositoryImpl({required this._database});
 
   final Database _database;
 

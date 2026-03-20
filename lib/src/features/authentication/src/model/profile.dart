@@ -13,6 +13,7 @@ sealed class ProfileUser extends AuthenticatedUser {
   const factory ProfileUser.master({
     required int id,
     required FirebaseUser user,
+    required SpecializationEntity specialization,
     required DormitoryEntity dormitory,
   }) = MasterUser;
 

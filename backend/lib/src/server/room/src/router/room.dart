@@ -5,11 +5,7 @@ import '../../../../core/rest_api/src/rest_api.dart';
 import '../../room.dart';
 
 class RoomRouter {
-  RoomRouter({
-    required IRoomRepository roomRepository,
-    required RestApi restApi,
-  }) : _restApi = restApi,
-       _roomRepository = roomRepository;
+  RoomRouter({required this._roomRepository, required this._restApi});
   final RestApi _restApi;
   final IRoomRepository _roomRepository;
 

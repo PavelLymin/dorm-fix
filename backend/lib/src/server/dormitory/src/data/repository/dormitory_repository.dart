@@ -8,8 +8,7 @@ abstract interface class IDormitoryRepository {
 }
 
 class DormitoryRepository implements IDormitoryRepository {
-  const DormitoryRepository({required Database database})
-    : _database = database;
+  const DormitoryRepository({required this._database});
 
   final Database _database;
 

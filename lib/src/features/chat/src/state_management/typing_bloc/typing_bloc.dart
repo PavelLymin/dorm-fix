@@ -8,9 +8,7 @@ part 'typing_event.dart';
 part 'typing_state.dart';
 
 class TypingBloc extends Bloc<TypingEvent, TypingState> {
-  TypingBloc({required ITypingRealTimeRepository typingRepository})
-    : _typingRepository = typingRepository,
-      super(const TypingState()) {
+  TypingBloc({required this._typingRepository}) : super(const TypingState()) {
     on<TypingEvent>(
       (event, emit) async =>
           await event.map(typingTextChanged: (e) => _onTextChanged(e, emit)),

@@ -8,10 +8,9 @@ abstract interface class IMessageRepository {
 
 class MessageRepositoryImpl implements IMessageRepository {
   const MessageRepositoryImpl({
-    required RestClientHttp client,
-    required FirebaseAuth firebaseAuth,
-  }) : _client = client,
-       _firebaseAuth = firebaseAuth;
+    required this._client,
+    required this._firebaseAuth,
+  });
 
   final RestClientHttp _client;
   final FirebaseAuth _firebaseAuth;

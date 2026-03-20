@@ -11,6 +11,14 @@ class SpecializationEntity {
   final String description;
   final String photoUrl;
 
+  const SpecializationEntity.fake()
+    : this(
+        id: -1,
+        title: 'title',
+        description: 'description',
+        photoUrl: 'photoUrl',
+      );
+
   SpecializationEntity copyWith({
     int? id,
     String? title,
@@ -37,14 +45,4 @@ class SpecializationEntity {
 
   @override
   int get hashCode => id.hashCode;
-}
-
-class FakeSpecializationEntity extends SpecializationEntity {
-  const FakeSpecializationEntity()
-    : super(
-        id: 0,
-        title: 'title',
-        description: 'description',
-        photoUrl: 'photoUrl',
-      );
 }

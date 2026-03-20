@@ -9,13 +9,10 @@ part 'phone_number_state.dart';
 
 class PhoneNumberBloc extends Bloc<PhoneNumberEvent, PhoneNumberState> {
   PhoneNumberBloc({
-    required IFirebaseUserRepository firebaseUserRepository,
-    required IUserRepository userRepository,
-    required Logger logger,
-  }) : _logger = logger,
-       _userRepository = userRepository,
-       _firebaseUserRepository = firebaseUserRepository,
-       super(PhoneNumberState.initial()) {
+    required this._firebaseUserRepository,
+    required this._userRepository,
+    required this._logger,
+  }) : super(PhoneNumberState.initial()) {
     on<PhoneNumberEvent>((event, emit) async {
       await event.map(
         verifyPhone: (event) => _verifyPhone(event, emit),

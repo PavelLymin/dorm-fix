@@ -7,12 +7,8 @@ part 'pins_event.dart';
 part 'pins_state.dart';
 
 class PinsBloc extends Bloc<PinsEvent, PinsState> {
-  PinsBloc({
-    required IDormitoryRepository dormitoryRepository,
-    required Logger logger,
-  }) : _dormitoryRepository = dormitoryRepository,
-       _logger = logger,
-       super(PinsState.loading(dormitories: [])) {
+  PinsBloc({required this._dormitoryRepository, required this._logger})
+    : super(PinsState.loading(dormitories: [])) {
     on<PinsEvent>(
       (event, emit) async =>
           await event.map(get: (e) => _getDormitories(e, emit)),

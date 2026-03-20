@@ -10,8 +10,7 @@ abstract interface class ISpecializationRepository {
 }
 
 class SpecializationRepositoryImpl implements ISpecializationRepository {
-  const SpecializationRepositoryImpl({required Database database})
-    : _database = database;
+  const SpecializationRepositoryImpl({required this._database});
 
   final Database _database;
 

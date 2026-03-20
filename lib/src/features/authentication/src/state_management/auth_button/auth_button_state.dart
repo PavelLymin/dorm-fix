@@ -2,18 +2,13 @@ part of 'auth_button_bloc.dart';
 
 class AuthButtonState {
   const AuthButtonState({
-    bool isLoading = false,
-    bool isEmail = false,
-    bool isPassword = false,
-    bool isPhoneNumber = false,
-    bool isPin = false,
-    bool isCodeSent = false,
-  }) : _isLoading = isLoading,
-       _isEmail = isEmail,
-       _isPassword = isPassword,
-       _isPhoneNumber = isPhoneNumber,
-       _isPin = isPin,
-       _isCodeSent = isCodeSent;
+    this._isLoading = false,
+    this._isEmail = false,
+    this._isPassword = false,
+    this._isPhoneNumber = false,
+    this._isPin = false,
+    this._isCodeSent = false,
+  });
 
   final bool _isLoading;
   final bool _isEmail;

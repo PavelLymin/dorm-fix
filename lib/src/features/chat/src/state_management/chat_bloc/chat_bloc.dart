@@ -12,15 +12,11 @@ part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> with _SetStateMixin {
   ChatBloc({
-    required IWebSocket webSocket,
-    required Logger logger,
-    required IMessageRepository messageRepository,
-    required IMessageRealtimeRepository messageRealTimeRepository,
-  }) : _webSocket = webSocket,
-       _logger = logger,
-       _messageRepository = messageRepository,
-       _messageRealTimeRepository = messageRealTimeRepository,
-       super(const .loading(messages: [])) {
+    required this._webSocket,
+    required this._logger,
+    required this._messageRepository,
+    required this._messageRealTimeRepository,
+  }) : super(const .loading(messages: [])) {
     _streamSubscription = _webSocket.stream.listen((message) {
       final payload = message.payload;
       if (payload is! MessagePayload) return;

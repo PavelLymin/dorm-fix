@@ -3,17 +3,19 @@ import 'package:dorm_fix/src/features/root/widget/root_screen.dart';
 import 'package:ui_kit/ui.dart';
 
 class BottomNavigation extends StatelessWidget {
-  const BottomNavigation({super.key});
+  const BottomNavigation({super.key, required this.pages});
+
+  final List<AppPage> pages;
 
   @override
   Widget build(BuildContext context) => SafeArea(
     child: SizedBox(
-      height: 80,
+      height: 80.0,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: List.generate(3, (index) {
-          final page = AppPage.pages[index];
+        mainAxisAlignment: .spaceEvenly,
+        crossAxisAlignment: .center,
+        children: List.generate(pages.length, (index) {
+          final page = pages[index];
           return TabItem(
             index: index,
             title: page.title,
@@ -58,12 +60,10 @@ class _TabItemState extends State<TabItem> {
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
     return GestureDetector(
-      onTap: () {
-        AutoTabsRouter.of(context).setActiveIndex(widget.index);
-      },
+      onTap: () => AutoTabsRouter.of(context).setActiveIndex(widget.index),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .center,
         children: [
           Icon(
             _isActive ? widget.activeIcon : widget.icon,

@@ -1,18 +1,24 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:ui_kit/ui.dart';
 import '../../features/authentication/authentication.dart';
-import '../../features/home/home.dart';
+import '../../features/authentication/src/widget/splash_screen.dart';
+import '../../features/master/home/home.dart';
+import '../../features/students/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
 import '../../features/root/widget/root_screen.dart';
+import '../../features/students/repair_requests/repair_requests.dart';
 import '../../features/yandex_mapkit/yandex_mapkit.dart';
 
 class AppRouter extends RootStackRouter {
-  AppRouter({required this._authenticationBloc});
-
-  final AuthBloc _authenticationBloc;
+  AppRouter();
 
   @override
   List<AutoRoute> get routes => [
+    NamedRouteDef(
+      name: 'SplashScreen',
+      builder: (_, _) => const SplashScreen(),
+    ),
     NamedRouteDef(
       name: 'SignIn',
       builder: (context, data) => const SignInScreen(),
@@ -33,26 +39,43 @@ class AppRouter extends RootStackRouter {
       ),
     ),
     NamedRouteDef(
-      name: 'RequestScreen',
-      builder: (context, data) => const RequestScreen(),
+      name: 'FormRequestScreen',
+      builder: (context, data) => const FormRequestScreen(),
     ),
     NamedRouteDef(
       name: 'HistoryScreen',
       builder: (context, data) => const HistoryScreen(),
     ),
     NamedRouteDef(
-      initial: true,
-      name: 'Root',
-      guards: [AuthGuard(authenticationBloc: _authenticationBloc)],
-      builder: (_, _) => const RootScreen(),
+      name: 'StudentRootSreen',
+      builder: (_, _) => const RootScreen(pages: studentPages),
       children: [
-        NamedRouteDef(name: 'Home', builder: (_, _) => const HomeScreen()),
         NamedRouteDef(
-          name: 'Request',
-          builder: (_, _) => const RequestScreen(),
+          name: 'StudentHomeScreen',
+          builder: (_, _) => const StudentHomeScreen(),
         ),
         NamedRouteDef(
-          name: 'Profile',
+          name: 'FormRequestScreen',
+          builder: (_, _) => const FormRequestScreen(),
+        ),
+        NamedRouteDef(
+          name: 'ProfileScreen',
+          builder: (_, _) => const ProfileScreen(),
+        ),
+      ],
+    ),
+    NamedRouteDef(
+      initial: true,
+
+      name: 'MasterRootSreen',
+      builder: (_, data) => const RootScreen(pages: masterPages),
+      children: [
+        NamedRouteDef(
+          name: 'MasterHomeScreen',
+          builder: (_, _) => const MasterHomeScreen(),
+        ),
+        NamedRouteDef(
+          name: 'ProfileScreen',
           builder: (_, _) => const ProfileScreen(),
         ),
       ],
@@ -60,18 +83,38 @@ class AppRouter extends RootStackRouter {
   ];
 }
 
-class AuthGuard extends AutoRouteGuard {
-  const AuthGuard({required this._authenticationBloc});
+const List<AppPage> studentPages = <AppPage>[
+  AppPage(
+    name: 'StudentHomeScreen',
+    title: 'Домашняя',
+    icon: Icons.home_outlined,
+    activeIcon: Icons.home,
+  ),
+  AppPage(
+    name: 'FormRequestScreen',
+    title: 'Заявка',
+    icon: Icons.request_page_outlined,
+    activeIcon: Icons.request_page,
+  ),
+  AppPage(
+    name: 'ProfileScreen',
+    title: 'Профиль',
+    icon: Icons.person_outline,
+    activeIcon: Icons.person,
+  ),
+];
 
-  final AuthBloc _authenticationBloc;
-
-  @override
-  void onNavigation(NavigationResolver resolver, StackRouter router) {
-    final isAuthenticated = _authenticationBloc.state.isAuthenticated;
-    if (isAuthenticated) {
-      resolver.next(true);
-    } else {
-      router.navigate(NamedRoute('SignIn'));
-    }
-  }
-}
+const List<AppPage> masterPages = <AppPage>[
+  AppPage(
+    name: 'MasterHomeScreen',
+    title: 'Домашняя',
+    icon: Icons.home_outlined,
+    activeIcon: Icons.home,
+  ),
+  AppPage(
+    name: 'ProfileScreen',
+    title: 'Профиль',
+    icon: Icons.person_outline,
+    activeIcon: Icons.person,
+  ),
+];

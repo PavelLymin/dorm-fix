@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../../../core/utils/src/error_util.dart';
-import '../../../../home/home.dart';
+import '../../../../students/home/home.dart';
 import '../../../request.dart';
 import 'choosing_service.dart';
 import 'line_calendar_picker.dart';
@@ -11,14 +11,14 @@ import 'description_text.dart';
 import 'photo_picker.dart';
 import 'time_picker.dart';
 
-class RequestScreen extends StatefulWidget {
-  const RequestScreen({super.key});
+class FormRequestScreen extends StatefulWidget {
+  const FormRequestScreen({super.key});
 
   @override
-  State<RequestScreen> createState() => _RequestScreenState();
+  State<FormRequestScreen> createState() => _FormRequestScreenState();
 }
 
-class _RequestScreenState extends State<RequestScreen>
+class _FormRequestScreenState extends State<FormRequestScreen>
     with _RequestScreenStateMixin {
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -84,7 +84,7 @@ class _RequestScreenState extends State<RequestScreen>
   );
 }
 
-mixin _RequestScreenStateMixin on State<RequestScreen> {
+mixin _RequestScreenStateMixin on State<FormRequestScreen> {
   final _descriptionController = TextEditingController();
   final _specializationIndex = ValueNotifier<int>(0);
   late final RequestFormBloc _requestFormBloc;

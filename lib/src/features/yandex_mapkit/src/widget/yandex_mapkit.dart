@@ -4,10 +4,9 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 class YandexMapkit extends StatelessWidget {
   const YandexMapkit({
     super.key,
-    required List<MapObject<dynamic>> mapObjects,
-    required Function(YandexMapController)? onMapCreated,
-  }) : _mapObjects = mapObjects,
-       _onMapCreated = onMapCreated;
+    required this._mapObjects,
+    required this._onMapCreated,
+  });
   final List<MapObject<dynamic>> _mapObjects;
   final Function(YandexMapController)? _onMapCreated;
 

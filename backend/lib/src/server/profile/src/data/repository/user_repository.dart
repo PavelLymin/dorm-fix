@@ -6,7 +6,7 @@ abstract interface class IUserRepository {
 }
 
 class UserRepositoryImpl implements IUserRepository {
-  UserRepositoryImpl({required Database database}) : _database = database;
+  UserRepositoryImpl({required this._database});
 
   final Database _database;
 

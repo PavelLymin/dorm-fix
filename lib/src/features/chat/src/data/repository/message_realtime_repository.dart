@@ -6,8 +6,7 @@ abstract interface class IMessageRealtimeRepository {
 }
 
 class MessageRealTimeRepositoryImpl implements IMessageRealtimeRepository {
-  const MessageRealTimeRepositoryImpl({required IWebSocket webSocket})
-    : _webSocket = webSocket;
+  const MessageRealTimeRepositoryImpl({required this._webSocket});
 
   final IWebSocket _webSocket;
 

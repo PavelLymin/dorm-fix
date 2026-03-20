@@ -9,12 +9,8 @@ part 'room_search_event.dart';
 part 'room_search_state.dart';
 
 class RoomSearcBloc extends Bloc<RoomSearchEvent, RoomSearchState> {
-  RoomSearcBloc({
-    required IRoomRepository roomRepository,
-    required Logger logger,
-  }) : _roomRepository = roomRepository,
-       _logger = logger,
-       super(const RoomSearchState.noTerm(rooms: [])) {
+  RoomSearcBloc({required this._roomRepository, required this._logger})
+    : super(const RoomSearchState.noTerm(rooms: [])) {
     onTextChanged = BehaviorSubject<String>();
 
     _subscription = onTextChanged.stream

@@ -8,5 +8,5 @@ export 'src/data/repository/request_repository.dart';
 export 'src/state_management/request_form_bloc/request_form_bloc.dart';
 export 'src/state_management/repair_request_bloc/repair_request_bloc.dart';
 export 'src/widget/form/request_screen.dart';
-export 'src/widget/history/student_history_screen.dart';
 export 'src/widget/history/repair_request_list.dart';
+export 'src/widget/history/search_appbar.dart';

@@ -5,10 +5,9 @@ import '../../chat.dart';
 
 class MessageRouter {
   const MessageRouter({
-    required RestApi restApi,
-    required IMessageRepository messageRepository,
-  }) : _restApi = restApi,
-       _messageRepository = messageRepository;
+    required this._restApi,
+    required this._messageRepository,
+  });
 
   final RestApi _restApi;
   final IMessageRepository _messageRepository;

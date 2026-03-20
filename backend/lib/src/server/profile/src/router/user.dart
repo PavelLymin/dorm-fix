@@ -7,11 +7,7 @@ import '../../../../core/rest_api/src/rest_api.dart';
 import '../../profile.dart';
 
 class UserRouter {
-  UserRouter({
-    required RestApi restApi,
-    required IUserRepository userRepository,
-  }) : _restApi = restApi,
-       _userRepository = userRepository;
+  UserRouter({required this._restApi, required this._userRepository});
 
   final RestApi _restApi;
   final IUserRepository _userRepository;

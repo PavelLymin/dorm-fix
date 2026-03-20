@@ -1,7 +1,7 @@
 import 'package:dorm_fix/src/features/chat/chat.dart';
 import 'package:dorm_fix/src/features/profile/profile.dart';
 
-import '../../../home/home.dart';
+import '../../../students/home/home.dart';
 import 'problem.dart';
 
 enum Priority {
@@ -269,7 +269,7 @@ final class FakeFullRepairRequest extends FullRepairRequest {
     super.studentAbsent = false,
     super.startTime = 0,
     super.endTime = 24,
-    super.specialization = const FakeSpecializationEntity(),
+    super.specialization = const .fake(),
     super.problems = const [],
     super.master,
   }) : super(date: .now(), chat: FakeFullChat(), createdAt: .now());

@@ -13,21 +13,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
     required this._authRepository,
     required this._firebaseUserRepository,
     required this._logger,
-  }) : super(const _NotAuthenticated(user: NotAuthenticatedUser())) {
+  }) : super(const _NotAuthenticated()) {
     _streamSubscription = _authRepository.userChanges().listen(
       (data) => data.map(
         notAuthenticated: (user) => setState(_NotAuthenticated(user: user)),
-        authenticated: (user) {
+        authenticated: (user) async {
           user.mapAuthUser(
-            firebase: (user) async {
-              setState(.authenticated(authUser: user, isNewUser: true));
-              await _authRepository.connect();
-            },
-            profile: (user) async {
-              setState(.authenticated(authUser: user, isNewUser: false));
-              await _authRepository.connect();
-            },
+            firebase: (user) =>
+                setState(.authenticated(authUser: user, isNewUser: true)),
+            profile: (user) =>
+                setState(.authenticated(authUser: user, isNewUser: false)),
           );
+          await _authRepository.connect();
         },
       ),
       onError: (e) =>
@@ -56,11 +53,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
   ) async {
     try {
       emit(.loading(user: state.currentUser));
-      final user = await _authRepository.signInWithEmailAndPassword(
+      await _authRepository.signInWithEmailAndPassword(
         email: e.email,
         password: e.password,
       );
-      emit(.authenticated(authUser: user, isNewUser: false));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(.error(user: state.currentUser, message: e));
@@ -73,11 +69,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
   ) async {
     try {
       emit(.loading(user: state.currentUser));
-      final user = await _authRepository.signUpWithEmailAndPassword(
+      await _authRepository.signUpWithEmailAndPassword(
         email: e.email,
         password: e.password,
       );
-      emit(.authenticated(authUser: user, isNewUser: true));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(.error(user: state.currentUser, message: e));
@@ -90,13 +85,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
   ) async {
     try {
       emit(.loading(user: state.currentUser));
-      final result = await _authRepository.signInWithPhoneNumber(
+      await _authRepository.signInWithPhoneNumber(
         verificationId: e.verificationId,
         smsCode: e.smsCode,
       );
-      result.isNewUser
-          ? emit(.authenticated(authUser: result.user, isNewUser: true))
-          : emit(.authenticated(authUser: result.user, isNewUser: false));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(.error(user: state.currentUser, message: e));
@@ -126,10 +118,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
   Future<void> _signInWithGoogle(Emitter<AuthState> emit) async {
     try {
       emit(.loading(user: state.currentUser));
-      final result = await _authRepository.signInWithGoogle();
-      result.isNewUser
-          ? emit(.authenticated(authUser: result.user, isNewUser: true))
-          : emit(.authenticated(authUser: result.user, isNewUser: false));
+      await _authRepository.signInWithGoogle();
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(.error(user: state.currentUser, message: e));

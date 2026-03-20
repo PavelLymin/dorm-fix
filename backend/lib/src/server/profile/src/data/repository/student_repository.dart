@@ -20,9 +20,7 @@ abstract interface class IStudentRepository {
 }
 
 class StudentRepositoryImpl implements IStudentRepository {
-  StudentRepositoryImpl({required Database database, required App firebaseApp})
-    : _database = database,
-      _firebaseApp = firebaseApp;
+  StudentRepositoryImpl({required this._database, required this._firebaseApp});
 
   final Database _database;
   final App _firebaseApp;

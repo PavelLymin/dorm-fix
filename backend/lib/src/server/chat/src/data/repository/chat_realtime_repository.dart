@@ -20,7 +20,7 @@ abstract interface class IChatRealTimeRepository {
 }
 
 class ChatRealTimeRepositoryImpl implements IChatRealTimeRepository {
-  ChatRealTimeRepositoryImpl({required WebSocketBase ws}) : _ws = ws;
+  ChatRealTimeRepositoryImpl({required this._ws});
 
   final WebSocketBase _ws;
 

@@ -46,14 +46,14 @@ sealed class AuthState {
 
   R map<R>({
     required AuthStateMatch<R, _Authenticated> authenticated,
-    required AuthStateMatch<R, _SmsCodeSent> smsCodeSent,
     required AuthStateMatch<R, _NotAuthenticated> notAuthenticated,
+    required AuthStateMatch<R, _SmsCodeSent> smsCodeSent,
     required AuthStateMatch<R, _Loading> loading,
     required AuthStateMatch<R, _Error> error,
   }) => switch (this) {
     _Authenticated s => authenticated(s),
-    _SmsCodeSent s => smsCodeSent(s),
     _NotAuthenticated s => notAuthenticated(s),
+    _SmsCodeSent s => smsCodeSent(s),
     _Loading s => loading(s),
     _Error s => error(s),
   };
@@ -61,28 +61,28 @@ sealed class AuthState {
   R maybeMap<R>({
     required R Function() orElse,
     AuthStateMatch<R, _Authenticated>? authenticated,
-    AuthStateMatch<R, _SmsCodeSent>? smsCodeSent,
     AuthStateMatch<R, _NotAuthenticated>? notAuthenticated,
+    AuthStateMatch<R, _SmsCodeSent>? smsCodeSent,
     AuthStateMatch<R, _Loading>? loading,
     AuthStateMatch<R, _Error>? error,
   }) => map<R>(
     authenticated: authenticated ?? (_) => orElse(),
-    smsCodeSent: smsCodeSent ?? (_) => orElse(),
     notAuthenticated: notAuthenticated ?? (_) => orElse(),
+    smsCodeSent: smsCodeSent ?? (_) => orElse(),
     loading: loading ?? (_) => orElse(),
     error: error ?? (_) => orElse(),
   );
 
   R? mapOrNull<R>({
     AuthStateMatch<R, _Authenticated>? authenticated,
-    AuthStateMatch<R, _SmsCodeSent>? smsCodeSent,
     AuthStateMatch<R, _NotAuthenticated>? notAuthenticated,
+    AuthStateMatch<R, _SmsCodeSent>? smsCodeSent,
     AuthStateMatch<R, _Loading>? loading,
     AuthStateMatch<R, _Error>? error,
   }) => map<R?>(
     authenticated: authenticated ?? (_) => null,
-    smsCodeSent: smsCodeSent ?? (_) => null,
     notAuthenticated: notAuthenticated ?? (_) => null,
+    smsCodeSent: smsCodeSent ?? (_) => null,
     loading: loading ?? (_) => null,
     error: error ?? (_) => null,
   );
@@ -96,6 +96,10 @@ final class _Authenticated extends AuthState {
   final bool isNewUser;
 }
 
+final class _NotAuthenticated extends AuthState {
+  const _NotAuthenticated({super.user = const NotAuthenticatedUser()});
+}
+
 final class _SmsCodeSent extends AuthState {
   const _SmsCodeSent({
     super.user = const NotAuthenticatedUser(),
@@ -103,10 +107,6 @@ final class _SmsCodeSent extends AuthState {
   });
 
   final String verificationId;
-}
-
-final class _NotAuthenticated extends AuthState {
-  const _NotAuthenticated({super.user = const NotAuthenticatedUser()});
 }
 
 final class _Loading extends AuthState {

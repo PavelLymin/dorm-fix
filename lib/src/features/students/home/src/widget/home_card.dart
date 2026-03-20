@@ -30,7 +30,9 @@ sealed class HomeCard extends StatelessWidget {
             horizontal: 3,
           ),
           onTap: () => switch (type) {
-            .request => context.router.push(const NamedRoute('RequestScreen')),
+            .request => context.router.push(
+              const NamedRoute('FormRequestScreen'),
+            ),
             .history => context.router.push(const NamedRoute('HistoryScreen')),
           },
           child: Column(

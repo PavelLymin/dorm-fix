@@ -16,31 +16,12 @@ class AppPage {
   final String title;
   final IconData icon;
   final IconData activeIcon;
-
-  static const List<AppPage> pages = <AppPage>[
-    AppPage(
-      name: 'Home',
-      title: 'Домашняя',
-      icon: Icons.home_outlined,
-      activeIcon: Icons.home,
-    ),
-    AppPage(
-      name: 'Request',
-      title: 'Заявка',
-      icon: Icons.request_page_outlined,
-      activeIcon: Icons.request_page,
-    ),
-    AppPage(
-      name: 'Profile',
-      title: 'Профиль',
-      icon: Icons.person_outline,
-      activeIcon: Icons.person,
-    ),
-  ];
 }
 
 class RootScreen extends StatelessWidget {
-  const RootScreen({super.key});
+  const RootScreen({super.key, required this.pages});
+
+  final List<AppPage> pages;
 
   @override
   Widget build(BuildContext context) {
@@ -51,18 +32,18 @@ class RootScreen extends StatelessWidget {
       lazyLoad: true,
       homeIndex: 0,
       routes: List.generate(
-        AppPage.pages.length,
-        (index) => NamedRoute(AppPage.pages[index].name),
+        pages.length,
+        (index) => NamedRoute(pages[index].name),
       ),
       builder: (context, child) => Scaffold(
         bottomNavigationBar: window.mapOrNull(
-          compact: (_) => const BottomNavigation(),
+          compact: (_) => BottomNavigation(pages: pages),
         ),
         // drawer: Drawer(child: MenuNavigation()),
         body: window.maybeMap(
           compact: (_) => child,
           medium: (_) => Burger(child: child),
-          orElse: () => SidebarNavigation(child: child),
+          orElse: () => SidebarNavigation(pages: pages, child: child),
         ),
       ),
     );

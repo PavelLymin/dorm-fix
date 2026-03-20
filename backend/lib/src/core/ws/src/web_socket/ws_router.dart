@@ -8,14 +8,11 @@ import '../../ws.dart';
 
 class WsRouter {
   const WsRouter({
-    required Logger logger,
-    required WebSocketBase ws,
-    required IChatRealTimeRepository chatRealTimeRepository,
-    required IMessageRealTimeRepository messageRealTimeRepository,
-  }) : _logger = logger,
-       _ws = ws,
-       _chatRepository = chatRealTimeRepository,
-       _messageRepository = messageRealTimeRepository;
+    required this._logger,
+    required this._ws,
+    required this._chatRepository,
+    required this._messageRepository,
+  });
 
   final Logger _logger;
   final WebSocketBase _ws;

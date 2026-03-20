@@ -11,7 +11,7 @@ import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
-import '../../features/home/home.dart';
+import '../../features/students/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/room/room.dart';
 import '../../features/settings/settings.dart';
@@ -60,12 +60,6 @@ class CompositionRoot {
 
     Bloc.observer = AppBlocObserver(logger: logger);
 
-    // User
-    // final userPerository = UserRepositoryImpl(
-    //   client: client,
-    //   firebaseAuth: firebaseAuth,
-    // );
-
     // Firebase User
     final firebaseUserRepository = FirebaseUserRepositoryImpl(
       firebaseAuth: firebaseAuth,
@@ -94,7 +88,7 @@ class CompositionRoot {
     );
 
     // auto_route
-    final router = AppRouter(authenticationBloc: authenticationBloc);
+    final router = AppRouter();
 
     // Settings
     final settingsContainer = await _CreateSettings().create();

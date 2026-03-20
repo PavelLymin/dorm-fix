@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import '../../../../../core/ws/ws.dart';
 
 abstract interface class IChatRealTimeRepository {
@@ -9,14 +7,12 @@ abstract interface class IChatRealTimeRepository {
 }
 
 class ChatRealTimeRepositoryImpl implements IChatRealTimeRepository {
-  const ChatRealTimeRepositoryImpl({required IWebSocket webSocket})
-    : _webSocket = webSocket;
+  const ChatRealTimeRepositoryImpl({required this._webSocket});
 
   final IWebSocket _webSocket;
 
   @override
   Future<void> joinToChat({required int chatId}) async {
-    log('message');
     _webSocket.send(
       envelope: MessageEnvelope(
         type: .chatJoin,

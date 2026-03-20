@@ -12,8 +12,7 @@ abstract interface class IMessageRepository {
 }
 
 class MessageRepositoryImpl implements IMessageRepository {
-  const MessageRepositoryImpl({required Database database})
-    : _database = database;
+  const MessageRepositoryImpl({required this._database});
 
   final Database _database;
 

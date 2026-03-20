@@ -6,10 +6,7 @@ import '../../../dormitory/src/model/dormitory.dart';
 import 'room_modal_sheet.dart';
 
 class DormitoryDetailsModalSheet extends StatefulWidget {
-  const DormitoryDetailsModalSheet({
-    super.key,
-    required DormitoryEntity dormitory,
-  }) : _dormitory = dormitory;
+  const DormitoryDetailsModalSheet({super.key, required this._dormitory});
   final DormitoryEntity _dormitory;
 
   @override

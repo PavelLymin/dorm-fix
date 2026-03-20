@@ -10,11 +10,7 @@ abstract interface class IRoomRepository {
 }
 
 class RoomRepository implements IRoomRepository {
-  RoomRepository({
-    required RestClientHttp client,
-    required FirebaseAuth firebaseAuth,
-  }) : _client = client,
-       _firebaseAuth = firebaseAuth;
+  RoomRepository({required this._client, required this._firebaseAuth});
   final RestClientHttp _client;
   final FirebaseAuth _firebaseAuth;
 

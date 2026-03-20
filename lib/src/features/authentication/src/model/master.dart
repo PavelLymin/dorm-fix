@@ -2,13 +2,15 @@ part of 'user.dart';
 
 class MasterUser extends ProfileUser {
   const MasterUser({
-    required this.user,
     required this.id,
+    required this.user,
+    required this.specialization,
     required this.dormitory,
   });
 
   final int id;
   final FirebaseUser user;
+  final SpecializationEntity specialization;
   final DormitoryEntity dormitory;
 
   const factory MasterUser.fake() = FakeMaster;
@@ -39,10 +41,12 @@ class MasterUser extends ProfileUser {
   MasterUser copyWith({
     int? id,
     FirebaseUser? user,
+    SpecializationEntity? specialization,
     DormitoryEntity? dormitory,
   }) => MasterUser(
     id: id ?? this.id,
     user: user ?? this.user,
+    specialization: specialization ?? this.specialization,
     dormitory: dormitory ?? this.dormitory,
   );
 
@@ -51,6 +55,7 @@ class MasterUser extends ProfileUser {
       'MasterEntity('
       'id: $id, '
       'user: $user, '
+      'specialization: $specialization, '
       'dormitory: $dormitory)';
 
   @override
@@ -62,8 +67,9 @@ class MasterUser extends ProfileUser {
 
 final class FakeMaster extends MasterUser {
   const FakeMaster({
+    super.id = -1,
     super.user = const .fake(),
-    super.id = 0,
+    super.specialization = const .fake(),
     super.dormitory = const .fake(),
   });
 
