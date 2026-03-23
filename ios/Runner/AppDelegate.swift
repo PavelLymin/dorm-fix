@@ -8,8 +8,8 @@ import YandexMapsMobile
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    YMKMapKit.setLocale("YOUR_LOCALE") // Your preferred language. Not required, defaults to system language
-    YMKMapKit.setApiKey("152caab1-17a7-4ec4-a0b9-aaa267e6b0a8") // Your generated API key
+    YMKMapKit.setLocale("ru_RU") // Your preferred language. Not required, defaults to system language
+    YMKMapKit.setApiKey("1c457cdb-845b-46df-aa96-8682605cacba") // Your generated API key
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 

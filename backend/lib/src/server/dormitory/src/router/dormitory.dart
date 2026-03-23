@@ -50,6 +50,7 @@ class DormitoryRouter {
     final json = dormitories
         .map((dormitory) => DormitoryDto.fromEntity(dormitory).toJson())
         .toList();
+
     return _restApi.send(
       statusCode: 200,
       responseBody: {

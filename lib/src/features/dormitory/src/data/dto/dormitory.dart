@@ -60,9 +60,9 @@ class DormitoryDto {
         long: long,
         lat: lat,
       );
-    } else {
-      throw ArgumentError('Invalid JSON format for DormitoryDto: $json');
     }
+
+    throw ArgumentError('Invalid JSON format for DormitoryDto: $json');
   }
 
   @override

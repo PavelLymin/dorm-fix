@@ -18,6 +18,50 @@ class AppPage {
   final IconData activeIcon;
 }
 
+class MasterDataScope extends InheritedWidget {
+  const MasterDataScope({
+    super.key,
+    required this.specializationId,
+    required this.dormitoryId,
+    required super.child,
+  });
+
+  final int specializationId;
+  final int dormitoryId;
+
+  static MasterDataScope of(BuildContext context) {
+    final scope = context.dependOnInheritedWidgetOfExactType<MasterDataScope>();
+    assert(scope != null, 'MasterDataScope not found');
+    return scope!;
+  }
+
+  @override
+  bool updateShouldNotify(MasterDataScope oldWidget) {
+    return specializationId != oldWidget.specializationId ||
+        dormitoryId != oldWidget.dormitoryId;
+  }
+}
+
+class MasterRootScreen extends StatelessWidget {
+  const MasterRootScreen({
+    super.key,
+    required this.pages,
+    required this.specializationId,
+    required this.dormitoryId,
+  });
+
+  final List<AppPage> pages;
+  final int specializationId;
+  final int dormitoryId;
+
+  @override
+  Widget build(BuildContext context) => MasterDataScope(
+    specializationId: specializationId,
+    dormitoryId: dormitoryId,
+    child: RootScreen(pages: pages),
+  );
+}
+
 class RootScreen extends StatelessWidget {
   const RootScreen({super.key, required this.pages});
 

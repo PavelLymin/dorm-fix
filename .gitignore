@@ -62,5 +62,7 @@ ios/Flutter/Release.xcconfig
 macos/Flutter/Flutter-Debug.xcconfig
 # Release macos config
 macos/Flutter/Flutter-Release.xcconfig
-
+# DataBase
 backend/database.db
+# env
+.env

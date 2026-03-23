@@ -20,6 +20,8 @@
 	<!-- Camera -->
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

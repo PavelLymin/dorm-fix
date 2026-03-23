@@ -2,13 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/ui.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/authentication/src/widget/splash_screen.dart';
+import '../../features/map/map.dart';
 import '../../features/master/home/home.dart';
 import '../../features/students/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
 import '../../features/root/widget/root_screen.dart';
 import '../../features/students/repair_requests/repair_requests.dart';
-import '../../features/yandex_mapkit/yandex_mapkit.dart';
 
 class AppRouter extends RootStackRouter {
   AppRouter();
@@ -24,8 +24,9 @@ class AppRouter extends RootStackRouter {
       builder: (context, data) => const SignInScreen(),
     ),
     NamedRouteDef(
-      name: 'Map',
-      builder: (context, data) => MapWithDormitories(),
+      initial: true,
+      name: 'MapScreen',
+      builder: (context, data) => const MapScreen(),
     ),
     NamedRouteDef(
       name: 'UpdatePhoneScreen',
@@ -65,10 +66,12 @@ class AppRouter extends RootStackRouter {
       ],
     ),
     NamedRouteDef(
-      initial: true,
-
       name: 'MasterRootSreen',
-      builder: (_, data) => const RootScreen(pages: masterPages),
+      builder: (_, data) => MasterRootScreen(
+        pages: masterPages,
+        specializationId: data.params.getInt('spec_id'),
+        dormitoryId: data.params.getInt('dorm_id'),
+      ),
       children: [
         NamedRouteDef(
           name: 'MasterHomeScreen',

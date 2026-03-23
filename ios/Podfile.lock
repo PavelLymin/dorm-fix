@@ -5,8 +5,8 @@ PODS:
   - Flutter (1.0.0)
   - yandex_mapkit (0.0.1):
     - Flutter
-    - YandexMapsMobile (= 4.22.0-full)
-  - YandexMapsMobile (4.22.0-full)
+    - YandexMapsMobile (= 4.22.0-lite)
+  - YandexMapsMobile (4.22.0-lite)
 
 DEPENDENCIES:
   - cupertino_http (from `.symlinks/plugins/cupertino_http/darwin`)
@@ -28,9 +28,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  yandex_mapkit: b0468cf6fdc2e5ef315e08c081cb48763db1edee
-  YandexMapsMobile: 27e6e45425bb61f0be2dbc2bf02d4e64926691a9
+  yandex_mapkit: bac34ca1bdf97e87252a8c6d09a95b1fe39ba103
+  YandexMapsMobile: c73844c6096bbb240d1491adc511c2ef4a88d88d
 
-PODFILE CHECKSUM: 37c4a488450e6479189f84cdd9bfd949ade1aaa7
+PODFILE CHECKSUM: ba0d7af98d1a0db7cbf744edd0331fd4de934cd6
 
 COCOAPODS: 1.16.2

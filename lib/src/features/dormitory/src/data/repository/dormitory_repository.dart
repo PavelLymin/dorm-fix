@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../../core/rest_client/rest_client.dart';
 import '../../../dormitory.dart';
@@ -30,18 +32,17 @@ class DormitoryRepository implements IDormitoryRepository {
 
     final data = response?['dormitories'];
 
-    if (data is! List) {
-      throw StructuredBackendException(
-        error: {'description': 'The dormitories was not found.'},
-        statusCode: 404,
-      );
+    if (data case List<Object?> dormitories) {
+      return dormitories
+          .whereType<Map<String, Object?>>()
+          .map((json) => DormitoryDto.fromJson(json).toEntity())
+          .toList();
     }
 
-    final dormitories = data
-        .map((json) => DormitoryDto.fromJson(json).toEntity())
-        .toList();
-
-    return dormitories;
+    throw StructuredBackendException(
+      error: {'description': 'Invalid data received from server.'},
+      statusCode: 500,
+    );
   }
 
   @override
@@ -53,19 +54,20 @@ class DormitoryRepository implements IDormitoryRepository {
       headers: {'Authorization': 'Bearer $token'},
     );
 
+    log(response.toString());
+
     final data = response?['dormitories'];
 
-    if (data is! List) {
-      throw StructuredBackendException(
-        error: {'description': 'The dormitories was not found.'},
-        statusCode: 404,
-      );
+    if (data case List<Object?> dormitories) {
+      return dormitories
+          .whereType<Map<String, Object?>>()
+          .map((json) => DormitoryDto.fromJson(json).toEntity())
+          .toList();
     }
 
-    final dormitories = data
-        .map((json) => DormitoryDto.fromJson(json).toEntity())
-        .toList();
-
-    return dormitories;
+    throw StructuredBackendException(
+      error: {'description': 'Invalid data received from server.'},
+      statusCode: 500,
+    );
   }
 }

@@ -11,11 +11,7 @@ class SearchAppBar extends StatelessWidget {
     return SliverResizingHeader(
       minExtentPrototype: Padding(
         padding: padding,
-        child: SizedBox(
-          height:
-              UiTextField.standard().style?.constraints?.maxWidth ??
-              48.0 + spacing,
-        ),
+        child: SizedBox(height: 48.0 + spacing),
       ),
       maxExtentPrototype: _TitleAppBar(
         title: 'Заявки',

@@ -50,8 +50,8 @@ class RepairRequestRouter {
   Future<Response> _watchRepairRequests(Request request) async {
     final qp = request.url.queryParameters;
     final useUid = bool.parse(qp['use_uid'] ?? 'false');
-    final specId = int.tryParse(qp['specId'] ?? '');
-    final dormId = int.tryParse(qp['dormId'] ?? '');
+    final specId = int.tryParse(qp['spec_id'] ?? '');
+    final dormId = int.tryParse(qp['dorm_id'] ?? '');
     final status = qp['status'];
 
     final uid = useUid ? RequireUser.getUserId(request) : null;

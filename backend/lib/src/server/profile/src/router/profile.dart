@@ -25,8 +25,8 @@ class ProfileRouter {
 
   Future<Response> _getProfile(Request request) async {
     final uid = RequireUser.getUserId(request);
-    // final role = RequireUser.getUserRole(request);
-    final response = switch (Role.fromString('master')) {
+    final role = RequireUser.getUserRole(request);
+    final response = switch (role) {
       .student => await _getStudent(uid),
       .master => await _getMaster(uid),
     };

@@ -63,7 +63,7 @@ class _SignInScreenState extends State<SignInScreen> {
           state.mapOrNull(
             loading: (_) => _addLoading(true),
             authenticated: (state) => state.authUser.mapAuthUser(
-              firebase: (_) => context.router.replace(const NamedRoute('Map')),
+              firebase: (_) {},
               profile: (user) => user.mapRoleUser(
                 student: (_) => context.router.replace(
                   const NamedRoute('StudentRootSreen'),
@@ -89,13 +89,13 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Padding(
                 padding: appPading.pagePadding,
                 child: SingleChildScrollView(
+                  padding: .only(top: 128.0),
                   child: Column(
                     crossAxisAlignment: .center,
                     mainAxisAlignment: .center,
                     mainAxisSize: .min,
-                    spacing: 32.0,
+                    spacing: 16.0,
                     children: [
-                      const SizedBox(height: 128.0),
                       UiText.titleLarge('Начните использовать приложение'),
                       const SignInForm(),
                       const AuthWithSocial(),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:shelf/shelf.dart';
 
@@ -21,6 +23,7 @@ abstract class AuthenticationMiddleware {
 
               final id = idToken.claims['user_id'];
               final role = idToken.claims['role'];
+
               request = request.change(
                 context: {...request.context, 'user_id': id, 'role': role},
               );
@@ -31,8 +34,15 @@ abstract class AuthenticationMiddleware {
             return _getUnauthorizedResponse(request);
           }
         } catch (e) {
-          return Response.badRequest(
-            body: 'Error processing request: ${e.toString()}',
+          return Response(
+            401,
+            body: jsonEncode({
+              'error': {
+                'description': 'Unauthorized',
+                'field': 'Authorization',
+              },
+            }),
+            headers: {'Content-Type': 'application/json'},
           );
         }
       };
@@ -40,8 +50,15 @@ abstract class AuthenticationMiddleware {
   }
 
   static Response _getUnauthorizedResponse(Request request) {
-    return Response.unauthorized(
-      'Request is missing jwt header: ${request.handlerPath}',
+    return Response(
+      401,
+      body: jsonEncode({
+        'error': {
+          'description': 'Missing or invalid JWT',
+          'field': 'Authorization',
+        },
+      }),
+      headers: {'Content-Type': 'application/json'},
     );
   }
 }

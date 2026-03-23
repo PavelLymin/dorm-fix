@@ -20,7 +20,7 @@ abstract class RequireUser {
     return uid;
   }
 
-  static String getUserRole(Request request) {
+  static Role getUserRole(Request request) {
     final role = request.context['role'];
     if (role is! String || role.isEmpty) {
       throw BadRequestException(
@@ -31,7 +31,7 @@ abstract class RequireUser {
       );
     }
 
-    return Role.fromString(role).name;
+    return Role.fromString(role);
   }
 
   static String getUserEmail(Request request) {
