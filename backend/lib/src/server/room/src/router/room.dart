@@ -12,19 +12,8 @@ class RoomRouter {
   Handler get handler {
     final router = Router();
 
-    router.get('/rooms/<dormitoryId>', _searchRooms);
+    router.get('/rooms/<dormitoryId>', _getRooms);
     return router.call;
-  }
-
-  String _checkQuery(Request request) {
-    final query = request.url.queryParameters['query'];
-    if (query == null || query.isEmpty) {
-      throw BadRequestException(
-        error: {'description': 'Missing query parameter.', 'field': 'query'},
-      );
-    }
-
-    return query;
   }
 
   int _checkDormitoryId(Request request) {
@@ -37,7 +26,8 @@ class RoomRouter {
           'field': 'dormitoryId',
         },
       );
-    } else if (int.tryParse(dormitoryId) == null) {
+    }
+    if (int.tryParse(dormitoryId) == null) {
       throw BadRequestException(
         error: {
           'description': 'Invalid path parameter.',
@@ -46,16 +36,23 @@ class RoomRouter {
       );
     }
 
-    return int.parse(dormitoryId);
+    return .parse(dormitoryId);
   }
 
-  Future<Response> _searchRooms(Request request) async {
+  Future<Response> _getRooms(Request request) async {
     final dormitoryId = _checkDormitoryId(request);
-    final query = _checkQuery(request);
-    final rooms = await _roomRepository.searchRooms(
-      query: query,
-      dormitoryId: dormitoryId,
-    );
+    final query = request.url.queryParameters['query'];
+
+    late List<RoomEntity> rooms;
+    if (query == null || query.isEmpty) {
+      rooms = await _roomRepository.getRooms(dormitoryId: dormitoryId);
+    } else {
+      rooms = await _roomRepository.searchRooms(
+        query: query,
+        dormitoryId: dormitoryId,
+      );
+    }
+
     final json = rooms
         .map((room) => RoomDto.fromEntity(room).toJson())
         .toList();

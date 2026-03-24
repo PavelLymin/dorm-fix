@@ -8,6 +8,8 @@ abstract interface class IRoomRepository {
     required int dormitoryId,
     required String query,
   });
+
+  Future<List<RoomEntity>> getRooms({required int dormitoryId});
 }
 
 class RoomRepository implements IRoomRepository {
@@ -26,6 +28,17 @@ class RoomRepository implements IRoomRepository {
                   row.number.like(pattern);
             }))
             .get();
+
+    final result = data.map((row) => RoomDto.fromData(row).toEntity()).toList();
+
+    return result;
+  }
+
+  @override
+  Future<List<RoomEntity>> getRooms({required int dormitoryId}) async {
+    final data = await (_database.select(
+      _database.rooms,
+    )..where((row) => row.dormitoryId.equals(dormitoryId))).get();
 
     final result = data.map((row) => RoomDto.fromData(row).toEntity()).toList();
 

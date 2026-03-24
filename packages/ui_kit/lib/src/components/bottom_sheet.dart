@@ -50,7 +50,7 @@ Future<T?> showUiBottomSheet<T>(
               ),
             ],
           ),
-          widget,
+          Flexible(child: widget),
         ],
       ),
     ),

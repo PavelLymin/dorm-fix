@@ -35,8 +35,8 @@ class AppRouter extends RootStackRouter {
     NamedRouteDef(
       name: 'PersonalDataScreen',
       builder: (context, data) => PersonalDataScreen(
-        dormitoryId: data.params.getInt('dormitoryId'),
-        roomId: data.params.getInt('roomId'),
+        dormitoryId: data.params.getInt('dormitory_id'),
+        roomId: data.params.getInt('room_id'),
       ),
     ),
     NamedRouteDef(

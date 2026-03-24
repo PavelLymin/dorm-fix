@@ -3,7 +3,7 @@ import '../../../../../core/database/database.dart';
 import '../../../dormitory.dart';
 
 abstract interface class IDormitoryRepository {
-  Future<List<DormitoryEntity>> search({required String query});
+  Future<List<DormitoryEntity>> searchDormitories({required String query});
   Future<List<DormitoryEntity>> getDormitories();
 }
 
@@ -13,7 +13,9 @@ class DormitoryRepository implements IDormitoryRepository {
   final Database _database;
 
   @override
-  Future<List<DormitoryEntity>> search({required String query}) async {
+  Future<List<DormitoryEntity>> searchDormitories({
+    required String query,
+  }) async {
     final pattern = '%$query%';
     final data =
         await (_database.select(_database.dormitories)..where((row) {

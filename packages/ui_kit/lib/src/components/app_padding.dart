@@ -5,8 +5,7 @@ class AppPadding {
 
   double get defaultPadding => 8.0;
 
-  EdgeInsets get pagePadding =>
-      .symmetric(horizontal: defaultPadding * 2, vertical: 0.0);
+  EdgeInsets get pagePadding => .symmetric(horizontal: defaultPadding * 2);
 
   EdgeInsets get contentPadding =>
       .symmetric(horizontal: defaultPadding * 2, vertical: defaultPadding);
