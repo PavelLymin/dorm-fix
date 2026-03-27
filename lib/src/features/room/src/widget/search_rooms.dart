@@ -31,7 +31,7 @@ class _Item extends StatelessWidget {
   void onTap(BuildContext context) => context.router.push(
     NamedRoute(
       'PersonalDataScreen',
-      params: {'dorm_id': dormitory.id, 'room_id': room.id},
+      params: {'dormitory_id': dormitory.id, 'room_id': room.id},
     ),
   );
 
@@ -39,6 +39,7 @@ class _Item extends StatelessWidget {
   Widget build(BuildContext context) {
     final palette = context.theme.colorPalette;
     return GestureDetector(
+      behavior: .opaque,
       onTap: () => onTap(context),
       child: Row(
         mainAxisAlignment: .start,

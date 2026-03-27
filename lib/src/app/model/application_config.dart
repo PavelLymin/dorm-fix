@@ -24,12 +24,6 @@ abstract final class Config {
     defaultValue: 'ws://localhost:8080',
   );
 
-  /// Api key for MapKit SDK
-  static const String mapKitApiKey = String.fromEnvironment(
-    'MAPKIT_API_KEY',
-    defaultValue: '152caab1-17a7-4ec4-a0b9-aaa267e6b0a8',
-  );
-
   static const String googleClientId = String.fromEnvironment(
     '889571705211-3m5otprqtm98lojcub115a29ed138lil.apps.googleusercontent.com',
     defaultValue: '',

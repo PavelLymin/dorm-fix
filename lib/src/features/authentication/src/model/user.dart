@@ -44,6 +44,14 @@ sealed class UserEntity {
     NotAuthenticatedUser u => notAuthenticated(u),
     AuthenticatedUser u => authenticated(u),
   };
+
+  R? mapOrNull<R>({
+    UserEntityrMatch<R, NotAuthenticatedUser>? notAuthenticated,
+    UserEntityrMatch<R, AuthenticatedUser>? authenticated,
+  }) => map<R?>(
+    notAuthenticated: notAuthenticated ?? (_) => null,
+    authenticated: authenticated ?? (_) => null,
+  );
 }
 
 class NotAuthenticatedUser extends UserEntity {

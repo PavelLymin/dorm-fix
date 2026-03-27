@@ -81,8 +81,8 @@ class _EmailPasswordFormState extends State<EmailPasswordForm>
 }
 
 mixin _EmailPasswordFormStateMixin on State<EmailPasswordForm> {
-  bool _isValidateEmail = false;
-  bool _isValidatePassword = false;
+  final _emailValidator = EmailValidator();
+  final _passwordValidator = PasswordValidator();
 
   @override
   void initState() {
@@ -98,41 +98,19 @@ mixin _EmailPasswordFormStateMixin on State<EmailPasswordForm> {
     super.dispose();
   }
 
-  void _onEmailChanged() {
-    if (EmailPasswordValidator.validateEmail(widget.emailController.text) &&
-        !_isValidateEmail) {
-      _isValidateEmail = true;
-      context.read<AuthButtonBloc>().add(
-        AuthButtonEvent.changeState(isEmail: true),
-      );
-    } else if (!EmailPasswordValidator.validateEmail(
-          widget.emailController.text,
-        ) &&
-        _isValidateEmail) {
-      _isValidateEmail = false;
-      context.read<AuthButtonBloc>().add(
-        AuthButtonEvent.changeState(isEmail: false),
-      );
-    }
-  }
+  void _onEmailChanged() => _emailValidator.onEmailChanged(
+    widget.emailController.text,
+    onValid: (_) =>
+        context.read<AuthButtonBloc>().add(.changeState(isEmail: true)),
+    onInvalid: (_) =>
+        context.read<AuthButtonBloc>().add(.changeState(isEmail: false)),
+  );
 
-  void _onPasswordChanged() {
-    if (EmailPasswordValidator.validatePassword(
-          widget.passwordController.text,
-        ) &&
-        !_isValidatePassword) {
-      _isValidatePassword = true;
-      context.read<AuthButtonBloc>().add(
-        AuthButtonEvent.changeState(isPassword: true),
-      );
-    } else if (!EmailPasswordValidator.validatePassword(
-          widget.passwordController.text,
-        ) &&
-        _isValidatePassword) {
-      _isValidatePassword = false;
-      context.read<AuthButtonBloc>().add(
-        AuthButtonEvent.changeState(isPassword: false),
-      );
-    }
-  }
+  void _onPasswordChanged() => _passwordValidator.onPasswordChanged(
+    widget.passwordController.text,
+    onValid: (_) =>
+        context.read<AuthButtonBloc>().add(.changeState(isPassword: true)),
+    onInvalid: (_) =>
+        context.read<AuthButtonBloc>().add(.changeState(isPassword: false)),
+  );
 }

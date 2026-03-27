@@ -3,6 +3,25 @@ import 'package:ui_kit/ui.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 import '../../../../app/widget/dependencies_scope.dart';
 import '../../../dormitory/dormitory.dart';
+import '../../map.dart';
+
+class MapControllerScope extends InheritedWidget {
+  const MapControllerScope({
+    super.key,
+    required this.controller,
+    required super.child,
+  });
+
+  final YandexMapController? controller;
+
+  static YandexMapController? of(BuildContext context) => context
+      .dependOnInheritedWidgetOfExactType<MapControllerScope>()
+      ?.controller;
+
+  @override
+  bool updateShouldNotify(covariant MapControllerScope oldWidget) =>
+      controller != oldWidget.controller;
+}
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -22,11 +41,17 @@ class _MapScreenState extends State<MapScreen> with _MapScreenStateMixin {
             builder: (context, state) => YandexMap(
               nightModeEnabled: false,
               mapObjects: _mapObjects(state.dormitories),
-              onMapCreated: (controller) => _controller = controller,
+              onMapCreated: _onMapCreated,
             ),
           ),
           const MapAppbar(),
-          const SearchButton(),
+          ValueListenableBuilder(
+            valueListenable: _controllerNotifier,
+            builder: (_, value, _) => MapControllerScope(
+              controller: value,
+              child: const SearchButton(),
+            ),
+          ),
         ],
       ),
     ),
@@ -35,11 +60,13 @@ class _MapScreenState extends State<MapScreen> with _MapScreenStateMixin {
 
 mixin _MapScreenStateMixin on State<MapScreen> {
   late final DormitoryBloc _dormitoryBloc;
-  late final YandexMapController _controller;
+  late final ValueNotifier<YandexMapController?> _controllerNotifier;
+  YandexMapController? _controller;
 
   @override
   void initState() {
     super.initState();
+    _controllerNotifier = ValueNotifier(null);
     final dependency = DependeciesScope.of(context);
     _dormitoryBloc = DormitoryBloc(
       dormitoryRepository: dependency.dormitoryRepository,
@@ -50,8 +77,25 @@ mixin _MapScreenStateMixin on State<MapScreen> {
   @override
   void dispose() {
     _dormitoryBloc.close();
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
+  }
+
+  void _onMapCreated(YandexMapController controller) {
+    _controller = controller;
+    _controllerNotifier.value = _controller;
+    final position = const Position();
+    _controller?.moveCamera(
+      .newCameraPosition(
+        CameraPosition(
+          target: Point(
+            latitude: position.latitude,
+            longitude: position.longitude,
+          ),
+          zoom: position.zoom,
+        ),
+      ),
+    );
   }
 
   List<MapObject> _mapObjects(List<DormitoryEntity> dormitories) => dormitories
@@ -59,14 +103,16 @@ mixin _MapScreenStateMixin on State<MapScreen> {
         (dormitory) => PlacemarkMapObject(
           mapId: MapObjectId(dormitory.id.toString()),
           point: Point(latitude: dormitory.lat, longitude: dormitory.long),
-          icon: .single(.new(image: .fromAssetImage(ImagesHelper.dormPin))),
+          icon: .single(
+            .new(image: .fromAssetImage(ImagesHelper.dormPin), scale: 5.0),
+          ),
           onTap: (_, point) => _showDormitoryDetails(context, point, dormitory),
         ),
       )
       .toList();
 
   void _moveCameraToPoint(Point target, {double zoom = 17}) async =>
-      await _controller.moveCamera(
+      await _controller?.moveCamera(
         .newCameraPosition(.new(target: target, zoom: zoom)),
         animation: const .new(type: .smooth, duration: 1.0),
       );
@@ -95,7 +141,7 @@ class MapAppbar extends StatelessWidget {
       child: Padding(
         padding: context.appStyle.appPadding.contentPadding,
         child: UiText.displayLarge(
-          'Найдите свое общежитие',
+          'Выберите общежитие',
           softWrap: true,
           textAlign: .left,
         ),
@@ -121,7 +167,10 @@ class SearchButton extends StatelessWidget {
               onTap: () => showUiBottomSheet(
                 context,
                 title: 'Выбор общежития',
-                widget: const SearchDormitoryScreen(),
+                widget: MapControllerScope(
+                  controller: MapControllerScope.of(context),
+                  child: const SearchDormitoryScreen(),
+                ),
               ),
               child: UiTextField.standard(
                 enabled: false,

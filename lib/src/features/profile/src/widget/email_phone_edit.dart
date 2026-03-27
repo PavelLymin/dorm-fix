@@ -195,6 +195,7 @@ class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
 }
 
 mixin _PhoneNumberEditStateMixin on State<_ButtonPhoneUpdate> {
+  final _phoneValidator = PhoneValidator();
   final ValueNotifier<bool> _isEnabled = ValueNotifier<bool>(false);
 
   @override
@@ -209,15 +210,11 @@ mixin _PhoneNumberEditStateMixin on State<_ButtonPhoneUpdate> {
     super.dispose();
   }
 
-  void _isValidPhoneNumber() {
-    if (!_isEnabled.value &&
-        PhoneNumberValidator.validatePhoneNumber(widget.controller.text)) {
-      _isEnabled.value = true;
-    } else if (_isEnabled.value &&
-        !PhoneNumberValidator.validatePhoneNumber(widget.controller.text)) {
-      _isEnabled.value = false;
-    }
-  }
+  void _isValidPhoneNumber() => _phoneValidator.onPhoneChanged(
+    widget.controller.text,
+    onValid: (_) => _isEnabled.value = true,
+    onInvalid: (_) => _isEnabled.value = false,
+  );
 
   void _verifyPhone() => context.read<PhoneNumberBloc>().add(
     PhoneNumberEvent.verifyPhone(phoneNumber: widget.controller.text),

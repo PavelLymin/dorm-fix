@@ -20,11 +20,11 @@ class AppRouter extends RootStackRouter {
       builder: (_, _) => const SplashScreen(),
     ),
     NamedRouteDef(
+      initial: true,
       name: 'SignIn',
       builder: (context, data) => const SignInScreen(),
     ),
     NamedRouteDef(
-      initial: true,
       name: 'MapScreen',
       builder: (context, data) => const MapScreen(),
     ),

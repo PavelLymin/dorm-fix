@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:backend/src/core/middleware/authentication.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 
 import 'package:backend/src/app/logic/composition_root.dart';
 import 'package:backend/src/app/model/application_config.dart';
-import 'package:backend/src/core/middleware/authentication.dart';
 import 'package:backend/src/core/middleware/error.dart';
 
 void main(List<String> args) async {

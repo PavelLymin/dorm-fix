@@ -50,6 +50,7 @@ dependencies:
   animations: ^2.1.1
   # DotEnv
   flutter_dotenv: ^6.0.0
+  # Yandex MapKit
   yandex_mapkit: ^4.2.1
 
 dev_dependencies:

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
 import '../../../../../core/ws/ws.dart';
@@ -21,7 +22,7 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
         get: (_) => _getRequest(emit),
         create: (event) => _create(event, emit),
       );
-    });
+    }, transformer: droppable());
   }
 
   final IRequestRepository _requestRepository;
@@ -45,6 +46,7 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
       final request = event.request.toEntity();
       await _requestRepository.createRequest(request: request);
     } on Object catch (e, stackTrace) {
+      addError(e, stackTrace);
       _logger.e(e, stackTrace: stackTrace);
       emit(.error(requests: state.requests, message: e));
     }

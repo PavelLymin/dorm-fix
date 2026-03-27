@@ -28,11 +28,9 @@ class _FormRequestScreenState extends State<FormRequestScreen>
         BlocProvider.value(value: _specializationBloc),
       ],
       child: BlocListener<RepairRequestBloc, RepairRequestState>(
-        listener: (context, state) {
-          state.mapOrNull(
-            error: (state) => ErrorUtil.showSnackBar(context, state.message),
-          );
-        },
+        listener: (context, state) => state.mapOrNull(
+          error: (state) => ErrorUtil.showSnackBar(context, state.message),
+        ),
         child: Padding(
           padding: context.appStyle.appPadding.pagePadding,
           child: CustomScrollView(

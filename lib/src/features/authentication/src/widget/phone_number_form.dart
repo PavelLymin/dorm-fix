@@ -83,8 +83,9 @@ class _PhoneNumberFormState extends State<PhoneNumberForm>
 }
 
 mixin _PhoneNumberFormStateMixin on State<PhoneNumberForm> {
-  bool _isValidatePhone = false;
-  bool _isPinValidate = false;
+  final _phoneValidator = PhoneValidator();
+  final _pinCodeValidator = PinCodeValidator();
+
   late final AuthBloc _authBloc;
 
   @override
@@ -102,47 +103,25 @@ mixin _PhoneNumberFormStateMixin on State<PhoneNumberForm> {
     super.dispose();
   }
 
-  void _onPhoneChanged() {
-    if (PhoneNumberValidator.validatePhoneNumber(widget.phoneController.text) &&
-        !_isValidatePhone) {
-      _isValidatePhone = true;
-      context.read<AuthButtonBloc>().add(
-        AuthButtonEvent.changeState(isPhoneNumber: true),
-      );
-    } else if (!PhoneNumberValidator.validatePhoneNumber(
-          widget.phoneController.text,
-        ) &&
-        _isValidatePhone) {
-      _isValidatePhone = false;
-      context.read<AuthButtonBloc>().add(
-        AuthButtonEvent.changeState(isPhoneNumber: false),
-      );
-    }
-  }
+  void _onPhoneChanged() => _phoneValidator.onPhoneChanged(
+    widget.phoneController.text,
+    onValid: (_) =>
+        context.read<AuthButtonBloc>().add(.changeState(isPhoneNumber: true)),
+    onInvalid: (_) =>
+        context.read<AuthButtonBloc>().add(.changeState(isPhoneNumber: false)),
+  );
 
-  void _onPinChanged() {
-    if (PhoneNumberValidator.validatePinCode(widget.pinCodeController.text) &&
-        !_isPinValidate) {
-      _isPinValidate = true;
-      _authBloc.state.mapOrNull(
-        smsCodeSent: (state) => _authBloc.add(
-          AuthEvent.signInWithPhoneNumber(
-            verificationId: state.verificationId,
-            smsCode: widget.pinCodeController.text,
-          ),
+  void _onPinChanged() => _pinCodeValidator.onPinCodeChanged(
+    widget.pinCodeController.text,
+    onValid: (_) => _authBloc.state.mapOrNull(
+      smsCodeSent: (state) => _authBloc.add(
+        .signInWithPhoneNumber(
+          verificationId: state.verificationId,
+          smsCode: widget.pinCodeController.text,
         ),
-      );
-      context.read<AuthButtonBloc>().add(
-        AuthButtonEvent.changeState(isPin: true),
-      );
-    } else if (!PhoneNumberValidator.validatePinCode(
-          widget.pinCodeController.text,
-        ) &&
-        _isPinValidate) {
-      _isPinValidate = false;
-      context.read<AuthButtonBloc>().add(
-        AuthButtonEvent.changeState(isPin: false),
-      );
-    }
-  }
+      ),
+    ),
+    onInvalid: (_) =>
+        context.read<AuthButtonBloc>().add(.changeState(isPin: false)),
+  );
 }

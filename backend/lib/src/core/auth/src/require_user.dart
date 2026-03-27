@@ -20,12 +20,15 @@ abstract class RequireUser {
     return uid;
   }
 
-  static Role getUserRole(Request request) {
+  static Role? getUserRole(Request request) {
     final role = request.context['role'];
+
+    if (role == null) return null;
+
     if (role is! String || role.isEmpty) {
       throw BadRequestException(
         error: {
-          'description': 'Missing or invalid user role in request context.',
+          'description': 'Missing or invalid role in request context.',
           'context': 'role',
         },
       );

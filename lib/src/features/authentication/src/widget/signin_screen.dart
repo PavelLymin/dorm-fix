@@ -63,7 +63,8 @@ class _SignInScreenState extends State<SignInScreen> {
           state.mapOrNull(
             loading: (_) => _addLoading(true),
             authenticated: (state) => state.authUser.mapAuthUser(
-              firebase: (_) {},
+              firebase: (_) =>
+                  context.router.replace(const NamedRoute('MapScreen')),
               profile: (user) => user.mapRoleUser(
                 student: (_) => context.router.replace(
                   const NamedRoute('StudentRootSreen'),

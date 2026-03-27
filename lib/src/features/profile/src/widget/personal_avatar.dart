@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../authentication/authentication.dart';
-import '../../profile.dart';
 
 class PersonalAvatar extends StatelessWidget {
   const PersonalAvatar({super.key});

@@ -1,19 +1,17 @@
 import '../../../../app/model/application_config.dart';
 
-abstract class EmailPasswordValidator {
-  static String? usernameError, passwordError;
+class PasswordValidator {
+  PasswordValidator._();
+  static final instance = PasswordValidator._();
+  factory PasswordValidator() => instance;
 
-  static String? emailValidator(String email) {
-    if (email.isEmpty) {
-      return 'Email is required.';
-    } else if (!Config.email.hasMatch(email)) {
-      return 'Must be a valid email.';
-    }
+  bool _isValidatePassword = false;
+  String? _passwordError;
 
-    return null;
-  }
+  bool get isValidatePassword => _isValidatePassword;
+  String? get passwordError => _passwordError;
 
-  static String? passwordValidator(String password) {
+  String? passwordValidator(String password) {
     const passwordMinLength = Config.passwordMinLength,
         passwordMaxLength = Config.passwordMaxLength;
 
@@ -41,15 +39,24 @@ abstract class EmailPasswordValidator {
     return null;
   }
 
-  static bool validateEmail(String email) {
-    usernameError = emailValidator(email);
-
-    return usernameError == null;
-  }
-
-  static bool validatePassword(String password) {
-    passwordError = passwordValidator(password);
+  bool validatePassword(String password) {
+    _passwordError = passwordValidator(password);
 
     return passwordError == null;
+  }
+
+  void onPasswordChanged(
+    String password, {
+    Function(String password)? onChange,
+    Function(String password)? onValid,
+    Function(String password)? onInvalid,
+  }) {
+    if (validatePassword(password) && !isValidatePassword) {
+      _isValidatePassword = true;
+      onChange?.call(password) ?? onValid?.call(password);
+    } else if (!validatePassword(password) && isValidatePassword) {
+      _isValidatePassword = false;
+      onChange?.call(password) ?? onInvalid?.call(password);
+    }
   }
 }

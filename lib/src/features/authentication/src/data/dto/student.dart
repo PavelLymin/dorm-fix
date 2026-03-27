@@ -1,7 +1,6 @@
 import '../../../authentication.dart';
 import '../../../../dormitory/dormitory.dart';
 import '../../../../room/room.dart';
-import '../../../../profile/profile.dart';
 
 abstract class StudentDto {
   const StudentDto();

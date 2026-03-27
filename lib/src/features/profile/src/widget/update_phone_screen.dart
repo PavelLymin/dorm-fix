@@ -11,6 +11,7 @@ class UpdatePhoneScreen extends StatefulWidget {
 }
 
 class _UpdatePhoneScreenState extends State<UpdatePhoneScreen> {
+  final _pinCodeValidator = PinCodeValidator();
   final ValueNotifier<bool> _isEnabled = ValueNotifier<bool>(false);
   final TextEditingController _controller = TextEditingController();
   late PhoneNumberBloc _phoneNumberBloc;
@@ -48,15 +49,11 @@ class _UpdatePhoneScreenState extends State<UpdatePhoneScreen> {
     );
   }
 
-  void _isValidPinCode() {
-    if (!_isEnabled.value &&
-        PhoneNumberValidator.validatePinCode(_controller.text)) {
-      _isEnabled.value = true;
-    } else if (_isEnabled.value &&
-        !PhoneNumberValidator.validatePinCode(_controller.text)) {
-      _isEnabled.value = false;
-    }
-  }
+  void _isValidPinCode() => _pinCodeValidator.onPinCodeChanged(
+    _controller.text,
+    onValid: (_) => _isEnabled.value = true,
+    onInvalid: (_) => _isEnabled.value = false,
+  );
 
   @override
   Widget build(BuildContext context) => Scaffold(

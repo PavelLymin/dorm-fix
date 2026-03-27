@@ -1,4 +1,7 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:dorm_fix/src/features/map/map.dart';
 import 'package:ui_kit/ui.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 import '../../dormitory.dart';
 
 class SearchDormitories extends StatelessWidget {
@@ -24,11 +27,33 @@ class _Item extends StatelessWidget {
 
   final DormitoryEntity dormitory;
 
+  void _moveCameraToPoint(
+    YandexMapController? controller, {
+    double zoom = 17,
+  }) async {
+    final point = Point(latitude: dormitory.lat, longitude: dormitory.long);
+    await controller?.moveCamera(
+      .newCameraPosition(.new(target: point, zoom: zoom)),
+      animation: const .new(type: .smooth, duration: 1.0),
+    );
+  }
+
+  void _showDormitoryDetails(BuildContext context) {
+    context.router.pop();
+    _moveCameraToPoint(MapControllerScope.of(context));
+    showUiBottomSheet(
+      context,
+      title: 'Общежитие',
+      widget: SearchDormitoryDetails(dormitory: dormitory),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final palette = context.theme.colorPalette;
     return GestureDetector(
-      onTap: () {},
+      behavior: .opaque,
+      onTap: () => _showDormitoryDetails(context),
       child: Row(
         mainAxisAlignment: .start,
         crossAxisAlignment: .center,
