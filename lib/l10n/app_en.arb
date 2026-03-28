@@ -1,6 +1,64 @@
 {
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  }
+  "@@locale": "en",
+
+  "next": "Next",
+  "update": "Update",
+
+  "profile": "Profile",
+  "personal_data": "Personal information",
+  "system_data": "System information",
+  "profile_update": "Edit",
+
+  "email_address": "Email address",
+  "phone_number": "Phone number",
+  "dormitory": "Dormitory",
+  "dormitory_name": "Dormitory {number}",
+  "@dormitory_name": {
+  "description": "Dormitory name",
+    "placeholders": {
+      "number": {
+      "type": "int",
+      "example": "30"
+      }
+    }
+  },
+  "room": "Room",
+
+  "notifications": "Notifications",
+  "notifications_on": "On",
+  "notifications_off": "Off",
+
+  "theme": "Theme",
+  "theme_light": "Light",
+  "theme_dark": "Dark",
+  "theme_system": "System",
+
+  "language": "Language",
+  "russian": "Russian",
+  "english": "English",
+
+  "logout": "Log out",
+
+  "create_request": "Create request",
+  "choose_master": "Choose a specialist",
+  "plumber": "Plumber",
+  "electrician": "Electrician",
+  "mechanic": "Mechanic",
+
+  "select_date": "Select date",
+  "select_time": "Select time",
+  "describe_problem": "Describe the problem",
+  "enter_problem": "Enter the problem",
+
+  "upload_photos": "Upload photos",
+  "files": "Files",
+  "files_added": "{count}/5 files added",
+  "@files_added": {
+    "description": "Number of uploaded files",
+    "placeholders": {
+      "count": {}
+    }
+  },
+
+  "submit": "Submit"
 }

@@ -6,7 +6,7 @@ class GroupedListPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UiCard.standart(
-      child: GroupedList<SampleEnum>(
+      child: GroupedList(
         divider: .indented(),
         items: [
           GroupedListItem(
@@ -23,9 +23,9 @@ class GroupedListPreview extends StatelessWidget {
             content: const Icon(Icons.arrow_forward),
             selectItems: SelectItem<SampleEnum>(
               items: {
-                'Option 1': .option1,
-                'Option 2': .option2,
-                'Option 3': .option3,
+                .option1: 'Option 1',
+                .option2: 'Option 2',
+                .option3: 'Option 3',
               },
               initial: .option2,
             ),
@@ -35,9 +35,9 @@ class GroupedListPreview extends StatelessWidget {
             content: const Icon(Icons.arrow_forward),
             selectItems: SelectItem<SampleEnum>(
               items: {
-                'Option 1': .option1,
-                'Option 2': .option2,
-                'Option 3': .option3,
+                .option1: 'Option 1',
+                .option2: 'Option 2',
+                .option3: 'Option 3',
               },
               initial: .option1,
               onChange: (value) {},

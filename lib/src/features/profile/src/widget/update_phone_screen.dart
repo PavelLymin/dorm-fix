@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../../authentication/authentication.dart';
 import '../../profile.dart';
 
@@ -56,35 +57,31 @@ class _UpdatePhoneScreenState extends State<UpdatePhoneScreen> {
   );
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    resizeToAvoidBottomInset: true,
-    body: Padding(
-      padding: context.appStyle.appPadding.horizontalIncrement(increment: 3),
-      child: Center(
-        child: SizedBox(
-          width: 400,
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: Padding(
+        padding: context.appStyle.appPadding.horizontalIncrement(increment: 3),
+        child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: .center,
+            mainAxisAlignment: .center,
+            mainAxisSize: .min,
             children: [
               PinCode(controller: _controller, isEnable: true, isFocus: true),
-              SizedBox(
-                height: 48,
-                width: .infinity,
-                child: ValueListenableBuilder(
-                  valueListenable: _isEnabled,
-                  builder: (_, value, _) => UiButton.filledPrimary(
-                    enabled: value,
-                    onPressed: _updatePhoneNumber,
-                    label: UiText.titleMedium('Далее'),
-                  ),
+              ValueListenableBuilder(
+                valueListenable: _isEnabled,
+                builder: (_, value, _) => UiButton.filledPrimary(
+                  enabled: value,
+                  onPressed: _updatePhoneNumber,
+                  label: UiText.titleMedium(localizations.next),
                 ),
               ),
             ],
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

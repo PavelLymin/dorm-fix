@@ -16,11 +16,11 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
     NamedRouteDef(
+      initial: true,
       name: 'SplashScreen',
       builder: (_, _) => const SplashScreen(),
     ),
     NamedRouteDef(
-      initial: true,
       name: 'SignIn',
       builder: (context, data) => const SignInScreen(),
     ),
@@ -60,6 +60,7 @@ class AppRouter extends RootStackRouter {
           builder: (_, _) => const FormRequestScreen(),
         ),
         NamedRouteDef(
+          initial: true,
           name: 'ProfileScreen',
           builder: (_, _) => const ProfileScreen(),
         ),

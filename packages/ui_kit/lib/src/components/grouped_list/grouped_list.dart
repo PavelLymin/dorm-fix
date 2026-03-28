@@ -6,7 +6,7 @@ import 'grouped_list_controller.dart';
 
 part 'grouped_list_item.dart';
 
-class GroupedListItem<T extends Enum> {
+class GroupedListItem {
   const GroupedListItem({
     required this.title,
     this.subTitle,
@@ -21,20 +21,40 @@ class GroupedListItem<T extends Enum> {
   final UiText? subTitle;
   final Icon? prefixIcon;
   final Widget? content;
-  final void Function()? onTap;
-  final SelectItem<T>? selectItems;
+  final FutureOr<void> Function()? onTap;
+  final GroupedListSelection? selectItems;
   final bool isSelected;
 }
 
-class SelectItem<T extends Enum> {
-  const SelectItem({required this.items, required this.initial, this.onChange});
-
-  final Map<String, T> items;
-  final T initial;
-  final FutureOr<void> Function(T)? onChange;
+abstract class GroupedListSelection {
+  Enum get initial;
+  Map<Enum, String> get items;
+  FutureOr<void> onSelect(Enum value);
 }
 
-class GroupedList<T extends Enum> extends StatefulWidget {
+class SelectItem<T extends Enum> implements GroupedListSelection {
+  const SelectItem({
+    required Map<T, String> items,
+    required T initial,
+    this.onChange,
+  }) : _items = items,
+       _initial = initial;
+
+  final Map<T, String> _items;
+  final T _initial;
+  final FutureOr<void> Function(T)? onChange;
+
+  @override
+  Enum get initial => _initial;
+
+  @override
+  Map<Enum, String> get items => _items;
+
+  @override
+  FutureOr<void> onSelect(Enum value) => onChange?.call(value as T);
+}
+
+class GroupedList extends StatefulWidget {
   const GroupedList({
     super.key,
     required this.items,
@@ -42,15 +62,15 @@ class GroupedList<T extends Enum> extends StatefulWidget {
     this.style = const GroupedListStyle(),
   });
 
-  final List<GroupedListItem<T>> items;
+  final List<GroupedListItem> items;
   final ItemDivider divider;
   final GroupedListStyle style;
 
   @override
-  State<GroupedList> createState() => _GroupedListState<T>();
+  State<GroupedList> createState() => _GroupedListState();
 }
 
-class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
+class _GroupedListState extends State<GroupedList> {
   @override
   Widget build(BuildContext context) {
     final palette = context.colorPalette;
@@ -71,7 +91,7 @@ class _GroupedListState<T extends Enum> extends State<GroupedList<T>> {
             final item = widget.items[index];
             final isFirst = index == 0;
             final isLast = index == widget.items.length - 1;
-            return _Item<T>(
+            return _Item(
               width: constraints.maxWidth,
               item: item,
               style: widget.style,

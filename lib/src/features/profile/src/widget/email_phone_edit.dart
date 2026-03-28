@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../../../app/model/application_config.dart';
 import '../../../../app/widget/dependencies_scope.dart';
 import '../../../authentication/authentication.dart';
@@ -52,7 +53,7 @@ class _EmailAddressEditState extends State<EmailAddressEdit>
           builder: (_, value, _) => UiButton.filledPrimary(
             onPressed: () {},
             enabled: value,
-            label: UiText.titleMedium('Изменить'),
+            label: UiText.titleMedium(AppLocalizations.of(context).update),
           ),
         ),
       ],
@@ -180,7 +181,7 @@ class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
               context.router.push(const NamedRoute('UpdatePhoneScreen')),
         ),
         builder: (context, state) => state.maybeMap(
-          orElse: () => UiText.titleMedium('Изменить'),
+          orElse: () => UiText.titleMedium(AppLocalizations.of(context).update),
           loading: (_) => SizedBox.square(
             dimension: 20,
             child: CircularProgressIndicator(

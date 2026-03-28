@@ -1,23 +1,25 @@
+import 'dart:async';
+
 import 'package:ui_kit/ui.dart';
 
-class SelectItemsController<T extends Enum> extends ValueNotifier<T> {
+class SelectItemsController extends ValueNotifier<Enum> {
   SelectItemsController(
     super.value, {
     required this.selectItems,
     required this.onTap,
   });
 
-  final SelectItem<T> selectItems;
-  void Function() onTap;
+  final GroupedListSelection selectItems;
+  final FutureOr<void> Function() onTap;
 
   List<GroupedListItem> createItems() => selectItems.items.entries.map((e) {
-    bool isSelected = value == e.value;
+    final isSelected = value == e.key;
     return GroupedListItem(
-      title: UiText.bodyMedium(e.value.toString()),
-      onTap: () {
-        value = e.value;
-        selectItems.onChange?.call(value);
-        onTap.call();
+      title: UiText.bodyMedium(e.value),
+      onTap: () async {
+        value = e.key;
+        await selectItems.onSelect(e.key);
+        await onTap();
       },
       content: isSelected
           ? const Icon(Icons.check_circle_outline, size: 18.0)

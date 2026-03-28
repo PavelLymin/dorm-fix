@@ -21,11 +21,13 @@ class SettingsScope extends InheritedNotifier {
         'out_of_scope',
       );
     }
+
     return settings;
   }
 
   static SettingsContainer of(BuildContext context) {
     SettingsContainer settings = _getSettings(context);
+
     return settings;
   }
 
@@ -35,6 +37,15 @@ class SettingsScope extends InheritedNotifier {
     );
 
     return themeData;
+  }
+
+  static Locale ofLocale(BuildContext context, SettingsEntity settings) {
+    final locale = settings.locale.map(
+      russian: (_) => const Locale('ru'),
+      english: (_) => const Locale('en'),
+    );
+
+    return locale;
   }
 
   @override

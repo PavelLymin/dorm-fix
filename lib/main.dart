@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ui_kit/ui.dart';
+import 'l10n/gen/app_localizations.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
 import 'src/features/authentication/authentication.dart';
@@ -66,6 +68,14 @@ class _MainAppState extends State<MainApp> {
       child: MaterialApp.router(
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('en'), Locale('ru')],
+        locale: SettingsScope.ofLocale(context, widget.settings),
         theme: SettingsScope.ofThemeData(context, widget.settings),
         routerConfig: router.config(),
       ),

@@ -1,0 +1,64 @@
+{
+  "@@locale": "ru",
+
+  "next": "Далее",
+  "update": "Изменить",
+
+  "profile": "Профиль",
+  "personal_data": "Персональные данные",
+  "system_data": "Системные данные",
+  "profile_update": "Изм.",
+
+  "email_address": "Адрес электронной почты",
+  "phone_number": "Номер телефона",
+  "dormitory": "Общежитие",
+  "dormitory_name": "Общежитие {number}",
+  "@dormitory_name": {
+  "description": "Название общежития",
+    "placeholders": {
+      "number": {
+      "type": "int",
+      "example": "30"
+      }
+    }
+  },
+  "room": "Комната",
+
+  "notifications": "Уведомления",
+  "notifications_on": "Вкл.",
+  "notifications_off": "Выкл.",
+
+  "theme": "Тема",
+  "theme_light": "Светлая",
+  "theme_dark": "Тёмная",
+  "theme_system": "Системная",
+
+  "language": "Язык",
+  "russian": "Русский",
+  "english": "Английский",
+
+  "logout": "Выйти",
+
+  "create_request": "Создание заявки",
+  "choose_master": "Выберите мастера",
+  "plumber": "Сантехник",
+  "electrician": "Электрик",
+  "mechanic": "Слесарь",
+
+  "select_date": "Укажите дату",
+  "select_time": "Укажите время",
+  "describe_problem": "Опишите проблему",
+  "enter_problem": "Введите проблему",
+
+  "upload_photos": "Загрузите фотографии",
+  "files": "Файлы",
+  "files_added": "{count}/5 файлов добавлено",
+  "@files_added": {
+    "description": "Количество добавленных файлов",
+    "placeholders": {
+      "count": {}
+    }
+  },
+
+  "submit": "Отправить"
+}

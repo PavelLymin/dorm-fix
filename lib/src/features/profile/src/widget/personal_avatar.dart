@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../../authentication/authentication.dart';
 
 class PersonalAvatar extends StatelessWidget {
@@ -28,6 +29,7 @@ class _PersonalAvatarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorPalette = Theme.of(context).colorPalette;
+    final localizations = AppLocalizations.of(context);
     final authUser = user.authenticatedOrNull!;
     return UiCard.standart(
       padding: context.appStyle.appPadding.allMedium,
@@ -56,7 +58,7 @@ class _PersonalAvatarView extends StatelessWidget {
               : user.mapRoleUser<Widget>(
                   student: (s) => _TitlePersonalAvatar(
                     displayName: s.user.displayName ?? 'User',
-                    title: s.dormitory.name,
+                    title: localizations.dormitory_name(s.dormitory.number),
                     subtitle: s.room.number,
                   ),
                   master: (m) => _TitlePersonalAvatar(

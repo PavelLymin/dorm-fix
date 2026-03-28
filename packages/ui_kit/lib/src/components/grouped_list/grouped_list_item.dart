@@ -1,6 +1,6 @@
 part of 'grouped_list.dart';
 
-class _Item<T extends Enum> extends StatefulWidget {
+class _Item extends StatefulWidget {
   const _Item({
     required this.width,
     required this.item,
@@ -10,20 +10,17 @@ class _Item<T extends Enum> extends StatefulWidget {
   });
 
   final double width;
-  final GroupedListItem<T> item;
+  final GroupedListItem item;
   final GroupedListStyle style;
   final BorderRadius borderRadius;
   final bool isInitial;
 
   @override
-  State<_Item<T>> createState() => _ItemState<T>();
+  State<_Item> createState() => _ItemState();
 }
 
-class _ItemState<T extends Enum> extends State<_Item<T>>
-    with
-        SingleTickerProviderStateMixin,
-        _ItemStateMixin,
-        _ItemMixinMenuLink<T> {
+class _ItemState extends State<_Item>
+    with SingleTickerProviderStateMixin, _ItemStateMixin, _ItemMixinMenuLink {
   @override
   void initState() {
     super.initState();
@@ -35,7 +32,7 @@ class _ItemState<T extends Enum> extends State<_Item<T>>
   }
 
   @override
-  void didUpdateWidget(covariant _Item<T> oldWidget) {
+  void didUpdateWidget(covariant _Item oldWidget) {
     super.didUpdateWidget(oldWidget);
     _updateStates();
   }
@@ -64,7 +61,7 @@ class _ItemState<T extends Enum> extends State<_Item<T>>
       ),
       child: CompositedTransformTarget(
         link: _layerLink,
-        child: _ItemContent<T>(
+        child: _ItemContent(
           style: widget.style,
           item: widget.item,
           hasSelect: _hasSelect,
@@ -76,9 +73,8 @@ class _ItemState<T extends Enum> extends State<_Item<T>>
   }
 }
 
-class _ItemContent<T extends Enum> extends StatelessWidget {
+class _ItemContent extends StatelessWidget {
   const _ItemContent({
-    super.key,
     required this.style,
     required this.item,
     required this.hasSelect,
@@ -87,10 +83,10 @@ class _ItemContent<T extends Enum> extends StatelessWidget {
   });
 
   final GroupedListStyle style;
-  final GroupedListItem<T> item;
+  final GroupedListItem item;
   final bool hasSelect;
   final bool hasData;
-  final SelectItemsController<T>? controller;
+  final SelectItemsController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -114,10 +110,10 @@ class _ItemContent<T extends Enum> extends StatelessWidget {
             children: [
               item.title,
               if (hasSelect)
-                ValueListenableBuilder<T>(
+                ValueListenableBuilder<Enum>(
                   valueListenable: controller!,
                   builder: (_, value, _) => UiText.bodyMedium(
-                    value.toString(),
+                    item.selectItems!.items[value]!,
                     color: palette.mutedForeground,
                   ),
                 ),
@@ -132,7 +128,7 @@ class _ItemContent<T extends Enum> extends StatelessWidget {
   }
 }
 
-mixin _ItemStateMixin<T extends Enum> on State<_Item<T>> {
+mixin _ItemStateMixin on State<_Item> {
   late final WidgetStatesController _statesController;
   bool get _isDisabled => widget.item.onTap == null;
 
@@ -149,19 +145,19 @@ mixin _ItemStateMixin<T extends Enum> on State<_Item<T>> {
   }
 }
 
-mixin _ItemMixinMenuLink<T extends Enum> on State<_Item<T>> {
+mixin _ItemMixinMenuLink<T extends Enum> on State<_Item> {
   final _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
   AnimationController? _animationController;
-  SelectItemsController<T>? _selectItemsController;
+  SelectItemsController? _selectItemsController;
 
-  SelectItem<T>? get _selectItems => widget.item.selectItems;
+  GroupedListSelection? get _selectItems => widget.item.selectItems;
   bool get _hasSelect => _selectItems != null && _selectItems!.items.isNotEmpty;
   bool get _hasSubTitle => !_hasSelect && widget.item.subTitle != null;
   double get _widthMenu => widget.width * .6;
 
   void _initSelectItems() {
-    _selectItemsController = SelectItemsController<T>(
+    _selectItemsController = SelectItemsController(
       _selectItems!.initial,
       selectItems: _selectItems!,
       onTap: hide,
@@ -210,11 +206,11 @@ mixin _ItemMixinMenuLink<T extends Enum> on State<_Item<T>> {
     _overlayEntry = null;
   }
 
-  void onTap() {
+  FutureOr<void> onTap() async {
     if (_hasSelect) {
       show();
     } else {
-      widget.item.onTap?.call();
+      await widget.item.onTap?.call();
     }
   }
 }
