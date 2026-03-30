@@ -12,6 +12,7 @@ import 'src/features/settings/settings.dart';
 
 void main() async {
   final logger = CreateAppLogger().create();
+
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +34,7 @@ void main() async {
     },
     (error, stackTrace) {
       logger.e(error, stackTrace: stackTrace);
+      Error.throwWithStackTrace(error, stackTrace);
     },
   );
 }

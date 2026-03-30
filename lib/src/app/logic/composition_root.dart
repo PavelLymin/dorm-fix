@@ -1,4 +1,3 @@
-import 'package:dorm_fix/src/features/repair_request/request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,11 +5,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../firebase_options.dart';
+import '../../core/middleware/src/authenticated_middleware.dart';
+import '../../core/middleware/src/logger_middleware.dart';
 import '../../core/rest_client/rest_client.dart';
 import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
+import '../../features/repair_request/request.dart';
 import '../../features/students/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/room/room.dart';
@@ -44,29 +46,37 @@ class CompositionRoot {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    final firebaseAuth = await _CreateFirebaseAuth().create();
 
-    // Http
-    final RestClientHttp client = RestClientHttp(
-      baseUrl: Config.apiBaseUrl,
-      client: createDefaultHttpClient(),
-    );
+    // Google
+    final googleSignIn = GoogleSignIn.instance;
 
     // WS
     final IWebSocket webSocket = WebSocketBase(
       uri: '${Config.wsBaseUrl}/connection',
     );
-    // Firebase
-    final firebaseAuth = await _CreateFirebaseAuth().create();
 
+    // Authentication
+    final authRepository = AuthRepository(
+      firebaseAuth: firebaseAuth,
+      googleSignIn: googleSignIn,
+      webSocket: webSocket,
+    );
+
+    final client = await _CreateHttpClient(
+      authRepository: authRepository,
+    ).create();
+
+    // BLoC observer
     Bloc.observer = AppBlocObserver(logger: logger);
+
+    // auto_route
+    final router = AppRouter();
 
     // Firebase User
     final firebaseUserRepository = FirebaseUserRepositoryImpl(
       firebaseAuth: firebaseAuth,
     );
-
-    final googleSignIn = GoogleSignIn.instance;
-    // await googleSignIn.initialize(clientId: Config.googleClientId);
 
     // Profile
     final profileRepository = ProfileRepositoryImpl(
@@ -74,29 +84,14 @@ class CompositionRoot {
       firebaseAuth: firebaseAuth,
     );
 
-    // Authentication
-    final authRepository = AuthRepository(
-      firebaseAuth: firebaseAuth,
-      profileRepository: profileRepository,
-      googleSignIn: googleSignIn,
-      webSocket: webSocket,
-    );
-    final authenticationBloc = AuthBloc(
-      authRepository: authRepository,
-      firebaseUserRepository: firebaseUserRepository,
-      logger: logger,
-    );
-
-    // auto_route
-    final router = AppRouter();
-
-    // Settings
-    final settingsContainer = await _CreateSettings().create();
-
+    // User
     final userRepository = UserRepositoryImpl(
       client: client,
       firebaseAuth: firebaseAuth,
     );
+
+    // Settings
+    final settingsContainer = await _CreateSettings().create();
 
     // Specialization
     final specializationRepository = SpecializationRepositoryImpl(
@@ -104,12 +99,7 @@ class CompositionRoot {
       firebaseAuth: firebaseAuth,
     );
 
-    final specializationBloc = SpecializationBloc(
-      specializationRepository: specializationRepository,
-      logger: logger,
-    );
-
-    // Search Dormitory
+    //  Dormitory
     final dormitoryRepository = DormitoryRepository(
       client: client,
       firebaseAuth: firebaseAuth,
@@ -121,6 +111,7 @@ class CompositionRoot {
       firebaseAuth: firebaseAuth,
     );
 
+    // Chat
     final chatRepository = ChatRepositoryImpl(
       client: client,
       firebaseAuth: firebaseAuth,
@@ -130,6 +121,7 @@ class CompositionRoot {
       webSocket: webSocket,
     );
 
+    // Message
     final messageRepository = MessageRepositoryImpl(
       client: client,
       firebaseAuth: firebaseAuth,
@@ -143,6 +135,18 @@ class CompositionRoot {
     final requestRepository = RequestRepositoryImpl(
       client: client,
       firebaseAuth: firebaseAuth,
+    );
+
+    final authenticationBloc = AuthBloc(
+      authRepository: authRepository,
+      firebaseUserRepository: firebaseUserRepository,
+      profileRepository: profileRepository,
+      logger: logger,
+    );
+
+    final specializationBloc = SpecializationBloc(
+      specializationRepository: specializationRepository,
+      logger: logger,
     );
 
     final repairRequestBloc = RepairRequestBloc(
@@ -263,6 +267,44 @@ class _CreateFirebaseAuth extends AsyncFactory<FirebaseAuth> {
     );
 
     return FirebaseAuth.instance;
+  }
+}
+
+class _CreateHttpClient extends AsyncFactory<RestClientHttp> {
+  const _CreateHttpClient({required this.authRepository});
+
+  final IAuthRepository authRepository;
+
+  @override
+  Future<RestClientHttp> create() async {
+    final list = <ApiClientMiddleware>[
+      const LoggerMiddleware().call,
+
+      AuthenticatedMiddleware(
+        getToken: () async {
+          try {
+            return await FirebaseAuth.instance.currentUser?.getIdToken();
+          } on Object catch (e, s) {
+            Logger().w(
+              'Failed to get authentication token',
+              error: e,
+              stackTrace: s,
+            );
+            return null;
+          }
+        },
+        logout: () async {
+          Logger().w('Authentication failed, logging out user');
+          await authRepository.signOut();
+        },
+      ).call,
+    ];
+
+    return RestClientHttp(
+      baseUrl: Config.apiBaseUrl,
+      client: createDefaultHttpClient(),
+      middleware: list,
+    );
   }
 }
 

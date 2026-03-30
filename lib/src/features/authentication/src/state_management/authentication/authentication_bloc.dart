@@ -13,8 +13,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
     required this._authRepository,
     required this._firebaseUserRepository,
     required this._logger,
+    required this._profileRepository,
   }) : super(const _NotAuthenticated()) {
-    _streamSubscription = _authRepository.userChanges().listen(
+    _streamSubscription = _profileRepository.userChanges().listen(
       (data) => data.map(
         notAuthenticated: (user) => setState(_NotAuthenticated(user: user)),
         authenticated: (user) async {
@@ -44,6 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with SetStateMixin {
 
   final IAuthRepository _authRepository;
   final IFirebaseUserRepository _firebaseUserRepository;
+  final IProfileRepository _profileRepository;
   final Logger _logger;
   StreamSubscription? _streamSubscription;
 

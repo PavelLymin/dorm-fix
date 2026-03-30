@@ -3,6 +3,7 @@ import '../../../../../features/chat/chat.dart';
 part 'message.dart';
 part 'chat.dart';
 part 'typing.dart';
+part 'presence.dart';
 part 'error.dart';
 
 enum PayloadType {
@@ -12,7 +13,8 @@ enum PayloadType {
   messageCreated(value: 'message_created'),
   messageDeleted(value: 'message_deleted'),
   messageUpdated(value: 'message_updated'),
-  typing(value: 'typing');
+  typing(value: 'typing'),
+  presence(value: 'presence');
 
   const PayloadType({required this.value});
   final String value;
@@ -43,6 +45,7 @@ sealed class Payload {
       switch (type) {
         .error => ErrorPayload.fromJson(json),
         .typing => TypingPayload.fromJson(json),
+        .presence => PresencePayload.fromJson(json),
         .chatJoin => JoinToChatPayload.fromJson(json),
         .chatLeave => LeaveFromChatPayload.fromJson(json),
         .messageCreated => CreatedMessagePayload.fromJson(json),

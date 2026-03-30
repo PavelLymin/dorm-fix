@@ -3,12 +3,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../../core/ws/ws.dart';
-import '../../../../profile/profile.dart';
 import '../../../authentication.dart';
 
 abstract interface class IAuthRepository {
-  Stream<UserEntity> userChanges();
-
   Future<void> connect();
 
   Future<FirebaseUser> signInWithEmailAndPassword({
@@ -34,46 +31,13 @@ abstract interface class IAuthRepository {
 class AuthRepository implements IAuthRepository {
   AuthRepository({
     required this._firebaseAuth,
-    required this._profileRepository,
     required this._googleSignIn,
     required this._webSocket,
   });
 
   final FirebaseAuth _firebaseAuth;
-  final IProfileRepository _profileRepository;
   final GoogleSignIn _googleSignIn;
   final IWebSocket _webSocket;
-
-  @override
-  Stream<UserEntity> userChanges() {
-    StreamSubscription? streamSubscription;
-    final controller = StreamController<UserEntity>(
-      onCancel: () => streamSubscription?.cancel(),
-    );
-    streamSubscription = _firebaseAuth.userChanges().listen((data) async {
-      if (data != null) {
-        try {
-          final profile = await _profileRepository.getProfile();
-          if (profile == null) {
-            final user = FirebaseUserDto.fromFirebase(data).toEntity();
-            controller.add(user);
-          } else {
-            final role = profile.mapRoleUser(
-              student: (student) => student,
-              master: (master) => master,
-            );
-            controller.add(role);
-          }
-        } catch (e) {
-          controller.addError(e);
-        }
-      } else {
-        controller.add(const NotAuthenticatedUser());
-      }
-    }, onDone: () => streamSubscription?.cancel());
-
-    return controller.stream;
-  }
 
   @override
   Future<void> connect() async {
