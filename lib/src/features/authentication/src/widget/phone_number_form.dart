@@ -30,7 +30,8 @@ class _PhoneNumberFormState extends State<PhoneNumberForm>
     with _PhoneNumberFormStateMixin {
   @override
   Widget build(BuildContext context) {
-    final palette = context.colorPalette;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
     return Column(
       children: [
         UiTextField.standard(

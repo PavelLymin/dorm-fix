@@ -4,19 +4,12 @@ final lightTheme = createThemeData(
   brightness: .light,
   palette: lightColorPalette,
   typography: defaultTypography,
-  style: const AppStyleData(),
+  style: defaultAppStyle,
 );
 
 final darkTheme = createThemeData(
   brightness: .dark,
   palette: darkColorPalette,
   typography: defaultTypography,
-  style: const AppStyleData(),
+  style: defaultAppStyle,
 );
-
-extension ThemeDataExtension on BuildContext {
-  ThemeData get theme => Theme.of(this);
-  ColorPalette get colorPalette => theme.colorPalette;
-  AppTypography get appTypography => theme.appTypography;
-  AppStyleData get appStyle => theme.appStyle;
-}

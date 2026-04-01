@@ -48,19 +48,18 @@ sealed class UiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.colorPalette;
-    final style = context.appStyle.style;
-    final appPadding = context.appStyle.appPadding;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyle;
     return map(
       standart: (variant) => DecoratedBox(
         decoration: BoxDecoration(
           color: variant.color ?? palette.card,
           borderRadius: variant.borderRadius,
-          border: .all(color: palette.border, width: style.borderWidth),
           gradient: variant.gradient,
         ),
         child: Padding(
-          padding: variant.padding ?? appPadding.allLarge,
+          padding: variant.padding ?? style.appPadding.allLarge,
           child: variant.child,
         ),
       ),
@@ -79,11 +78,10 @@ sealed class UiCard extends StatelessWidget {
                 WidgetState.any: variant.color ?? palette.card,
               }).resolve(states),
               borderRadius: variant.borderRadius,
-              border: .all(color: palette.border, width: style.borderWidth),
               gradient: variant.gradient,
             ),
             child: Padding(
-              padding: variant.padding ?? appPadding.allLarge,
+              padding: variant.padding ?? style.appPadding.allLarge,
               child: variant.builder(context, states, variant.child),
             ),
           ),

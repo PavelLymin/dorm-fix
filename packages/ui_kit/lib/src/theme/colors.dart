@@ -1,0 +1,142 @@
+import 'package:ui_kit/ui.dart';
+
+final lightColorPalette2 = generatePaletteByBrightness(.light);
+final darkColorPalette2 = generatePaletteByBrightness(.dark);
+
+ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
+  if (brightness == .dark) {
+    return const ColorPalette2(
+      background: Color(0xFFEBEBEB),
+      primary: Color(0xFF009530),
+      primaryIcon: Color(0xFF00B23D),
+      secondary: Color(0xFF7B7B7B),
+      foreground: Color(0xFF232323),
+      foregroundPrimary: Color(0xFF009530),
+      foregroundSecondary: Color(0xFF7B7B7B),
+      foregroundDisabled: Color(0xFFC2C2C2),
+      disabled: Color(0xFFC2C2C2),
+      disabledIcon: Color(0xFFD6D6D6),
+      inputPlaceholder: Color(0xFFEBEBEB),
+      card: Color(0xFFFFFFFF),
+    );
+  }
+
+  return const ColorPalette2(
+    background: Color(0xFFEBEBEB),
+    primary: Color(0xFF009530),
+    primaryIcon: Color(0xFF00B23D),
+    secondary: Color(0xFF7B7B7B),
+    foreground: Color(0xFF232323),
+    foregroundPrimary: Color(0xFF009530),
+    foregroundSecondary: Color(0xFF7B7B7B),
+    foregroundDisabled: Color(0xFFC2C2C2),
+    disabled: Color(0xFFC2C2C2),
+    disabledIcon: Color(0xFFD6D6D6),
+    inputPlaceholder: Color(0xFFEBEBEB),
+    card: Color(0xFFFFFFFF),
+  );
+}
+
+class ColorPalette2 extends ThemeExtension<ColorPalette2> {
+  const ColorPalette2({
+    required this.background,
+    required this.primary,
+    required this.primaryIcon,
+    required this.secondary,
+    required this.foreground,
+    required this.foregroundPrimary,
+    required this.foregroundSecondary,
+    required this.foregroundDisabled,
+    required this.disabled,
+    required this.disabledIcon,
+    required this.inputPlaceholder,
+    required this.card,
+  });
+
+  final Color background;
+  final Color primary;
+  final Color primaryIcon;
+  final Color secondary;
+  final Color foreground;
+  final Color foregroundPrimary;
+  final Color foregroundSecondary;
+  final Color foregroundDisabled;
+  final Color disabled;
+  final Color disabledIcon;
+  final Color inputPlaceholder;
+  final Color card;
+
+  @override
+  ThemeExtension<ColorPalette2> copyWith({
+    Color? background,
+    Color? primary,
+    Color? primaryIcon,
+    Color? secondary,
+    Color? foreground,
+    Color? foregroundPrimary,
+    Color? foregroundSecondary,
+    Color? foregroundDisabled,
+    Color? disabled,
+    Color? disabledIcon,
+    Color? inputPlaceholder,
+    Color? card,
+  }) => ColorPalette2(
+    background: background ?? this.background,
+    primary: primary ?? this.primary,
+    primaryIcon: primaryIcon ?? this.primaryIcon,
+    secondary: secondary ?? this.secondary,
+    foreground: foreground ?? this.foreground,
+    foregroundPrimary: foregroundPrimary ?? this.foregroundPrimary,
+    foregroundSecondary: foregroundSecondary ?? this.foregroundSecondary,
+    foregroundDisabled: foregroundDisabled ?? this.foregroundDisabled,
+    disabled: disabled ?? this.disabled,
+    disabledIcon: disabledIcon ?? this.disabledIcon,
+    inputPlaceholder: inputPlaceholder ?? this.inputPlaceholder,
+    card: card ?? this.card,
+  );
+
+  @override
+  ThemeExtension<ColorPalette2> lerp(
+    covariant ThemeExtension<ColorPalette2>? other,
+    double t,
+  ) {
+    if (other == null || other is! ColorPalette2) return this;
+    return ColorPalette2(
+      background: .lerp(background, other.background, t)!,
+      primary: .lerp(primary, other.primary, t)!,
+      primaryIcon: .lerp(primaryIcon, other.primaryIcon, t)!,
+      secondary: .lerp(secondary, other.secondary, t)!,
+      foreground: .lerp(foreground, other.foreground, t)!,
+      foregroundPrimary: .lerp(foregroundPrimary, other.foregroundPrimary, t)!,
+      foregroundSecondary: .lerp(
+        foregroundSecondary,
+        other.foregroundSecondary,
+        t,
+      )!,
+      foregroundDisabled: .lerp(
+        foregroundDisabled,
+        other.foregroundDisabled,
+        t,
+      )!,
+      disabled: .lerp(disabled, other.disabled, t)!,
+      disabledIcon: .lerp(disabledIcon, other.disabledIcon, t)!,
+      inputPlaceholder: .lerp(inputPlaceholder, other.inputPlaceholder, t)!,
+      card: .lerp(card, other.card, t)!,
+    );
+  }
+
+  Map<String, Color> toMap() => {
+    'background': background,
+    'primary': primary,
+    'primaryIcon': primaryIcon,
+    'secondary': secondary,
+    'foreground': foreground,
+    'foregroundPrimary': foregroundPrimary,
+    'foregroundSecondary': foregroundSecondary,
+    'foregroundDisabled': foregroundDisabled,
+    'disabled': disabled,
+    'disabledIcon': disabledIcon,
+    'inputPlaceholder': inputPlaceholder,
+    'card': card,
+  };
+}

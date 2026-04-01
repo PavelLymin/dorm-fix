@@ -29,7 +29,9 @@ class AuthButton extends StatelessWidget {
                   dimension: 20.0,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: context.colorPalette.primary.withValues(alpha: .38),
+                    color: Theme.of(
+                      context,
+                    ).colorPalette.primary.withValues(alpha: .38),
                   ),
                 )
               : const Text('Далее'),

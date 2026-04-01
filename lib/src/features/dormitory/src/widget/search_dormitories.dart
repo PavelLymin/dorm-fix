@@ -14,7 +14,7 @@ class SearchDormitories extends StatelessWidget {
     itemExtent: 48.0,
     delegate: SliverChildBuilderDelegate(
       (_, index) => Padding(
-        padding: context.appStyle.appPadding.vertical,
+        padding: Theme.of(context).appStyle.appPadding.vertical,
         child: _Item(dormitory: dormitories[index]),
       ),
       childCount: dormitories.length,
@@ -50,7 +50,8 @@ class _Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.theme.colorPalette;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
     return GestureDetector(
       behavior: .opaque,
       onTap: () => _showDormitoryDetails(context),

@@ -260,39 +260,6 @@ class AppTypography extends ThemeExtension<AppTypography> {
   }
 }
 
-class AppStyleData extends ThemeExtension<AppStyleData> {
-  const AppStyleData({
-    this.style = const AppStyle(),
-    this.appPadding = const AppPadding(),
-    this.lineCalendarStyle = const LineCalendarStyle(),
-    this.groupedListStyle = const GroupedListStyle(),
-  });
-
-  final AppStyle style;
-  final AppPadding appPadding;
-  final LineCalendarStyle lineCalendarStyle;
-  final GroupedListStyle groupedListStyle;
-
-  @override
-  ThemeExtension<AppStyleData> copyWith({
-    AppStyle? style,
-    AppPadding? appPadding,
-    LineCalendarStyle? lineCalendarStyle,
-    GroupedListStyle? groupedListStyle,
-  }) => AppStyleData(
-    style: style ?? this.style,
-    appPadding: appPadding ?? this.appPadding,
-    lineCalendarStyle: lineCalendarStyle ?? this.lineCalendarStyle,
-    groupedListStyle: groupedListStyle ?? this.groupedListStyle,
-  );
-
-  @override
-  ThemeExtension<AppStyleData> lerp(
-    covariant ThemeExtension<AppStyleData>? other,
-    double t,
-  ) => this;
-}
-
 extension ThemeDataExtensions on ThemeData {
   ColorPalette get colorPalette =>
       extension<ColorPalette>() ?? lightColorPalette;
@@ -300,6 +267,11 @@ extension ThemeDataExtensions on ThemeData {
   AppTypography get appTypography =>
       extension<AppTypography>() ?? defaultTypography;
 
-  AppStyleData get appStyle =>
-      extension<AppStyleData>() ?? const AppStyleData();
+  AppTypography2 get appTypography2 =>
+      extension<AppTypography2>() ?? defaultTypography2;
+
+  ColorPalette2 get colorPalette2 =>
+      extension<ColorPalette2>() ?? lightColorPalette2;
+
+  AppStyle get appStyle => extension<AppStyle>() ?? defaultAppStyle;
 }

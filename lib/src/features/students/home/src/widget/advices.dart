@@ -23,9 +23,10 @@ class _AdvicesState extends State<Advices> {
 
   @override
   Widget build(BuildContext context) {
-    final padding = context.appStyle.appPadding;
+    final theme = Theme.of(context);
+    final style = theme.appStyle;
     return Padding(
-      padding: padding.contentPadding,
+      padding: style.appPadding.contentPadding,
       child: Column(
         crossAxisAlignment: .start,
         mainAxisSize: .min,
@@ -52,10 +53,10 @@ class _AdvicesState extends State<Advices> {
               itemBuilder: (context, index) {
                 final item = list[index];
                 return Padding(
-                  padding: padding.horizontal,
+                  padding: style.appPadding.horizontal,
                   child: UiCard.clickable(
                     onTap: () {},
-                    padding: padding.allMedium,
+                    padding: style.appPadding.allMedium,
                     child: Column(
                       mainAxisAlignment: .start,
                       crossAxisAlignment: .start,

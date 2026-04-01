@@ -20,6 +20,7 @@ abstract class EstimatedSizes {
   }
 
   static double estimateHeightDescription(BuildContext context) {
+    final theme = Theme.of(context);
     final style = titleStyle(context);
     final twoLineText =
         TextPainter(
@@ -29,7 +30,7 @@ abstract class EstimatedSizes {
         )..layout(
           maxWidth:
               MediaQuery.sizeOf(context).width -
-              context.appStyle.appPadding.pagePadding.horizontal,
+              theme.appStyle.appPadding.pagePadding.horizontal,
         );
 
     return heightDescription = twoLineText.height;
@@ -60,8 +61,9 @@ class Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.colorPalette;
-    final style = context.appStyle.style;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyle;
     return UiCard.standart(
       borderRadius: style.borderRadius,
       padding: EstimatedSizes.itemPadding,
@@ -164,8 +166,9 @@ class _ItemStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.colorPalette;
-    final style = context.appStyle.style;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyle;
     Color statusColor = switch (status) {
       .completed => palette.completed,
       .inProgress => palette.inProgress,

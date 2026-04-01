@@ -12,7 +12,7 @@ class PhotoPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UiCard.standart(
-      padding: context.appStyle.appPadding.allMedium,
+      padding: Theme.of(context).appStyle.appPadding.allMedium,
       child: BlocBuilder<RequestFormBloc, RequestFormState>(
         buildWhen: (previous, current) =>
             previous.currentFormModel.imagePaths.length !=
@@ -67,7 +67,6 @@ class _ButtonAdd extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette;
-    final style = theme.appStyle.style;
     return UiButton.icon(
       statesController: controller,
       onPressed: onPressed,
@@ -85,9 +84,6 @@ class _ButtonAdd extends StatelessWidget {
           WidgetState.disabled: palette.muted,
           WidgetState.any: palette.secondary,
         }),
-        side: .all(
-          BorderSide(color: palette.borderStrong, width: style.borderWidth),
-        ),
       ),
     );
   }
@@ -226,9 +222,9 @@ class _Item extends StatelessWidget {
       context.read<RequestFormBloc>().add(.deleteImage(index: index));
   @override
   Widget build(BuildContext context) {
-    final palette = context.colorPalette;
-    final style = context.appStyle.style;
-    final padding = context.appStyle.appPadding;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyle;
     return Padding(
       padding: pickerStyle.photoPadding,
       child: Stack(
@@ -244,7 +240,7 @@ class _Item extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: padding.allSmall,
+            padding: style.appPadding.allSmall,
             child: UiButton.icon(
               onPressed: () => _onPressed(context),
               icon: Icon(
@@ -255,14 +251,8 @@ class _Item extends StatelessWidget {
               ),
               style: ButtonStyle(
                 minimumSize: .all(.square(8.0)),
-                padding: .all(padding.allIncrement(increment: .5)),
+                padding: .all(style.appPadding.allIncrement(increment: .5)),
                 backgroundColor: .all(Theme.of(context).colorPalette.secondary),
-                side: .all(
-                  BorderSide(
-                    color: palette.borderStrong,
-                    width: style.borderWidth * 2,
-                  ),
-                ),
                 shape: .all(const CircleBorder()),
               ),
             ),

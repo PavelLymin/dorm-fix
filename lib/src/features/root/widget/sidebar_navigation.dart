@@ -20,7 +20,9 @@ class SidebarNavigation extends StatelessWidget {
           child: ColoredBox(
             color: Theme.of(context).colorPalette.secondary,
             child: Padding(
-              padding: context.appStyle.appPadding.onlyIncrement(top: 16),
+              padding: Theme.of(
+                context,
+              ).appStyle.appPadding.onlyIncrement(top: 16),
               child: ListView(
                 children: List.generate(pages.length, (index) {
                   final page = pages[index];
@@ -50,7 +52,7 @@ class MenuNavigation extends StatelessWidget {
   Widget build(BuildContext context) => ColoredBox(
     color: Theme.of(context).colorPalette.secondary,
     child: Padding(
-      padding: context.appStyle.appPadding.onlyIncrement(top: 16),
+      padding: Theme.of(context).appStyle.appPadding.onlyIncrement(top: 16),
       child: ListView(
         children: List.generate(pages.length, (index) {
           final page = pages[index];
@@ -95,9 +97,10 @@ class _TabItemState extends State<_TabItem> {
 
   @override
   Widget build(BuildContext context) {
-    final appPadding = context.appStyle.appPadding;
+    final theme = Theme.of(context);
+    final style = theme.appStyle;
     return Padding(
-      padding: appPadding.symmetricIncrement(horizontal: 3),
+      padding: style.appPadding.symmetricIncrement(horizontal: 3),
       child: GestureDetector(
         onTap: () => AutoTabsRouter.of(context).setActiveIndex(widget.index),
         child: DecoratedBox(
@@ -108,7 +111,7 @@ class _TabItemState extends State<_TabItem> {
                 )
               : BoxDecoration(),
           child: Padding(
-            padding: appPadding.allMedium,
+            padding: style.appPadding.allMedium,
             child: Row(
               spacing: 16,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -141,7 +144,7 @@ class Burger extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: context.appStyle.appPadding.symmetricIncrement(
+              padding: Theme.of(context).appStyle.appPadding.symmetricIncrement(
                 horizontal: 2,
                 vertical: 7,
               ),

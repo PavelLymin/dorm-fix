@@ -13,10 +13,10 @@ class _ChoiceOptionsPreviewState extends State<ChoiceOptionsPreview> {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final theme = Theme.of(context);
     return UiCard.standart(
       child: Padding(
-        padding: context.appStyle.appPadding.allSmall,
+        padding: theme.appStyle.appPadding.allSmall,
         child: Column(
           children: [
             ChoiceOptions(
@@ -25,8 +25,8 @@ class _ChoiceOptionsPreviewState extends State<ChoiceOptionsPreview> {
                 ChoiceItem(title: 'Option 2'),
                 ChoiceItem(title: 'Option 3'),
               ],
-              barColor: colorPalette.card,
-              selectedColor: colorPalette.secondary,
+              barColor: theme.colorPalette.card,
+              selectedColor: theme.colorPalette.secondary,
               selected: _selected1,
               onChange: (index) => setState(() => _selected1 = index),
             ),
@@ -37,8 +37,8 @@ class _ChoiceOptionsPreviewState extends State<ChoiceOptionsPreview> {
                 ChoiceItem(title: 'Option 2', icon: Icon(Icons.star_rounded)),
                 ChoiceItem(title: 'Option 3', icon: Icon(Icons.star_rounded)),
               ],
-              barColor: colorPalette.card,
-              selectedColor: colorPalette.secondary,
+              barColor: theme.colorPalette.card,
+              selectedColor: theme.colorPalette.secondary,
               selected: _selected2,
               onChange: (index) => setState(() => _selected2 = index),
             ),

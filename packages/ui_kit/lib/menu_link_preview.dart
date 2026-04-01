@@ -5,6 +5,6 @@ class MenuLinkPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => UiCard.standart(
-    child: Padding(padding: context.appStyle.appPadding.allSmall),
+    child: Padding(padding: Theme.of(context).appStyle.appPadding.allSmall),
   );
 }

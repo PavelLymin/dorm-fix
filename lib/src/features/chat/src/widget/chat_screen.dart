@@ -111,7 +111,7 @@ class _ChatLoadedState extends State<_ChatLoaded> {
     child: Stack(
       children: [
         Padding(
-          padding: context.appStyle.appPadding.pagePadding,
+          padding: Theme.of(context).appStyle.appPadding.pagePadding,
           child: ChatList(
             controller: _controller,
             itemCount: widget.messages.length,

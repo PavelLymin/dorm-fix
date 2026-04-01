@@ -32,7 +32,7 @@ class _FormRequestScreenState extends State<FormRequestScreen>
           error: (state) => ErrorUtil.showSnackBar(context, state.message),
         ),
         child: Padding(
-          padding: context.appStyle.appPadding.pagePadding,
+          padding: Theme.of(context).appStyle.appPadding.pagePadding,
           child: CustomScrollView(
             slivers: [
               SliverAppBar(

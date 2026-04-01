@@ -139,7 +139,7 @@ class MapAppbar extends StatelessWidget {
     alignment: .topStart,
     child: SafeArea(
       child: Padding(
-        padding: context.appStyle.appPadding.contentPadding,
+        padding: Theme.of(context).appStyle.appPadding.contentPadding,
         child: UiText.displayLarge(
           'Выберите общежитие',
           softWrap: true,
@@ -155,14 +155,16 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.appStyle;
     return Align(
       alignment: .bottomCenter,
       child: UiCard.standart(
-        padding: context.appStyle.appPadding.verticalIncrement(increment: 3),
+        padding: style.appPadding.verticalIncrement(increment: 3),
         child: SafeArea(
           top: false,
           child: Padding(
-            padding: context.appStyle.appPadding.pagePadding,
+            padding: style.appPadding.pagePadding,
             child: GestureDetector(
               onTap: () => showUiBottomSheet(
                 context,

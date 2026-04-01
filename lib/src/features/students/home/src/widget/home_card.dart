@@ -20,12 +20,14 @@ sealed class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.appStyle;
     return SizedBox(
       height: 160.0,
       child: Padding(
-        padding: context.appStyle.appPadding.contentPadding,
+        padding: style.appPadding.contentPadding,
         child: UiCard.clickable(
-          padding: context.appStyle.appPadding.symmetricIncrement(
+          padding: style.appPadding.symmetricIncrement(
             vertical: 3,
             horizontal: 3,
           ),

@@ -56,22 +56,20 @@ class LineCalendarStyle {
   final double contentSpacing;
 
   AppWidgetStateMap<BoxDecoration> decoration(BuildContext context) {
-    final palette = context.colorPalette;
-    final style = context.appStyle.style;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyle;
     return AppWidgetStateMap<BoxDecoration>({
       WidgetState.selected: BoxDecoration(
         color: palette.secondary,
         borderRadius: style.borderRadius,
-        border: .all(color: palette.borderStrong, width: style.borderWidth),
       ),
       WidgetState.disabled: BoxDecoration(
         color: palette.muted,
-        border: .all(color: palette.border, width: style.borderWidth),
         borderRadius: style.borderRadius,
       ),
       WidgetState.any: BoxDecoration(
         color: palette.card,
-        border: .all(color: palette.border, width: style.borderWidth),
         borderRadius: style.borderRadius,
       ),
     });

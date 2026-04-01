@@ -25,7 +25,7 @@ class _RepairRequestListState extends State<RepairRequestList> {
 
   @override
   Widget build(BuildContext context) => SliverPadding(
-    padding: context.appStyle.appPadding.contentPadding,
+    padding: Theme.of(context).appStyle.appPadding.contentPadding,
     sliver: StreamBuilder<List<FullRepairRequest>>(
       stream: widget.requests,
       builder: (context, snapshot) {
@@ -68,8 +68,9 @@ class _OpenItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.colorPalette;
-    final style = context.appStyle.style;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyle;
     return OpenContainer(
       openElevation: .0,
       closedElevation: .0,

@@ -22,7 +22,7 @@ class _Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SliverPadding(
-    padding: context.appStyle.appPadding.appBar(context: context),
+    padding: Theme.of(context).appStyle.appPadding.appBar(context: context),
     sliver: const SliverToBoxAdapter(
       child: Shimmer(child: _UserDisplay(user: .fake())),
     ),
@@ -36,7 +36,8 @@ class _Loadded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final padding = context.appStyle.appPadding.appBar(context: context);
+    final theme = Theme.of(context);
+    final padding = theme.appStyle.appPadding.appBar(context: context);
     return SliverResizingHeader(
       minExtentPrototype: _TitleAppBar(
         title: user.displayName ?? 'Name',

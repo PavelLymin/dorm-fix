@@ -13,7 +13,7 @@ class _ButtonsPreview extends State<ButtonsPreview> {
     return RepaintBoundary(
       child: UiCard.standart(
         child: Padding(
-          padding: context.appStyle.appPadding.allSmall,
+          padding: Theme.of(context).appStyle.appPadding.allSmall,
           child: const Wrap(
             spacing: 16,
             runSpacing: 16,

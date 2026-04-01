@@ -28,11 +28,12 @@ class _PersonalAvatarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
     final localizations = AppLocalizations.of(context);
     final authUser = user.authenticatedOrNull!;
     return UiCard.standart(
-      padding: context.appStyle.appPadding.allMedium,
+      padding: theme.appStyle.appPadding.allMedium,
       child: Row(
         crossAxisAlignment: .center,
         mainAxisAlignment: .start,
@@ -42,7 +43,7 @@ class _PersonalAvatarView extends StatelessWidget {
               ? const Shimmer(child: CircleAvatar(radius: 40.0))
               : CircleAvatar(
                   radius: 40.0,
-                  backgroundColor: colorPalette.secondary,
+                  backgroundColor: palette.secondary,
                   backgroundImage: authUser.photoURL != null
                       ? NetworkImage(authUser.photoURL!)
                       : null,

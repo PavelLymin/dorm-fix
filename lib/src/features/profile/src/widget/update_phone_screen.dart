@@ -62,7 +62,9 @@ class _UpdatePhoneScreenState extends State<UpdatePhoneScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Padding(
-        padding: context.appStyle.appPadding.horizontalIncrement(increment: 3),
+        padding: Theme.of(
+          context,
+        ).appStyle.appPadding.horizontalIncrement(increment: 3),
         child: Center(
           child: Column(
             crossAxisAlignment: .center,

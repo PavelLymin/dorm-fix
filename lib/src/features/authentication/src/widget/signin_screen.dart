@@ -53,7 +53,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appPading = context.appStyle.appPadding;
+    final theme = Theme.of(context);
+    final style = theme.appStyle;
     return BlocProvider.value(
       value: _authButtonBloc,
       child: BlocListener<AuthBloc, AuthState>(
@@ -88,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
           body: SafeArea(
             child: SafeArea(
               child: Padding(
-                padding: appPading.pagePadding,
+                padding: style.appPadding.pagePadding,
                 child: SingleChildScrollView(
                   padding: .only(top: 128.0),
                   child: Column(

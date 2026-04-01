@@ -30,7 +30,7 @@ ThemeData createThemeData({
   required Brightness brightness,
   required ColorPalette palette,
   required AppTypography typography,
-  required AppStyleData style,
+  required AppStyle style,
 }) => ThemeData(
   brightness: brightness,
   fontFamily: 'Inter',
@@ -111,7 +111,7 @@ AppBarTheme appBarTheme(ColorPalette palette, AppTypography typography) =>
 DropdownMenuThemeData dropdownMenuTheme(
   ColorPalette palette,
   AppTypography typography,
-  AppStyleData style,
+  AppStyle style,
 ) => DropdownMenuThemeData(
   inputDecorationTheme: inputDecorationTheme(palette, typography, style),
 );
@@ -119,7 +119,7 @@ DropdownMenuThemeData dropdownMenuTheme(
 InputDecorationTheme inputDecorationTheme(
   ColorPalette palette,
   AppTypography typography,
-  AppStyleData style,
+  AppStyle style,
 ) => InputDecorationTheme(
   filled: true,
   fillColor: palette.inputPlaceholder,

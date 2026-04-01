@@ -9,7 +9,8 @@ class SearchDormitoryDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.theme.colorPalette;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
     return Column(
       mainAxisAlignment: .center,
       crossAxisAlignment: .stretch,

@@ -60,11 +60,12 @@ abstract final class ErrorUtil {
   static void showSnackBar(BuildContext context, Object error) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette;
+    final style = theme.appStyle;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: Theme.of(context).colorPalette.destructiveCard,
+        backgroundColor: palette.destructiveCard,
         duration: const Duration(seconds: 3),
-        padding: context.appStyle.appPadding.allMedium,
+        padding: style.appPadding.allMedium,
         behavior: .floating,
         content: Column(
           mainAxisAlignment: .center,

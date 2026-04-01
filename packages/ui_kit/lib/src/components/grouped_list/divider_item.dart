@@ -12,7 +12,7 @@ class ItemDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = context.appStyle;
+    final style = Theme.of(context).appStyle;
     final appPadding = style.groupedListStyle.contentEdgePadding;
 
     return switch (type) {

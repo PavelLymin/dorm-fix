@@ -13,15 +13,14 @@ class Searcher extends StatefulWidget {
 class _SearcherState extends State<Searcher> {
   @override
   Widget build(BuildContext context) {
-    final palette = context.colorPalette;
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette;
+    final style = theme.appStyle;
     return Padding(
-      padding: context.appStyle.appPadding.contentPadding,
+      padding: style.appPadding.contentPadding,
       child: OpenContainer(
         openElevation: 0.0,
         closedElevation: 0.0,
-        closedShape: RoundedRectangleBorder(
-          borderRadius: context.appStyle.style.inputBorderRadius,
-        ),
         closedColor: palette.background,
         openColor: palette.background,
         openBuilder: (context, _) => const SearchScreen(),

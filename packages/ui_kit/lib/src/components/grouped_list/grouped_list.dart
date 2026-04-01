@@ -72,41 +72,36 @@ class GroupedList extends StatefulWidget {
 
 class _GroupedListState extends State<GroupedList> {
   @override
-  Widget build(BuildContext context) {
-    final palette = context.colorPalette;
-    final style = context.appStyle.style;
-    return DecoratedBox(
-      position: .foreground,
-      decoration: BoxDecoration(
-        borderRadius: .all(.circular(widget.style.borderRadius)),
-        border: .all(width: style.borderWidth, color: palette.border),
+  Widget build(BuildContext context) => DecoratedBox(
+    position: .foreground,
+    decoration: BoxDecoration(
+      borderRadius: .all(.circular(widget.style.borderRadius)),
+    ),
+    child: LayoutBuilder(
+      builder: (_, constraints) => ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const .all(.0),
+        itemCount: widget.items.length,
+        itemBuilder: (_, index) {
+          final item = widget.items[index];
+          final isFirst = index == 0;
+          final isLast = index == widget.items.length - 1;
+          return _Item(
+            width: constraints.maxWidth,
+            item: item,
+            style: widget.style,
+            borderRadius: .vertical(
+              top: isFirst ? .circular(widget.style.borderRadius) : .zero,
+              bottom: isLast ? .circular(widget.style.borderRadius) : .zero,
+            ),
+            isInitial: item.isSelected,
+          );
+        },
+        separatorBuilder: (_, _) => widget.divider,
       ),
-      child: LayoutBuilder(
-        builder: (_, constraints) => ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const .all(.0),
-          itemCount: widget.items.length,
-          itemBuilder: (_, index) {
-            final item = widget.items[index];
-            final isFirst = index == 0;
-            final isLast = index == widget.items.length - 1;
-            return _Item(
-              width: constraints.maxWidth,
-              item: item,
-              style: widget.style,
-              borderRadius: .vertical(
-                top: isFirst ? .circular(widget.style.borderRadius) : .zero,
-                bottom: isLast ? .circular(widget.style.borderRadius) : .zero,
-              ),
-              isInitial: item.isSelected,
-            );
-          },
-          separatorBuilder: (_, _) => widget.divider,
-        ),
-      ),
-    );
-  }
+    ),
+  );
 }
 
 class GroupedListStyle {
