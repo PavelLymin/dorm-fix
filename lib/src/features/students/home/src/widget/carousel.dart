@@ -22,20 +22,22 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: Theme.of(context).appStyle.appPadding.contentPadding,
-    child: BlocBuilder<SpecializationBloc, SpecializationState>(
-      builder: (context, state) {
-        return state.map(
+  Widget build(BuildContext context) {
+    double heightPageView = 160.0;
+    return Padding(
+      padding: AppInsets.screen,
+      child: BlocBuilder<SpecializationBloc, SpecializationState>(
+        builder: (context, state) => state.map(
           loading: (_) =>
               const Shimmer(child: SizedBox(width: .infinity, height: 176.0)),
           loaded: (state) => Column(
             mainAxisAlignment: .center,
+            crossAxisAlignment: .center,
             mainAxisSize: .min,
-            spacing: 8,
+            spacing: 8.0,
             children: [
               SizedBox(
-                height: 160.0,
+                height: heightPageView,
                 child: PageView.builder(
                   controller: _controller,
                   itemCount: state.specializations.length,
@@ -59,10 +61,10 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
           error: (state) => UiCard.standart(
             child: Center(child: UiText.bodyLarge(state.message)),
           ),
-        );
-      },
-    ),
-  );
+        ),
+      ),
+    );
+  }
 }
 
 class _Item extends StatelessWidget {
@@ -72,44 +74,28 @@ class _Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyle;
-    final gradient = LinearGradient(
-      begin: .topLeft,
-      end: .topEnd,
-      stops: [.5, 1.0],
-      colors: [palette.background, palette.border],
-    );
     return UiCard.standart(
-      padding: style.appPadding.symmetricIncrement(horizontal: 2, vertical: 3),
-      gradient: gradient,
       child: Row(
         mainAxisAlignment: .center,
+        crossAxisAlignment: .center,
         mainAxisSize: .max,
         children: [
           Expanded(
-            flex: 3,
             child: Column(
+              mainAxisAlignment: .center,
               crossAxisAlignment: .start,
               mainAxisSize: .max,
+              spacing: 6.0,
               children: [
-                Row(
-                  mainAxisAlignment: .center,
-                  mainAxisSize: .min,
-                  spacing: 8.0,
-                  children: [
-                    UiText.titleLarge(spec.title),
-                    const Icon(Icons.info_outline),
-                  ],
-                ),
-                const SizedBox(height: 16.0),
+                UiText.titleLarge(spec.title),
                 UiText.bodyLarge(spec.description),
               ],
             ),
           ),
-          const Spacer(),
-          Image.asset(ImagesHelper.specializations + spec.photoUrl, height: 84),
+          Image.asset(
+            ImagesHelper.specializations + spec.photoUrl,
+            height: 80.0,
+          ),
         ],
       ),
     );
@@ -130,42 +116,36 @@ class Indicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = Theme.of(context).colorPalette;
+    final palette = Theme.of(context).colorPalette2;
     return ValueListenableBuilder(
       valueListenable: currentPage,
-      builder: (context, value, _) {
-        return Row(
-          mainAxisAlignment: .center,
-          crossAxisAlignment: .center,
-          mainAxisSize: .min,
-          spacing: 8.0,
-          children: List.generate(
-            countPages,
-            (index) => GestureDetector(
-              onTap: () => _animateToPage(index),
-              child: SizedBox.square(
-                dimension: 8.0,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: .circle,
-                    color: value == index
-                        ? palette.foreground
-                        : palette.borderStrong,
-                  ),
+      builder: (context, value, _) => Row(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .center,
+        mainAxisSize: .min,
+        spacing: 8.0,
+        children: List.generate(
+          countPages,
+          (index) => GestureDetector(
+            onTap: () => _animateToPage(index),
+            child: SizedBox.square(
+              dimension: 6.0,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: .circle,
+                  color: value == index ? palette.primary : palette.disabled,
                 ),
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
-  void _animateToPage(int index) {
-    controller.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeIn,
-    );
-  }
+  void _animateToPage(int index) => controller.animateToPage(
+    index,
+    duration: const Duration(milliseconds: 300),
+    curve: Curves.easeIn,
+  );
 }

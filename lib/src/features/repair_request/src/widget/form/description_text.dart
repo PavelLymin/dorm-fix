@@ -12,12 +12,9 @@ class DescriptionText extends StatefulWidget {
 }
 
 class _DescriptionTextState extends State<DescriptionText> {
-  late final RequestFormBloc _requestFormBloc;
-
   @override
   void initState() {
     super.initState();
-    _requestFormBloc = context.read<RequestFormBloc>();
     widget.controller.addListener(_onChange);
   }
 
@@ -27,19 +24,23 @@ class _DescriptionTextState extends State<DescriptionText> {
     super.dispose();
   }
 
-  void _onChange() {
-    _requestFormBloc.add(.update(description: widget.controller.text));
-  }
+  void _onChange() => context.read<RequestFormBloc>().add(
+    .update(description: widget.controller.text),
+  );
 
   @override
   Widget build(BuildContext context) {
+    final palette = Theme.of(context).colorPalette2;
     return UiTextField.standard(
       controller: widget.controller,
       maxLines: 5,
       maxLength: 200,
       showCounter: true,
       textInputAction: .done,
-      style: UiTextFieldStyle(hintText: 'Введите текст'),
+      style: UiTextFieldStyle(
+        hintText: 'Введите проблему',
+        fillColor: palette.card,
+      ),
     );
   }
 }

@@ -25,7 +25,7 @@ class _RepairRequestListState extends State<RepairRequestList> {
 
   @override
   Widget build(BuildContext context) => SliverPadding(
-    padding: Theme.of(context).appStyle.appPadding.contentPadding,
+    padding: AppInsets.screen,
     sliver: StreamBuilder<List<FullRepairRequest>>(
       stream: widget.requests,
       builder: (context, snapshot) {

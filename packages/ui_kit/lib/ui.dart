@@ -4,6 +4,7 @@ export 'package:flutter/material.dart';
 
 // Components
 export 'package:ui_kit/src/components/text.dart';
+export 'package:ui_kit/src/components/ui_text.dart';
 export 'package:ui_kit/src/components/button.dart';
 export 'package:ui_kit/src/components/card.dart';
 export 'package:ui_kit/src/components/surface.dart';
@@ -16,7 +17,8 @@ export 'package:ui_kit/src/components/bottom_sheet.dart';
 export 'package:ui_kit/src/components/choice_options.dart';
 export 'package:ui_kit/src/components/check_box.dart';
 export 'package:ui_kit/src/components/line_calendar/line_calendar.dart';
-export 'package:ui_kit/src/components/drop_down_menu.dart';
+export 'package:ui_kit/src/components/drop_down_button.dart';
+export 'package:ui_kit/src/components/app_gap.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

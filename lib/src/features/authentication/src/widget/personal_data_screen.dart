@@ -20,13 +20,11 @@ class _PersonalDataScreenState extends State<PersonalDataScreen>
     with _PersonalDataScreenStateMixin {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.appStyle;
     return Scaffold(
       appBar: AppBar(title: const Text('Личные данные')),
       body: SafeArea(
         child: Padding(
-          padding: style.appPadding.pagePadding,
+          padding: AppInsets.screen,
           child: Column(
             mainAxisAlignment: .center,
             crossAxisAlignment: .stretch,
@@ -40,7 +38,6 @@ class _PersonalDataScreenState extends State<PersonalDataScreen>
                 textInputAction: .next,
                 enabled: _isNameEditable,
                 style: UiTextFieldStyle(
-                  contentPadding: style.appPadding.allMedium,
                   hintText: 'Иван Иванов',
                   prefixIcon: const Icon(Icons.person),
                 ),
@@ -51,7 +48,6 @@ class _PersonalDataScreenState extends State<PersonalDataScreen>
                 textInputAction: .next,
                 enabled: _isEmailEditable,
                 style: UiTextFieldStyle(
-                  contentPadding: style.appPadding.allMedium,
                   hintText: 'name@mail.ru',
                   prefixIcon: const Icon(Icons.email_outlined),
                 ),

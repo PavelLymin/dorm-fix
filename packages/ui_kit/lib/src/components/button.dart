@@ -57,8 +57,8 @@ class UiButton extends ButtonStyleButton {
   @override
   ButtonStyle defaultStyleOf(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = theme.colorPalette;
-    final typography = theme.appTypography;
+    final colors = theme.colorPalette2;
+    final typography = theme.appTypography2;
 
     return switch (variant) {
       ButtonVariant.filledPrimary => _FilledButtonPrimaryStyle(
@@ -66,7 +66,7 @@ class UiButton extends ButtonStyleButton {
         typography: typography,
       ),
 
-      ButtonVariant.icon => _IconButtonStandardStyle(
+      ButtonVariant.icon => _IconButtonBaseStyle(
         colorPalette: colors,
         typography: typography,
       ),
@@ -114,14 +114,14 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   @override
   WidgetStateProperty<Color?>? get foregroundColor =>
       WidgetStateMapper<Color?>({
-        WidgetState.disabled: colorPalette.mutedForeground,
-        WidgetState.any: colorPalette.foreground,
+        WidgetState.disabled: colorPalette.foregroundAccent,
+        WidgetState.any: colorPalette.foregroundAccent,
       });
 
   @override
   WidgetStateProperty<Color?>? get backgroundColor =>
       WidgetStateMapper<Color?>({
-        WidgetState.disabled: colorPalette.primaryMuted,
+        WidgetState.disabled: colorPalette.disabled,
         WidgetState.any: colorPalette.primary,
       });
 
@@ -148,8 +148,8 @@ class _UiBaseButtonStyle extends ButtonStyle {
     required this.typography,
   });
 
-  final ColorPalette colorPalette;
-  final AppTypography typography;
+  final ColorPalette2 colorPalette;
+  final AppTypography2 typography;
 
   @override
   AlignmentGeometry? get alignment => .center;
@@ -160,13 +160,12 @@ class _UiBaseButtonStyle extends ButtonStyle {
   @override
   WidgetStateProperty<OutlinedBorder?>? get shape =>
       const WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: .all(.circular(16))),
+        RoundedRectangleBorder(borderRadius: .all(.circular(20.0))),
       );
 
   @override
   WidgetStateProperty<BorderSide?>? get side => WidgetStateMapper<BorderSide?>({
-    WidgetState.disabled: BorderSide(color: colorPalette.borderMuted, width: 1),
-    WidgetState.any: BorderSide(color: colorPalette.primaryBorder, width: 1),
+    WidgetState.any: const BorderSide(style: .none),
   });
 
   @override
@@ -175,7 +174,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
   @override
   WidgetStateProperty<EdgeInsetsGeometry?>? get padding =>
       const WidgetStatePropertyAll(
-        EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
       );
 
   @override
@@ -188,7 +187,7 @@ class _UiBaseButtonStyle extends ButtonStyle {
 
   @override
   WidgetStateProperty<TextStyle?>? get textStyle =>
-      WidgetStatePropertyAll(typography.bodyMedium);
+      WidgetStatePropertyAll(typography.m);
 
   @override
   VisualDensity? get visualDensity => VisualDensity.adaptivePlatformDensity;
@@ -222,86 +221,8 @@ class _UiBaseButtonStyle extends ButtonStyle {
   ) {
     if (child == null) return const SizedBox.shrink();
 
-    return OutlineFocusButtonBorder(
-      showBorder: states.contains(WidgetState.focused),
-      border: RoundedRectangleBorder(
-        side: BorderSide(color: colorPalette.border, width: 1),
-        borderRadius: const .all(.circular(16.0)),
-      ),
-      child: child,
-    );
+    return child;
   }
-}
-
-class OutlineFocusButtonBorder extends StatelessWidget {
-  const OutlineFocusButtonBorder({
-    required this.child,
-    required this.showBorder,
-    required this.border,
-    super.key,
-  });
-
-  final Widget child;
-  final bool showBorder;
-  final ShapeBorder border;
-
-  @override
-  Widget build(BuildContext context) => CustomPaint(
-    painter: _OutlineFocusButtonBorderPainter(
-      showBorder: showBorder,
-      border: border,
-    ),
-    child: child,
-  );
-}
-
-class _OutlineFocusButtonBorderPainter extends CustomPainter {
-  _OutlineFocusButtonBorderPainter({
-    required bool showBorder,
-    required ShapeBorder border,
-  }) : _showBorder = showBorder,
-       _border = border;
-
-  final bool _showBorder;
-  final ShapeBorder _border;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (!_showBorder) return;
-
-    final rect = Offset.zero & size;
-
-    _border.paint(canvas, rect);
-  }
-
-  @override
-  bool shouldRepaint(_OutlineFocusButtonBorderPainter oldDelegate) =>
-      _showBorder != oldDelegate._showBorder || _border != oldDelegate._border;
-
-  @override
-  bool shouldRebuildSemantics(_OutlineFocusButtonBorderPainter oldDelegate) =>
-      false;
-}
-
-class _IconButtonStandardStyle extends _IconButtonBaseStyle {
-  const _IconButtonStandardStyle({
-    required super.colorPalette,
-    required super.typography,
-  });
-
-  @override
-  WidgetStateProperty<Color?>? get foregroundColor =>
-      WidgetStateMapper<Color?>({
-        WidgetState.disabled: colorPalette.muted,
-        WidgetState.any: colorPalette.foreground,
-      });
-
-  @override
-  WidgetStateProperty<Color?>? get overlayColor => WidgetStateMapper<Color?>({
-    WidgetState.pressed: colorPalette.foreground.withValues(alpha: .1),
-    WidgetState.hovered: colorPalette.foreground.withValues(alpha: .08),
-    WidgetState.focused: colorPalette.foreground.withValues(alpha: .1),
-  });
 }
 
 class _IconButtonBaseStyle extends _UiBaseButtonStyle {
@@ -312,12 +233,15 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<Color?>? get backgroundColor =>
-      WidgetStatePropertyAll(colorPalette.card);
+      WidgetStateMapper<Color?>({
+        WidgetState.disabled: colorPalette.disabled,
+        WidgetState.any: colorPalette.card,
+      });
 
   @override
   WidgetStateProperty<Color?>? get foregroundColor =>
       WidgetStateMapper<Color?>({
-        WidgetState.disabled: colorPalette.foreground.withValues(alpha: .38),
+        WidgetState.disabled: colorPalette.disabledIcon,
         WidgetState.any: colorPalette.foreground,
       });
 
@@ -342,15 +266,17 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<Color?>? get iconColor =>
-      WidgetStatePropertyAll<Color?>(colorPalette.mutedForeground);
+      WidgetStatePropertyAll<Color?>(colorPalette.secondary);
 
   @override
   WidgetStateProperty<OutlinedBorder?>? get shape =>
-      .all(RoundedRectangleBorder(borderRadius: const .all(.circular(18.0))));
+      const WidgetStatePropertyAll<OutlinedBorder>(
+        RoundedRectangleBorder(borderRadius: .all(.circular(20.0))),
+      );
 
   @override
-  WidgetStateProperty<BorderSide?>? get side => WidgetStateMapper<BorderSide?>({
-    WidgetState.disabled: BorderSide(color: colorPalette.border, width: 1),
-    WidgetState.any: BorderSide(color: colorPalette.borderStrong, width: 1),
-  });
+  WidgetStateProperty<BorderSide?>? get side =>
+      const WidgetStateMapper<BorderSide?>({
+        WidgetState.any: BorderSide(style: .none),
+      });
 }

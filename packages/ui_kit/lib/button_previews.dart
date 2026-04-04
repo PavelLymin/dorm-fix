@@ -12,13 +12,10 @@ class _ButtonsPreview extends State<ButtonsPreview> {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: UiCard.standart(
-        child: Padding(
-          padding: Theme.of(context).appStyle.appPadding.allSmall,
-          child: const Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            children: [_FilledPrimaryButton()],
-          ),
+        child: const Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: [_FilledPrimaryButton()],
         ),
       ),
     );
@@ -33,11 +30,10 @@ class _FilledPrimaryButton extends StatelessWidget {
     return SizedBox(
       width: 200,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: .stretch,
         children: [
-          UiText.titleSmall('Filled Primary Button'),
+          UiText2.m('Filled Primary Button'),
           const SizedBox(height: 16),
-          const SizedBox(height: 8),
           UiButton.filledPrimary(
             onPressed: () {},
             label: const Text('Primary'),
@@ -48,7 +44,6 @@ class _FilledPrimaryButton extends StatelessWidget {
             onPressed: () {},
             label: const Text('Primary'),
           ),
-          const SizedBox(height: 8),
           const SizedBox(height: 8),
           UiButton.filledPrimary(
             onPressed: () {},
@@ -70,7 +65,7 @@ class _FilledPrimaryButton extends StatelessWidget {
               dimension: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: Theme.of(context).colorPalette.mutedForeground,
+                color: Theme.of(context).colorPalette2.disabledIcon,
               ),
             ),
           ),

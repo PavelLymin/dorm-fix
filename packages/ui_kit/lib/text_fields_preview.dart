@@ -10,44 +10,36 @@ class TextFieldsPreview extends StatefulWidget {
 class _TextFieldsPreviewState extends State<TextFieldsPreview> {
   @override
   Widget build(BuildContext context) => UiCard.standart(
-    child: Padding(
-      padding: Theme.of(context).appStyle.appPadding.allSmall,
-      child: const SizedBox(
-        width: 200,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            UiTextField.standard(
-              style: UiTextFieldStyle(hintText: 'Text input'),
+    child: const SizedBox(
+      width: 200,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          UiTextField.standard(style: UiTextFieldStyle(hintText: 'Text input')),
+          SizedBox(height: 16),
+          UiTextField.standard(
+            style: UiTextFieldStyle(
+              hintText: 'Text input',
+              helperText: 'Helper',
             ),
-            SizedBox(height: 16),
-            UiTextField.standard(
-              style: UiTextFieldStyle(
-                hintText: 'Text input',
-                helperText: 'Helper',
-              ),
-            ),
-            SizedBox(height: 16),
-            UiTextField.standard(
-              style: UiTextFieldStyle(
-                hintText: 'Text input',
-                errorText: 'Error',
-              ),
-            ),
-            SizedBox(height: 16),
-            UiTextField.standard(
-              showCounter: true,
-              maxLength: 10,
-              style: UiTextFieldStyle(hintText: 'Text input'),
-            ),
-            SizedBox(height: 16),
-            UiTextField.standard(
-              showCounter: true,
-              enabled: false,
-              style: UiTextFieldStyle(hintText: 'Disabled'),
-            ),
-          ],
-        ),
+          ),
+          SizedBox(height: 16),
+          UiTextField.standard(
+            style: UiTextFieldStyle(hintText: 'Text input', errorText: 'Error'),
+          ),
+          SizedBox(height: 16),
+          UiTextField.standard(
+            showCounter: true,
+            maxLength: 10,
+            style: UiTextFieldStyle(hintText: 'Text input'),
+          ),
+          SizedBox(height: 16),
+          UiTextField.standard(
+            showCounter: true,
+            enabled: false,
+            style: UiTextFieldStyle(hintText: 'Disabled'),
+          ),
+        ],
       ),
     ),
   );

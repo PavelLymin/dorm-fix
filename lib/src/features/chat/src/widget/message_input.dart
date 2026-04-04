@@ -51,11 +51,8 @@ class _MessageInputState extends State<MessageInput> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.appStyle;
     final padding =
-        style.appPadding.pagePadding +
-        .only(bottom: MediaQuery.paddingOf(context).bottom);
+        AppInsets.screen + .only(bottom: MediaQuery.paddingOf(context).bottom);
     return Align(
       alignment: .bottomCenter,
       child: BackdropGroup(
@@ -70,7 +67,7 @@ class _MessageInputState extends State<MessageInput> {
                     _typingBloc.add(.textChanged(chatId: 1, text: text)),
                 style: UiTextFieldStyle(
                   suffixIcon: Padding(
-                    padding: style.appPadding.allIncrement(increment: 0.5),
+                    padding: const .all(4.0),
                     child: UiButton.icon(
                       onPressed: _onSend,
                       icon: const Icon(Icons.arrow_upward_outlined),

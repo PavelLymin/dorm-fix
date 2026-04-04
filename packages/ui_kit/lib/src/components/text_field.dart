@@ -60,8 +60,8 @@ class _UiTextFieldState extends State<UiTextField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final typography = theme.appTypography;
+    final palette = theme.colorPalette2;
+    final typography = theme.appTypography2;
 
     final variantStyle = switch (widget.variant) {
       .standard => StandardUiTextFieldStyle(
@@ -119,8 +119,8 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
     required this.typography,
   });
 
-  final ColorPalette palette;
-  final AppTypography typography;
+  final ColorPalette2 palette;
+  final AppTypography2 typography;
 
   @override
   bool? get filled => true;
@@ -129,72 +129,54 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
   Color? get fillColor => palette.inputPlaceholder;
 
   @override
-  TextStyle? get textStyle =>
-      typography.bodyMedium.copyWith(color: palette.foreground);
+  TextStyle? get textStyle => typography.m.copyWith(color: palette.foreground);
 
   @override
-  TextStyle? get counterStyle => typography.labelSmall.copyWith(
-    color: palette.foreground.withValues(alpha: .58),
-  );
+  TextStyle? get counterStyle =>
+      typography.xs.copyWith(color: palette.foreground.withValues(alpha: .58));
 
   @override
-  TextStyle? get errorStyle =>
-      typography.bodySmall.copyWith(color: palette.destructiveForeground);
+  TextStyle? get errorStyle => typography.xs.copyWith(color: palette.disabled);
 
   @override
   TextStyle? get hintStyle => WidgetStateTextStyle.resolveWith((states) {
     if (states.contains(WidgetState.disabled)) {
-      return typography.bodyMedium.copyWith(
-        color: palette.foreground.withValues(alpha: .3),
-      );
+      return typography.m.copyWith(color: palette.disabled);
     }
 
-    return typography.bodyMedium.copyWith(
-      color: palette.foreground.withValues(alpha: .58),
-    );
+    return typography.m.copyWith(color: palette.secondary);
   });
 
   @override
-  TextStyle? get helperStyle => typography.bodySmall.copyWith(
-    color: palette.foreground.withValues(alpha: .58),
+  TextStyle? get helperStyle => typography.m.copyWith(color: palette.secondary);
+
+  @override
+  InputBorder? get border => OutlineInputBorder(
+    borderRadius: const .all(.circular(16)),
+    borderSide: const BorderSide(style: .none),
   );
 
   @override
-  InputBorder? get focusedBorder => OutlineInputBorder(
-    borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.foreground, width: 1),
-  );
+  InputBorder? get focusedBorder => border;
 
   @override
-  InputBorder? get focusedErrorBorder => OutlineInputBorder(
-    borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.borderDestructive, width: 1),
-  );
+  InputBorder? get focusedErrorBorder => border;
 
   @override
-  InputBorder? get errorBorder => OutlineInputBorder(
-    borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(
-      color: palette.borderDestructive.withValues(alpha: .3),
-      width: 1,
-    ),
-  );
+  InputBorder? get errorBorder => border;
 
   @override
-  InputBorder? get enabledBorder => OutlineInputBorder(
-    borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.inputBorder),
-  );
+  InputBorder? get enabledBorder => border;
 
   @override
   InputBorder? get disabledBorder => OutlineInputBorder(
     borderRadius: const .all(.circular(16)),
-    borderSide: BorderSide(color: palette.inputBorder),
+    borderSide: const BorderSide(style: .none),
   );
 
   @override
   EdgeInsetsGeometry? get contentPadding =>
-      const .symmetric(horizontal: 12, vertical: 16);
+      const .symmetric(horizontal: 16.0, vertical: 12.0);
 
   @override
   BoxConstraints? get constraints => const BoxConstraints(minHeight: 32);

@@ -2,8 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/ui.dart';
 import 'bottom_navigation.dart';
 
-part 'sidebar_navigation.dart';
-
 class AppPage {
   const AppPage({
     required this.name,
@@ -86,8 +84,10 @@ class RootScreen extends StatelessWidget {
         // drawer: Drawer(child: MenuNavigation()),
         body: window.maybeMap(
           compact: (_) => child,
-          medium: (_) => Burger(child: child),
-          orElse: () => SidebarNavigation(pages: pages, child: child),
+          // medium: (_) => Burger(child: child),
+          // orElse: () => SidebarNavigation(pages: pages, child: child),
+          medium: (_) => child,
+          orElse: () => child,
         ),
       ),
     );

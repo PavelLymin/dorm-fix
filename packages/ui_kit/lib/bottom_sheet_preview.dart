@@ -5,28 +5,25 @@ class BottomSheetPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => UiCard.standart(
-    child: Padding(
-      padding: Theme.of(context).appStyle.appPadding.allMedium,
-      child: UiButton.filledPrimary(
-        onPressed: () => showUiBottomSheet(
-          context,
-          title: 'Modal bottom sheet',
-          widget: Column(
-            mainAxisAlignment: .center,
-            crossAxisAlignment: .stretch,
-            mainAxisSize: .min,
-            children: [
-              UiText.titleMedium('Modal bottom sheet'),
-              const SizedBox(height: 24),
-              UiButton.filledPrimary(
-                onPressed: () => Navigator.pop(context),
-                label: UiText.bodyMedium('Close'),
-              ),
-            ],
-          ),
+    child: UiButton.filledPrimary(
+      onPressed: () => showUiBottomSheet(
+        context,
+        title: 'Modal bottom sheet',
+        widget: Column(
+          mainAxisAlignment: .center,
+          crossAxisAlignment: .stretch,
+          mainAxisSize: .min,
+          children: [
+            UiText.titleMedium('Modal bottom sheet'),
+            const SizedBox(height: 24),
+            UiButton.filledPrimary(
+              onPressed: () => Navigator.pop(context),
+              label: UiText.bodyMedium('Close'),
+            ),
+          ],
         ),
-        label: UiText.bodyMedium('Show bottom sheet'),
       ),
+      label: UiText.bodyMedium('Show bottom sheet'),
     ),
   );
 }

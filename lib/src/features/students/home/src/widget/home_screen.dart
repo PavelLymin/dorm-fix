@@ -3,7 +3,6 @@ import 'package:ui_kit/ui.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
 import '../../home.dart';
 import 'advices.dart';
-import 'app_bar.dart';
 import 'carousel.dart';
 import 'home_card.dart';
 import 'searcher.dart';
@@ -31,15 +30,17 @@ class _HomeScreenState extends State<StudentHomeScreen> {
     return BlocProvider.value(
       value: _specializationBloc,
       child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            const HomeAppBar(),
-            const SliverToBoxAdapter(child: SpecializationsCarousel()),
-            const SliverToBoxAdapter(child: Searcher()),
-            const SliverToBoxAdapter(child: Advices()),
-            const SliverToBoxAdapter(child: HomeCard.request()),
-            const SliverToBoxAdapter(child: HomeCard.history()),
-          ],
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              // const HomeAppBar(),
+              const SliverToBoxAdapter(child: Searcher()),
+              const SliverToBoxAdapter(child: SpecializationsCarousel()),
+              const SliverToBoxAdapter(child: Advices()),
+              const SliverToBoxAdapter(child: HomeCard.request()),
+              const SliverToBoxAdapter(child: HomeCard.history()),
+            ],
+          ),
         ),
       ),
     );

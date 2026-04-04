@@ -155,6 +155,7 @@ class WidgetStateBuilder extends StatefulWidget {
     this.autofocus = false,
     this.isDisabled = false,
     this.builder = _builder,
+    this.child,
   });
 
   static Widget _builder(
@@ -166,6 +167,7 @@ class WidgetStateBuilder extends StatefulWidget {
   final bool isSelected;
   final bool autofocus;
   final bool isDisabled;
+  final Widget? child;
   final ValueWidgetBuilder<Set<WidgetState>> builder;
 
   @override
@@ -195,5 +197,5 @@ class _WidgetStateBuilderState extends State<WidgetStateBuilder> {
 
   @override
   Widget build(BuildContext context) =>
-      widget.builder(context, _controller.value, context.widget);
+      widget.builder(context, _controller.value, widget.child);
 }

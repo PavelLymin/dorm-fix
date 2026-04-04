@@ -6,14 +6,15 @@ final darkColorPalette2 = generatePaletteByBrightness(.dark);
 ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
   if (brightness == .dark) {
     return const ColorPalette2(
-      background: Color(0xFFEBEBEB),
-      primary: Color(0xFF009530),
-      primaryIcon: Color(0xFF00B23D),
+      background: Color(0xFFF5F5F5),
+      primary: Color(0xFF18AC72),
+      primaryIcon: Color(0xFF3FCE8E),
       secondary: Color(0xFF7B7B7B),
       foreground: Color(0xFF232323),
       foregroundPrimary: Color(0xFF009530),
       foregroundSecondary: Color(0xFF7B7B7B),
-      foregroundDisabled: Color(0xFFC2C2C2),
+      foregroundDisabled: Color(0xFFF5F5F5),
+      foregroundAccent: Color(0xFF141414),
       disabled: Color(0xFFC2C2C2),
       disabledIcon: Color(0xFFD6D6D6),
       inputPlaceholder: Color(0xFFEBEBEB),
@@ -22,14 +23,15 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
   }
 
   return const ColorPalette2(
-    background: Color(0xFFEBEBEB),
-    primary: Color(0xFF009530),
-    primaryIcon: Color(0xFF00B23D),
+    background: Color(0xFFF5F5F5),
+    primary: Color(0xFF18AC72),
+    primaryIcon: Color(0xFF3FCE8E),
     secondary: Color(0xFF7B7B7B),
     foreground: Color(0xFF232323),
     foregroundPrimary: Color(0xFF009530),
     foregroundSecondary: Color(0xFF7B7B7B),
-    foregroundDisabled: Color(0xFFC2C2C2),
+    foregroundDisabled: Color(0xFFF5F5F5),
+    foregroundAccent: Color(0xFFFFFFFF),
     disabled: Color(0xFFC2C2C2),
     disabledIcon: Color(0xFFD6D6D6),
     inputPlaceholder: Color(0xFFEBEBEB),
@@ -47,6 +49,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     required this.foregroundPrimary,
     required this.foregroundSecondary,
     required this.foregroundDisabled,
+    required this.foregroundAccent,
     required this.disabled,
     required this.disabledIcon,
     required this.inputPlaceholder,
@@ -61,6 +64,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
   final Color foregroundPrimary;
   final Color foregroundSecondary;
   final Color foregroundDisabled;
+  final Color foregroundAccent;
   final Color disabled;
   final Color disabledIcon;
   final Color inputPlaceholder;
@@ -76,6 +80,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     Color? foregroundPrimary,
     Color? foregroundSecondary,
     Color? foregroundDisabled,
+    Color? foregroundAccent,
     Color? disabled,
     Color? disabledIcon,
     Color? inputPlaceholder,
@@ -89,6 +94,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     foregroundPrimary: foregroundPrimary ?? this.foregroundPrimary,
     foregroundSecondary: foregroundSecondary ?? this.foregroundSecondary,
     foregroundDisabled: foregroundDisabled ?? this.foregroundDisabled,
+    foregroundAccent: foregroundAccent ?? this.foregroundAccent,
     disabled: disabled ?? this.disabled,
     disabledIcon: disabledIcon ?? this.disabledIcon,
     inputPlaceholder: inputPlaceholder ?? this.inputPlaceholder,
@@ -118,6 +124,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
         other.foregroundDisabled,
         t,
       )!,
+      foregroundAccent: .lerp(foregroundAccent, other.foregroundAccent, t)!,
       disabled: .lerp(disabled, other.disabled, t)!,
       disabledIcon: .lerp(disabledIcon, other.disabledIcon, t)!,
       inputPlaceholder: .lerp(inputPlaceholder, other.inputPlaceholder, t)!,
@@ -134,6 +141,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     'foregroundPrimary': foregroundPrimary,
     'foregroundSecondary': foregroundSecondary,
     'foregroundDisabled': foregroundDisabled,
+    'foregroundAccent': foregroundAccent,
     'disabled': disabled,
     'disabledIcon': disabledIcon,
     'inputPlaceholder': inputPlaceholder,

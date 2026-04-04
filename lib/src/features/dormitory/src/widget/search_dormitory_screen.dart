@@ -82,7 +82,7 @@ class _SearchInputState extends State<_SearchInput> {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: Theme.of(context).appStyle.appPadding.onlyIncrement(bottom: 2),
+    padding: const .only(bottom: AppSpacing.xxxl),
     child: UiTextField.standard(
       controller: _controller,
       onChanged: context.read<SearchDormitoryBloc>().onQueryChanged.add,

@@ -8,7 +8,7 @@ class RequestDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: Theme.of(context).appStyle.appPadding.pagePadding,
+        padding: AppInsets.screen,
         child: Column(
           children: [
             Center(child: UiTextField.standard()),

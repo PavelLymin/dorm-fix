@@ -61,27 +61,22 @@ class _UpdatePhoneScreenState extends State<UpdatePhoneScreen> {
     final localizations = AppLocalizations.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Padding(
-        padding: Theme.of(
-          context,
-        ).appStyle.appPadding.horizontalIncrement(increment: 3),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: .center,
-            mainAxisAlignment: .center,
-            mainAxisSize: .min,
-            children: [
-              PinCode(controller: _controller, isEnable: true, isFocus: true),
-              ValueListenableBuilder(
-                valueListenable: _isEnabled,
-                builder: (_, value, _) => UiButton.filledPrimary(
-                  enabled: value,
-                  onPressed: _updatePhoneNumber,
-                  label: UiText.titleMedium(localizations.next),
-                ),
+      body: Center(
+        child: Column(
+          crossAxisAlignment: .center,
+          mainAxisAlignment: .center,
+          mainAxisSize: .min,
+          children: [
+            PinCode(controller: _controller, isEnable: true, isFocus: true),
+            ValueListenableBuilder(
+              valueListenable: _isEnabled,
+              builder: (_, value, _) => UiButton.filledPrimary(
+                enabled: value,
+                onPressed: _updatePhoneNumber,
+                label: UiText.titleMedium(localizations.next),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

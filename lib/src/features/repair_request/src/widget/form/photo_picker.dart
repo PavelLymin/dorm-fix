@@ -12,7 +12,6 @@ class PhotoPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UiCard.standart(
-      padding: Theme.of(context).appStyle.appPadding.allMedium,
       child: BlocBuilder<RequestFormBloc, RequestFormState>(
         buildWhen: (previous, current) =>
             previous.currentFormModel.imagePaths.length !=
@@ -37,15 +36,19 @@ class _TitlePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: .spaceBetween,
       crossAxisAlignment: .center,
       mainAxisSize: .max,
       children: [
-        UiText.titleMedium('Фотографии'),
+        UiText2.m('Фотографии'),
         UiButton.icon(
           onPressed: onPressed,
-          icon: const Icon(Icons.chevron_right_rounded),
+          icon: Icon(
+            Icons.chevron_right_rounded,
+            color: theme.colorPalette2.secondary,
+          ),
         ),
       ],
     );
@@ -66,7 +69,7 @@ class _ButtonAdd extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
+    final palette = theme.colorPalette2;
     return UiButton.icon(
       statesController: controller,
       onPressed: onPressed,
@@ -74,15 +77,15 @@ class _ButtonAdd extends StatelessWidget {
         Icons.add_outlined,
         size: pickerStyle.iconAddSize,
         color: AppWidgetStateMap({
-          WidgetState.disabled: palette.borderStrong,
+          WidgetState.disabled: palette.disabledIcon,
           WidgetState.any: palette.foreground,
         }).resolve(controller.value),
       ),
       style: ButtonStyle(
         padding: .all(pickerStyle.buttonAddPadding),
         backgroundColor: AppWidgetStateMap({
-          WidgetState.disabled: palette.muted,
-          WidgetState.any: palette.secondary,
+          WidgetState.disabled: palette.disabled,
+          WidgetState.any: palette.secondary.withValues(alpha: .2),
         }),
       ),
     );
@@ -137,8 +140,8 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     bool isEmpty = widget.imagePaths.isEmpty;
-
     return Column(
       mainAxisAlignment: .center,
       crossAxisAlignment: isEmpty ? .center : .start,
@@ -168,8 +171,9 @@ class _ContentState extends State<_Content> {
         ),
         Align(
           alignment: .centerStart,
-          child: UiText.titleMedium(
+          child: UiText2.m(
             '${widget.imagePaths.length}/5 фото добавлены',
+            color: theme.colorPalette2.secondary,
           ),
         ),
       ],
@@ -192,16 +196,16 @@ class _Photos extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: style.photoSquare,
-      child: ListView.builder(
+      child: ListView.separated(
         controller: scrollController,
         scrollDirection: .horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: imagePaths.length,
-        itemExtent: style.photoSquare,
         itemBuilder: (_, index) {
           final path = imagePaths[index];
           return _Item(pickerStyle: style, path: path, index: index);
         },
+        separatorBuilder: (context, index) => const SizedBox(width: 8.0),
       ),
     );
   }
@@ -223,42 +227,37 @@ class _Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyle;
-    return Padding(
-      padding: pickerStyle.photoPadding,
-      child: Stack(
-        alignment: .topRight,
-        children: [
-          ClipRRect(
-            borderRadius: const .all(.circular(8)),
-            child: Image.file(
-              height: pickerStyle.photoSquare,
-              width: pickerStyle.photoSquare,
-              fit: .cover,
-              File(path),
+    final palette = theme.colorPalette2;
+    return Stack(
+      alignment: .topRight,
+      children: [
+        ClipRRect(
+          borderRadius: const .all(.circular(12.0)),
+          child: Image.file(
+            File(path),
+            height: pickerStyle.photoSquare,
+            width: pickerStyle.photoSquare,
+            fit: .cover,
+          ),
+        ),
+        Padding(
+          padding: const .all(AppSpacing.xxxs),
+          child: UiButton.icon(
+            onPressed: () => _onPressed(context),
+            icon: Icon(
+              Icons.clear,
+              fontWeight: .w700,
+              size: pickerStyle.iconClearSize,
+              color: palette.foregroundAccent,
+            ),
+            style: ButtonStyle(
+              backgroundColor: .all(palette.primary),
+              minimumSize: .all(const .square(24.0)),
+              shape: .all(const CircleBorder()),
             ),
           ),
-          Padding(
-            padding: style.appPadding.allSmall,
-            child: UiButton.icon(
-              onPressed: () => _onPressed(context),
-              icon: Icon(
-                fontWeight: .w700,
-                Icons.clear,
-                size: pickerStyle.iconClearSize,
-                color: palette.foreground,
-              ),
-              style: ButtonStyle(
-                minimumSize: .all(.square(8.0)),
-                padding: .all(style.appPadding.allIncrement(increment: .5)),
-                backgroundColor: .all(Theme.of(context).colorPalette.secondary),
-                shape: .all(const CircleBorder()),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -267,9 +266,9 @@ class PhotoPickerStyle {
   const PhotoPickerStyle({
     this.spacing = 8.0,
     this.iconAddSize = 32.0,
-    this.iconClearSize = 8.0,
-    this.buttonAddPadding = const .symmetric(horizontal: 32, vertical: 32),
-    this.photoPadding = const .symmetric(horizontal: 8),
+    this.iconClearSize = 16.0,
+    this.buttonAddPadding = const .symmetric(horizontal: 32.0, vertical: 32.0),
+    this.photoPadding = const .symmetric(horizontal: 8.0),
   });
 
   final double spacing;

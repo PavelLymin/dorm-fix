@@ -14,7 +14,11 @@ class SearchRooms extends StatelessWidget {
     itemExtent: 48.0,
     delegate: SliverChildBuilderDelegate(
       (_, index) => Padding(
-        padding: Theme.of(context).appStyle.appPadding.vertical,
+        padding: index == 0
+            ? AppInsets.itemDense.copyWith(top: 0)
+            : index == rooms.length - 1
+            ? AppInsets.itemDense.copyWith(bottom: 0)
+            : AppInsets.item,
         child: _Item(dormitory: dormitory, room: rooms[index]),
       ),
       childCount: rooms.length,

@@ -40,9 +40,7 @@ class _PinCodeState extends State<PinCode> {
     super.dispose();
   }
 
-  void _onFocusChanged() {
-    setState(() {});
-  }
+  void _onFocusChanged() => setState(() {});
 
   void _onTextChanged() {
     String pin = widget.controller.text;
@@ -69,9 +67,7 @@ class _PinCodeState extends State<PinCode> {
     });
   }
 
-  bool _isFilled(int index) {
-    return index < _pinCode.length;
-  }
+  bool _isFilled(int index) => index < _pinCode.length;
 
   @override
   Widget build(BuildContext context) => SizedBox(
@@ -96,9 +92,7 @@ class _PinCodeState extends State<PinCode> {
         GestureDetector(
           onTap: () {
             if (widget.isFocus) {
-              setState(() {
-                _focusNode.requestFocus();
-              });
+              setState(() => _focusNode.requestFocus());
             }
           },
           child: Row(
@@ -132,24 +126,21 @@ class PinInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = Theme.of(context).colorPalette;
-    Color color = isFocus ? palette.foreground : palette.borderStrong;
+    final palette = Theme.of(context).colorPalette2;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       width: isCurrentFocus ? 45 : 40,
       height: isCurrentFocus ? 60 : 50,
       decoration: BoxDecoration(
-        color: palette.secondary,
-        borderRadius: const .all(.circular(16)),
-        border: .all(color: color),
+        color: palette.inputPlaceholder,
+        borderRadius: const .all(.circular(20.0)),
       ),
       child: Center(
         child: number.isEmpty && isCurrentFocus
-            ? SizedBox(
-                height: 40,
-                width: 1.5,
-                child: ColoredBox(color: palette.foreground),
+            ? Padding(
+                padding: const .symmetric(vertical: 12.0, horizontal: 16.0),
+                child: Container(color: palette.foreground, width: 1.2),
               )
             : UiText.bodyLarge(number),
       ),

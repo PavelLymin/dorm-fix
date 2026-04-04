@@ -5,21 +5,18 @@ class ColorPalettePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => UiCard.standart(
-    child: Padding(
-      padding: Theme.of(context).appStyle.appPadding.allSmall,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          UiText.titleMedium('Light'),
-          const SizedBox(height: 8),
-          _PalettePreview(colorPalette: lightColorPalette),
-          const SizedBox(height: 16),
-          UiText.titleMedium('Dark'),
-          const SizedBox(height: 8),
-          _PalettePreview(colorPalette: darkColorPalette),
-        ],
-      ),
+    child: Column(
+      crossAxisAlignment: .start,
+      mainAxisSize: .min,
+      children: [
+        UiText.titleMedium('Light'),
+        const SizedBox(height: 8),
+        _PalettePreview(colorPalette: lightColorPalette2),
+        const SizedBox(height: 16),
+        UiText.titleMedium('Dark'),
+        const SizedBox(height: 8),
+        _PalettePreview(colorPalette: darkColorPalette2),
+      ],
     ),
   );
 }
@@ -27,7 +24,7 @@ class ColorPalettePreview extends StatelessWidget {
 class _PalettePreview extends StatelessWidget {
   const _PalettePreview({required this.colorPalette});
 
-  final ColorPalette colorPalette;
+  final ColorPalette2 colorPalette;
 
   @override
   Widget build(BuildContext context) => Wrap(
@@ -42,18 +39,18 @@ class _PalettePreview extends StatelessWidget {
         height: 100,
         child: Column(
           key: ValueKey(name),
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             SizedBox.square(
               dimension: 60,
               child: Material(
                 color: color,
                 elevation: 2,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: .circular(8),
               ),
             ),
             const SizedBox(height: 8),
-            UiText.labelMedium(name, textAlign: TextAlign.center),
+            UiText2.xs(name, textAlign: .center),
           ],
         ),
       );

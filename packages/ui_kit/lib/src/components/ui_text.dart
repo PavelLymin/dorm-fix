@@ -1,7 +1,7 @@
 import 'package:ui_kit/ui.dart';
 
-class UiText extends StatelessWidget {
-  const UiText(
+class UiText2 extends StatelessWidget {
+  const UiText2(
     this.data, {
     this.color,
     this.style,
@@ -22,7 +22,7 @@ class UiText extends StatelessWidget {
   final bool? softWrap;
   final TextStyle? Function(AppTypography2)? _styleBuilder;
 
-  factory UiText.h1(
+  factory UiText2.h1(
     String data, {
     Color? color,
     TextStyle? style,
@@ -31,7 +31,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -43,7 +43,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.h1Bold(
+  factory UiText2.h1Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -52,7 +52,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -64,7 +64,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.h2(
+  factory UiText2.h2(
     String data, {
     Color? color,
     TextStyle? style,
@@ -73,7 +73,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -85,7 +85,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.h2Bold(
+  factory UiText2.h2Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -94,7 +94,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -106,7 +106,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.h3(
+  factory UiText2.h3(
     String data, {
     Color? color,
     TextStyle? style,
@@ -115,7 +115,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -127,7 +127,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.h3Bold(
+  factory UiText2.h3Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -136,7 +136,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -148,7 +148,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.h4(
+  factory UiText2.h4(
     String data, {
     Color? color,
     TextStyle? style,
@@ -157,7 +157,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -169,7 +169,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.h4Bold(
+  factory UiText2.h4Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -178,7 +178,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -190,7 +190,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.h5(
+  factory UiText2.h5(
     String data, {
     Color? color,
     TextStyle? style,
@@ -199,7 +199,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -211,7 +211,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.h5Bold(
+  factory UiText2.h5Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -220,7 +220,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -232,7 +232,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.l(
+  factory UiText2.l(
     String data, {
     Color? color,
     TextStyle? style,
@@ -241,7 +241,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -253,7 +253,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.lBold(
+  factory UiText2.lBold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -262,7 +262,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -274,7 +274,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.m(
+  factory UiText2.m(
     String data, {
     Color? color,
     TextStyle? style,
@@ -283,7 +283,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -295,7 +295,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.mBold(
+  factory UiText2.mBold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -304,7 +304,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -316,7 +316,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.s(
+  factory UiText2.s(
     String data, {
     Color? color,
     TextStyle? style,
@@ -325,7 +325,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -337,7 +337,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.sBold(
+  factory UiText2.sBold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -346,7 +346,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -358,7 +358,7 @@ class UiText extends StatelessWidget {
     key: key,
   );
 
-  factory UiText.xs(
+  factory UiText2.xs(
     String data, {
     Color? color,
     TextStyle? style,
@@ -367,7 +367,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,

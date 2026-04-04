@@ -15,35 +15,32 @@ class _ChoiceOptionsPreviewState extends State<ChoiceOptionsPreview> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return UiCard.standart(
-      child: Padding(
-        padding: theme.appStyle.appPadding.allSmall,
-        child: Column(
-          children: [
-            ChoiceOptions(
-              options: const [
-                ChoiceItem(title: 'Option 1'),
-                ChoiceItem(title: 'Option 2'),
-                ChoiceItem(title: 'Option 3'),
-              ],
-              barColor: theme.colorPalette.card,
-              selectedColor: theme.colorPalette.secondary,
-              selected: _selected1,
-              onChange: (index) => setState(() => _selected1 = index),
-            ),
-            const SizedBox(height: 16),
-            ChoiceOptions(
-              options: const [
-                ChoiceItem(title: 'Option 1', icon: Icon(Icons.star_rounded)),
-                ChoiceItem(title: 'Option 2', icon: Icon(Icons.star_rounded)),
-                ChoiceItem(title: 'Option 3', icon: Icon(Icons.star_rounded)),
-              ],
-              barColor: theme.colorPalette.card,
-              selectedColor: theme.colorPalette.secondary,
-              selected: _selected2,
-              onChange: (index) => setState(() => _selected2 = index),
-            ),
-          ],
-        ),
+      child: Column(
+        children: [
+          ChoiceOptions(
+            options: const [
+              ChoiceItem(title: 'Option 1'),
+              ChoiceItem(title: 'Option 2'),
+              ChoiceItem(title: 'Option 3'),
+            ],
+            barColor: theme.colorPalette.card,
+            selectedColor: theme.colorPalette.secondary,
+            selected: _selected1,
+            onChange: (index) => setState(() => _selected1 = index),
+          ),
+          const SizedBox(height: 16),
+          ChoiceOptions(
+            options: const [
+              ChoiceItem(title: 'Option 1', icon: Icon(Icons.star_rounded)),
+              ChoiceItem(title: 'Option 2', icon: Icon(Icons.star_rounded)),
+              ChoiceItem(title: 'Option 3', icon: Icon(Icons.star_rounded)),
+            ],
+            barColor: theme.colorPalette.card,
+            selectedColor: theme.colorPalette.secondary,
+            selected: _selected2,
+            onChange: (index) => setState(() => _selected2 = index),
+          ),
+        ],
       ),
     );
   }

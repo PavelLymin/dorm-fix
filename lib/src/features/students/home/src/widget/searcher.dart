@@ -14,10 +14,9 @@ class _SearcherState extends State<Searcher> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyle;
+    final palette = theme.colorPalette2;
     return Padding(
-      padding: style.appPadding.contentPadding,
+      padding: AppInsets.screen,
       child: OpenContainer(
         openElevation: 0.0,
         closedElevation: 0.0,
@@ -27,9 +26,9 @@ class _SearcherState extends State<Searcher> {
         closedBuilder: (context, action) => UiTextField.standard(
           enabled: false,
           style: UiTextFieldStyle(
-            prefixIcon: Icon(Icons.search_outlined, color: palette.foreground),
-            hintText: 'Что ищете?',
-            hintStyle: TextStyle(color: palette.foreground),
+            prefixIcon: Icon(Icons.search_outlined, color: palette.secondary),
+            hintText: 'Поиск',
+            hintStyle: TextStyle(color: palette.secondary),
           ),
         ),
       ),

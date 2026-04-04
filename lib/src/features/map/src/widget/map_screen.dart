@@ -139,7 +139,7 @@ class MapAppbar extends StatelessWidget {
     alignment: .topStart,
     child: SafeArea(
       child: Padding(
-        padding: Theme.of(context).appStyle.appPadding.contentPadding,
+        padding: AppInsets.screen,
         child: UiText.displayLarge(
           'Выберите общежитие',
           softWrap: true,
@@ -155,31 +155,26 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.appStyle;
     return Align(
       alignment: .bottomCenter,
-      child: UiCard.standart(
-        padding: style.appPadding.verticalIncrement(increment: 3),
-        child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: style.appPadding.pagePadding,
-            child: GestureDetector(
-              onTap: () => showUiBottomSheet(
-                context,
-                title: 'Выбор общежития',
-                widget: MapControllerScope(
-                  controller: MapControllerScope.of(context),
-                  child: const SearchDormitoryScreen(),
-                ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: AppInsets.screen,
+          child: GestureDetector(
+            onTap: () => showUiBottomSheet(
+              context,
+              title: 'Выбор общежития',
+              widget: MapControllerScope(
+                controller: MapControllerScope.of(context),
+                child: const SearchDormitoryScreen(),
               ),
-              child: UiTextField.standard(
-                enabled: false,
-                style: .new(
-                  hintText: 'Поиск общежитий...',
-                  prefixIcon: const Icon(Icons.search_outlined),
-                ),
+            ),
+            child: UiTextField.standard(
+              enabled: false,
+              style: .new(
+                hintText: 'Поиск общежитий...',
+                prefixIcon: const Icon(Icons.search_outlined),
               ),
             ),
           ),

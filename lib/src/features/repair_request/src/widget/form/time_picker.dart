@@ -12,7 +12,6 @@ class TimePicker extends StatefulWidget {
 class _TimePickerState extends State<TimePicker> with _TimePickerStateMixin {
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
     return BlocListener<RequestFormBloc, RequestFormState>(
       listenWhen: (previous, current) =>
           previous.currentFormModel.startTime !=
@@ -26,21 +25,17 @@ class _TimePickerState extends State<TimePicker> with _TimePickerStateMixin {
           crossAxisAlignment: .center,
           mainAxisSize: .min,
           children: [
-            UiDropDownMenu<DateTime>(
+            UiDropDownButton<DateTime>(
               controller: _startTime,
               selectOnly: true,
-              onSelected: _onSelectedStartTime,
-              textAlign: .center,
               showTrailingIcon: false,
+              onSelected: _onSelectedStartTime,
+              width: 150.0,
               dropdownMenuEntries: _startTimes,
               initialSelection: _workingDateTime.start,
             ),
             const Spacer(),
-            Icon(
-              Icons.arrow_right_alt,
-              color: colorPalette.borderStrong,
-              size: 48,
-            ),
+            const Icon(Icons.chevron_right_rounded),
             const Spacer(),
             BlocBuilder<RequestFormBloc, RequestFormState>(
               buildWhen: (previous, current) =>
@@ -50,12 +45,12 @@ class _TimePickerState extends State<TimePicker> with _TimePickerStateMixin {
                 final startTime = state.currentFormModel.startTime;
                 final endTime = state.currentFormModel.endTime;
                 _onChangeStart(startTime, endTime);
-                return UiDropDownMenu<DateTime>(
+                return UiDropDownButton<DateTime>(
                   controller: _endTime,
                   selectOnly: true,
-                  onSelected: _onSelectedEndTime,
-                  textAlign: .center,
                   showTrailingIcon: false,
+                  onSelected: _onSelectedEndTime,
+                  width: 150.0,
                   dropdownMenuEntries: _endTimes,
                   initialSelection: _workingDateTime.end,
                 );

@@ -43,7 +43,6 @@ class _LineCalendarPickerState extends State<LineCalendarPicker> {
           initial: (state) => _controller.value = state.currentFormModel.date,
         ),
         child: UiCard.standart(
-          padding: Theme.of(context).appStyle.appPadding.allSmall,
           borderRadius: .all(.circular(16.0)),
           child: LineCalendar(
             today: _workingDateTime.today,

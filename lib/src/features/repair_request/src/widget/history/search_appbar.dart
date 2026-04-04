@@ -6,8 +6,7 @@ class SearchAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final padding = theme.appStyle.appPadding.appBar(context: context);
+    final padding = AppInsets.screen;
     final spacing = 16.0;
     return SliverResizingHeader(
       minExtentPrototype: Padding(

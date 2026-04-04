@@ -10,6 +10,9 @@ Future<T?> showUiBottomSheet<T>(
     curve: Curves.easeIn,
   ),
   Color? backgroundColor,
+  BorderRadius? borderRadius,
+  EdgeInsets? padding,
+  double spacing = 16.0,
   double minWidth = .infinity,
   double maxWidth = .infinity,
   double minHeight = .0,
@@ -24,7 +27,7 @@ Future<T?> showUiBottomSheet<T>(
     context: context,
     sheetAnimationStyle: anymation,
     backgroundColor: backgroundColor ?? palette.background,
-    shape: RoundedSuperellipseBorder(borderRadius: style.borderRadius),
+    shape: RoundedRectangleBorder(borderRadius: style.borderRadius),
     useSafeArea: useSafeArea,
     isScrollControlled: isScrollControlled,
     constraints: BoxConstraints(
@@ -34,15 +37,10 @@ Future<T?> showUiBottomSheet<T>(
       maxHeight: maxHeight,
     ),
     builder: (BuildContext context) => Padding(
-      padding: style.appPadding.onlyIncrement(
-        top: 2,
-        left: 2,
-        right: 2,
-        bottom: 8,
-      ),
+      padding: padding ?? AppInsets.sheet,
       child: Column(
         mainAxisSize: .min,
-        spacing: 24.0,
+        spacing: spacing,
         children: [
           Row(
             mainAxisAlignment: .spaceBetween,
@@ -50,7 +48,9 @@ Future<T?> showUiBottomSheet<T>(
             children: [
               UiText.titleMedium(title),
               UiButton.icon(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.canPop(context) ? Navigator.pop(context) : null;
+                },
                 icon: const Icon(Icons.close_rounded),
               ),
             ],

@@ -29,17 +29,16 @@ final _material2021 = Typography.material2021().tall.apply(
 ThemeData createThemeData({
   required Brightness brightness,
   required ColorPalette palette,
+  required ColorPalette2 palette2,
   required AppTypography typography,
   required AppStyle style,
 }) => ThemeData(
   brightness: brightness,
   fontFamily: 'Inter',
-  scaffoldBackgroundColor: palette.background,
+  scaffoldBackgroundColor: palette2.background,
   appBarTheme: appBarTheme(palette, typography),
-  inputDecorationTheme: inputDecorationTheme(palette, typography, style),
-  dropdownMenuTheme: dropdownMenuTheme(palette, typography, style),
-  iconTheme: iconThemeData(palette),
-  extensions: {palette, typography, style},
+  iconTheme: iconThemeData(palette2),
+  extensions: {palette, palette2, typography, style},
 );
 
 ColorPalette generatePaletteForBrightness(Brightness brightness) {
@@ -108,64 +107,5 @@ AppBarTheme appBarTheme(ColorPalette palette, AppTypography typography) =>
       ),
     );
 
-DropdownMenuThemeData dropdownMenuTheme(
-  ColorPalette palette,
-  AppTypography typography,
-  AppStyle style,
-) => DropdownMenuThemeData(
-  inputDecorationTheme: inputDecorationTheme(palette, typography, style),
-);
-
-InputDecorationTheme inputDecorationTheme(
-  ColorPalette palette,
-  AppTypography typography,
-  AppStyle style,
-) => InputDecorationTheme(
-  filled: true,
-  fillColor: palette.inputPlaceholder,
-  labelStyle: typography.bodyMedium,
-  contentPadding: .symmetric(horizontal: 12, vertical: 12),
-  constraints: const BoxConstraints(minHeight: 48),
-  isDense: true,
-  counterStyle: typography.labelSmall.copyWith(
-    color: palette.foreground.withValues(alpha: .58),
-  ),
-  errorStyle: typography.bodySmall.copyWith(
-    color: palette.destructiveForeground,
-  ),
-  hintStyle: WidgetStateTextStyle.resolveWith((states) {
-    if (states.contains(WidgetState.disabled)) {
-      return typography.bodyMedium.copyWith(
-        color: palette.foreground.withValues(alpha: .3),
-      );
-    }
-    return typography.bodyMedium.copyWith(
-      color: palette.foreground.withValues(alpha: .58),
-    );
-  }),
-  helperStyle: typography.bodySmall.copyWith(
-    color: palette.foreground.withValues(alpha: .58),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderRadius: const .all(.circular(16.0)),
-    borderSide: BorderSide(color: palette.borderDestructive, width: 1),
-  ),
-  errorBorder: OutlineInputBorder(
-    borderRadius: const .all(.circular(16.0)),
-    borderSide: BorderSide(
-      color: palette.borderDestructive.withValues(alpha: .3),
-      width: 1,
-    ),
-  ),
-  enabledBorder: OutlineInputBorder(
-    borderRadius: const .all(.circular(16.0)),
-    borderSide: BorderSide(color: palette.inputBorder),
-  ),
-  disabledBorder: OutlineInputBorder(
-    borderRadius: const .all(.circular(16.0)),
-    borderSide: BorderSide(color: palette.borderMuted),
-  ),
-);
-
-IconThemeData iconThemeData(ColorPalette palette) =>
-    IconThemeData(color: palette.mutedForeground, size: 24.0);
+IconThemeData iconThemeData(ColorPalette2 palette) =>
+    IconThemeData(color: palette.secondary, size: 24.0);

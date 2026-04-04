@@ -20,17 +20,11 @@ sealed class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.appStyle;
     return SizedBox(
       height: 160.0,
       child: Padding(
-        padding: style.appPadding.contentPadding,
+        padding: AppInsets.screen,
         child: UiCard.clickable(
-          padding: style.appPadding.symmetricIncrement(
-            vertical: 3,
-            horizontal: 3,
-          ),
           onTap: () => switch (type) {
             .request => context.router.push(
               const NamedRoute('FormRequestScreen'),
@@ -39,6 +33,7 @@ sealed class HomeCard extends StatelessWidget {
           },
           child: Column(
             mainAxisAlignment: .start,
+            crossAxisAlignment: .center,
             mainAxisSize: .min,
             spacing: 8.0,
             children: [

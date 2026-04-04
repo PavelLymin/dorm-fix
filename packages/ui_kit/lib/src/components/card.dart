@@ -5,24 +5,26 @@ sealed class UiCard extends StatelessWidget {
     super.key,
     this.child,
     this.color,
-    this.gradient,
     this.padding,
-    this.borderRadius = const .all(.circular(32.0)),
+    this.borderRadius,
   });
+
+  final Color? color;
+  final EdgeInsets? padding;
+  final BorderRadius? borderRadius;
+  final Widget? child;
 
   const factory UiCard.standart({
     Color? color,
-    Gradient? gradient,
     EdgeInsets? padding,
-    BorderRadiusGeometry borderRadius,
+    BorderRadius borderRadius,
     Widget? child,
   }) = UiCardStandart;
 
   const factory UiCard.clickable({
     Color? color,
-    Gradient? gradient,
     EdgeInsets? padding,
-    BorderRadiusGeometry borderRadius,
+    BorderRadius borderRadius,
     Widget? child,
     ValueWidgetBuilder<Set<WidgetState>> builder,
     Function()? onTap,
@@ -31,12 +33,6 @@ sealed class UiCard extends StatelessWidget {
     Color? selectedColor,
     Color? disabledColor,
   }) = UiCardClickable;
-
-  final Color? color;
-  final Gradient? gradient;
-  final EdgeInsets? padding;
-  final BorderRadiusGeometry borderRadius;
-  final Widget? child;
 
   T map<T>({
     required T Function(UiCardStandart) standart,
@@ -49,17 +45,16 @@ sealed class UiCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
+    final palette = theme.colorPalette2;
     final style = theme.appStyle;
     return map(
       standart: (variant) => DecoratedBox(
         decoration: BoxDecoration(
           color: variant.color ?? palette.card,
-          borderRadius: variant.borderRadius,
-          gradient: variant.gradient,
+          borderRadius: variant.borderRadius ?? style.cardBorderRadius,
         ),
         child: Padding(
-          padding: variant.padding ?? style.appPadding.allLarge,
+          padding: variant.padding ?? AppInsets.card,
           child: variant.child,
         ),
       ),
@@ -71,20 +66,20 @@ sealed class UiCard extends StatelessWidget {
           autofocus: variant.autofocus,
           builder: (context, states, child) => DecoratedBox(
             decoration: BoxDecoration(
+              borderRadius: variant.borderRadius ?? style.cardBorderRadius,
               color: AppWidgetStateMap({
-                WidgetState.disabled: variant.disabledColor ?? palette.muted,
+                WidgetState.disabled: variant.disabledColor ?? palette.disabled,
                 WidgetState.selected:
                     variant.selectedColor ?? palette.secondary,
                 WidgetState.any: variant.color ?? palette.card,
               }).resolve(states),
-              borderRadius: variant.borderRadius,
-              gradient: variant.gradient,
             ),
             child: Padding(
-              padding: variant.padding ?? style.appPadding.allLarge,
-              child: variant.builder(context, states, variant.child),
+              padding: variant.padding ?? AppInsets.card,
+              child: variant.builder(context, states, child),
             ),
           ),
+          child: variant.child,
         ),
       ),
     );
@@ -96,7 +91,6 @@ class UiCardStandart extends UiCard {
     super.key,
     super.child,
     super.color,
-    super.gradient,
     super.padding,
     super.borderRadius,
   });
@@ -107,7 +101,6 @@ class UiCardClickable extends UiCard {
     super.key,
     super.child,
     super.color,
-    super.gradient,
     super.padding,
     super.borderRadius,
     this.builder = _builder,

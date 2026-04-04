@@ -11,7 +11,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     return Padding(
-      padding: Theme.of(context).appStyle.appPadding.pagePadding,
+      padding: AppInsets.screen,
       child: CustomScrollView(
         slivers: [
           SliverAppBar(

@@ -23,10 +23,8 @@ class _AdvicesState extends State<Advices> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.appStyle;
     return Padding(
-      padding: style.appPadding.contentPadding,
+      padding: AppInsets.screen,
       child: Column(
         crossAxisAlignment: .start,
         mainAxisSize: .min,
@@ -44,33 +42,30 @@ class _AdvicesState extends State<Advices> {
             ],
           ),
           SizedBox(
-            height: 124.0,
+            height: 140.0,
             child: ListView.builder(
-              itemExtent: 124.0,
-              scrollDirection: .horizontal,
+              itemExtent: 140.0,
               itemCount: list.length,
+              scrollDirection: .horizontal,
               padding: .zero,
               itemBuilder: (context, index) {
                 final item = list[index];
-                return Padding(
-                  padding: style.appPadding.horizontal,
-                  child: UiCard.clickable(
-                    onTap: () {},
-                    padding: style.appPadding.allMedium,
-                    child: Column(
-                      mainAxisAlignment: .start,
-                      crossAxisAlignment: .start,
-                      mainAxisSize: .min,
-                      children: [
-                        UiText.bodyMedium(
-                          item.$1,
-                          style: TextStyle(fontWeight: .w500),
-                        ),
-                        const Spacer(),
-                        UiText.bodyMedium(item.$2),
-                        UiText.bodyMedium(item.$3),
-                      ],
-                    ),
+                return UiCard.clickable(
+                  onTap: () {},
+                  child: Column(
+                    mainAxisAlignment: .start,
+                    crossAxisAlignment: .start,
+                    mainAxisSize: .min,
+                    children: [
+                      UiText.bodyMedium(
+                        item.$1,
+                        style: TextStyle(fontWeight: .w500),
+                      ),
+                      const Spacer(),
+                      UiText.bodyMedium(item.$2),
+                      const SizedBox(height: 4.0),
+                      UiText.bodyMedium(item.$3),
+                    ],
                   ),
                 );
               },

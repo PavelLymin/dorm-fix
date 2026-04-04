@@ -20,7 +20,6 @@ abstract class EstimatedSizes {
   }
 
   static double estimateHeightDescription(BuildContext context) {
-    final theme = Theme.of(context);
     final style = titleStyle(context);
     final twoLineText =
         TextPainter(
@@ -29,8 +28,7 @@ abstract class EstimatedSizes {
           textDirection: .ltr,
         )..layout(
           maxWidth:
-              MediaQuery.sizeOf(context).width -
-              theme.appStyle.appPadding.pagePadding.horizontal,
+              MediaQuery.sizeOf(context).width - AppInsets.screen.horizontal,
         );
 
     return heightDescription = twoLineText.height;
