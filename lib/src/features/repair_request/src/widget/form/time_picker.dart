@@ -12,6 +12,7 @@ class TimePicker extends StatefulWidget {
 class _TimePickerState extends State<TimePicker> with _TimePickerStateMixin {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocListener<RequestFormBloc, RequestFormState>(
       listenWhen: (previous, current) =>
           previous.currentFormModel.startTime !=
@@ -33,6 +34,7 @@ class _TimePickerState extends State<TimePicker> with _TimePickerStateMixin {
               width: 150.0,
               dropdownMenuEntries: _startTimes,
               initialSelection: _workingDateTime.start,
+              textStyle: theme.appTypography2.m,
             ),
             const Spacer(),
             const Icon(Icons.chevron_right_rounded),
@@ -53,6 +55,7 @@ class _TimePickerState extends State<TimePicker> with _TimePickerStateMixin {
                   width: 150.0,
                   dropdownMenuEntries: _endTimes,
                   initialSelection: _workingDateTime.end,
+                  textStyle: theme.appTypography2.m,
                 );
               },
             ),

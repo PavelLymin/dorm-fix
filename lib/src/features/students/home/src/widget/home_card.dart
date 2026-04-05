@@ -22,32 +22,29 @@ sealed class HomeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 160.0,
-      child: Padding(
-        padding: AppInsets.screen,
-        child: UiCard.clickable(
-          onTap: () => switch (type) {
-            .request => context.router.push(
-              const NamedRoute('FormRequestScreen'),
-            ),
-            .history => context.router.push(const NamedRoute('HistoryScreen')),
-          },
-          child: Column(
-            mainAxisAlignment: .start,
-            crossAxisAlignment: .center,
-            mainAxisSize: .min,
-            spacing: 8.0,
-            children: [
-              Row(
-                mainAxisAlignment: .spaceBetween,
-                crossAxisAlignment: .start,
-                children: [
-                  UiText.titleMedium(title),
-                  const Icon(Icons.chevron_right_outlined),
-                ],
-              ),
-              UiText.bodyLarge(subtitle),
-            ],
+      child: UiCard.clickable(
+        onTap: () => switch (type) {
+          .request => context.router.push(
+            const NamedRoute('FormRequestScreen'),
           ),
+          .history => context.router.push(const NamedRoute('HistoryScreen')),
+        },
+        child: Column(
+          mainAxisAlignment: .start,
+          crossAxisAlignment: .center,
+          mainAxisSize: .min,
+          spacing: 8.0,
+          children: [
+            Row(
+              mainAxisAlignment: .spaceBetween,
+              crossAxisAlignment: .start,
+              children: [
+                UiText.titleMedium(title),
+                const Icon(Icons.chevron_right_outlined),
+              ],
+            ),
+            UiText.bodyLarge(subtitle),
+          ],
         ),
       ),
     );

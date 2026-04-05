@@ -5,6 +5,7 @@ final lightTheme = createThemeData(
   palette: lightColorPalette,
   palette2: lightColorPalette2,
   typography: defaultTypography,
+  typography2: defaultTypography2,
   style: defaultAppStyle,
 );
 
@@ -13,5 +14,6 @@ final darkTheme = createThemeData(
   palette: darkColorPalette,
   palette2: darkColorPalette2,
   typography: defaultTypography,
+  typography2: defaultTypography2,
   style: defaultAppStyle,
 );

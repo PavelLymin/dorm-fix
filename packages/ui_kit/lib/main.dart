@@ -42,6 +42,7 @@ class UiPreview extends StatefulWidget {
 class _UiPreviewState extends State<UiPreview>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+  int selected = 0;
 
   @override
   void initState() {
@@ -137,7 +138,7 @@ class _UiPreviewState extends State<UiPreview>
                   child: UiText2.h5Bold('Choice options'),
                 ),
                 const SizedBox(height: 8),
-                const ChoiceOptionsPreview(),
+                const ChoiceChipPreview(),
                 const SizedBox(height: 24),
                 Align(alignment: .center, child: UiText2.h5Bold('CheckBox')),
                 const SizedBox(height: 8),
@@ -157,6 +158,32 @@ class _UiPreviewState extends State<UiPreview>
                 const SizedBox(height: 8),
                 const LineCalendarPreview(),
                 const SizedBox(height: 24),
+                UiChoiceChip<int>(
+                  options: const [
+                    ChipItem<int>(
+                      value: 1,
+                      title: 'Iрорtem 1',
+                      icon: Icon(Icons.home),
+                    ),
+                    ChipItem<int>(
+                      value: 1,
+                      title: 'Iрорtem 2',
+                      icon: Icon(Icons.home),
+                    ),
+                    ChipItem<int>(
+                      value: 1,
+                      title: 'Iрорtem 3',
+                      icon: Icon(Icons.home),
+                    ),
+                    ChipItem<int>(
+                      value: 1,
+                      title: 'Iрорtem 4',
+                      icon: Icon(Icons.home),
+                    ),
+                  ],
+                  initial: selected,
+                  onChange: (index) => setState(() => selected = index),
+                ),
                 UiButton.filledPrimary(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(

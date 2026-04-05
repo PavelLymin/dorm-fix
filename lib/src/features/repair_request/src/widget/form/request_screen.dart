@@ -50,7 +50,7 @@ class _FormRequestScreenState extends State<FormRequestScreen>
                   const SizedBox(height: 16.0),
                   UiText2.lBold('Выберите мастера или услугу'),
                   const SizedBox(height: 10.0),
-                  ChoosingService(selectedIndex: _specializationIndex),
+                  const ChoosingService(),
                   const SizedBox(height: 24.0),
                   UiText2.lBold('Укажите дату'),
                   const SizedBox(height: 10.0),
@@ -84,7 +84,6 @@ class _FormRequestScreenState extends State<FormRequestScreen>
 
 mixin _RequestScreenStateMixin on State<FormRequestScreen> {
   final _descriptionController = TextEditingController();
-  final _specializationIndex = ValueNotifier<int>(0);
   late final RequestFormBloc _requestFormBloc;
   late final SpecializationBloc _specializationBloc;
 
@@ -101,16 +100,9 @@ mixin _RequestScreenStateMixin on State<FormRequestScreen> {
     _specializationBloc = dependency.specializationBloc;
   }
 
-  @override
-  void dispose() {
-    _specializationIndex.dispose();
-    super.dispose();
-  }
-
   void _submitForm() {
     final request = _requestFormBloc.state.currentFormModel;
     context.read<RepairRequestBloc>().add(.create(request: request));
-    _specializationIndex.value = 0;
     _descriptionController.clear();
     _requestFormBloc.add(.clearForm());
   }

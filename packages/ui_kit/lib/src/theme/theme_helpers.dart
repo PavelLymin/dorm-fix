@@ -31,12 +31,13 @@ ThemeData createThemeData({
   required ColorPalette palette,
   required ColorPalette2 palette2,
   required AppTypography typography,
+  required AppTypography2 typography2,
   required AppStyle style,
 }) => ThemeData(
   brightness: brightness,
   fontFamily: 'Inter',
   scaffoldBackgroundColor: palette2.background,
-  appBarTheme: appBarTheme(palette, typography),
+  appBarTheme: appBarTheme(palette2, typography2),
   iconTheme: iconThemeData(palette2),
   extensions: {palette, palette2, typography, style},
 );
@@ -94,17 +95,15 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
   );
 }
 
-AppBarTheme appBarTheme(ColorPalette palette, AppTypography typography) =>
+AppBarTheme appBarTheme(ColorPalette2 palette, AppTypography2 typography) =>
     AppBarTheme(
       centerTitle: false,
       titleSpacing: .0,
-      backgroundColor: Colors.transparent,
-      foregroundColor: palette.primaryForeground,
+      toolbarHeight: 32.0,
+      backgroundColor: palette.background,
       surfaceTintColor: palette.background,
-      titleTextStyle: typography.headlineLarge.copyWith(
-        color: palette.primaryForeground,
-        fontWeight: .w700,
-      ),
+      foregroundColor: palette.foreground,
+      titleTextStyle: typography.h4Bold.copyWith(color: palette.foreground),
     );
 
 IconThemeData iconThemeData(ColorPalette2 palette) =>

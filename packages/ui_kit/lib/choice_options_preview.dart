@@ -1,47 +1,26 @@
 import 'package:ui_kit/ui.dart';
 
-class ChoiceOptionsPreview extends StatefulWidget {
-  const ChoiceOptionsPreview({super.key});
-
-  @override
-  State<ChoiceOptionsPreview> createState() => _ChoiceOptionsPreviewState();
-}
-
-class _ChoiceOptionsPreviewState extends State<ChoiceOptionsPreview> {
-  int _selected1 = 0;
-  int _selected2 = 0;
+class ChoiceChipPreview extends StatelessWidget {
+  const ChoiceChipPreview({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return UiCard.standart(
-      child: Column(
-        children: [
-          ChoiceOptions(
-            options: const [
-              ChoiceItem(title: 'Option 1'),
-              ChoiceItem(title: 'Option 2'),
-              ChoiceItem(title: 'Option 3'),
-            ],
-            barColor: theme.colorPalette.card,
-            selectedColor: theme.colorPalette.secondary,
-            selected: _selected1,
-            onChange: (index) => setState(() => _selected1 = index),
-          ),
-          const SizedBox(height: 16),
-          ChoiceOptions(
-            options: const [
-              ChoiceItem(title: 'Option 1', icon: Icon(Icons.star_rounded)),
-              ChoiceItem(title: 'Option 2', icon: Icon(Icons.star_rounded)),
-              ChoiceItem(title: 'Option 3', icon: Icon(Icons.star_rounded)),
-            ],
-            barColor: theme.colorPalette.card,
-            selectedColor: theme.colorPalette.secondary,
-            selected: _selected2,
-            onChange: (index) => setState(() => _selected2 = index),
-          ),
-        ],
-      ),
+      // child: UiChoiceChip<String>(
+      //   initial: '0',
+      //   style: UiChoiceChipStyle(
+      //     selectedColor: Theme.of(context).colorPalette2.primary,
+      //   ),
+      //   options: const [
+      //     ChipItem(value: '0', title: 'Option 1'),
+      //     ChipItem(value: '1', title: 'Option 2'),
+      //     ChipItem(value: '2', title: 'Option 3'),
+      //     ChipItem(value: '3', title: 'Option 4'),
+      //     ChipItem(value: '4', title: 'Option 5'),
+      //     ChipItem(value: '5', title: 'Option 6'),
+      //   ],
+      //   onChange: (value) => log(value),
+      // ),
     );
   }
 }

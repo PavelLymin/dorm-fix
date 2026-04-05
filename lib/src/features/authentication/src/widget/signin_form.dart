@@ -7,21 +7,18 @@ import 'email_password_form.dart';
 import 'phone_number_form.dart';
 
 class _ChoiceLogIn extends StatelessWidget {
-  const _ChoiceLogIn({required this.isSignIn});
+  const _ChoiceLogIn({required this.onChange});
 
-  final ValueNotifier<bool> isSignIn;
+  final void Function(bool) onChange;
 
   @override
-  Widget build(BuildContext context) => ValueListenableBuilder(
-    valueListenable: isSignIn,
-    builder: (_, value, _) => ChoiceOptions(
-      options: <ChoiceItem>[
-        ChoiceItem(title: 'Регистрация'),
-        ChoiceItem(title: 'Вход'),
-      ],
-      selected: value ? 1 : 0,
-      onChange: (_) => isSignIn.value = !value,
-    ),
+  Widget build(BuildContext context) => UiChoiceChip(
+    options: const <ChipItem<bool>>[
+      ChipItem(value: false, title: 'Регистрация'),
+      ChipItem(value: true, title: 'Вход'),
+    ],
+    initial: false,
+    onChange: (value) => onChange(value),
   );
 }
 
@@ -40,7 +37,7 @@ class _SignInFormState extends State<SignInForm> with _FormStateMixin {
     mainAxisSize: .min,
     spacing: 32.0,
     children: [
-      _ChoiceLogIn(isSignIn: _isSignIn),
+      _ChoiceLogIn(onChange: (value) => _isSignIn = value),
       ValueListenableBuilder(
         valueListenable: _isPhoneNumber,
         builder: (context, value, _) => !value
@@ -95,7 +92,7 @@ class _SignInFormState extends State<SignInForm> with _FormStateMixin {
 
 mixin _FormStateMixin on State<SignInForm> {
   late final AuthBloc _authBloc;
-  late final ValueNotifier<bool> _isSignIn;
+  late final bool _isSignIn;
   late final ValueNotifier<bool> _isPhoneNumber;
 
   final _emailController = TextEditingController();
@@ -112,7 +109,7 @@ mixin _FormStateMixin on State<SignInForm> {
   void initState() {
     super.initState();
     _authBloc = DependeciesScope.of(context).authenticationBloc;
-    _isSignIn = ValueNotifier<bool>(true);
+    _isSignIn = true;
     _isPhoneNumber = ValueNotifier<bool>(false);
     _emailController.addListener(_emailToPhoneNumber);
     _phoneController.addListener(_phoneNumberToEmail);
@@ -120,7 +117,6 @@ mixin _FormStateMixin on State<SignInForm> {
 
   @override
   void dispose() {
-    _isSignIn.dispose();
     _emailController.removeListener(_emailToPhoneNumber);
     _phoneController.removeListener(_phoneNumberToEmail);
     super.dispose();
@@ -165,8 +161,7 @@ mixin _FormStateMixin on State<SignInForm> {
     }
   }
 
-  void _logInWithEmailAndPassword(String email, String password) =>
-      _isSignIn.value
+  void _logInWithEmailAndPassword(String email, String password) => _isSignIn
       ? _authBloc.add(
           .signInWithEmailAndPassword(email: email, password: password),
         )

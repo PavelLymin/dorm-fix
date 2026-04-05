@@ -4,9 +4,7 @@ import '../../../../students/home/home.dart';
 import '../../../request.dart';
 
 class ChoosingService extends StatelessWidget {
-  const ChoosingService({super.key, required this.selectedIndex});
-
-  final ValueNotifier<int> selectedIndex;
+  const ChoosingService({super.key});
 
   @override
   Widget build(BuildContext context) =>
@@ -14,59 +12,61 @@ class ChoosingService extends StatelessWidget {
         builder: (context, state) => state.maybeMap(
           orElse: () => const SizedBox.shrink(),
           loading: (state) => Shimmer(
-            child: _SpecializationOptions(
-              specialization: const [.fake()],
-              selectedIndex: selectedIndex,
-            ),
+            child: _SpecializationOptions(specialization: const [.fake()]),
           ),
-          loaded: (state) => _SpecializationOptions(
-            specialization: state.specializations,
-            selectedIndex: selectedIndex,
-          ),
+          loaded: (state) =>
+              _SpecializationOptions(specialization: state.specializations),
           error: (state) => UiText.bodyLarge(state.message),
         ),
       );
 }
 
 class _SpecializationOptions extends StatefulWidget {
-  const _SpecializationOptions({
-    required this.specialization,
-    required this.selectedIndex,
-  });
+  const _SpecializationOptions({required this.specialization});
 
   final List<SpecializationEntity> specialization;
-  final ValueNotifier<int> selectedIndex;
 
   @override
   State<_SpecializationOptions> createState() => _SpecializationOptionsState();
 }
 
 class _SpecializationOptionsState extends State<_SpecializationOptions> {
-  late final List<ChoiceItem> options;
+  late final RequestFormBloc _requestFormBloc;
+  late final List<ChipItem<int>> options;
 
   @override
   void initState() {
     super.initState();
+    _requestFormBloc = context.read<RequestFormBloc>();
     options = widget.specialization
-        .map((specialization) => ChoiceItem(title: specialization.title))
+        .map(
+          (specialization) =>
+              ChipItem(value: specialization.id, title: specialization.title),
+        )
         .toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
-    return ValueListenableBuilder(
-      valueListenable: widget.selectedIndex,
-      builder: (_, value, _) => ChoiceOptions(
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
+    final style = theme.appStyle;
+    return BlocBuilder<RequestFormBloc, RequestFormState>(
+      buildWhen: (previous, current) =>
+          previous.currentFormModel.specializationId !=
+          current.currentFormModel.specializationId,
+      builder: (context, state) => UiChoiceChip<int>(
         options: options,
-        selected: value,
-        barColor: colorPalette.card,
-        selectedColor: colorPalette.secondary,
-        onChange: (index) {
-          context.read<RequestFormBloc>().add(
-            .update(specializationId: widget.specialization[index].id),
-          );
-          widget.selectedIndex.value = index;
+        initial: state.currentFormModel.specializationId,
+        style: ChoiceChipStyle(
+          barColor: palette.background,
+          indicatorColor: palette.card,
+          borderRadius: style.borderRadius,
+          padding: AppInsets.card,
+          textStyle: TextStyle(color: palette.secondary),
+        ),
+        onChange: (id) {
+          _requestFormBloc.add(.update(specializationId: id));
         },
       ),
     );

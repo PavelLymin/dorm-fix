@@ -24,43 +24,40 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
   @override
   Widget build(BuildContext context) {
     double heightPageView = 160.0;
-    return Padding(
-      padding: AppInsets.screen,
-      child: BlocBuilder<SpecializationBloc, SpecializationState>(
-        builder: (context, state) => state.map(
-          loading: (_) =>
-              const Shimmer(child: SizedBox(width: .infinity, height: 176.0)),
-          loaded: (state) => Column(
-            mainAxisAlignment: .center,
-            crossAxisAlignment: .center,
-            mainAxisSize: .min,
-            spacing: 8.0,
-            children: [
-              SizedBox(
-                height: heightPageView,
-                child: PageView.builder(
-                  controller: _controller,
-                  itemCount: state.specializations.length,
-                  onPageChanged: (index) => _currentPage.value = index,
-                  itemBuilder: (context, index) {
-                    final spec = state.specializations[index];
-                    return FractionallySizedBox(
-                      widthFactor: 1 / _controller.viewportFraction,
-                      child: _Item(spec: spec),
-                    );
-                  },
-                ),
-              ),
-              Indicator(
-                countPages: state.specializations.length,
-                currentPage: _currentPage,
+    return BlocBuilder<SpecializationBloc, SpecializationState>(
+      builder: (context, state) => state.map(
+        loading: (_) =>
+            const Shimmer(child: SizedBox(width: .infinity, height: 176.0)),
+        loaded: (state) => Column(
+          mainAxisAlignment: .center,
+          crossAxisAlignment: .center,
+          mainAxisSize: .min,
+          spacing: 8.0,
+          children: [
+            SizedBox(
+              height: heightPageView,
+              child: PageView.builder(
                 controller: _controller,
+                itemCount: state.specializations.length,
+                onPageChanged: (index) => _currentPage.value = index,
+                itemBuilder: (context, index) {
+                  final spec = state.specializations[index];
+                  return FractionallySizedBox(
+                    widthFactor: 1 / _controller.viewportFraction,
+                    child: _Item(spec: spec),
+                  );
+                },
               ),
-            ],
-          ),
-          error: (state) => UiCard.standart(
-            child: Center(child: UiText.bodyLarge(state.message)),
-          ),
+            ),
+            Indicator(
+              countPages: state.specializations.length,
+              currentPage: _currentPage,
+              controller: _controller,
+            ),
+          ],
+        ),
+        error: (state) => UiCard.standart(
+          child: Center(child: UiText.bodyLarge(state.message)),
         ),
       ),
     );

@@ -3,8 +3,9 @@ import 'package:ui_kit/ui.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
 import '../../home.dart';
 import 'advices.dart';
+import 'app_bar.dart';
 import 'carousel.dart';
-import 'home_card.dart';
+import 'repair_requests.dart';
 import 'searcher.dart';
 
 class StudentHomeScreen extends StatefulWidget {
@@ -30,15 +31,21 @@ class _HomeScreenState extends State<StudentHomeScreen> {
     return BlocProvider.value(
       value: _specializationBloc,
       child: Scaffold(
-        body: SafeArea(
+        body: Padding(
+          padding: AppInsets.screen,
           child: CustomScrollView(
             slivers: [
-              // const HomeAppBar(),
+              const HomeAppBar(),
+              const SliverToBoxAdapter(child: AppGap.afterAppBar),
               const SliverToBoxAdapter(child: Searcher()),
+              const SliverToBoxAdapter(child: SizedBox(height: 32.0)),
               const SliverToBoxAdapter(child: SpecializationsCarousel()),
+              const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
+              // const SliverToBoxAdapter(child: HomeCard.request()),
+              // const SliverToBoxAdapter(child: HomeCard.history()),
+              const SliverToBoxAdapter(child: RepairRequests()),
+              const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
               const SliverToBoxAdapter(child: Advices()),
-              const SliverToBoxAdapter(child: HomeCard.request()),
-              const SliverToBoxAdapter(child: HomeCard.history()),
             ],
           ),
         ),

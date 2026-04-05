@@ -64,22 +64,27 @@ sealed class UiCard extends StatelessWidget {
           isSelected: variant.isSelected,
           isDisabled: variant.isDisabled,
           autofocus: variant.autofocus,
-          builder: (context, states, child) => DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: variant.borderRadius ?? style.cardBorderRadius,
-              color: AppWidgetStateMap({
-                WidgetState.disabled: variant.disabledColor ?? palette.disabled,
-                WidgetState.selected:
-                    variant.selectedColor ?? palette.secondary,
-                WidgetState.any: variant.color ?? palette.card,
-              }).resolve(states),
-            ),
-            child: Padding(
-              padding: variant.padding ?? AppInsets.card,
+          builder: (context, states, child) {
+            final color = AppWidgetStateMap({
+              WidgetState.disabled: variant.disabledColor ?? palette.disabled,
+              WidgetState.selected: variant.selectedColor ?? palette.secondary,
+              WidgetState.any: variant.color ?? palette.card,
+            }).resolve(states);
+
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: variant.borderRadius ?? style.cardBorderRadius,
+              ),
               child: variant.builder(context, states, child),
-            ),
+            );
+          },
+          child: Padding(
+            padding: variant.padding ?? AppInsets.card,
+            child: variant.child,
           ),
-          child: variant.child,
         ),
       ),
     );

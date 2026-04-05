@@ -52,6 +52,7 @@ class AppRouter extends RootStackRouter {
       builder: (_, _) => const RootScreen(pages: studentPages),
       children: [
         NamedRouteDef(
+          initial: true,
           name: 'StudentHomeScreen',
           builder: (_, _) => const StudentHomeScreen(),
         ),
@@ -60,7 +61,6 @@ class AppRouter extends RootStackRouter {
           builder: (_, _) => const FormRequestScreen(),
         ),
         NamedRouteDef(
-          initial: true,
           name: 'ProfileScreen',
           builder: (_, _) => const ProfileScreen(),
         ),

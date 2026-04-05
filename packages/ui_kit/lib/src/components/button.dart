@@ -266,7 +266,7 @@ class _IconButtonBaseStyle extends _UiBaseButtonStyle {
 
   @override
   WidgetStateProperty<Color?>? get iconColor =>
-      WidgetStatePropertyAll<Color?>(colorPalette.secondary);
+      WidgetStatePropertyAll<Color?>(colorPalette.foreground);
 
   @override
   WidgetStateProperty<OutlinedBorder?>? get shape =>

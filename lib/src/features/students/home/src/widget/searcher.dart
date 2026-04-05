@@ -15,21 +15,18 @@ class _SearcherState extends State<Searcher> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
-    return Padding(
-      padding: AppInsets.screen,
-      child: OpenContainer(
-        openElevation: 0.0,
-        closedElevation: 0.0,
-        closedColor: palette.background,
-        openColor: palette.background,
-        openBuilder: (context, _) => const SearchScreen(),
-        closedBuilder: (context, action) => UiTextField.standard(
-          enabled: false,
-          style: UiTextFieldStyle(
-            prefixIcon: Icon(Icons.search_outlined, color: palette.secondary),
-            hintText: 'Поиск',
-            hintStyle: TextStyle(color: palette.secondary),
-          ),
+    return OpenContainer(
+      openElevation: 0.0,
+      closedElevation: 0.0,
+      closedColor: palette.background,
+      openColor: palette.background,
+      openBuilder: (context, _) => const SearchScreen(),
+      closedBuilder: (context, action) => UiTextField.standard(
+        enabled: false,
+        style: UiTextFieldStyle(
+          prefixIcon: Icon(Icons.search_outlined, color: palette.secondary),
+          hintText: 'Поиск',
+          hintStyle: TextStyle(color: palette.secondary),
         ),
       ),
     );
