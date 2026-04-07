@@ -10,7 +10,7 @@ class RequestFormModel {
     DateTime? date,
     DateTime? startTime,
     DateTime? endTime,
-    this.imagePaths = const [],
+    this.problems = const [],
   }) : date = date ?? WorkingDateTime().today,
        startTime = startTime ?? WorkingDateTime().start,
        endTime = endTime ?? WorkingDateTime().end;
@@ -22,7 +22,7 @@ class RequestFormModel {
   final DateTime date;
   final DateTime startTime;
   final DateTime endTime;
-  final List<String> imagePaths;
+  final List<String> problems;
 
   RequestFormModel copyWith({
     int? specializationId,
@@ -33,7 +33,7 @@ class RequestFormModel {
     DateTime? date,
     DateTime? startTime,
     DateTime? endTime,
-    List<String>? imagePaths,
+    List<String>? problems,
   }) => RequestFormModel(
     specializationId: specializationId ?? this.specializationId,
     description: description ?? this.description,
@@ -43,7 +43,7 @@ class RequestFormModel {
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
-    imagePaths: imagePaths ?? this.imagePaths,
+    problems: problems ?? this.problems,
   );
 
   String? checkError() {
@@ -65,7 +65,7 @@ class RequestFormModel {
       date: date,
       startTime: startTime.hour,
       endTime: endTime.hour,
-      imagePaths: imagePaths,
+      problems: problems,
     );
   }
 
@@ -79,5 +79,5 @@ class RequestFormModel {
       'date: $date, '
       'startTime: $startTime, '
       'endTime: $endTime, '
-      'imagePaths: $imagePaths)';
+      'problems: $problems)';
 }

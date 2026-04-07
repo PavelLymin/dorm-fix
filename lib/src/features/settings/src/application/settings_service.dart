@@ -38,6 +38,7 @@ final class SettingsServiceImpl implements SettingsService {
     final updated = transform(current);
     await _repository.save(updated);
     _current = updated;
+
     _controller.add(updated);
   }
 }

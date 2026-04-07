@@ -35,11 +35,10 @@ dependencies:
   logger: ^2.6.2
   # RX
   rxdart: ^0.28.0
-  # Yandex MapKit
   # Http clients  
-  http: ^1.5.0
-  cronet_http: ^1.6.0
-  cupertino_http: ^2.3.0
+  http: ^1.6.0
+  cronet_http: ^1.8.0
+  cupertino_http: ^2.4.0
   # Local storage
   shared_preferences: ^2.5.3
   # Image picker
@@ -52,6 +51,7 @@ dependencies:
   flutter_dotenv: ^6.0.0
   # Yandex MapKit
   yandex_mapkit: ^4.2.1
+  supabase_flutter: ^2.12.2
 
 dev_dependencies:
   flutter_test:

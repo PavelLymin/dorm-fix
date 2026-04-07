@@ -114,7 +114,7 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   @override
   WidgetStateProperty<Color?>? get foregroundColor =>
       WidgetStateMapper<Color?>({
-        WidgetState.disabled: colorPalette.foregroundAccent,
+        WidgetState.disabled: colorPalette.foregroundDisabled,
         WidgetState.any: colorPalette.foregroundAccent,
       });
 
@@ -186,8 +186,9 @@ class _UiBaseButtonStyle extends ButtonStyle {
       const WidgetStatePropertyAll(.infinite);
 
   @override
-  WidgetStateProperty<TextStyle?>? get textStyle =>
-      WidgetStatePropertyAll(typography.m);
+  WidgetStateProperty<TextStyle?>? get textStyle => WidgetStatePropertyAll(
+    typography.m.copyWith(color: colorPalette.foregroundAccent),
+  );
 
   @override
   VisualDensity? get visualDensity => VisualDensity.adaptivePlatformDensity;

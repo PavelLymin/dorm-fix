@@ -39,9 +39,9 @@ class _PersonalAvatarView extends StatelessWidget {
         spacing: 24.0,
         children: [
           user.isFake
-              ? const Shimmer(child: CircleAvatar(radius: 40.0))
+              ? const Shimmer(child: CircleAvatar(radius: 37.0))
               : CircleAvatar(
-                  radius: 40.0,
+                  radius: 37.0,
                   backgroundColor: palette.secondary,
                   backgroundImage: authUser.photoURL != null
                       ? NetworkImage(authUser.photoURL!)
@@ -86,17 +86,16 @@ class _TitlePersonalAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final theme = Theme.of(context);
     return Column(
       mainAxisAlignment: .center,
       crossAxisAlignment: .start,
       children: [
-        UiText.titleLarge(
-          displayName,
-          style: TextStyle(color: colorPalette.primaryForeground),
+        UiText2.lBold(displayName),
+        UiText2.m(
+          '$title, $subtitle',
+          color: theme.colorPalette2.foregroundSecondary,
         ),
-        UiText.titleMedium(title),
-        UiText.titleMedium(subtitle),
       ],
     );
   }

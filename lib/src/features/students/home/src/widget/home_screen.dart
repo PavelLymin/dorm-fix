@@ -43,7 +43,7 @@ class _HomeScreenState extends State<StudentHomeScreen> {
               const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
               // const SliverToBoxAdapter(child: HomeCard.request()),
               // const SliverToBoxAdapter(child: HomeCard.history()),
-              const SliverToBoxAdapter(child: RepairRequests()),
+              SliverToBoxAdapter(child: const RepairRequests()),
               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
               const SliverToBoxAdapter(child: Advices()),
             ],

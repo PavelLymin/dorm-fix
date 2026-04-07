@@ -35,12 +35,12 @@ class _SettingsState extends State<Settings> {
     return SettingsBuilder(
       builder: (context, settings) {
         final items = _createSettingsList(context, settings, textStyle);
-        return GroupedList(divider: .indented(), items: items);
+        return TileGroup(items: items);
       },
     );
   }
 
-  List<GroupedListItem> _createSettingsList(
+  List<TileGroupItem> _createSettingsList(
     BuildContext context,
     SettingsEntity settings,
     TextStyle dataStyle,
@@ -48,48 +48,70 @@ class _SettingsState extends State<Settings> {
     final icon = const Icon(Icons.expand_more_outlined);
 
     final l10n = AppLocalizations.of(context);
-    return <GroupedListItem>[
-      GroupedListItem(
-        title: UiText.bodyMedium(l10n.notifications),
+    return <TileGroupItem>[
+      TileGroupItem(
+        title: l10n.notifications,
+        sufixIcon: icon,
         prefixIcon: Icon(Icons.notifications_none_outlined),
-        subTitle: UiText.bodyMedium(l10n.notifications_off),
+        subTitle: l10n.notifications_off,
         onTap: () {},
-        content: icon,
       ),
-      GroupedListItem(
-        title: UiText.bodyMedium(l10n.theme),
+      TileGroupItem(
+        title: l10n.theme,
+        sufixIcon: icon,
         prefixIcon: Icon(Icons.light_mode_outlined),
         onTap: () {},
-        content: icon,
-        selectItems: SelectItem<ThemeModeVO>(
+        initial: settings.themeMode.index,
+        selectItem: TileSelectItem(
           items: {
-            for (final mode in ThemeModeVO.values) mode: mode.label(l10n),
+            for (int i = 0; i < ThemeModeVO.values.length; i++)
+              i: ThemeModeVO.values[i].label(l10n),
           },
-          initial: settings.themeMode,
-          onChange: (mode) => _onChangeTheme(mode),
+          onSelect: (index) => _onChangeTheme(ThemeModeVO.values[index]),
         ),
       ),
-      GroupedListItem(
-        title: UiText.bodyMedium(l10n.language),
+      TileGroupItem(
+        title: l10n.language,
+        sufixIcon: icon,
         prefixIcon: Icon(Icons.language_outlined),
-        subTitle: UiText.bodyMedium(l10n.russian),
+        subTitle: l10n.russian,
         onTap: () {},
-        content: icon,
-        selectItems: SelectItem<LocaleVO>(
-          items: {for (final l in LocaleVO.values) l: l.label(l10n)},
-          initial: settings.locale,
-          onChange: (locale) => _onChangeLocale(locale),
+        initial: settings.locale.index,
+        selectItem: TileSelectItem(
+          items: {
+            for (int i = 0; i < LocaleVO.values.length; i++)
+              i: LocaleVO.values[i].label(l10n),
+          },
+          onSelect: (index) => _onChangeLocale(LocaleVO.values[index]),
         ),
-      ),
-      GroupedListItem(
-        title: UiText.bodyMedium(l10n.logout),
-        prefixIcon: Icon(Icons.logout_outlined),
-        onTap: () {
-          context.read<AuthBloc>().add(.signOut());
-          context.router.replace(const NamedRoute('SignIn'));
-        },
-        content: icon,
       ),
     ];
+  }
+}
+
+class LogOutButton extends StatelessWidget {
+  const LogOutButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return UiButton.filledPrimary(
+      onPressed: () {
+        context.read<AuthBloc>().add(.signOut());
+        context.router.replace(const NamedRoute('SignIn'));
+      },
+      icon: Icon(Icons.logout_outlined, color: theme.colorPalette2.destructive),
+      label: UiText2.m(
+        'Выйти из профиля',
+        color: theme.colorPalette2.destructive,
+      ),
+      style: ButtonStyle(
+        shape: const WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: .all(.circular(24.0))),
+        ),
+        alignment: .centerStart,
+        backgroundColor: .all(theme.colorPalette2.card),
+      ),
+    );
   }
 }

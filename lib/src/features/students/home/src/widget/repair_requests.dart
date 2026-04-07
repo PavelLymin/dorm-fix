@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ui_kit/ui.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../../repair_request/request.dart';
@@ -25,21 +27,34 @@ class _RepairRequestsState extends State<RepairRequests> {
     final palette = theme.colorPalette2;
     final typography = theme.appTypography2;
     return Column(
-      mainAxisAlignment: .start,
-      crossAxisAlignment: .start,
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .stretch,
       mainAxisSize: .min,
       children: [
-        UiText2.lBold('Ваши заявки'),
-        SizedBox(
-          height: 100,
-          child: RepairRequestList(
-            requests: requests,
-            itemCount: 2,
-            style: RepairRequestsStyle(
-              titleStyle: typography.lBold.copyWith(color: palette.foreground),
-              dataStyle: typography.m.copyWith(color: palette.secondary),
+        Row(
+          mainAxisAlignment: .spaceBetween,
+          crossAxisAlignment: .center,
+          children: [
+            UiText2.lBold('Ваши заявки'),
+            UiButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.timelapse_outlined),
             ),
+          ],
+        ),
+        RepairRequestList(
+          requests: requests,
+          itemCount: 1,
+          style: RepairRequestsStyle(
+            titleStyle: typography.lBold.copyWith(color: palette.foreground),
+            dataStyle: typography.m.copyWith(color: palette.secondary),
           ),
+        ),
+        const SizedBox(height: 12.0),
+        UiButton.filledPrimary(
+          onPressed: () {},
+          label: Text('Создать заявку'),
+          icon: Icon(Icons.add_outlined),
         ),
       ],
     );
@@ -82,47 +97,68 @@ class _RepairRequestListState extends State<RepairRequestList> {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
-        print(_height);
         final requests = snapshot.data!;
-        return ListView.builder(
-          itemExtent: _height,
-          itemCount: widget.itemCount,
-          itemBuilder: (_, index) => Padding(
-            padding: widget.style.listPadding,
-            child: UiCard.clickable(
-              padding: widget.style.itemPadding,
-              onTap: () {},
-              child: Row(
-                mainAxisAlignment: .spaceBetween,
-                crossAxisAlignment: .center,
-                children: [
-                  Column(
-                    mainAxisAlignment: .start,
-                    crossAxisAlignment: .start,
-                    mainAxisSize: .min,
-                    children: [
-                      Text(
-                        requests[index].specialization.title,
-                        style: widget.style.titleStyle,
-                      ),
-                      SizedBox(height: widget.style.spacing),
-                      Text(
-                        '${requests[index].startTime}:00-${requests[index].endTime}:00',
-                        style: widget.style.dataStyle,
-                      ),
-                      SizedBox(height: widget.style.dataSpacing),
-                      Text(
-                        requests[index].date.toLocal().toIso8601String(),
-                        style: widget.style.dataStyle,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+        return SizedBox(
+          height: _height * widget.itemCount,
+          child: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            padding: .zero,
+            itemExtent: _height,
+            itemCount: widget.itemCount,
+            itemBuilder: (context, index) => _Item(
+              request: requests[requests.length - 1],
+              style: widget.style,
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _Item extends StatelessWidget {
+  const _Item({required this.request, required this.style});
+
+  final FullRepairRequest request;
+  final RepairRequestsStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: style.listPadding,
+      child: UiCard.clickable(
+        padding: style.itemPadding,
+        onTap: () {
+          log(request.problems.first.photoPath);
+        },
+        child: Row(
+          mainAxisAlignment: .spaceBetween,
+          crossAxisAlignment: .center,
+          children: [
+            Column(
+              mainAxisAlignment: .start,
+              crossAxisAlignment: .start,
+              mainAxisSize: .min,
+              children: [
+                Text(request.specialization.title, style: style.titleStyle),
+                SizedBox(height: style.spacing),
+                Text(
+                  '${request.startTime}:00-${request.endTime}:00',
+                  style: style.dataStyle,
+                ),
+                SizedBox(height: style.dataSpacing),
+                Text(
+                  request.date.toLocal().toIso8601String(),
+                  style: style.dataStyle,
+                ),
+              ],
+            ),
+            // Image.network(
+            //   'https://[project_id].supabase.co/storage/v1/object/public/problems/problem/${request.problems.first.photoPath}.png',
+            // ),
+          ],
+        ),
+      ),
     );
   }
 }

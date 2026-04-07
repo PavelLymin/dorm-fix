@@ -13,9 +13,8 @@ class PersonalData extends StatelessWidget {
       return state.maybeMap(
         orElse: () => const SizedBox.shrink(),
         loading: (_) => Shimmer(
-          child: GroupedList(
+          child: TileGroup(
             items: _createStudentDataList(context, const .fake()),
-            divider: .indented(),
           ),
         ),
         authenticated: (user) {
@@ -26,87 +25,83 @@ class PersonalData extends StatelessWidget {
               master: (m) => _createMasterDataList(context, m),
             ),
           );
-          return GroupedList(divider: .indented(), items: items);
+          return TileGroup(items: items);
         },
       );
     },
   );
 
-  List<GroupedListItem> _createGeneralDataList(
+  List<TileGroupItem> _createGeneralDataList(
     BuildContext context,
     AuthenticatedUser user,
   ) {
     final localizations = AppLocalizations.of(context);
     final icon = const Icon(Icons.chevron_right_rounded);
-    return <GroupedListItem>[
-      GroupedListItem(
-        title: UiText.bodyMedium(localizations.email_address),
+    return <TileGroupItem>[
+      TileGroupItem(
+        title: localizations.email_address,
+        sufixIcon: icon,
         prefixIcon: Icon(Icons.email_outlined),
-        subTitle: UiText.bodyMedium(user.email ?? 'Укажите почту'),
+        subTitle: user.email ?? 'Укажите почту',
         onTap: () => showUiBottomSheet(
           context,
           title: localizations.email_address,
           isScrollControlled: true,
           widget: EmailAddressEdit(initialText: user.email ?? ''),
         ),
-        content: icon,
       ),
-      GroupedListItem(
-        title: UiText.bodyMedium(localizations.phone_number),
+      TileGroupItem(
+        title: localizations.phone_number,
+        sufixIcon: icon,
         prefixIcon: Icon(Icons.phone_rounded),
-        subTitle: UiText.bodyMedium(user.phoneNumber ?? 'Укажите телефон'),
+        subTitle: user.phoneNumber ?? 'Укажите телефон',
         onTap: () => showUiBottomSheet(
           title: localizations.phone_number,
           context,
           isScrollControlled: true,
           widget: PhoneNumberEdit(initialText: user.phoneNumber ?? ''),
         ),
-        content: icon,
       ),
     ];
   }
 
-  List<GroupedListItem> _createStudentDataList(
+  List<TileGroupItem> _createStudentDataList(
     BuildContext context,
     FullStudent student,
   ) {
     final localizations = AppLocalizations.of(context);
     final icon = const Icon(Icons.chevron_right_rounded);
-    return _createGeneralDataList(context, student)..addAll(<GroupedListItem>[
-      GroupedListItem(
-        title: UiText.bodyMedium(localizations.dormitory),
+    return _createGeneralDataList(context, student)..addAll(<TileGroupItem>[
+      TileGroupItem(
+        title: localizations.dormitory,
+        sufixIcon: icon,
         prefixIcon: Icon(Icons.apartment),
-        subTitle: UiText.bodyMedium(
-          localizations.dormitory_name(student.dormitory.number),
-        ),
+        subTitle: localizations.dormitory_name(student.dormitory.number),
         onTap: () {},
-        content: icon,
       ),
-      GroupedListItem(
-        title: UiText.bodyMedium(localizations.room),
+      TileGroupItem(
+        title: localizations.room,
+        sufixIcon: icon,
         prefixIcon: Icon(Icons.room_outlined),
-        subTitle: UiText.bodyMedium(student.room.number),
+        subTitle: student.room.number,
         onTap: () {},
-        content: icon,
       ),
     ]);
   }
 
-  List<GroupedListItem> _createMasterDataList(
+  List<TileGroupItem> _createMasterDataList(
     BuildContext context,
     MasterUser master,
   ) {
     final localizations = AppLocalizations.of(context);
     final icon = const Icon(Icons.chevron_right_rounded);
-    return _createGeneralDataList(context, master)..addAll(<GroupedListItem>[
-      GroupedListItem(
-        title: UiText.bodyMedium(localizations.dormitory),
+    return _createGeneralDataList(context, master)..addAll(<TileGroupItem>[
+      TileGroupItem(
+        title: localizations.dormitory,
+        sufixIcon: icon,
         prefixIcon: Icon(Icons.apartment),
-        subTitle: UiText.bodyMedium(
-          localizations.dormitory_name(master.dormitory.number),
-        ),
+        subTitle: localizations.dormitory_name(master.dormitory.number),
         onTap: () {},
-        content: icon,
       ),
     ]);
   }

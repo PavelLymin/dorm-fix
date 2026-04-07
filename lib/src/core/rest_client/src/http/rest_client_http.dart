@@ -1,31 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cronet_http/cronet_http.dart' show CronetClient;
-import 'package:cupertino_http/cupertino_http.dart' show CupertinoClient;
-import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:http/http.dart' as http;
 import '../../rest_client.dart';
 import '../exception/check_exception_io.dart';
 
-http.Client createDefaultHttpClient() {
-  http.Client? client;
-  final platform = defaultTargetPlatform;
+const String _contentTypeJson = 'application/json;charset=utf-8';
+const String _methodGet = 'GET';
+const String _acceptEventStream = 'text/event-stream';
+const String _cacheControlNoCache = 'no-cache';
+const String _dataPrefix = 'data: ';
+const String _errorPrefix = 'error: ';
 
-  try {
-    client = switch (platform) {
-      .android => CronetClient.defaultCronetEngine(),
-      .iOS || .macOS => CupertinoClient.defaultSessionConfiguration(),
-      _ => null,
-    };
-  } on Object catch (e, stackTrace) {
-    Zone.current.print(
-      'Failed to create a default http client for platform $platform $e $stackTrace',
-    );
-  }
-
-  return client ?? http.Client();
-}
+http.Client createDefaultHttpClient() => http.Client();
 
 final class RestClientHttp extends RestClientBase {
   RestClientHttp({
@@ -37,6 +24,45 @@ final class RestClientHttp extends RestClientBase {
 
   final http.Client _client;
   final List<ApiClientMiddleware> middleware;
+
+  ApiClientHandler _applyMiddleware() {
+    ApiClientHandler handler = (request, context) =>
+        _client.send(request).then(http.Response.fromStream);
+
+    for (final mw in middleware) {
+      handler = mw(handler);
+    }
+
+    return handler;
+  }
+
+  ApiClientHandler _applyMiddlewareStrem() {
+    ApiClientHandler handler = (request, context) => _client.send(request);
+
+    for (final mw in middleware) {
+      handler = mw(handler);
+    }
+
+    return handler;
+  }
+
+  Future<http.BaseResponse> _sendWithMiddleware(http.Request request) async {
+    final handler = _applyMiddleware();
+    return handler(request, null);
+  }
+
+  Never _handleHttpException(http.ClientException e, StackTrace stack) {
+    final checkedException = checkHttpException(e);
+
+    if (checkedException != null) {
+      Error.throwWithStackTrace(checkedException, stack);
+    }
+
+    Error.throwWithStackTrace(
+      ClientException(message: e.message, cause: e),
+      stack,
+    );
+  }
 
   @override
   Future<Map<String, Object?>?> send({
@@ -52,19 +78,17 @@ final class RestClientHttp extends RestClientBase {
 
       if (body != null) {
         request.bodyBytes = encodeBody(body);
-        request.headers['content-type'] = 'application/json;charset=utf-8';
+        request.headers['content-type'] = _contentTypeJson;
       }
 
       if (headers != null) request.headers.addAll(headers);
 
-      ApiClientHandler handler = (request, context) =>
-          _client.send(request).then(http.Response.fromStream);
-
-      for (final mw in middleware) {
-        handler = mw(handler);
+      final response = await _sendWithMiddleware(request);
+      if (response is! http.Response) {
+        throw ClientException(
+          message: 'Expected Response but got ${response.runtimeType}',
+        );
       }
-
-      final response = await handler(request, null) as http.Response;
 
       final result = await decodeResponse(
         BytesResponseBody(response.bodyBytes),
@@ -75,17 +99,65 @@ final class RestClientHttp extends RestClientBase {
     } on RestClientException {
       rethrow;
     } on http.ClientException catch (e, stack) {
-      final checkedException = checkHttpException(e);
+      _handleHttpException(e, stack);
+    }
+  }
 
-      if (checkedException != null) {
-        Error.throwWithStackTrace(checkedException, stack);
-      }
+  void _processSseLine(
+    String line,
+    StringBuffer buffer,
+    StreamController<Map<String, Object?>> streamController,
+  ) {
+    if (line.isEmpty) {
+      _flushBuffer(buffer, streamController);
+      return;
+    }
 
-      Error.throwWithStackTrace(
-        ClientException(message: e.message, cause: e),
-        stack,
+    if (line.startsWith(_dataPrefix)) {
+      buffer.write(line.substring(_dataPrefix.length).trim());
+    } else if (line.startsWith(_errorPrefix)) {
+      streamController.addError(
+        ClientException(message: line.substring(_errorPrefix.length).trim()),
       );
     }
+  }
+
+  void _flushBuffer(
+    StringBuffer buffer,
+    StreamController<Map<String, Object?>> streamController,
+  ) {
+    if (buffer.isEmpty) return;
+
+    try {
+      final json = jsonDecode(buffer.toString()) as Map<String, Object?>;
+      streamController.add(json);
+    } catch (e) {
+      streamController.addError(e);
+    } finally {
+      buffer.clear();
+    }
+  }
+
+  StreamSubscription<String> _setupStreamListener(
+    http.StreamedResponse response,
+    StreamController<Map<String, Object?>> streamController,
+  ) {
+    final buffer = StringBuffer();
+
+    return response.stream
+        .transform(const Utf8Decoder())
+        .transform(const LineSplitter())
+        .listen(
+          (line) => _processSseLine(line, buffer, streamController),
+          onError: (error) {
+            streamController.addError(error);
+          },
+          onDone: () {
+            _flushBuffer(buffer, streamController);
+            streamController.close();
+          },
+          cancelOnError: false,
+        );
   }
 
   @override
@@ -96,27 +168,20 @@ final class RestClientHttp extends RestClientBase {
   }) {
     try {
       final uri = buildUri(path: path, queryParams: queryParams);
-      final request = http.Request('GET', uri);
+      final request = http.Request(_methodGet, uri);
 
       request.headers.addAll({
         ...?headers,
-        'Accept': 'text/event-stream',
-        'Cache-Control': 'no-cache',
+        'Accept': _acceptEventStream,
+        'Cache-Control': _cacheControlNoCache,
       });
+      StreamSubscription<String>? subscription;
 
-      StreamSubscription? dataSubscription;
       final streamController = StreamController<Map<String, Object?>>(
-        onCancel: () {
-          dataSubscription?.cancel();
-        },
+        onCancel: () => subscription?.cancel(),
       );
 
-      ApiClientHandler handler = (request, context) => _client.send(request);
-      for (final mw in middleware) {
-        handler = mw(handler);
-      }
-
-      String buffer = '';
+      final handler = _applyMiddlewareStrem();
       handler(request, null)
           .then((baseResponse) {
             if (baseResponse is! http.StreamedResponse) {
@@ -126,67 +191,23 @@ final class RestClientHttp extends RestClientBase {
                       'Expected StreamedResponse but got ${baseResponse.runtimeType}',
                 ),
               );
+              streamController.close();
               return;
             }
-
-            final response = baseResponse;
-            dataSubscription = response.stream
-                .transform(const Utf8Decoder())
-                .transform(const LineSplitter())
-                .listen(
-                  (line) {
-                    if (line.isEmpty) {
-                      if (buffer.isNotEmpty) {
-                        try {
-                          final json =
-                              jsonDecode(buffer) as Map<String, Object?>;
-                          streamController.add(json);
-                        } catch (e) {
-                          streamController.addError(e);
-                        } finally {
-                          buffer = '';
-                        }
-                      }
-                      return;
-                    }
-                    if (line.startsWith('data: ')) {
-                      buffer += line.substring(6).trim();
-                    }
-                    if (line.startsWith('error: ')) {
-                      streamController.addError(
-                        ClientException(message: line.substring(7).trim()),
-                      );
-                    }
-                  },
-                  onError: (error) {
-                    streamController.addError(error);
-                  },
-                  onDone: () {
-                    if (buffer.isNotEmpty) {
-                      try {
-                        final json = jsonDecode(buffer) as Map<String, Object?>;
-                        streamController.add(json);
-                      } catch (e) {
-                        streamController.addError(e);
-                      }
-                    }
-                    streamController.close();
-                  },
-                );
+            subscription = _setupStreamListener(baseResponse, streamController);
           })
           .catchError((error) {
-            streamController.addError(error);
-            streamController.close();
+            if (!streamController.isClosed) {
+              streamController.addError(error);
+              streamController.close();
+            }
           });
 
       return streamController.stream;
     } on RestClientException {
       rethrow;
     } on http.ClientException catch (e, stack) {
-      Error.throwWithStackTrace(
-        ClientException(message: e.message, cause: e),
-        stack,
-      );
+      _handleHttpException(e, stack);
     }
   }
 }

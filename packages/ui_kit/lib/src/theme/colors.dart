@@ -19,6 +19,7 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
       disabledIcon: Color(0xFFD6D6D6),
       inputPlaceholder: Color(0xFFEBEBEB),
       card: Color(0xFFFFFFFF),
+      destructive: Color(0xFFE84040),
     );
   }
 
@@ -36,6 +37,7 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
     disabledIcon: Color(0xFFD6D6D6),
     inputPlaceholder: Color(0xFFEBEBEB),
     card: Color(0xFFFFFFFF),
+    destructive: Color(0xFFE84040),
   );
 }
 
@@ -54,6 +56,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     required this.disabledIcon,
     required this.inputPlaceholder,
     required this.card,
+    required this.destructive,
   });
 
   final Color background;
@@ -69,6 +72,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
   final Color disabledIcon;
   final Color inputPlaceholder;
   final Color card;
+  final Color destructive;
 
   @override
   ThemeExtension<ColorPalette2> copyWith({
@@ -85,6 +89,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     Color? disabledIcon,
     Color? inputPlaceholder,
     Color? card,
+    Color? destructive,
   }) => ColorPalette2(
     background: background ?? this.background,
     primary: primary ?? this.primary,
@@ -99,6 +104,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     disabledIcon: disabledIcon ?? this.disabledIcon,
     inputPlaceholder: inputPlaceholder ?? this.inputPlaceholder,
     card: card ?? this.card,
+    destructive: destructive ?? this.destructive,
   );
 
   @override
@@ -129,6 +135,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
       disabledIcon: .lerp(disabledIcon, other.disabledIcon, t)!,
       inputPlaceholder: .lerp(inputPlaceholder, other.inputPlaceholder, t)!,
       card: .lerp(card, other.card, t)!,
+      destructive: .lerp(destructive, other.destructive, t)!,
     );
   }
 
@@ -146,5 +153,6 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     'disabledIcon': disabledIcon,
     'inputPlaceholder': inputPlaceholder,
     'card': card,
+    'destructive': destructive,
   };
 }

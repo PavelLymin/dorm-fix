@@ -51,7 +51,7 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
     _LoadImagesEvent e,
   ) async {
     final images = await _imageRepository.loadImages();
-    final form = state.currentFormModel.copyWith(imagePaths: List.from(images));
+    final form = state.currentFormModel.copyWith(problems: List.from(images));
     emit(.updated(formModel: form));
   }
 

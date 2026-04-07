@@ -19,43 +19,47 @@ class EmailAddressEdit extends StatefulWidget {
 class _EmailAddressEditState extends State<EmailAddressEdit>
     with _EmailAddressEditStateMixin {
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: .only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-    child: Column(
-      spacing: 64.0,
-      mainAxisAlignment: .center,
-      crossAxisAlignment: .stretch,
-      mainAxisSize: .min,
-      children: [
-        UiTextField.standard(
-          controller: _controller,
-          autofocus: false,
-          keyboardType: .emailAddress,
-          textInputAction: .done,
-          style: UiTextFieldStyle(
-            hintText: 'name@mail.ru',
-            prefixIcon: const Icon(Icons.email_outlined),
-            suffixIcon: ValueListenableBuilder<TextEditingValue>(
-              valueListenable: _controller,
-              builder: (_, value, _) {
-                if (value.text.isEmpty) return const SizedBox.shrink();
-                return IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () => _controller.clear(),
-                );
-              },
+  Widget build(BuildContext context) => SafeArea(
+    child: Padding(
+      padding: .only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: Column(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .stretch,
+        mainAxisSize: .min,
+        children: [
+          UiText2.lBold('Укажите почту'),
+          const SizedBox(height: 10.0),
+          UiTextField.standard(
+            controller: _controller,
+            autofocus: false,
+            keyboardType: .emailAddress,
+            textInputAction: .done,
+            style: UiTextFieldStyle(
+              hintText: 'name@mail.ru',
+              prefixIcon: const Icon(Icons.email_outlined),
+              suffixIcon: ValueListenableBuilder<TextEditingValue>(
+                valueListenable: _controller,
+                builder: (_, value, _) {
+                  if (value.text.isEmpty) return const SizedBox.shrink();
+                  return IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () => _controller.clear(),
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        ValueListenableBuilder(
-          valueListenable: _isEnabled,
-          builder: (_, value, _) => UiButton.filledPrimary(
-            onPressed: () {},
-            enabled: value,
-            label: UiText.titleMedium(AppLocalizations.of(context).update),
+          const SizedBox(height: 20.0),
+          ValueListenableBuilder(
+            valueListenable: _isEnabled,
+            builder: (_, value, _) => UiButton.filledPrimary(
+              onPressed: () {},
+              enabled: value,
+              label: UiText.titleMedium(AppLocalizations.of(context).update),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }
@@ -125,11 +129,12 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
     child: Padding(
       padding: .only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: Column(
-        spacing: 64.0,
         mainAxisAlignment: .center,
         crossAxisAlignment: .stretch,
         mainAxisSize: .min,
         children: [
+          UiText2.lBold('Укажите номер телефона'),
+          const SizedBox(height: 10.0),
           UiTextField.standard(
             controller: _controller,
             autofocus: false,
@@ -150,6 +155,7 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
               ),
             ),
           ),
+          const SizedBox(height: 20.0),
           _ButtonPhoneUpdate(controller: _controller),
         ],
       ),

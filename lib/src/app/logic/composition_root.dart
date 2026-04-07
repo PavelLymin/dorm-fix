@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../firebase_options.dart';
 import '../../core/middleware/src/authenticated_middleware.dart';
 import '../../core/middleware/src/logger_middleware.dart';
@@ -13,6 +14,7 @@ import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
 import '../../features/repair_request/request.dart';
+import '../../features/repair_request/src/data/repository/problem_repository.dart';
 import '../../features/students/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/room/room.dart';
@@ -47,6 +49,11 @@ class CompositionRoot {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     final firebaseAuth = await _CreateFirebaseAuth().create();
+
+    final supabase = await Supabase.initialize(
+      url: 'https://oztyuuvqhgnnzjxclcfv.supabase.co',
+      anonKey: 'sb_publishable_sV_KnN1bz7rpFETM_gp7Dg_a1EFkkF-',
+    );
 
     // Google
     final googleSignIn = GoogleSignIn.instance;
@@ -149,9 +156,11 @@ class CompositionRoot {
       logger: logger,
     );
 
+    final problemRepository = ProblemRepositoryImpl(supabase: supabase.client);
+
     final repairRequestBloc = RepairRequestBloc(
       requestRepository: requestRepository,
-      webSocket: webSocket,
+      problemRepository: problemRepository,
       logger: logger,
     );
 

@@ -42,9 +42,14 @@ class RepairRequestRouter {
     final uid = RequireUser.getUserId(request);
     final json = await _readJson(request);
     final entity = PartialRepairRequestDto.fromJson(json).toEntity();
-    await _requestFacade.createRequest(uid: uid, request: entity);
+    final requestAggregate = await _requestFacade.createRequest(
+      uid: uid,
+      request: entity,
+    );
 
-    return _restApi.send(statusCode: 201);
+    final data = RequestAggregateDto.fromEntity(requestAggregate).toJson();
+
+    return _restApi.send(statusCode: 200, responseBody: {'data': data});
   }
 
   Future<Response> _watchRepairRequests(Request request) async {
@@ -82,9 +87,10 @@ class RepairRequestRouter {
     return Response.ok(
       controller.stream,
       headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
         'Connection': 'keep-alive',
+        'X-Accel-Buffering': 'no',
       },
       context: {'shelf.io.buffer_output': false},
     );

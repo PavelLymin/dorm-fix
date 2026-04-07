@@ -6,7 +6,12 @@ typedef RepairRequestEventMatch<R, E extends RepairRequestEvent> =
 sealed class RepairRequestEvent {
   const RepairRequestEvent();
 
-  factory RepairRequestEvent.get() = _GetRepairRequestsEvent;
+  factory RepairRequestEvent.get({
+    bool uid,
+    int? specId,
+    int? dormId,
+    Status? status,
+  }) = _GetRepairRequestsEvent;
 
   factory RepairRequestEvent.create({required RequestFormModel request}) =>
       _CreateRepairRequestsEvent(request: request);
@@ -21,7 +26,17 @@ sealed class RepairRequestEvent {
 }
 
 final class _GetRepairRequestsEvent extends RepairRequestEvent {
-  const _GetRepairRequestsEvent();
+  const _GetRepairRequestsEvent({
+    this.uid = false,
+    this.specId,
+    this.dormId,
+    this.status,
+  });
+
+  final bool uid;
+  final int? specId;
+  final int? dormId;
+  final Status? status;
 }
 
 final class _CreateRepairRequestsEvent extends RepairRequestEvent {

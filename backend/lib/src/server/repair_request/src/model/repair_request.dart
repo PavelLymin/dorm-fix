@@ -1,5 +1,3 @@
-import 'problem.dart';
-
 enum Priority {
   ordinary(value: 'Обычный'),
   high(value: 'Высокий');
@@ -33,6 +31,7 @@ enum Status {
 
 sealed class RepairRequestEntity {
   const RepairRequestEntity({
+    required this.specId,
     required this.description,
     required this.priority,
     required this.status,
@@ -42,6 +41,7 @@ sealed class RepairRequestEntity {
     required this.endTime,
   });
 
+  final int specId;
   final String description;
   final Priority priority;
   final Status status;
@@ -59,12 +59,13 @@ sealed class RepairRequestEntity {
     required final DateTime date,
     required final int startTime,
     required final int endTime,
-    required final List<PartialProblem> problems,
+    required final List<String> problems,
   }) = PartialRepairRequest;
 
   const factory RepairRequestEntity.full({
     required final int id,
     required final String uid,
+    required final int specId,
     required final String description,
     required final Priority priority,
     required final Status status,
@@ -78,6 +79,7 @@ sealed class RepairRequestEntity {
 
 final class PartialRepairRequest extends RepairRequestEntity {
   const PartialRepairRequest({
+    required super.specId,
     required super.description,
     required super.priority,
     required super.status,
@@ -85,12 +87,10 @@ final class PartialRepairRequest extends RepairRequestEntity {
     required super.date,
     required super.startTime,
     required super.endTime,
-    required this.specId,
     required this.problems,
   });
 
-  final int specId;
-  final List<PartialProblem> problems;
+  final List<String> problems;
 
   PartialRepairRequest copyWith({
     int? specId,
@@ -101,7 +101,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
     DateTime? date,
     int? startTime,
     int? endTime,
-    List<PartialProblem>? problems,
+    List<String>? problems,
   }) => PartialRepairRequest(
     specId: specId ?? this.specId,
     description: description ?? this.description,
@@ -157,6 +157,7 @@ final class FullRepairRequest extends RepairRequestEntity {
   const FullRepairRequest({
     required this.id,
     required this.uid,
+    required super.specId,
     required super.description,
     required super.priority,
     required super.status,
@@ -174,6 +175,7 @@ final class FullRepairRequest extends RepairRequestEntity {
   FullRepairRequest copyWith({
     int? id,
     String? uid,
+    int? specId,
     String? description,
     Priority? priority,
     Status? status,
@@ -185,6 +187,7 @@ final class FullRepairRequest extends RepairRequestEntity {
   }) => FullRepairRequest(
     id: id ?? this.id,
     uid: uid ?? this.uid,
+    specId: specId ?? this.specId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
     status: status ?? this.status,
@@ -200,6 +203,7 @@ final class FullRepairRequest extends RepairRequestEntity {
       'FullRepairRequest('
       'id: $id,'
       'uid: $uid, '
+      'specId: $specId, '
       'description: $description, '
       'priority: $priority, '
       'status: $status, '

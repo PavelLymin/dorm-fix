@@ -42,14 +42,11 @@ class _LineCalendarPickerState extends State<LineCalendarPicker> {
         listener: (context, state) => state.mapOrNull(
           initial: (state) => _controller.value = state.currentFormModel.date,
         ),
-        child: UiCard.standart(
-          borderRadius: .all(.circular(16.0)),
-          child: LineCalendar(
-            today: _workingDateTime.today,
-            start: _workingDateTime.today,
-            end: _workingDateTime.endDay,
-            controller: _controller,
-          ),
+        child: LineCalendar(
+          today: _workingDateTime.today,
+          start: _workingDateTime.today,
+          end: _workingDateTime.endDay,
+          controller: _controller,
         ),
       );
 }

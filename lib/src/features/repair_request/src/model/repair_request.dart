@@ -63,7 +63,7 @@ sealed class RepairRequestEntity {
     required final DateTime date,
     required final int startTime,
     required final int endTime,
-    required final List<String> imagePaths,
+    required final List<String> problems,
   }) = PartialRepairRequest;
 
   const factory RepairRequestEntity.full({
@@ -77,7 +77,7 @@ sealed class RepairRequestEntity {
     required final int startTime,
     required final int endTime,
     required final SpecializationEntity specialization,
-    required final List<ProblemEntity> problems,
+    required final List<FullProblem> problems,
     required final FullChat chat,
     required final MasterUser? master,
     required final DateTime createdAt,
@@ -104,11 +104,11 @@ final class PartialRepairRequest extends RepairRequestEntity {
     required super.startTime,
     required super.endTime,
     required this.specId,
-    required this.imagePaths,
+    required this.problems,
   });
 
   final int specId;
-  final List<String> imagePaths;
+  final List<String> problems;
 
   @override
   PartialRepairRequest copyWith({
@@ -120,7 +120,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
     DateTime? date,
     int? startTime,
     int? endTime,
-    List<String>? imagePaths,
+    List<String>? problems,
   }) => PartialRepairRequest(
     specId: specId ?? this.specId,
     description: description ?? this.description,
@@ -130,7 +130,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
-    imagePaths: imagePaths ?? this.imagePaths,
+    problems: problems ?? this.problems,
   );
 
   @override
@@ -143,7 +143,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
       'date: $date, '
       'startTime: $startTime, '
       'endTime: $endTime, '
-      'imagePaths: $imagePaths)';
+      'problems: $problems)';
 
   @override
   bool operator ==(Object other) {
@@ -156,7 +156,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
         other.date == date &&
         other.startTime == startTime &&
         other.endTime == endTime &&
-        other.imagePaths == imagePaths;
+        other.problems == problems;
   }
 
   @override
@@ -168,7 +168,7 @@ final class PartialRepairRequest extends RepairRequestEntity {
     date,
     startTime,
     endTime,
-    imagePaths,
+    problems,
   );
 }
 
@@ -194,7 +194,7 @@ final class FullRepairRequest extends RepairRequestEntity {
   final String uid;
   final DateTime createdAt;
   final SpecializationEntity specialization;
-  final List<ProblemEntity> problems;
+  final List<FullProblem> problems;
   final FullChat chat;
   final MasterUser? master;
 
@@ -210,7 +210,7 @@ final class FullRepairRequest extends RepairRequestEntity {
     int? startTime,
     int? endTime,
     SpecializationEntity? specialization,
-    List<ProblemEntity>? problems,
+    List<FullProblem>? problems,
     FullChat? chat,
     MasterUser? master,
     DateTime? createdAt,

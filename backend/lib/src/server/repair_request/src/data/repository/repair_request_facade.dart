@@ -6,7 +6,7 @@ import '../../../../specialization/specialization.dart';
 import '../../../repair_request.dart';
 
 abstract interface class IRepairRequestFacade {
-  Future<void> createRequest({
+  Future<RequestAggregate> createRequest({
     required String uid,
     required PartialRepairRequest request,
   });
@@ -37,22 +37,39 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
   final IAssignmentsRepository _assignmentsRepository;
 
   @override
-  Future<void> createRequest({
+  Future<RequestAggregate> createRequest({
     required String uid,
     required PartialRepairRequest request,
   }) async {
     late final FullRepairRequest requestData;
+    late final List<FullProblem> problems;
+    late final SpecializationEntity specialization;
     late final FullChat chat;
     await _database.transaction(() async {
       requestData = await _requestRepository.createRequest(
         uid: uid,
         request: request,
       );
+      problems = await _problemRepository.createProblems(
+        problems: request.problems
+            .map((e) => PartialProblem(requestId: requestData.id, photoPath: e))
+            .toList(),
+      );
       chat = await _chatRepository.createChat(
         chat: PartialChat(requestId: requestData.id),
       );
+      specialization = await _specRepository.getSpecialization(
+        id: request.specId,
+      );
       await _chatRepository.addMember(chatId: chat.id, uid: uid);
     });
+
+    return RequestAggregate(
+      request: requestData,
+      specialization: specialization,
+      problems: problems,
+      chat: chat,
+    );
   }
 
   Stream<RequestAggregate> _watchRequestAggregate(int requestId) {

@@ -46,9 +46,9 @@ class LineCalendar extends StatelessWidget {
 
 class LineCalendarStyle {
   const LineCalendarStyle({
-    this.padding = const .symmetric(horizontal: 8.0),
-    this.contentEdgeSpacing = 16,
-    this.contentSpacing = 8,
+    this.padding = const .symmetric(horizontal: 6.0),
+    this.contentEdgeSpacing = 16.0,
+    this.contentSpacing = 8.0,
   });
 
   final EdgeInsetsGeometry padding;
@@ -57,61 +57,39 @@ class LineCalendarStyle {
 
   AppWidgetStateMap<BoxDecoration> decoration(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final style = theme.appStyle;
+    final palette = theme.colorPalette2;
     return AppWidgetStateMap<BoxDecoration>({
-      WidgetState.selected: BoxDecoration(
-        color: palette.secondary,
-        borderRadius: style.borderRadius,
-      ),
-      WidgetState.disabled: BoxDecoration(
-        color: palette.muted,
-        borderRadius: style.borderRadius,
-      ),
-      WidgetState.any: BoxDecoration(
-        color: palette.card,
-        borderRadius: style.borderRadius,
-      ),
+      WidgetState.selected: BoxDecoration(color: palette.primary),
+      WidgetState.disabled: BoxDecoration(color: palette.disabled),
+      WidgetState.any: BoxDecoration(color: palette.card),
     });
   }
 
   AppWidgetStateMap<TextStyle> dateTextStyle(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final typography = theme.appTypography;
+    final palette = theme.colorPalette2;
+    final typography = theme.appTypography2;
     return AppWidgetStateMap<TextStyle>({
-      WidgetState.selected: typography.titleLarge.copyWith(
+      WidgetState.selected: typography.lBold.copyWith(
         color: palette.foreground,
-        fontWeight: .w500,
       ),
-      WidgetState.disabled: typography.titleLarge.copyWith(
-        color: palette.mutedForeground,
-        fontWeight: .w500,
+      WidgetState.disabled: typography.lBold.copyWith(
+        color: palette.foregroundDisabled,
       ),
-      WidgetState.any: typography.titleLarge.copyWith(
-        color: palette.foreground,
-        fontWeight: .w500,
-      ),
+      WidgetState.any: typography.lBold.copyWith(color: palette.foreground),
     });
   }
 
   AppWidgetStateMap<TextStyle> weekdayTextStyle(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
-    final typography = theme.appTypography;
+    final palette = theme.colorPalette2;
+    final typography = theme.appTypography2;
     return AppWidgetStateMap<TextStyle>({
-      WidgetState.selected: typography.titleMedium.copyWith(
-        color: palette.foreground,
-        fontWeight: .w500,
+      WidgetState.selected: typography.m.copyWith(color: palette.foreground),
+      WidgetState.disabled: typography.m.copyWith(
+        color: palette.foregroundDisabled,
       ),
-      WidgetState.disabled: typography.titleMedium.copyWith(
-        color: palette.mutedForeground,
-        fontWeight: .w500,
-      ),
-      WidgetState.any: typography.titleMedium.copyWith(
-        color: palette.foreground,
-        fontWeight: .w500,
-      ),
+      WidgetState.any: typography.m.copyWith(color: palette.foreground),
     });
   }
 }

@@ -35,16 +35,7 @@ class _FormRequestScreenState extends State<FormRequestScreen>
           padding: AppInsets.screen,
           child: CustomScrollView(
             slivers: [
-              SliverAppBar(
-                title: const Text('Создание заявки'),
-                pinned: true,
-                flexibleSpace: ClipRect(
-                  child: BackdropFilter(
-                    filter: .blur(sigmaX: .9, sigmaY: 4.0),
-                    child: SizedBox.expand(),
-                  ),
-                ),
-              ),
+              SliverAppBar(title: const Text('Создание заявки')),
               SliverList.list(
                 children: [
                   const SizedBox(height: 16.0),

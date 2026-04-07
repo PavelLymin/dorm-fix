@@ -6,41 +6,63 @@ class GroupedListPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UiCard.standart(
-      child: GroupedList(
-        divider: .indented(),
+      color: Colors.amber,
+      // child: GroupedList(
+      //   divider: .indented(),
+      //   items: [
+      //     GroupedListItem(
+      //       prefixIcon: const Icon(Icons.email_outlined),
+      //       title: UiText.bodyMedium('Адрес электронной почты'),
+      //       onTap: () {},
+      //       content: const Icon(Icons.arrow_forward),
+      //     ),
+      //     GroupedListItem(
+      //       prefixIcon: Icon(Icons.phone_rounded),
+      //       title: UiText.bodyMedium('Номер телефона'),
+      //       onTap: () {},
+      //       content: const Icon(Icons.arrow_forward),
+      //       selectItems: SelectItem<SampleEnum>(
+      //         items: {
+      //           .option1: 'Option 1',
+      //           .option2: 'Option 2',
+      //           .option3: 'Option 3',
+      //         },
+      //         initial: .option2,
+      //       ),
+      //     ),
+      //     GroupedListItem(
+      //       title: UiText.bodyMedium('Общежитие'),
+      //       content: const Icon(Icons.arrow_forward),
+      //       selectItems: SelectItem<SampleEnum>(
+      //         items: {
+      //           .option1: 'Option 1',
+      //           .option2: 'Option 2',
+      //           .option3: 'Option 3',
+      //         },
+      //         initial: .option1,
+      //         onChange: (value) {},
+      //       ),
+      //     ),
+      //   ],
+      // ),
+      child: TileGroup(
         items: [
-          GroupedListItem(
-            prefixIcon: const Icon(Icons.email_outlined),
-            title: UiText.bodyMedium('Адрес электронной почты'),
-
-            onTap: () {},
-            content: const Icon(Icons.arrow_forward),
+          TileGroupItem(
+            prefixIcon: Icon(Icons.email_outlined),
+            title: 'Адрес электронной почты',
           ),
-          GroupedListItem(
+          TileGroupItem(
             prefixIcon: Icon(Icons.phone_rounded),
-            title: UiText.bodyMedium('Номер телефона'),
-            onTap: () {},
-            content: const Icon(Icons.arrow_forward),
-            selectItems: SelectItem<SampleEnum>(
-              items: {
-                .option1: 'Option 1',
-                .option2: 'Option 2',
-                .option3: 'Option 3',
-              },
-              initial: .option2,
-            ),
+            title: 'Номер телефона',
           ),
-          GroupedListItem(
-            title: UiText.bodyMedium('Общежитие'),
-            content: const Icon(Icons.arrow_forward),
-            selectItems: SelectItem<SampleEnum>(
-              items: {
-                .option1: 'Option 1',
-                .option2: 'Option 2',
-                .option3: 'Option 3',
-              },
-              initial: .option1,
-              onChange: (value) {},
+          TileGroupItem(
+            prefixIcon: Icon(Icons.apartment_outlined),
+            title: 'Общежитие',
+            initial: 0,
+            onTap: () {},
+            selectItem: TileSelectItem(
+              items: {0: 'Option 1', 1: 'Option 2', 2: 'Option 3'},
+              onSelect: (p0) => debugPrint('Selected: $p0'),
             ),
           ),
         ],

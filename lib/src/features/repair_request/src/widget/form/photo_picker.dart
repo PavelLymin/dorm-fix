@@ -14,10 +14,10 @@ class PhotoPicker extends StatelessWidget {
     return UiCard.standart(
       child: BlocBuilder<RequestFormBloc, RequestFormState>(
         buildWhen: (previous, current) =>
-            previous.currentFormModel.imagePaths.length !=
-            current.currentFormModel.imagePaths.length,
+            previous.currentFormModel.problems.length !=
+            current.currentFormModel.problems.length,
         builder: (context, state) {
-          final images = state.currentFormModel.imagePaths;
+          final images = state.currentFormModel.problems;
           return _Content(
             pickerStyle: style,
             imagePaths: images,

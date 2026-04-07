@@ -10,9 +10,12 @@ Future<T?> showUiBottomSheet<T>(
     curve: Curves.easeIn,
   ),
   Color? backgroundColor,
-  BorderRadius? borderRadius,
+  BorderRadiusGeometry borderRadius = const .only(
+    topLeft: .circular(24.0),
+    topRight: .circular(24.0),
+  ),
   EdgeInsets? padding,
-  double spacing = 16.0,
+  double spacing = 20.0,
   double minWidth = .infinity,
   double maxWidth = .infinity,
   double minHeight = .0,
@@ -21,13 +24,12 @@ Future<T?> showUiBottomSheet<T>(
   bool useSafeArea = true,
 }) {
   final theme = Theme.of(context);
-  final palette = theme.colorPalette;
-  final style = theme.appStyle;
+  final palette = theme.colorPalette2;
   return showModalBottomSheet<T>(
     context: context,
     sheetAnimationStyle: anymation,
     backgroundColor: backgroundColor ?? palette.background,
-    shape: RoundedRectangleBorder(borderRadius: style.borderRadius),
+    shape: RoundedRectangleBorder(borderRadius: borderRadius),
     useSafeArea: useSafeArea,
     isScrollControlled: isScrollControlled,
     constraints: BoxConstraints(
@@ -36,27 +38,29 @@ Future<T?> showUiBottomSheet<T>(
       minHeight: minHeight,
       maxHeight: maxHeight,
     ),
-    builder: (BuildContext context) => Padding(
-      padding: padding ?? AppInsets.sheet,
-      child: Column(
-        mainAxisSize: .min,
-        spacing: spacing,
-        children: [
-          Row(
-            mainAxisAlignment: .spaceBetween,
-            crossAxisAlignment: .center,
-            children: [
-              UiText.titleMedium(title),
-              UiButton.icon(
-                onPressed: () {
-                  Navigator.canPop(context) ? Navigator.pop(context) : null;
-                },
-                icon: const Icon(Icons.close_rounded),
-              ),
-            ],
-          ),
-          Flexible(child: widget),
-        ],
+    builder: (BuildContext context) => SafeArea(
+      child: Padding(
+        padding: padding ?? AppInsets.sheet,
+        child: Column(
+          mainAxisSize: .min,
+          spacing: spacing,
+          children: [
+            Row(
+              mainAxisAlignment: .spaceBetween,
+              crossAxisAlignment: .center,
+              children: [
+                UiText.titleMedium(title),
+                UiButton.icon(
+                  onPressed: () {
+                    Navigator.canPop(context) ? Navigator.pop(context) : null;
+                  },
+                  icon: const Icon(Icons.close_rounded),
+                ),
+              ],
+            ),
+            Flexible(child: widget),
+          ],
+        ),
       ),
     ),
   );

@@ -1,6 +1,5 @@
-import 'package:dorm_fix/src/features/chat/chat.dart';
-import 'package:dorm_fix/src/features/profile/profile.dart';
-
+import '../../../../chat/chat.dart';
+import '../../../../profile/profile.dart';
 import '../../../../students/home/home.dart';
 import '../../model/repair_request.dart';
 import 'problem.dart';
@@ -36,7 +35,7 @@ sealed class RepairRequestDto {
     required DateTime date,
     required int startTime,
     required int endTime,
-    required List<String> imagePaths,
+    required List<String> problems,
   }) = PartialRepairRequestDto;
 
   factory RepairRequestDto.full({
@@ -50,7 +49,7 @@ sealed class RepairRequestDto {
     required DateTime date,
     required int startTime,
     required int endTime,
-    required List<ProblemDto> problems,
+    required List<FullProblemDto> problems,
     required FullChatDto chat,
     required MasterDto? master,
     required DateTime createdAt,
@@ -67,11 +66,11 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     required super.startTime,
     required super.endTime,
     required this.specId,
-    required this.imagePaths,
+    required this.problems,
   });
 
   final int specId;
-  final List<String> imagePaths;
+  final List<String> problems;
 
   @override
   PartialRepairRequest toEntity() => PartialRepairRequest(
@@ -83,7 +82,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     date: date,
     startTime: startTime,
     endTime: endTime,
-    imagePaths: imagePaths,
+    problems: problems,
   );
 
   @override
@@ -96,7 +95,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     'date': date.toLocal().toString(),
     'start_time': startTime,
     'end_time': endTime,
-    'problems': imagePaths,
+    'problems': problems,
   };
 
   factory PartialRepairRequestDto.fromEntity(PartialRepairRequest entity) =>
@@ -109,7 +108,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
         date: entity.date,
         startTime: entity.startTime,
         endTime: entity.endTime,
-        imagePaths: entity.imagePaths,
+        problems: entity.problems,
       );
 
   factory PartialRepairRequestDto.fromJson(Map<String, Object?> json) {
@@ -122,7 +121,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
       'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
-      'problems': final List<Object?> imagePaths,
+      'problems': final List<String> imagePaths,
     }) {
       return PartialRepairRequestDto(
         specId: specId,
@@ -133,7 +132,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
         date: .parse(date),
         startTime: startTime,
         endTime: endTime,
-        imagePaths: imagePaths.whereType<String>().toList(),
+        problems: imagePaths,
       );
     }
 
@@ -165,7 +164,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
   final String uid;
   final DateTime createdAt;
   final SpecializationDto specialization;
-  final List<ProblemDto> problems;
+  final List<FullProblemDto> problems;
   final FullChatDto chat;
   final MasterDto? master;
 
@@ -216,7 +215,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
         date: entity.date,
         startTime: entity.startTime,
         endTime: entity.endTime,
-        problems: entity.problems.map(ProblemDto.fromEntity).toList(),
+        problems: entity.problems.map(FullProblemDto.fromEntity).toList(),
         chat: .fromEntity(entity.chat),
         master: entity.master != null ? .fromEntity(entity.master!) : null,
         createdAt: entity.createdAt,
@@ -252,7 +251,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
         endTime: endTime,
         problems: problems
             .whereType<Map<String, Object?>>()
-            .map(ProblemDto.fromJson)
+            .map(FullProblemDto.fromJson)
             .toList(),
         chat: .fromJson(chat),
         master: master != null ? .fromJson(master) : null,

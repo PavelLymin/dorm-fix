@@ -143,11 +143,14 @@ class Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ValueListenableBuilder(
       valueListenable: controller,
       builder: (context, value, child) {
         return UiCard.clickable(
           padding: .all(0),
+          selectedColor: theme.colorPalette2.primary,
+          disabledColor: theme.colorPalette2.disabled,
           isSelected: date == value,
           onTap: controller.isWeekDay(date)
               ? () => controller.value = date
