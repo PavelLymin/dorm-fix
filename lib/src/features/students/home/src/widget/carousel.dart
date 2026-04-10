@@ -23,11 +23,11 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    double heightPageView = 160.0;
+    double heightPageView = 110.0;
     return BlocBuilder<SpecializationBloc, SpecializationState>(
       builder: (context, state) => state.map(
         loading: (_) =>
-            const Shimmer(child: SizedBox(width: .infinity, height: 176.0)),
+            const Shimmer(child: SizedBox(width: .infinity, height: 166.0)),
         loaded: (state) => Column(
           mainAxisAlignment: .center,
           crossAxisAlignment: .center,
@@ -72,10 +72,12 @@ class _Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UiCard.standart(
+      padding: .only(left: 20.0, top: 12.0, right: 20.0, bottom: 16.0),
       child: Row(
         mainAxisAlignment: .center,
         crossAxisAlignment: .center,
         mainAxisSize: .max,
+        spacing: 12.0,
         children: [
           Expanded(
             child: Column(
@@ -84,8 +86,11 @@ class _Item extends StatelessWidget {
               mainAxisSize: .max,
               spacing: 6.0,
               children: [
-                UiText.titleLarge(spec.title),
-                UiText.bodyLarge(spec.description),
+                UiText2.lBold(spec.title),
+                UiText2.m(
+                  spec.description,
+                  color: Theme.of(context).colorPalette2.foregroundSecondary,
+                ),
               ],
             ),
           ),

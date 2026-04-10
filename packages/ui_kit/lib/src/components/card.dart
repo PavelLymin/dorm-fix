@@ -17,14 +17,14 @@ sealed class UiCard extends StatelessWidget {
   const factory UiCard.standart({
     Color? color,
     EdgeInsets? padding,
-    BorderRadius borderRadius,
+    BorderRadius? borderRadius,
     Widget? child,
   }) = UiCardStandart;
 
   const factory UiCard.clickable({
     Color? color,
     EdgeInsets? padding,
-    BorderRadius borderRadius,
+    BorderRadius? borderRadius,
     Widget? child,
     ValueWidgetBuilder<Set<WidgetState>> builder,
     Function()? onTap,

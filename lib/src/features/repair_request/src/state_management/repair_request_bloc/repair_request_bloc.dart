@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,14 +57,13 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
     Emitter<RepairRequestState> emit,
   ) async {
     try {
-      log(event.request.problems.toString());
       final request = event.request.toEntity();
       final newRequest = await _requestRepository.createRequest(
         request: request,
       );
 
       await _problemRepository.uploadProblems(
-        problems: newRequest.problems,
+        problems: event.request.problems,
         requestId: newRequest.id,
       );
     } on Object catch (e, stackTrace) {

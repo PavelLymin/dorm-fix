@@ -50,9 +50,9 @@ class SpecializationDto {
         description: description,
         photoUrl: photoUrl,
       );
-    } else {
-      throw ArgumentError('Invalid JSON format for SpecializationDto: $json');
     }
+
+    throw ArgumentError('Invalid JSON format for SpecializationDto: $json');
   }
 
   SpecializationsCompanion toCompanion() => SpecializationsCompanion(

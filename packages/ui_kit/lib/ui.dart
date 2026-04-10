@@ -19,6 +19,8 @@ export 'package:ui_kit/src/components/check_box.dart';
 export 'package:ui_kit/src/components/line_calendar/line_calendar.dart';
 export 'package:ui_kit/src/components/drop_down_button.dart';
 export 'package:ui_kit/src/components/app_gap.dart';
+export 'package:ui_kit/src/components/status_indicator.dart';
+export 'package:ui_kit/src/components/detail_card.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

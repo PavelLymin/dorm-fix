@@ -65,7 +65,7 @@ class RequestFormModel {
       date: date,
       startTime: startTime.hour,
       endTime: endTime.hour,
-      problems: problems,
+      problems: problems.map((e) => e.split('/').last).toList(),
     );
   }
 

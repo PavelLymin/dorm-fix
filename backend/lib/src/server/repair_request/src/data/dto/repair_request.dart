@@ -240,11 +240,9 @@ final class FullRepairRequestDto extends RepairRequestDto {
         endTime: endTime,
         createdAt: .parse(createdAt),
       );
-    } else {
-      throw ArgumentError(
-        'Invalid JSON format for FullRepairRequestDto: $json',
-      );
     }
+
+    throw ArgumentError('Invalid JSON format for FullRepairRequestDto: $json');
   }
 
   factory FullRepairRequestDto.fromData(Request request) =>

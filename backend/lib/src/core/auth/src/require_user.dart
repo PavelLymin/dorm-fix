@@ -1,5 +1,4 @@
 import 'package:shelf/shelf.dart';
-import '../../../app/model/application_config.dart';
 import '../../../server/profile/profile.dart';
 import '../../rest_api/src/rest_api.dart';
 
@@ -35,25 +34,5 @@ abstract class RequireUser {
     }
 
     return Role.fromString(role);
-  }
-
-  static String getUserEmail(Request request) {
-    final email = request.url.queryParameters['email'];
-    if (email is! String || email.isEmpty) {
-      throw BadRequestException(
-        error: {
-          'description': 'Missing path parameter "email".',
-          'param': 'email',
-        },
-      );
-    }
-
-    if (Config.email.matchAsPrefix(email) == null) {
-      throw BadRequestException(
-        error: {'description': 'Invalid email format.', 'field': 'email'},
-      );
-    }
-
-    return email;
   }
 }

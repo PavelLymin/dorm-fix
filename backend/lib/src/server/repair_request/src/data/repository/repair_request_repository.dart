@@ -9,6 +9,8 @@ abstract interface class IRequestRepository {
   });
 
   Stream<List<FullRepairRequest>> watchRequests({
+    int page = 1,
+    int limit = 10,
     String? uid,
     int? specId,
     int? dormId,
@@ -40,6 +42,8 @@ class RequestRepositoryImpl implements IRequestRepository {
 
   @override
   Stream<List<FullRepairRequest>> watchRequests({
+    int page = 1,
+    int limit = 10,
     String? uid,
     int? specId,
     int? dormId,
@@ -52,7 +56,8 @@ class RequestRepositoryImpl implements IRequestRepository {
           _database.students.uid.equalsExp(_database.requests.uid) &
               _database.students.dormitoryId.equals(dormId),
         ),
-    ]);
+    ])..limit(limit, offset: (page - 1) * limit);
+
     if (uid != null) query.where(_database.requests.uid.equals(uid));
     if (specId != null) query.where(_database.requests.specId.equals(specId));
     if (status != null) query.where(_database.requests.status.equals(status));

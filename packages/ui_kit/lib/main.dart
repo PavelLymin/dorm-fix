@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:ui_kit/detail_card_preview.dart';
 import 'package:ui_kit/ui.dart';
 import 'button_previews.dart';
 import 'check_box_preview.dart';
@@ -42,7 +43,6 @@ class UiPreview extends StatefulWidget {
 class _UiPreviewState extends State<UiPreview>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  int selected = 0;
 
   @override
   void initState() {
@@ -151,6 +151,10 @@ class _UiPreviewState extends State<UiPreview>
                 const SizedBox(height: 8),
                 const DropDownButtonPreview(),
                 const SizedBox(height: 24),
+                Align(alignment: .center, child: UiText2.h5Bold('Detail card')),
+                const SizedBox(height: 8),
+                const DetailCardPreview(),
+                const SizedBox(height: 24),
                 Align(
                   alignment: .center,
                   child: UiText2.h5Bold('Line Calendar'),
@@ -158,32 +162,12 @@ class _UiPreviewState extends State<UiPreview>
                 const SizedBox(height: 8),
                 const LineCalendarPreview(),
                 const SizedBox(height: 24),
-                UiChoiceChip<int>(
-                  options: const [
-                    ChipItem<int>(
-                      value: 1,
-                      title: 'Iрорtem 1',
-                      icon: Icon(Icons.home),
-                    ),
-                    ChipItem<int>(
-                      value: 1,
-                      title: 'Iрорtem 2',
-                      icon: Icon(Icons.home),
-                    ),
-                    ChipItem<int>(
-                      value: 1,
-                      title: 'Iрорtem 3',
-                      icon: Icon(Icons.home),
-                    ),
-                    ChipItem<int>(
-                      value: 1,
-                      title: 'Iрорtem 4',
-                      icon: Icon(Icons.home),
-                    ),
-                  ],
-                  initial: selected,
-                  onChange: (index) => setState(() => selected = index),
-                ),
+                Align(alignment: .center, child: UiText2.h5Bold('Choice chip')),
+                const SizedBox(height: 8),
+                ChoiceChipPreview(),
+                const SizedBox(height: 24),
+                Align(alignment: .center, child: UiText2.h5Bold('SnackBar')),
+                const SizedBox(height: 8),
                 UiButton.filledPrimary(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(

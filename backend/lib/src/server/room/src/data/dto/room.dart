@@ -64,9 +64,9 @@ class RoomDto {
         number: number,
         isOccupied: isOccupied,
       );
-    } else {
-      throw ArgumentError('Invalid JSON format for RoomDto: $json');
     }
+
+    throw ArgumentError('Invalid JSON format for RoomDto: $json');
   }
 
   Map<String, Object?> toJson() => {

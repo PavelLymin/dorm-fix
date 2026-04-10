@@ -63,9 +63,9 @@ class DormitoryDto {
         long: long,
         lat: lat,
       );
-    } else {
-      throw FormatException('Invalid JSON format for DormitoryDto', json);
     }
+
+    throw FormatException('Invalid JSON format for DormitoryDto', json);
   }
 
   DormitoriesCompanion toCompanion() => DormitoriesCompanion(

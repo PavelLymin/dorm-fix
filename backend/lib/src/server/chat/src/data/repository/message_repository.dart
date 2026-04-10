@@ -6,7 +6,7 @@ abstract interface class IMessageRepository {
 
   Future<List<FullMessage>> getMessages({
     required int chatId,
-    int? beforeId,
+    int page = 1,
     int limit = 50,
   });
 }
@@ -31,13 +31,14 @@ class MessageRepositoryImpl implements IMessageRepository {
   @override
   Future<List<FullMessage>> getMessages({
     required int chatId,
-    int? beforeId,
+    int page = 1,
     int limit = 50,
   }) async {
     final data =
         await (_database.select(_database.messages)
               ..where((row) => row.chatId.equals(chatId))
-              ..orderBy([(message) => .desc(message.createdAt)]))
+              ..orderBy([(message) => .desc(message.createdAt)])
+              ..limit(limit, offset: (page - 1) * limit))
             .get();
 
     final messages = data

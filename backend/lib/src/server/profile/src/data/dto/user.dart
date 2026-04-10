@@ -81,8 +81,8 @@ class UserDto {
         phoneNumber: phoneNumber,
         role: .fromString(role),
       );
-    } else {
-      throw ArgumentError('Invalid JSON format for UserDto: $json');
     }
+
+    throw ArgumentError('Invalid JSON format for UserDto: $json');
   }
 }
