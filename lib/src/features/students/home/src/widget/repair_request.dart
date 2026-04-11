@@ -23,7 +23,8 @@ class CreateRequestButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UiButton.filledPrimary(
-      onPressed: () => context.router.push(const NamedRoute('RequestScreen')),
+      onPressed: () =>
+          context.router.push(const NamedRoute('FormRequestScreen')),
       icon: const Icon(Icons.add_outlined),
       label: const Text('Создать заявку'),
     );

@@ -49,7 +49,7 @@ Future<T?> showUiBottomSheet<T>(
               mainAxisAlignment: .spaceBetween,
               crossAxisAlignment: .center,
               children: [
-                UiText.titleMedium(title),
+                UiText2.lBold(title),
                 UiButton.icon(
                   onPressed: () {
                     Navigator.canPop(context) ? Navigator.pop(context) : null;

@@ -5,7 +5,9 @@ import '../../../authentication/authentication.dart';
 import '../../profile.dart';
 
 class UpdatePhoneScreen extends StatefulWidget {
-  const UpdatePhoneScreen({super.key});
+  const UpdatePhoneScreen({super.key, required this.user});
+
+  final FirebaseUser user;
 
   @override
   State<UpdatePhoneScreen> createState() => _UpdatePhoneScreenState();
@@ -44,7 +46,12 @@ class _UpdatePhoneScreenState extends State<UpdatePhoneScreen> {
         PhoneNumberEvent.submitSmsCode(
           smsCode: _controller.text,
           verificationId: state.verificationId,
-          phoneNumber: state.phoneNumber,
+          user: widget.user.copyWithPatch(
+            displayName: .absent(),
+            photoURL: .absent(),
+            email: .absent(),
+            phoneNumber: .new(state.phoneNumber),
+          ),
         ),
       ),
     );

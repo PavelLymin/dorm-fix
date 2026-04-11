@@ -62,7 +62,7 @@ class PhoneNumberBloc extends Bloc<PhoneNumberEvent, PhoneNumberState> {
           smsCode: event.smsCode,
           verificationId: event.verificationId,
         ),
-        _userRepository.updatePhoneNumber(phoneNumber: event.phoneNumber),
+        _userRepository.update(user: event.user),
       ]);
       emit(.success());
     } on Object catch (e, stackTrace) {

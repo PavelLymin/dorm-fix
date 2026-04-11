@@ -25,7 +25,7 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
     });
   }
 
-  final IImageRepository _imageRepository;
+  final IProblemImageRepository _imageRepository;
 
   void _updateRequestForm(
     Emitter<RequestFormState> emit,
@@ -43,8 +43,10 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
     emit(.updated(formModel: form));
   }
 
-  void _clearForm(Emitter<RequestFormState> emit) =>
-      emit(.initial(formModel: RequestFormModel()));
+  Future<void> _clearForm(Emitter<RequestFormState> emit) async {
+    await _imageRepository.clearImages();
+    emit(.initial(formModel: RequestFormModel()));
+  }
 
   Future<void> _loadImages(
     Emitter<RequestFormState> emit,

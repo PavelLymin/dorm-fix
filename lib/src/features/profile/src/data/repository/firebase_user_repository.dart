@@ -7,6 +7,8 @@ import '../../../profile.dart';
 abstract interface class IFirebaseUserRepository {
   Future<void> updateEmail({required String email});
 
+  Future<void> updateProfile({String? displayName, String? photoURL});
+
   Future<PhoneNumberHelper> verifyPhoneNumber({required String phoneNumber});
 
   Future<void> updatePhoneNumber({
@@ -30,6 +32,20 @@ class FirebaseUserRepositoryImpl implements IFirebaseUserRepository {
       );
     }
 
+    await user.reload();
+  }
+
+  @override
+  Future<void> updateProfile({String? displayName, String? photoURL}) async {
+    final user = _firebaseAuth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'no-current-user',
+        message: 'Пользователь не найден',
+      );
+    }
+
+    await user.updateProfile(displayName: displayName, photoURL: photoURL);
     await user.reload();
   }
 

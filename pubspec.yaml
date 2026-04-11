@@ -27,8 +27,8 @@ dependencies:
   # Route
   auto_route: ^10.1.2
   # Firebase
-  firebase_auth: ^6.1.1
-  firebase_core: ^4.2.1
+  firebase_auth: ^6.3.0
+  firebase_core: ^4.6.0
   # Google sign in
   google_sign_in: ^7.2.0
   # Logs

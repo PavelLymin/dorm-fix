@@ -81,7 +81,7 @@ mixin _RequestScreenStateMixin on State<FormRequestScreen> {
   @override
   void initState() {
     super.initState();
-    final imageRepository = ImageRepositoryImpl(picker: ImagePicker());
+    final imageRepository = ProblemImageRepositoryImpl(picker: ImagePicker());
     final dependency = DependeciesScope.of(context);
     _requestFormBloc = RequestFormBloc(
       imageRepository: imageRepository,

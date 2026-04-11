@@ -10,7 +10,7 @@ class PersonalAvatar extends StatelessWidget {
   Widget build(BuildContext context) => BlocBuilder<AuthBloc, AuthState>(
     builder: (context, state) {
       return state.maybeMap(
-        loading: (_) => const _PersonalAvatarView(user: .studentFake()),
+        loading: (_) => const _PersonalAvatarView(user: .fake()),
         authenticated: (state) => state.authUser.mapAuthUser(
           firebase: (_) => const SizedBox.shrink(),
           profile: (user) => _PersonalAvatarView(user: user),
@@ -24,50 +24,62 @@ class PersonalAvatar extends StatelessWidget {
 class _PersonalAvatarView extends StatelessWidget {
   const _PersonalAvatarView({required this.user});
 
-  final ProfileUser user;
+  final AuthenticatedUser user;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.colorPalette;
     final localizations = AppLocalizations.of(context);
-    final authUser = user.authenticatedOrNull!;
     return UiCard.standart(
       child: Row(
         crossAxisAlignment: .center,
         mainAxisAlignment: .start,
         spacing: 24.0,
         children: [
-          user.isFake
-              ? const Shimmer(child: CircleAvatar(radius: 37.0))
-              : CircleAvatar(
-                  radius: 37.0,
-                  backgroundColor: palette.secondary,
-                  backgroundImage: authUser.photoURL != null
-                      ? NetworkImage(authUser.photoURL!)
-                      : null,
-                ),
-          user.isFake
-              ? Shimmer(
-                  child: _TitlePersonalAvatar(
-                    displayName: user.displayName!,
-                    title: user.email!,
-                    subtitle: user.phoneNumber!,
-                  ),
-                )
-              : user.mapRoleUser<Widget>(
-                  student: (s) => _TitlePersonalAvatar(
-                    displayName: s.user.displayName ?? 'User',
-                    title: localizations.dormitory_name(s.dormitory.number),
-                    subtitle: s.room.number,
-                  ),
-                  master: (m) => _TitlePersonalAvatar(
-                    displayName: m.user.displayName ?? 'User',
-                    title: m.dormitory.name,
-                    subtitle: m.dormitory.address,
-                  ),
-                ),
+          UserAvatar(user: user),
+          user.mapAuthUser(
+            firebase: (f) => Shimmer(
+              child: _TitlePersonalAvatar(
+                displayName: user.displayName!,
+                title: user.email!,
+                subtitle: user.phoneNumber!,
+              ),
+            ),
+            profile: (p) => p.mapRoleUser(
+              student: (s) => _TitlePersonalAvatar(
+                displayName: s.user.displayName ?? 'User',
+                title: localizations.dormitory_name(s.dormitory.number),
+                subtitle: s.room.number,
+              ),
+              master: (m) => _TitlePersonalAvatar(
+                displayName: m.user.displayName ?? 'User',
+                title: m.dormitory.name,
+                subtitle: m.dormitory.address,
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class UserAvatar extends StatelessWidget {
+  const UserAvatar({super.key, required this.user});
+
+  final AuthenticatedUser user;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
+    return user.mapAuthUser(
+      firebase: (_) => const Shimmer(child: CircleAvatar(radius: 37.0)),
+      profile: (p) => CircleAvatar(
+        radius: 37.0,
+        backgroundColor: palette.secondary,
+        backgroundImage: p.photoURL != null
+            ? NetworkImage(user.photoURL!)
+            : null,
       ),
     );
   }

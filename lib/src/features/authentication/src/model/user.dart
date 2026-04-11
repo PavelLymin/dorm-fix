@@ -1,3 +1,4 @@
+import '../../../../core/utils/utils.dart';
 import '../../../dormitory/dormitory.dart';
 import '../../../students/home/home.dart';
 import '../../../room/room.dart';
@@ -73,6 +74,13 @@ typedef AuthenticatedUserMatch<R, U extends AuthenticatedUser> =
 sealed class AuthenticatedUser extends UserEntity {
   const AuthenticatedUser();
 
+  String get uid;
+  String? get displayName;
+  String? get photoURL;
+  String? get email;
+  String? get phoneNumber;
+  Role get role;
+
   const factory AuthenticatedUser.firebase({
     required String uid,
     required String? displayName,
@@ -84,6 +92,8 @@ sealed class AuthenticatedUser extends UserEntity {
 
   const factory AuthenticatedUser.fake() = FirebaseUser.fake;
 
+  bool get isFake;
+
   R mapAuthUser<R>({
     required AuthenticatedUserMatch<R, FirebaseUser> firebase,
     required AuthenticatedUserMatch<R, ProfileUser> profile,
@@ -91,11 +101,4 @@ sealed class AuthenticatedUser extends UserEntity {
     FirebaseUser u => firebase(u),
     ProfileUser u => profile(u),
   };
-
-  String get uid;
-  String? get displayName;
-  String? get photoURL;
-  String? get email;
-  String? get phoneNumber;
-  Role get role;
 }

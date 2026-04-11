@@ -1,8 +1,10 @@
+import 'package:drift/drift.dart';
+
 import '../../../../../core/database/database.dart';
 import '../../../profile.dart';
 
 abstract interface class IUserRepository {
-  Future<void> updateUser({required String uid, required UserEntity user});
+  Future<void> update({required UserEntity user});
 }
 
 class UserRepositoryImpl implements IUserRepository {
@@ -11,12 +13,18 @@ class UserRepositoryImpl implements IUserRepository {
   final Database _database;
 
   @override
-  Future<void> updateUser({
-    required String uid,
-    required UserEntity user,
-  }) async {
-    await (_database.update(_database.users)
-          ..where((row) => row.uid.equals(uid)))
-        .replace(UserDto.fromEntity(user).toCompanion());
+  Future<void> update({required UserEntity user}) async {
+    final dto = UserDto.fromEntity(user);
+    await (_database.update(
+      _database.users,
+    )..where((row) => row.uid.equals(user.uid))).write(
+      UsersCompanion(
+        displayName: toValue(dto.displayName),
+        photoURL: toValue(dto.photoURL),
+        email: toValue(dto.email),
+        phoneNumber: toValue(dto.phoneNumber),
+        role: Value(dto.role.name),
+      ),
+    );
   }
 }

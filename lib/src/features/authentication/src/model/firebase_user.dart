@@ -17,6 +17,38 @@ class FirebaseUser extends AuthenticatedUser {
   final String? _phoneNumber;
   final Role _role;
 
+  FirebaseUser copyWith({
+    String? uid,
+    String? displayName,
+    String? photoURL,
+    String? email,
+    String? phoneNumber,
+    Role? role,
+  }) => FirebaseUser(
+    uid: uid ?? _uid,
+    displayName: displayName ?? _displayName,
+    photoURL: photoURL ?? _photoURL,
+    email: email ?? _email,
+    phoneNumber: phoneNumber ?? _phoneNumber,
+    role: role ?? _role,
+  );
+
+  FirebaseUser copyWithPatch({
+    String? uid,
+    required Option<String> displayName,
+    required Option<String> photoURL,
+    required Option<String> email,
+    required Option<String> phoneNumber,
+    Role? role,
+  }) => FirebaseUser(
+    uid: uid ?? _uid,
+    displayName: displayName.isAbsent ? null : displayName.value,
+    photoURL: photoURL.isAbsent ? null : photoURL.value,
+    email: email.isAbsent ? null : email.value,
+    phoneNumber: phoneNumber.isAbsent ? null : phoneNumber.value,
+    role: role ?? _role,
+  );
+
   const FirebaseUser.fake()
     : this(
         uid: 'uid',
@@ -26,6 +58,8 @@ class FirebaseUser extends AuthenticatedUser {
         phoneNumber: '+1234567890',
         role: .student,
       );
+
+  bool get isFake => this == FirebaseUser.fake();
 
   @override
   String get uid => _uid;

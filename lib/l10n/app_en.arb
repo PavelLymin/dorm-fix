@@ -3,6 +3,7 @@
 
   "next": "Next",
   "update": "Update",
+  "save": "Save",
 
   "profile": "Profile",
   "personal_data": "Personal information",
@@ -11,6 +12,8 @@
 
   "email_address": "Email address",
   "phone_number": "Phone number",
+  "name_photo": "Change name and photo",
+  "provide_name": "Please provide your first and last name",
   "dormitory": "Dormitory",
   "dormitory_name": "Dormitory {number}",
   "@dormitory_name": {

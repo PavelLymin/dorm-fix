@@ -30,7 +30,8 @@ class AppRouter extends RootStackRouter {
     ),
     NamedRouteDef(
       name: 'UpdatePhoneScreen',
-      builder: (context, data) => const UpdatePhoneScreen(),
+      builder: (context, data) =>
+          UpdatePhoneScreen(user: data.params.get('user')),
     ),
     NamedRouteDef(
       name: 'PersonalDataScreen',

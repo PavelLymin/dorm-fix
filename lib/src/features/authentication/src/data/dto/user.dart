@@ -45,16 +45,14 @@ class FirebaseUserDto {
     role: user.role,
   );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'uid': uid,
-      'display_name': displayName,
-      'photo_url': photoURL,
-      'email': email,
-      'phone_number': phoneNumber,
-      'role': role.name,
-    };
-  }
+  Map<String, Object?> toJson() => {
+    'uid': uid,
+    'display_name': displayName,
+    'photo_url': photoURL,
+    'email': email,
+    'phone_number': phoneNumber,
+    'role': role.name,
+  };
 
   factory FirebaseUserDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{

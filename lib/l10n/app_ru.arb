@@ -3,6 +3,7 @@
 
   "next": "Далее",
   "update": "Изменить",
+  "save": "Сохранить",
 
   "profile": "Профиль",
   "personal_data": "Персональные данные",
@@ -11,6 +12,8 @@
 
   "email_address": "Адрес электронной почты",
   "phone_number": "Номер телефона",
+  "name_photo": "Изменить имя и фото",
+  "provide_name": "Укажите имя и фамилию",
   "dormitory": "Общежитие",
   "dormitory_name": "Общежитие {number}",
   "@dormitory_name": {

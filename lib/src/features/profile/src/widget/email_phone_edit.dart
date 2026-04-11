@@ -19,47 +19,45 @@ class EmailAddressEdit extends StatefulWidget {
 class _EmailAddressEditState extends State<EmailAddressEdit>
     with _EmailAddressEditStateMixin {
   @override
-  Widget build(BuildContext context) => SafeArea(
-    child: Padding(
-      padding: .only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-      child: Column(
-        mainAxisAlignment: .center,
-        crossAxisAlignment: .stretch,
-        mainAxisSize: .min,
-        children: [
-          UiText2.lBold('Укажите почту'),
-          const SizedBox(height: 10.0),
-          UiTextField.standard(
-            controller: _controller,
-            autofocus: false,
-            keyboardType: .emailAddress,
-            textInputAction: .done,
-            style: UiTextFieldStyle(
-              hintText: 'name@mail.ru',
-              prefixIcon: const Icon(Icons.email_outlined),
-              suffixIcon: ValueListenableBuilder<TextEditingValue>(
-                valueListenable: _controller,
-                builder: (_, value, _) {
-                  if (value.text.isEmpty) return const SizedBox.shrink();
-                  return IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () => _controller.clear(),
-                  );
-                },
-              ),
+  Widget build(BuildContext context) => Padding(
+    padding: .only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+    child: Column(
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .stretch,
+      mainAxisSize: .min,
+      children: [
+        UiText2.lBold('Укажите почту'),
+        const SizedBox(height: 10.0),
+        UiTextField.standard(
+          controller: _controller,
+          autofocus: false,
+          keyboardType: .emailAddress,
+          textInputAction: .done,
+          style: UiTextFieldStyle(
+            hintText: 'name@mail.ru',
+            prefixIcon: const Icon(Icons.email_outlined),
+            suffixIcon: ValueListenableBuilder<TextEditingValue>(
+              valueListenable: _controller,
+              builder: (_, value, _) {
+                if (value.text.isEmpty) return const SizedBox.shrink();
+                return IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () => _controller.clear(),
+                );
+              },
             ),
           ),
-          const SizedBox(height: 20.0),
-          ValueListenableBuilder(
-            valueListenable: _isEnabled,
-            builder: (_, value, _) => UiButton.filledPrimary(
-              onPressed: () {},
-              enabled: value,
-              label: UiText.titleMedium(AppLocalizations.of(context).update),
-            ),
+        ),
+        const SizedBox(height: 20.0),
+        ValueListenableBuilder(
+          valueListenable: _isEnabled,
+          builder: (_, value, _) => UiButton.filledPrimary(
+            onPressed: () {},
+            enabled: value,
+            label: UiText.titleMedium(AppLocalizations.of(context).update),
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }
@@ -95,9 +93,9 @@ mixin _EmailAddressEditStateMixin on State<EmailAddressEdit> {
 }
 
 class PhoneNumberEdit extends StatefulWidget {
-  const PhoneNumberEdit({super.key, required this.initialText});
+  const PhoneNumberEdit({super.key, required this.user});
 
-  final String initialText;
+  final FirebaseUser user;
 
   @override
   State<PhoneNumberEdit> createState() => _PhoneNumberEditState();
@@ -110,7 +108,7 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.initialText);
+    _controller = TextEditingController(text: widget.user.phoneNumber);
     final firebaseUserRepository = DependeciesScope.of(
       context,
     ).firebaseUserRepository;
@@ -121,6 +119,13 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
       userRepository: userRepository,
       logger: logger,
     );
+  }
+
+  @override
+  void dispose() {
+    _phoneNumberBloc.close();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -156,7 +161,7 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
             ),
           ),
           const SizedBox(height: 20.0),
-          _ButtonPhoneUpdate(controller: _controller),
+          _ButtonPhoneUpdate(controller: _controller, user: widget.user),
         ],
       ),
     ),
@@ -164,9 +169,10 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
 }
 
 class _ButtonPhoneUpdate extends StatefulWidget {
-  const _ButtonPhoneUpdate({required this.controller});
+  const _ButtonPhoneUpdate({required this.controller, required this.user});
 
   final TextEditingController controller;
+  final AuthenticatedUser user;
 
   @override
   State<_ButtonPhoneUpdate> createState() => _ButtonPhoneUpdateState();
@@ -182,8 +188,9 @@ class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
       onPressed: _verifyPhone,
       label: BlocConsumer<PhoneNumberBloc, PhoneNumberState>(
         listener: (context, state) => state.mapOrNull(
-          smsCodeSent: (_) =>
-              context.router.push(const NamedRoute('UpdatePhoneScreen')),
+          smsCodeSent: (_) => context.router.push(
+            NamedRoute('UpdatePhoneScreen', params: {'user': widget.user}),
+          ),
         ),
         builder: (context, state) => state.maybeMap(
           orElse: () => UiText.titleMedium(AppLocalizations.of(context).update),

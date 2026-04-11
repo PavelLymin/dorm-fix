@@ -51,6 +51,7 @@ class _RepairRequestsState extends State<RepairRequests> {
                 key: ValueKey(request.id),
                 title: request.description,
                 subTitle1: request.date.toLocal().toIso8601String(),
+                subTitle2: request.specialization.title,
                 status: request.status,
                 statusText: request.status.value,
                 colors: const {

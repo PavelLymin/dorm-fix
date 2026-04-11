@@ -15,6 +15,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get update => 'Изменить';
 
   @override
+  String get save => 'Сохранить';
+
+  @override
   String get profile => 'Профиль';
 
   @override
@@ -31,6 +34,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get phone_number => 'Номер телефона';
+
+  @override
+  String get name_photo => 'Изменить имя и фото';
+
+  @override
+  String get provide_name => 'Укажите имя и фамилию';
 
   @override
   String get dormitory => 'Общежитие';

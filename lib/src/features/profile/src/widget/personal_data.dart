@@ -19,7 +19,7 @@ class PersonalData extends StatelessWidget {
         ),
         authenticated: (user) {
           final items = user.authUser.mapAuthUser(
-            firebase: (_) => _createGeneralDataList(context, user.authUser),
+            firebase: (f) => _createGeneralDataList(context, f),
             profile: (p) => p.mapRoleUser(
               student: (s) => _createStudentDataList(context, s),
               master: (m) => _createMasterDataList(context, m),
@@ -33,7 +33,7 @@ class PersonalData extends StatelessWidget {
 
   List<TileGroupItem> _createGeneralDataList(
     BuildContext context,
-    AuthenticatedUser user,
+    FirebaseUser user,
   ) {
     final localizations = AppLocalizations.of(context);
     final icon = const Icon(Icons.chevron_right_rounded);
@@ -59,7 +59,7 @@ class PersonalData extends StatelessWidget {
           title: localizations.phone_number,
           context,
           isScrollControlled: true,
-          widget: PhoneNumberEdit(initialText: user.phoneNumber ?? ''),
+          widget: PhoneNumberEdit(user: user),
         ),
       ),
     ];
@@ -71,22 +71,23 @@ class PersonalData extends StatelessWidget {
   ) {
     final localizations = AppLocalizations.of(context);
     final icon = const Icon(Icons.chevron_right_rounded);
-    return _createGeneralDataList(context, student)..addAll(<TileGroupItem>[
-      TileGroupItem(
-        title: localizations.dormitory,
-        sufixIcon: icon,
-        prefixIcon: Icon(Icons.apartment),
-        subTitle: localizations.dormitory_name(student.dormitory.number),
-        onTap: () {},
-      ),
-      TileGroupItem(
-        title: localizations.room,
-        sufixIcon: icon,
-        prefixIcon: Icon(Icons.room_outlined),
-        subTitle: student.room.number,
-        onTap: () {},
-      ),
-    ]);
+    return _createGeneralDataList(context, student.user)
+      ..addAll(<TileGroupItem>[
+        TileGroupItem(
+          title: localizations.dormitory,
+          sufixIcon: icon,
+          prefixIcon: Icon(Icons.apartment),
+          subTitle: localizations.dormitory_name(student.dormitory.number),
+          onTap: () {},
+        ),
+        TileGroupItem(
+          title: localizations.room,
+          sufixIcon: icon,
+          prefixIcon: Icon(Icons.room_outlined),
+          subTitle: student.room.number,
+          onTap: () {},
+        ),
+      ]);
   }
 
   List<TileGroupItem> _createMasterDataList(
@@ -95,7 +96,7 @@ class PersonalData extends StatelessWidget {
   ) {
     final localizations = AppLocalizations.of(context);
     final icon = const Icon(Icons.chevron_right_rounded);
-    return _createGeneralDataList(context, master)..addAll(<TileGroupItem>[
+    return _createGeneralDataList(context, master.user)..addAll(<TileGroupItem>[
       TileGroupItem(
         title: localizations.dormitory,
         sufixIcon: icon,

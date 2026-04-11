@@ -95,6 +95,7 @@ class CompositionRoot {
     final userRepository = UserRepositoryImpl(
       client: client,
       firebaseAuth: firebaseAuth,
+      supabase: supabase.client,
     );
 
     // Settings

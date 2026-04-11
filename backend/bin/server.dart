@@ -35,7 +35,7 @@ void main(List<String> args) async {
             Cascade()
                 .add(dependency.wsRouter.handler)
                 .add(dependency.profileRouter.handler)
-                .add(dependency.userRouter.protectedHandler)
+                .add(dependency.userRouter.handler)
                 .add(dependency.dormitoryRouter.handler)
                 .add(dependency.specializationRouter.handler)
                 .add(dependency.roomRouter.handler)

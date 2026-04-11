@@ -15,6 +15,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get update => 'Update';
 
   @override
+  String get save => 'Save';
+
+  @override
   String get profile => 'Profile';
 
   @override
@@ -31,6 +34,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get phone_number => 'Phone number';
+
+  @override
+  String get name_photo => 'Change name and photo';
+
+  @override
+  String get provide_name => 'Please provide your first and last name';
 
   @override
   String get dormitory => 'Dormitory';

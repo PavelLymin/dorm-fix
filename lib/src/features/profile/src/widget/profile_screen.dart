@@ -1,5 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../../l10n/gen/app_localizations.dart';
+import '../../../authentication/authentication.dart';
+import 'name_photo_edit.dart';
 import 'personal_avatar.dart';
 import 'personal_data.dart';
 import 'settings.dart';
@@ -21,9 +24,26 @@ class ProfileScreen extends StatelessWidget {
               mainAxisSize: .max,
               children: [
                 Text(localizations.profile),
-                UiButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.edit_outlined),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    final user = state.authenticatedOrNull;
+                    return UiButton.icon(
+                      onPressed: user == null
+                          ? null
+                          : () => showUiBottomSheet(
+                              context,
+                              title: localizations.name_photo,
+                              isScrollControlled: true,
+                              widget: NamePhotoEdit(
+                                user: user.mapAuthUser(
+                                  firebase: (f) => f,
+                                  profile: (p) => p.user,
+                                ),
+                              ),
+                            ),
+                      icon: const Icon(Icons.edit_outlined),
+                    );
+                  },
                 ),
               ],
             ),

@@ -23,14 +23,12 @@ sealed class StudentUser {
 
 class FullStudent extends ProfileUser implements StudentUser {
   const FullStudent({
-    required this.user,
-    required this.id,
+    required super.id,
+    required super.user,
     required this.dormitory,
     required this.room,
   });
 
-  final int id;
-  final FirebaseUser user;
   final DormitoryEntity dormitory;
   final RoomEntity room;
 

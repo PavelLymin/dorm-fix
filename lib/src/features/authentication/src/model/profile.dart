@@ -1,7 +1,10 @@
 part of 'user.dart';
 
 sealed class ProfileUser extends AuthenticatedUser {
-  const ProfileUser();
+  const ProfileUser({required this.id, required this.user});
+
+  final int id;
+  final FirebaseUser user;
 
   const factory ProfileUser.student({
     required int id,
@@ -19,8 +22,6 @@ sealed class ProfileUser extends AuthenticatedUser {
 
   const factory ProfileUser.studentFake() = FakeStudent;
   const factory ProfileUser.masterFake() = MasterUser.fake;
-
-  bool get isFake;
 
   R mapRoleUser<R>({
     required AuthenticatedUserMatch<R, FullStudent> student,

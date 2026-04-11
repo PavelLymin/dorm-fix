@@ -72,7 +72,7 @@ class UiDetailCard<T extends Enum> extends StatelessWidget {
           const SizedBox(height: 6.0),
 
           if (subTitle2 != null)
-            UiText2.l(
+            UiText2.m(
               subTitle2!,
               style: TextStyle(
                 color: palette.foregroundSecondary,
@@ -82,7 +82,7 @@ class UiDetailCard<T extends Enum> extends StatelessWidget {
             mainAxisAlignment: .spaceBetween,
             crossAxisAlignment: .center,
             children: [
-              UiText2.l(
+              UiText2.m(
                 subTitle1,
                 style: TextStyle(
                   color: palette.foregroundSecondary,

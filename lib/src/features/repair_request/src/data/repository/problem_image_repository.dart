@@ -1,15 +1,18 @@
 import 'package:image_picker/image_picker.dart';
 
-abstract interface class IImageRepository {
+abstract interface class IProblemImageRepository {
   Future<void> addImages({int limit});
 
   Future<List<String>> loadImages();
 
   Future<void> deleteImage(int index);
+
+  Future<void> clearImages();
 }
 
-class ImageRepositoryImpl implements IImageRepository {
-  ImageRepositoryImpl({required this._picker});
+class ProblemImageRepositoryImpl implements IProblemImageRepository {
+  ProblemImageRepositoryImpl({required this._picker});
+
   final ImagePicker _picker;
 
   final List<String> _imageList = <String>[];
@@ -33,4 +36,7 @@ class ImageRepositoryImpl implements IImageRepository {
 
   @override
   Future<void> deleteImage(int index) async => _imageList.removeAt(index);
+
+  @override
+  Future<void> clearImages() async => _imageList.clear();
 }

@@ -22,6 +22,10 @@ part 'entity.dart';
     Messages,
   ],
 )
+Value<T> toValue<T>(T? value) {
+  return value != null ? Value(value) : const Value.absent();
+}
+
 class Database extends _$Database {
   Database.lazy({
     required File file,

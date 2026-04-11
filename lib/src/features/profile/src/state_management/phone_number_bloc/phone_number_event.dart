@@ -12,7 +12,7 @@ sealed class PhoneNumberEvent {
   factory PhoneNumberEvent.submitSmsCode({
     required String smsCode,
     required String verificationId,
-    required String phoneNumber,
+    required FirebaseUser user,
   }) = _SubmitSmsCodeEvent;
 
   FutureOr<R> map<R>({
@@ -34,10 +34,10 @@ final class _SubmitSmsCodeEvent extends PhoneNumberEvent {
   _SubmitSmsCodeEvent({
     required this.smsCode,
     required this.verificationId,
-    required this.phoneNumber,
+    required this.user,
   });
 
   final String smsCode;
   final String verificationId;
-  final String phoneNumber;
+  final FirebaseUser user;
 }

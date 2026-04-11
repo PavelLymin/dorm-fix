@@ -2,14 +2,12 @@ part of 'user.dart';
 
 class MasterUser extends ProfileUser {
   const MasterUser({
-    required this.id,
-    required this.user,
+    required super.id,
+    required super.user,
     required this.specialization,
     required this.dormitory,
   });
 
-  final int id;
-  final FirebaseUser user;
   final SpecializationEntity specialization;
   final DormitoryEntity dormitory;
 

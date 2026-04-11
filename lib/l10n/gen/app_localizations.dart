@@ -110,6 +110,12 @@ abstract class AppLocalizations {
   /// **'Update'**
   String get update;
 
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
   /// No description provided for @profile.
   ///
   /// In en, this message translates to:
@@ -145,6 +151,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Phone number'**
   String get phone_number;
+
+  /// No description provided for @name_photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Change name and photo'**
+  String get name_photo;
+
+  /// No description provided for @provide_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide your first and last name'**
+  String get provide_name;
 
   /// No description provided for @dormitory.
   ///
