@@ -47,9 +47,8 @@ class _ItemState extends State<Item>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _style = ItemStyle.initStyle(
+    _style = TileGroupStyle.defaultStyle(
       context,
-      widget.style,
       widget.isFirst,
       widget.isLast,
     );
@@ -63,9 +62,8 @@ class _ItemState extends State<Item>
       _controller?.value = widget.item.initial;
     }
     if (widget.style != oldWidget.style) {
-      _style = ItemStyle.initStyle(
+      _style = TileGroupStyle.defaultStyle(
         context,
-        widget.style,
         widget.isFirst,
         widget.isLast,
       );

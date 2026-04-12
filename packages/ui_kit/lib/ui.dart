@@ -21,6 +21,7 @@ export 'package:ui_kit/src/components/drop_down_button.dart';
 export 'package:ui_kit/src/components/app_gap.dart';
 export 'package:ui_kit/src/components/status_indicator.dart';
 export 'package:ui_kit/src/components/detail_card.dart';
+export 'package:ui_kit/src/components/stepper.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

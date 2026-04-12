@@ -7,9 +7,11 @@ import 'check_box_preview.dart';
 import 'choice_options_preview.dart';
 import 'color_palette_preview.dart';
 import 'drop_down_button_preview.dart';
-import 'grouped_list_preview.dart';
+import 'tile_group_preview.dart';
 import 'line_calendar_preview.dart';
 import 'pin_preview.dart';
+import 'snack_bar_preview.dart';
+import 'stepper_preview.dart';
 import 'switch_preview.dart';
 import 'text_fields_preview.dart';
 import 'typography_preview.dart';
@@ -26,7 +28,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) => WindowSizeScope(
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      darkTheme: darkTheme,
+      // darkTheme: darkTheme,
       theme: lightTheme,
       home: const UiPreview(),
     ),
@@ -120,7 +122,7 @@ class _UiPreviewState extends State<UiPreview>
                   child: UiText2.h5Bold('Grouped List'),
                 ),
                 const SizedBox(height: 8),
-                const GroupedListPreview(),
+                const TileGroupPreview(),
                 const SizedBox(height: 24),
                 Align(alignment: .center, child: UiText2.h5Bold('Switch')),
                 const SizedBox(height: 8),
@@ -133,20 +135,17 @@ class _UiPreviewState extends State<UiPreview>
                 const SizedBox(height: 8),
                 const BottomSheetPreview(),
                 const SizedBox(height: 24),
-                Align(
-                  alignment: .center,
-                  child: UiText2.h5Bold('Choice options'),
-                ),
-                const SizedBox(height: 8),
-                const ChoiceChipPreview(),
-                const SizedBox(height: 24),
                 Align(alignment: .center, child: UiText2.h5Bold('CheckBox')),
                 const SizedBox(height: 8),
                 const CheckBoxPreview(),
                 const SizedBox(height: 24),
+                Align(alignment: .center, child: UiText2.h5Bold('Stepper')),
+                const SizedBox(height: 8),
+                const StepperPreview(),
+                const SizedBox(height: 24),
                 Align(
                   alignment: .center,
-                  child: UiText2.h5Bold('DropDownButton'),
+                  child: UiText2.h5Bold('Drop down button'),
                 ),
                 const SizedBox(height: 8),
                 const DropDownButtonPreview(),
@@ -166,48 +165,9 @@ class _UiPreviewState extends State<UiPreview>
                 const SizedBox(height: 8),
                 ChoiceChipPreview(),
                 const SizedBox(height: 24),
-                Align(alignment: .center, child: UiText2.h5Bold('SnackBar')),
+                Align(alignment: .center, child: UiText2.h5Bold('Snack Bar')),
                 const SizedBox(height: 8),
-                UiButton.filledPrimary(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Theme.of(context).colorPalette.card,
-                        duration: const Duration(seconds: 3),
-                        padding: const .all(24.0),
-                        behavior: .floating,
-                        showCloseIcon: true,
-                        content: Column(
-                          mainAxisAlignment: .center,
-                          crossAxisAlignment: .start,
-                          spacing: 8.0,
-                          children: [
-                            UiText.bodyLarge('Button pressed'),
-                            UiText.bodyLarge(
-                              'We recommend placing FToaster in the builder method of MaterialApp/WidgetsApp/CupertinoApp',
-                              style: TextStyle(
-                                color: Theme.of(
-                                  context,
-                                ).colorPalette.mutedForeground,
-                              ),
-                            ),
-                          ],
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: .circular(16.0),
-                          side: BorderSide(
-                            color: Theme.of(context).colorPalette.borderStrong,
-                          ),
-                        ),
-                      ),
-                      snackBarAnimationStyle: AnimationStyle(
-                        duration: const Duration(milliseconds: 500),
-                        reverseDuration: const Duration(milliseconds: 2000),
-                        curve: Curves.easeInOut,
-                      ),
-                    );
-                  },
-                ),
+                const SnackBarPreview(),
               ],
             ),
           ),

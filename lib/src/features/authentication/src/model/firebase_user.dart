@@ -59,6 +59,7 @@ class FirebaseUser extends AuthenticatedUser {
         role: .student,
       );
 
+  @override
   bool get isFake => this == FirebaseUser.fake();
 
   @override

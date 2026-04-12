@@ -20,6 +20,7 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
       inputPlaceholder: Color(0xFFEBEBEB),
       card: Color(0xFFFFFFFF),
       destructive: Color(0xFFE84040),
+      step: Color(0xFFEBEBEB),
     );
   }
 
@@ -38,6 +39,7 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
     inputPlaceholder: Color(0xFFEBEBEB),
     card: Color(0xFFFFFFFF),
     destructive: Color(0xFFE84040),
+    step: Color(0xFFEBEBEB),
   );
 }
 
@@ -57,6 +59,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     required this.inputPlaceholder,
     required this.card,
     required this.destructive,
+    required this.step,
   });
 
   final Color background;
@@ -73,6 +76,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
   final Color inputPlaceholder;
   final Color card;
   final Color destructive;
+  final Color step;
 
   @override
   ThemeExtension<ColorPalette2> copyWith({
@@ -90,6 +94,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     Color? inputPlaceholder,
     Color? card,
     Color? destructive,
+    Color? step,
   }) => ColorPalette2(
     background: background ?? this.background,
     primary: primary ?? this.primary,
@@ -105,6 +110,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     inputPlaceholder: inputPlaceholder ?? this.inputPlaceholder,
     card: card ?? this.card,
     destructive: destructive ?? this.destructive,
+    step: step ?? this.step,
   );
 
   @override
@@ -136,6 +142,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
       inputPlaceholder: .lerp(inputPlaceholder, other.inputPlaceholder, t)!,
       card: .lerp(card, other.card, t)!,
       destructive: .lerp(destructive, other.destructive, t)!,
+      step: .lerp(step, other.step, t)!,
     );
   }
 
@@ -154,5 +161,6 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     'inputPlaceholder': inputPlaceholder,
     'card': card,
     'destructive': destructive,
+    'step': step,
   };
 }

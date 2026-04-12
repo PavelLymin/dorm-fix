@@ -37,8 +37,6 @@ dependencies:
   rxdart: ^0.28.0
   # Http clients  
   http: ^1.6.0
-  cronet_http: ^1.8.0
-  cupertino_http: ^2.4.0
   # Local storage
   shared_preferences: ^2.5.3
   # Image picker

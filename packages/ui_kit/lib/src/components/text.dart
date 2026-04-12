@@ -9,9 +9,9 @@ class UiText extends StatelessWidget {
     this.overflow,
     this.maxLines,
     this.softWrap,
-    TextStyle? Function(AppTypography)? styleBuilder,
+    this._styleBuilder,
     super.key,
-  }) : _styleBuilder = styleBuilder;
+  });
 
   final String data;
   final TextStyle? style;

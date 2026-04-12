@@ -36,14 +36,9 @@ class TileGroupStyle {
     subtitleStyle: subtitleStyle ?? this.subtitleStyle,
     buttonStyle: buttonStyle ?? this.buttonStyle,
   );
-}
 
-abstract class ItemStyle {
-  ItemStyle();
-
-  static TileGroupStyle initStyle(
+  factory TileGroupStyle.defaultStyle(
     BuildContext context,
-    TileGroupStyle? style,
     bool isFirst,
     bool isLast,
   ) {
@@ -77,6 +72,7 @@ abstract class ItemStyle {
           WidgetState.any: palette.foreground,
         }),
         tapTargetSize: .shrinkWrap,
+        visualDensity: .standard,
         overlayColor: AppWidgetStateMap<Color>({
           WidgetState.selected: palette.foreground.withValues(alpha: .2),
           WidgetState.disabled: palette.disabled.withValues(alpha: .1),
@@ -87,12 +83,7 @@ abstract class ItemStyle {
           WidgetState.disabled: palette.disabled,
           WidgetState.any: palette.card,
         }),
-      ).merge(style?.buttonStyle),
-    ).copyWith(
-      selectedColor: style?.selectedColor,
-      borderRadius: style?.borderRadius,
-      titleStyle: style?.titleStyle,
-      subtitleStyle: style?.subtitleStyle,
+      ),
     );
   }
 }
