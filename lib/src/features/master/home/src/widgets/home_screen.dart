@@ -28,7 +28,11 @@ class _HomeScreenState extends State<MasterHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(slivers: [RepairRequestList(requests: requests)]),
+      body: CustomScrollView(
+        slivers: [
+          // RepairRequestList(requests: requests)
+        ],
+      ),
     );
   }
 }

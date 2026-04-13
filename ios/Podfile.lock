@@ -1,7 +1,4 @@
 PODS:
-  - cupertino_http (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - Flutter (1.0.0)
   - yandex_mapkit (0.0.1):
     - Flutter
@@ -9,7 +6,6 @@ PODS:
   - YandexMapsMobile (4.22.0-lite)
 
 DEPENDENCIES:
-  - cupertino_http (from `.symlinks/plugins/cupertino_http/darwin`)
   - Flutter (from `Flutter`)
   - yandex_mapkit (from `.symlinks/plugins/yandex_mapkit/ios`)
 
@@ -18,15 +14,12 @@ SPEC REPOS:
     - YandexMapsMobile
 
 EXTERNAL SOURCES:
-  cupertino_http:
-    :path: ".symlinks/plugins/cupertino_http/darwin"
   Flutter:
     :path: Flutter
   yandex_mapkit:
     :path: ".symlinks/plugins/yandex_mapkit/ios"
 
 SPEC CHECKSUMS:
-  cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   yandex_mapkit: bac34ca1bdf97e87252a8c6d09a95b1fe39ba103
   YandexMapsMobile: c73844c6096bbb240d1491adc511c2ef4a88d88d

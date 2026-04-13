@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:ui_kit/ui.dart';
@@ -111,7 +110,7 @@ class StepperPainter {
     required this.steps,
     required this.currentStep,
     required this.currentColor,
-  }) : _size = .zero;
+  }) : _size = Size.zero;
 
   ThemeData theme;
   List<StepItem> steps;
@@ -130,176 +129,173 @@ class StepperPainter {
     final canvas = Canvas(recorder);
 
     final titlePainter = TextPainter(
-      textDirection: .ltr,
-      textAlign: .left,
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.left,
       ellipsis: '...',
       maxLines: 2,
     );
 
     final subTitlePainter = TextPainter(
-      textDirection: .ltr,
-      textAlign: .left,
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.left,
       ellipsis: '...',
       maxLines: 1,
     );
 
-    const pointSize = 8.0;
-    const currentPointSize = 16.0;
-    const spacing = 12.0;
-    const linePadding = 8.0;
+    const point = 8.0;
+    const currentPoint = 16.0;
+    const spacing = 20.0;
+    const lineSpacing = 8.0;
+    const textSpacing = 48.0;
     const cardPadV = 6.0;
     const cardPadH = 16.0;
+    const centerX = currentPoint / 2;
+    const titleLeft = currentPoint + spacing;
+    const lineThickness = 2.0;
 
-    final pointsList = <double>[];
-    final linesList = <double>[];
-
+    final pointCenters = <Offset>[];
     double currentY = 0.0;
-    double? prevCenterY;
-    int? prevStep;
-
-    final centerX = currentPointSize / 2;
-    final contentLeft = currentPointSize + spacing;
 
     for (int i = 0; i < steps.length; i++) {
-      if (i != 0) currentY += spacing;
-      final isCurrent = i == currentStep;
-      double stepHeight;
-      double stepWeight;
-      double centerY;
-      double subtitleWidth = 0.0;
-      double titleWidth = maxWidth - contentLeft - subtitleWidth - 48.0;
+      final step = steps[i];
+      final isActive = i == currentStep;
 
-      if (steps[i].subtitle != null) {
+      // Рассчитываем доступную ширину для title (с учетом паддингов карточки)
+      double availableTitleWidth = maxWidth - titleLeft - textSpacing;
+      if (isActive) availableTitleWidth -= (cardPadH * 2);
+
+      // Layout Subtitle
+      double subtitleHeight = 0.0;
+      double subtitleWidth = 0.0;
+      if (step.subtitle != null) {
         subTitlePainter
           ..text = TextSpan(
-            text: steps[i].subtitle,
-            style: typography.s.copyWith(color: palette.foregroundSecondary),
-          )
-          ..layout();
-        subtitleWidth = subTitlePainter.width;
-        titleWidth = maxWidth - contentLeft - subtitleWidth - 48.0;
-        subTitlePainter.paint(
-          canvas,
-          Offset(maxWidth - subtitleWidth, currentY + cardPadV),
-        );
-      }
-
-      if (isCurrent) {
-        titlePainter
-          ..text = TextSpan(
-            text: steps[i].title,
+            text: step.subtitle,
             style: typography.s.copyWith(color: palette.foreground),
           )
-          ..layout(maxWidth: titleWidth);
+          ..layout();
+        subtitleHeight = subTitlePainter.height;
+        subtitleWidth = subTitlePainter.width;
+      }
 
-        stepHeight = titlePainter.height + (cardPadV * 2);
-        stepWeight = titlePainter.width + (cardPadH * 2);
-        centerY = currentY + stepHeight / 2;
-        canvas.drawRRect(
-          .fromRectAndRadius(
-            .fromLTWH(contentLeft, currentY, stepWeight, stepHeight),
-            const .circular(12.0),
+      // Layout Title
+      titlePainter
+        ..text = TextSpan(
+          text: step.title,
+          style: isActive
+              ? typography.s.copyWith(color: palette.foreground)
+              : typography.m.copyWith(color: palette.foregroundSecondary),
+        )
+        ..layout(maxWidth: availableTitleWidth);
+
+      double titleHeight = titlePainter.height;
+
+      double titleBoxHeight = titleHeight + (isActive ? cardPadV * 2 : 0);
+
+      // Высота всего шага определяется самым высоким элементом
+      double stepHeight = titleBoxHeight > subtitleHeight
+          ? titleBoxHeight
+          : subtitleHeight;
+
+      // ЕДИНЫЙ ЦЕНТР по вертикали для выравнивания точки, title и subtitle
+      double itemCenterY = currentY + stepHeight / 2;
+
+      // Отрисовка фона-карточки для активного шага
+      if (isActive) {
+        final cardRect = RRect.fromRectAndRadius(
+          Rect.fromLTWH(
+            titleLeft,
+            itemCenterY - titleBoxHeight / 2,
+            titlePainter.width + cardPadH * 2,
+            titleBoxHeight,
           ),
+          const .circular(12.0),
+        );
+
+        canvas.drawRRect(
+          cardRect,
           Paint()
-            ..color = currentColor ?? palette.foregroundDisabled
+            ..color = palette.step
             ..style = .fill,
         );
+      }
 
-        titlePainter.paint(
+      // Отрисовка Title (центрируем по вертикали относительно itemCenterY)
+      titlePainter.paint(
+        canvas,
+        Offset(
+          titleLeft + (isActive ? cardPadH : 0),
+          itemCenterY - titleHeight / 2 - (isActive ? 1.5 : 2.0),
+        ),
+      );
+
+      // Отрисовка Subtitle
+      if (step.subtitle != null) {
+        subTitlePainter.paint(
           canvas,
-          Offset(contentLeft + cardPadH, currentY + cardPadV),
+          Offset(
+            maxWidth - subtitleWidth,
+            itemCenterY - subtitleHeight / 2 - (isActive ? 1.5 : 1.0),
+          ),
         );
-      } else {
-        titlePainter
-          ..text = TextSpan(
-            text: steps[i].title,
-            style: typography.m.copyWith(color: palette.foreground),
-          )
-          ..layout(maxWidth: titleWidth);
-        stepHeight = titlePainter.height;
-        centerY = currentY + stepHeight / 2;
-        titlePainter.paint(canvas, Offset(contentLeft, currentY));
       }
 
-      if (prevCenterY != null) {
-        final prevRadius = (prevStep == currentStep)
-            ? (currentPointSize / 2)
-            : (pointSize / 2);
-        final currentRadius = (i == currentStep)
-            ? (currentPointSize / 2)
-            : (pointSize / 2);
-        final startLineY = prevCenterY + prevRadius + linePadding;
-        final endLineY = centerY - currentRadius - linePadding;
+      // Сохраняем центр точки для последующей отрисовки линий
+      pointCenters.add(Offset(centerX, itemCenterY));
 
-        if (endLineY > startLineY) {
-          linesList.addAll([centerX, startLineY, centerX, endLineY]);
-        }
-      }
-
-      if (isCurrent) {
-        canvas.drawCircle(
-          Offset(centerX, centerY),
-          currentPointSize / 2,
-          Paint()..color = palette.secondary,
-        );
-      } else {
-        pointsList.addAll([centerX, centerY]);
-      }
-
-      prevCenterY = centerY;
-      prevStep = i;
-      currentY += stepHeight;
+      // Увеличиваем currentY для следующего шага
+      currentY += stepHeight + (i == steps.length - 1 ? 0 : spacing);
     }
 
-    _drawLinesAndPoints(canvas, linesList, pointsList, palette, pointSize);
+    // 2. Отрисовка линий (с отступами lineSpacing)
+    final linePaint = Paint()
+      ..color = palette.step
+      ..strokeWidth = lineThickness
+      ..strokeCap = .round;
+
+    for (int i = 0; i < pointCenters.length - 1; i++) {
+      final p1 = pointCenters[i];
+      final p2 = pointCenters[i + 1];
+
+      final r1 = (i == currentStep ? currentPoint : point) / 2;
+      final r2 = ((i + 1) == currentStep ? currentPoint : point) / 2;
+
+      final startY = p1.dy + r1 + lineSpacing;
+      final endY = p2.dy - r2 - lineSpacing;
+
+      if (endY > startY) {
+        canvas.drawLine(
+          Offset(centerX, startY),
+          Offset(centerX, endY),
+          linePaint,
+        );
+      }
+    }
+
+    // 3. Отрисовка самих точек
+    for (int i = 0; i < pointCenters.length; i++) {
+      final isActive = i == currentStep;
+      final r = (isActive ? currentPoint : point) / 2;
+
+      // Активная точка - темная (или currentColor), неактивная - серая
+      final color = isActive ? (palette.secondary) : palette.step;
+
+      canvas.drawCircle(
+        pointCenters[i],
+        r,
+        Paint()
+          ..color = color
+          ..style = .fill,
+      );
+    }
 
     _picture = recorder.endRecording();
     return _size = Size(maxWidth, currentY);
   }
 
-  void _drawLinesAndPoints(
-    Canvas canvas,
-    List<double> lines,
-    List<double> points,
-    ColorPalette2 palette,
-    double pointSize,
-  ) {
-    if (lines.isNotEmpty) {
-      canvas.drawRawPoints(
-        .lines,
-        Float32List.fromList(lines),
-        Paint()
-          ..color = palette.step
-          ..strokeWidth = 2.0
-          ..strokeCap = .round,
-      );
-    }
-    if (points.isNotEmpty) {
-      canvas.drawRawPoints(
-        .points,
-        Float32List.fromList(points),
-        Paint()
-          ..color = palette.step
-          ..strokeWidth = pointSize
-          ..strokeCap = .round,
-      );
-    }
-  }
-
-  void addPointPos(
-    Float32List points,
-    int i,
-    double pointSize,
-    double centerY,
-  ) {
-    points
-      ..[i * 2] = pointSize / 2
-      ..[i * 2 + 1] = centerY;
-  }
-
   void paint(Canvas canvas, Size size) {
-    final pisture = _picture;
-    if (pisture == null) return;
-    canvas.drawPicture(pisture);
+    final picture = _picture;
+    if (picture == null) return;
+    canvas.drawPicture(picture);
   }
 }

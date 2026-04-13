@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../app/model/application_config.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../request.dart';
 
@@ -62,10 +64,17 @@ class _RepairRequestsState extends State<RepairRequests> {
                 images: request.problems
                     .map(
                       (e) =>
-                          'https://oztyuuvqhgnnzjxclcfv.supabase.co/storage/v1/object/problems/problem/${e.photoPath}',
+                          '${Config.storageBaseUrl}${Config.problemsBucket}${e.photoPath}',
                     )
                     .toList(),
-                onTap: () {},
+                onTap: () {
+                  context.router.push(
+                    NamedRoute(
+                      'RequestDetailsScreen',
+                      params: {'request': request},
+                    ),
+                  );
+                },
               ),
             );
           },

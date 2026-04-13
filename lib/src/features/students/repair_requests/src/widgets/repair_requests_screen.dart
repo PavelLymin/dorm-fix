@@ -32,7 +32,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: CustomScrollView(
         slivers: [
           const SearchAppBar(),
-          RepairRequestList(requests: requests),
+          // RepairRequestList(requests: requests),
         ],
       ),
     );

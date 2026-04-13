@@ -17,7 +17,6 @@ void main() async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       final dependency = await CompositionRoot(logger: logger).compose();
-
       runApp(
         DependeciesScope(
           dependencyContainer: dependency,

@@ -27,7 +27,7 @@ class ProblemRepositoryImpl implements IProblemRepository {
         final url = await _supabase.storage
             .from('problems')
             .upload(
-              'problem/$path',
+              path,
               problemFile,
               fileOptions: const FileOptions(
                 cacheControl: '3600',

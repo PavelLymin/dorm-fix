@@ -1,3 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 /// Config for app.
 abstract final class Config {
   // --- ENVIRONMENT --- //
@@ -53,6 +55,19 @@ abstract final class Config {
   /// Refetch data from url when cache is expired.
   /// e.g. 1 hour
   static const Duration cacheLifetime = Duration(hours: 1);
+
+  // --- STORAGE --- //
+
+  /// Base url for storage.
+  /// e.g. https://storage.domain.tld
+  static String storageBaseUrl = String.fromEnvironment(
+    'STORAGE_BASE_URL',
+    defaultValue: '${dotenv.env['SUPABASE_URL']}/storage/v1/object/',
+  );
+
+  static const String problemsBucket = 'problems/';
+
+  static const String avatarsBucket = 'avatars/';
 
   // --- AUTHENTICATION --- //
 

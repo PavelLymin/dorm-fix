@@ -49,6 +49,11 @@ class AppRouter extends RootStackRouter {
       builder: (context, data) => const HistoryScreen(),
     ),
     NamedRouteDef(
+      name: 'RequestDetailsScreen',
+      builder: (_, data) =>
+          RequestDetailsScreen(request: data.params.get('request')),
+    ),
+    NamedRouteDef(
       name: 'StudentRootSreen',
       builder: (_, _) => const RootScreen(pages: studentPages),
       children: [

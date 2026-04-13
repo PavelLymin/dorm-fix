@@ -11,7 +11,7 @@ class StepperPreview extends StatelessWidget {
         steps: const [
           StepItem(title: 'Создана', subtitle: '4 апреля в 20:01'),
           StepItem(title: 'Передана мастеру', subtitle: '5 апреля в 12:15'),
-          StepItem(title: 'Завершена'),
+          StepItem(title: 'Завершена', subtitle: '5 апреля в 13:15'),
         ],
       ),
     );

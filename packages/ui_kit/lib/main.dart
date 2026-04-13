@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:ui_kit/carousel_preview.dart';
 import 'package:ui_kit/detail_card_preview.dart';
 import 'package:ui_kit/ui.dart';
 import 'button_previews.dart';
@@ -168,6 +169,8 @@ class _UiPreviewState extends State<UiPreview>
                 Align(alignment: .center, child: UiText2.h5Bold('Snack Bar')),
                 const SizedBox(height: 8),
                 const SnackBarPreview(),
+
+                const CarouselPreview(),
               ],
             ),
           ),
