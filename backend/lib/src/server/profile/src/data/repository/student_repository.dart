@@ -11,7 +11,7 @@ abstract interface class IStudentRepository {
 
   Future<void> deleteStudent({required String uid});
 
-  Future<FullStudent?> getStudent({required String uid});
+  Future<FullStudentDto> getStudent({required String uid});
 
   Future<void> updateStudent({
     required String uid,
@@ -58,7 +58,7 @@ class StudentRepositoryImpl implements IStudentRepository {
   }
 
   @override
-  Future<FullStudent?> getStudent({required String uid}) async {
+  Future<FullStudentDto> getStudent({required String uid}) async {
     final data = await (_database.select(_database.students).join([
       innerJoin(
         _database.users,
@@ -72,16 +72,14 @@ class StudentRepositoryImpl implements IStudentRepository {
         _database.rooms,
         _database.rooms.id.equalsExp(_database.students.roomId),
       ),
-    ])..where(_database.students.uid.equals(uid))).getSingleOrNull();
-
-    if (data == null) return null;
+    ])..where(_database.students.uid.equals(uid))).getSingle();
 
     final student = FullStudentDto.fromData(
       data.readTable(_database.students),
       data.readTable(_database.users),
       data.readTable(_database.dormitories),
       data.readTable(_database.rooms),
-    ).toEntity();
+    );
 
     return student;
   }

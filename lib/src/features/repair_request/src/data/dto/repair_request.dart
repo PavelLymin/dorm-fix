@@ -40,7 +40,7 @@ sealed class RepairRequestDto {
 
   factory RepairRequestDto.full({
     required int id,
-    required String uid,
+    required FullStudentDto student,
     required SpecializationDto specialization,
     required String description,
     required Priority priority,
@@ -144,8 +144,6 @@ final class PartialRepairRequestDto extends RepairRequestDto {
 
 final class FullRepairRequestDto extends RepairRequestDto {
   const FullRepairRequestDto({
-    required this.id,
-    required this.uid,
     required super.description,
     required super.priority,
     required super.status,
@@ -153,6 +151,8 @@ final class FullRepairRequestDto extends RepairRequestDto {
     required super.date,
     required super.startTime,
     required super.endTime,
+    required this.id,
+    required this.student,
     required this.specialization,
     required this.problems,
     required this.chat,
@@ -161,17 +161,17 @@ final class FullRepairRequestDto extends RepairRequestDto {
   });
 
   final int id;
-  final String uid;
-  final DateTime createdAt;
+  final FullStudentDto student;
   final SpecializationDto specialization;
   final List<FullProblemDto> problems;
   final FullChatDto chat;
   final MasterDto? master;
+  final DateTime createdAt;
 
   @override
   FullRepairRequest toEntity() => FullRepairRequest(
     id: id,
-    uid: uid,
+    student: student.toEntity(),
     specialization: specialization.toEntity(),
     description: description,
     priority: priority,
@@ -189,7 +189,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
   @override
   Map<String, Object?> toJson() => {
     'id': id,
-    'uid': uid,
+    'student': student.toJson(),
     'specialization': specialization.toJson(),
     'description': description,
     'priority': priority.value,
@@ -206,7 +206,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
   factory FullRepairRequestDto.fromEntity(FullRepairRequest entity) =>
       FullRepairRequestDto(
         id: entity.id,
-        uid: entity.uid,
+        student: .fromEntity(entity.student),
         specialization: .fromEntity(entity.specialization),
         description: entity.description,
         priority: entity.priority,
@@ -224,7 +224,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
   factory FullRepairRequestDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
       'id': final int id,
-      'uid': final String uid,
+      'student': final Map<String, Object?> student,
       'specialization': final Map<String, Object?> specialization,
       'description': final String description,
       'priority': final String priority,
@@ -240,7 +240,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
     }) {
       return FullRepairRequestDto(
         id: id,
-        uid: uid,
+        student: .fromJson(student),
         specialization: .fromJson(specialization),
         description: description,
         priority: .fromValue(priority),

@@ -1,77 +1,102 @@
-import 'package:drift/drift.dart';
 import '../../../../../core/database/database.dart';
 import '../../../repair_request.dart';
 
 abstract interface class IRequestRepository {
-  Future<FullRepairRequest> createRequest({
+  Future<Request> createRequest({
     required String uid,
     required PartialRepairRequest request,
   });
 
-  Stream<List<FullRepairRequest>> watchRequests({
-    int page = 1,
-    int limit = 10,
-    String? uid,
-    int? specId,
-    int? dormId,
-    String? status,
-  });
+  // Stream<List<FullRepairRequest>> watchRequests({
+  //   int page = 1,
+  //   int limit = 10,
+  //   String? uid,
+  //   int? specId,
+  //   int? dormId,
+  //   String? status,
+  // });
 
-  Stream<FullRepairRequest> watchRequest({required int id});
+  // Stream<FullRepairRequest> watchRequest({required int id});
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
-  const RequestRepositoryImpl({required this._database});
+  const RequestRepositoryImpl({required Database database}) : _db = database;
 
-  final Database _database;
+  final Database _db;
 
   @override
-  Future<FullRepairRequest> createRequest({
+  Future<Request> createRequest({
     required String uid,
     required PartialRepairRequest request,
   }) async {
     final dto = PartialRepairRequestDto.fromEntity(request);
-    final requestData = await _database
-        .into(_database.requests)
+    final result = await _db
+        .into(_db.requests)
         .insertReturning(dto.toCompanion(uid: uid));
-
-    final result = FullRepairRequestDto.fromData(requestData).toEntity();
 
     return result;
   }
 
-  @override
-  Stream<List<FullRepairRequest>> watchRequests({
-    int page = 1,
-    int limit = 10,
-    String? uid,
-    int? specId,
-    int? dormId,
-    String? status,
-  }) {
-    final query = _database.select(_database.requests).join([
-      if (dormId != null)
-        innerJoin(
-          _database.students,
-          _database.students.uid.equalsExp(_database.requests.uid) &
-              _database.students.dormitoryId.equals(dormId),
-        ),
-    ])..limit(limit, offset: (page - 1) * limit);
+  // @override
+  // Stream<List<FullRepairRequest>> watchRequests({
+  //   int page = 1,
+  //   int limit = 10,
+  //   String? uid,
+  //   int? specId,
+  //   int? dormId,
+  //   String? status,
+  // }) {
+  //   final query = _db.select(_db.requests).join([
+  //     if (dormId != null)
+  //       innerJoin(
+  //         _db.students,
+  //         _db.students.uid.equalsExp(_db.requests.uid) &
+  //             _db.students.dormitoryId.equals(dormId),
+  //       ),
+  //   ])..limit(limit, offset: (page - 1) * limit);
 
-    if (uid != null) query.where(_database.requests.uid.equals(uid));
-    if (specId != null) query.where(_database.requests.specId.equals(specId));
-    if (status != null) query.where(_database.requests.status.equals(status));
-    return query.watch().map(
-      (rows) => rows.map((row) {
-        final request = row.readTable(_database.requests);
-        return FullRepairRequestDto.fromData(request).toEntity();
-      }).toList(),
-    );
-  }
+  //   if (uid != null) query.where(_db.requests.uid.equals(uid));
+  //   if (specId != null) query.where(_db.requests.specId.equals(specId));
+  //   if (status != null) query.where(_db.requests.status.equals(status));
+  //   return query.watch().map(
+  //     (rows) => rows.map((row) {
+  //       final request = row.readTable(_db.requests);
+  //       return FullRepairRequestDto.fromData(request).toEntity();
+  //     }).toList(),
+  //   );
+  // }
 
-  @override
-  Stream<FullRepairRequest> watchRequest({required int id}) =>
-      (_database.select(_database.requests)..where((row) => row.id.equals(id)))
-          .watchSingle()
-          .map((row) => FullRepairRequestDto.fromData(row).toEntity());
+  // Stream<List<FullRepairRequest>> watchRequests2({
+  //   int page = 1,
+  //   int limit = 10,
+  //   String? uid,
+  //   int? specId,
+  //   int? dormId,
+  //   String? status,
+  // }) {
+  //   final query = _db.select(_db.requests).join([
+  //     innerJoin(_db.users, _db.users.uid.equalsExp(_db.students.uid)),
+  //     innerJoin(
+  //       _db.dormitories,
+  //       _db.dormitories.id.equalsExp(_db.students.dormitoryId),
+  //     ),
+  //     innerJoin(_db.rooms, _db.rooms.id.equalsExp(_db.students.roomId)),
+  //   ])..limit(limit, offset: (page - 1) * limit);
+
+  //   if (uid != null) query.where(_db.requests.uid.equals(uid));
+  //   if (specId != null) query.where(_db.requests.specId.equals(specId));
+  //   if (status != null) query.where(_db.requests.status.equals(status));
+  //   return query.watch().map(
+  //     (rows) => rows.map((row) {
+  //       final request = row.readTable(_db.requests);
+  //       return FullRepairRequestDto.fromData(request).toEntity();
+  //     }).toList(),
+  //   );
+  // }
+
+  // @override
+  // Stream<FullRepairRequest> watchRequest({required int id}) =>
+  //     (_db.select(_db.requests)..where((row) => row.id.equals(id)))
+  //         .watchSingle()
+  //         .map((row) => FullRepairRequestDto.fromData(row).toEntity());
 }

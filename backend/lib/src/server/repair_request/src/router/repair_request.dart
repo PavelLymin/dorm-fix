@@ -42,12 +42,9 @@ class RepairRequestRouter {
     final uid = RequireUser.getUserId(request);
     final json = await _readJson(request);
     final entity = PartialRepairRequestDto.fromJson(json).toEntity();
-    final requestAggregate = await _requestFacade.createRequest(
-      uid: uid,
-      request: entity,
-    );
+    final result = await _requestFacade.createRequest(uid: uid, req: entity);
 
-    final data = RequestAggregateDto.fromEntity(requestAggregate).toJson();
+    final data = FullRepairRequestDto.fromEntity(result).toJson();
 
     return _restApi.send(statusCode: 200, responseBody: {'data': data});
   }
@@ -71,7 +68,7 @@ class RepairRequestRouter {
             final payload = {
               'data': {
                 'requests': rows
-                    .map((row) => RequestAggregateDto.fromEntity(row).toJson())
+                    .map((row) => FullRepairRequestDto.fromEntity(row).toJson())
                     .toList(),
               },
             };

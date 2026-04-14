@@ -3,7 +3,7 @@ import '../../../../../core/database/database.dart';
 import '../../../profile.dart';
 
 abstract interface class IAssignmentsRepository {
-  Stream<MasterEntity?> watchAssignment({required int requestId});
+  Stream<MasterDto?> watchAssignment({required int requestId});
 }
 
 class AssignmentsRepositoryImpl implements IAssignmentsRepository {
@@ -12,7 +12,7 @@ class AssignmentsRepositoryImpl implements IAssignmentsRepository {
   final Database _database;
 
   @override
-  Stream<MasterEntity?> watchAssignment({required int requestId}) {
+  Stream<MasterDto?> watchAssignment({required int requestId}) {
     final query = _database.select(_database.assignments).join([
       innerJoin(
         _database.masters,
@@ -40,7 +40,7 @@ class AssignmentsRepositoryImpl implements IAssignmentsRepository {
         row.readTable(_database.users),
         row.readTable(_database.dormitories),
         row.readTable(_database.specializations),
-      ).toEntity();
+      );
     });
   }
 }

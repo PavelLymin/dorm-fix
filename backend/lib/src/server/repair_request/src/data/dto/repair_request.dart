@@ -1,34 +1,35 @@
 import 'package:drift/drift.dart';
 import '../../../../../core/database/database.dart';
+import '../../../../chat/chat.dart';
+import '../../../../profile/profile.dart';
+import '../../../../specialization/specialization.dart';
 import '../../../repair_request.dart';
+import '../../model/status.dart';
+import 'status.dart';
 
 sealed class RepairRequestDto {
   const RepairRequestDto({
-    required this.specId,
     required this.description,
     required this.priority,
-    required this.status,
-    required this.studentAbsent,
     required this.date,
     required this.startTime,
     required this.endTime,
+    required this.currentStatus,
   });
 
-  final int specId;
   final String description;
   final Priority priority;
-  final Status status;
-  final bool studentAbsent;
   final DateTime date;
   final int startTime;
   final int endTime;
+  final StatusEnum currentStatus;
 
   const factory RepairRequestDto.partial({
     required final int specId,
     required final String description,
     required final Priority priority,
-    required final Status status,
-    required final bool studentAbsent,
+    required final StatusEnum currentStatus,
+    required final List<StatusDto> status,
     required final DateTime date,
     required final int startTime,
     required final int endTime,
@@ -37,15 +38,18 @@ sealed class RepairRequestDto {
 
   const factory RepairRequestDto.full({
     required final int id,
-    required final String uid,
-    required final int specId,
     required final String description,
     required final Priority priority,
-    required final Status status,
-    required final bool studentAbsent,
+    required final StatusEnum currentStatus,
+    required final List<StatusDto> status,
     required final DateTime date,
     required final int startTime,
     required final int endTime,
+    required final FullStudentDto student,
+    required final SpecializationDto specialization,
+    required final List<FullProblemDto> problems,
+    required final FullChatDto chat,
+    required final MasterDto? master,
     required final DateTime createdAt,
   }) = FullRepairRequestDto;
 
@@ -56,17 +60,19 @@ sealed class RepairRequestDto {
 
 final class PartialRepairRequestDto extends RepairRequestDto {
   const PartialRepairRequestDto({
-    required super.specId,
     required super.description,
     required super.priority,
-    required super.status,
-    required super.studentAbsent,
     required super.date,
     required super.startTime,
     required super.endTime,
+    required super.currentStatus,
+    required this.specId,
+    required this.status,
     required this.problems,
   });
 
+  final int specId;
+  final List<StatusDto> status;
   final List<String> problems;
 
   @override
@@ -74,8 +80,8 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     specId: specId,
     description: description,
     priority: priority,
-    status: status,
-    studentAbsent: studentAbsent,
+    currentStatus: currentStatus,
+    status: status.map((e) => e.toEntity()).toList(),
     date: date,
     startTime: startTime,
     endTime: endTime,
@@ -87,8 +93,8 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     'spec_id': specId,
     'description': description,
     'priority': priority.value,
-    'status': status.value,
-    'student_absent': studentAbsent,
+    'current_status': currentStatus.value,
+    'status': status.map((e) => e.toJson()).toList(),
     'date': date.toLocal().toString(),
     'start_time': startTime,
     'end_time': endTime,
@@ -100,8 +106,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     specId: Value(specId),
     description: Value(description),
     priority: Value(priority.value),
-    status: Value(status.value),
-    studentAbsent: Value(studentAbsent),
+    currentStatus: Value(currentStatus.value),
     date: Value(date),
     startTime: Value(startTime),
     endTime: Value(endTime),
@@ -112,8 +117,8 @@ final class PartialRepairRequestDto extends RepairRequestDto {
         specId: entity.specId,
         description: entity.description,
         priority: entity.priority,
-        status: entity.status,
-        studentAbsent: entity.studentAbsent,
+        currentStatus: entity.currentStatus,
+        status: entity.status.map(StatusDto.fromEntity).toList(),
         date: entity.date,
         startTime: entity.startTime,
         endTime: entity.endTime,
@@ -125,8 +130,8 @@ final class PartialRepairRequestDto extends RepairRequestDto {
       'spec_id': final int specId,
       'description': final String description,
       'priority': final String priority,
-      'status': final String status,
-      'student_absent': final bool studentAbsent,
+      'current_status': final String currentStatus,
+      'status': final List<Object?> status,
       'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
@@ -136,8 +141,11 @@ final class PartialRepairRequestDto extends RepairRequestDto {
         specId: specId,
         description: description,
         priority: .fromValue(priority),
-        status: .fromValue(status),
-        studentAbsent: studentAbsent,
+        currentStatus: .fromString(currentStatus),
+        status: status
+            .whereType<Map<String, Object?>>()
+            .map(StatusDto.fromJson)
+            .toList(),
         date: .parse(date),
         startTime: startTime,
         endTime: endTime,
@@ -151,93 +159,124 @@ final class PartialRepairRequestDto extends RepairRequestDto {
 
 final class FullRepairRequestDto extends RepairRequestDto {
   const FullRepairRequestDto({
-    required this.id,
-    required this.uid,
-    required super.specId,
     required super.description,
     required super.priority,
-    required super.status,
-    required super.studentAbsent,
     required super.date,
     required super.startTime,
     required super.endTime,
+    required super.currentStatus,
+    required this.id,
+    required this.student,
+    required this.specialization,
+    required this.status,
+    required this.problems,
+    required this.chat,
+    required this.master,
     required this.createdAt,
   });
 
   final int id;
-  final String uid;
+  final FullStudentDto student;
+  final SpecializationDto specialization;
+  final List<StatusDto> status;
+  final List<FullProblemDto> problems;
+  final FullChatDto chat;
+  final MasterDto? master;
   final DateTime createdAt;
 
   @override
   FullRepairRequest toEntity() => FullRepairRequest(
     id: id,
-    uid: uid,
-    specId: specId,
     description: description,
     priority: priority,
-    status: status,
-    studentAbsent: studentAbsent,
+    currentStatus: currentStatus,
+    status: status.map((e) => e.toEntity()).toList(),
     date: date,
     startTime: startTime,
     endTime: endTime,
+    student: student.toEntity(),
+    specialization: specialization.toEntity(),
+    problems: problems.map((e) => e.toEntity()).toList(),
+    chat: chat.toEntity(),
+    master: master?.toEntity(),
     createdAt: createdAt,
   );
 
   @override
   Map<String, Object?> toJson() => {
     'id': id,
-    'uid': uid,
-    'spec_id': specId,
     'description': description,
     'priority': priority.value,
-    'status': status.value,
-    'student_absent': studentAbsent,
-    'date': date.toLocal().toString(),
+    'current_status': currentStatus.value,
+    'status': status.map((e) => e.toJson()).toList(),
+    'date': date.toLocal().toIso8601String(),
     'start_time': startTime,
     'end_time': endTime,
-    'created_at': createdAt.toLocal().toString(),
+    'student': student.toJson(),
+    'specialization': specialization.toJson(),
+    'problems': problems.map((e) => e.toJson()).toList(),
+    'chat': chat.toJson(),
+    'master': master?.toJson(),
+    'created_at': createdAt.toLocal().toIso8601String(),
   };
 
   factory FullRepairRequestDto.fromEntity(FullRepairRequest entity) =>
       FullRepairRequestDto(
         id: entity.id,
-        uid: entity.uid,
-        specId: entity.specId,
         description: entity.description,
         priority: entity.priority,
-        status: entity.status,
-        studentAbsent: entity.studentAbsent,
+        currentStatus: entity.currentStatus,
+        status: entity.status.map(StatusDto.fromEntity).toList(),
         date: entity.date,
         startTime: entity.startTime,
         endTime: entity.endTime,
+        student: .fromEntity(entity.student),
+        specialization: .fromEntity(entity.specialization),
+        problems: entity.problems
+            .map((e) => FullProblemDto.fromEntity(e))
+            .toList(),
+        chat: .fromEntity(entity.chat),
+        master: entity.master != null ? .fromEntity(entity.master!) : null,
         createdAt: entity.createdAt,
       );
 
   factory FullRepairRequestDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
       'id': final int id,
-      'uid': final String uid,
-      'spec_id': final int specId,
       'description': final String description,
       'priority': final String priority,
-      'status': final String status,
-      'student_absent': final int studentAbsent,
+      'current_status': final String currentStatus,
+      'status': final List<Object?> status,
       'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
+      'student': final Map<String, Object?> student,
+      'specialization': final Map<String, Object?> specialization,
+      'problems': final List<Object?> problems,
+      'chat': final Map<String, Object?> chat,
+      'master': final Map<String, Object?>? master,
       'created_at': final String createdAt,
     }) {
       return FullRepairRequestDto(
         id: id,
-        uid: uid,
-        specId: specId,
         description: description,
         priority: .fromValue(priority),
-        status: .fromValue(status),
-        studentAbsent: studentAbsent == 1,
+        currentStatus: .fromString(currentStatus),
+        status: status
+            .whereType<Map<String, Object?>>()
+            .map(StatusDto.fromJson)
+            .toList(),
         date: .parse(date),
         startTime: startTime,
         endTime: endTime,
+        student: .fromJson(student),
+        specialization: .fromJson(specialization),
+        problems: problems
+            .whereType<Map<String, Object?>>()
+            .map((e) => FullProblemDto.fromJson(e))
+            .toList(),
+        chat: .fromJson(chat),
+        master: master != null ? .fromJson(master) : null,
         createdAt: .parse(createdAt),
       );
     }
@@ -245,18 +284,28 @@ final class FullRepairRequestDto extends RepairRequestDto {
     throw ArgumentError('Invalid JSON format for FullRepairRequestDto: $json');
   }
 
-  factory FullRepairRequestDto.fromData(Request request) =>
-      FullRepairRequestDto(
-        id: request.id,
-        uid: request.uid,
-        specId: request.specId,
-        description: request.description,
-        priority: .fromValue(request.priority),
-        status: .fromValue(request.status),
-        studentAbsent: request.studentAbsent,
-        date: request.date,
-        startTime: request.startTime,
-        endTime: request.endTime,
-        createdAt: request.createdAt,
-      );
+  factory FullRepairRequestDto.fromData({
+    required Request request,
+    required FullStudentDto student,
+    required List<StatusDto> status,
+    required SpecializationDto specialization,
+    required List<FullProblemDto> problems,
+    required FullChatDto chat,
+    MasterDto? master,
+  }) => FullRepairRequestDto(
+    id: request.id,
+    description: request.description,
+    priority: .fromValue(request.priority),
+    currentStatus: .fromString(request.currentStatus),
+    status: status,
+    date: request.date,
+    startTime: request.startTime,
+    endTime: request.endTime,
+    student: student,
+    specialization: specialization,
+    problems: problems,
+    chat: chat,
+    master: master,
+    createdAt: request.createdAt,
+  );
 }

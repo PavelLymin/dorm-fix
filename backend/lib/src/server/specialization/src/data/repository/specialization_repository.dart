@@ -6,7 +6,7 @@ import '../../../specialization.dart';
 abstract interface class ISpecializationRepository {
   Future<List<SpecializationEntity>> getSpecializations();
 
-  Future<SpecializationEntity> getSpecialization({required int id});
+  Future<SpecializationDto> getSpecialization({required int id});
 
   Stream<SpecializationEntity> watchSpec({required int requestId});
 }
@@ -30,14 +30,14 @@ class SpecializationRepositoryImpl implements ISpecializationRepository {
   }
 
   @override
-  Future<SpecializationEntity> getSpecialization({required int id}) async {
+  Future<SpecializationDto> getSpecialization({required int id}) async {
     final data = await (_database.select(
       _database.specializations,
     )..where((row) => row.id.equals(id))).getSingle();
 
-    final specialization = SpecializationDto.fromData(data).toEntity();
+    final result = SpecializationDto.fromData(data);
 
-    return specialization;
+    return result;
   }
 
   @override

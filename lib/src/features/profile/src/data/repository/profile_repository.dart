@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rxdart/rxdart.dart';
 import '../../../../../core/rest_client/rest_client.dart';
 import '../../../../authentication/authentication.dart';
 
@@ -46,33 +47,19 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
-  Stream<UserEntity> userChanges() {
-    StreamSubscription? streamSubscription;
-    final controller = StreamController<UserEntity>(
-      onCancel: () => streamSubscription?.cancel(),
-    );
-    streamSubscription = _firebaseAuth.userChanges().listen((data) async {
-      if (data != null) {
-        try {
-          final profile = await getProfile();
-          if (profile == null) {
-            final user = FirebaseUserDto.fromFirebase(data).toEntity();
-            controller.add(user);
-          } else {
-            final role = profile.mapRoleUser(
-              student: (student) => student,
-              master: (master) => master,
-            );
-            controller.add(role);
-          }
-        } catch (e) {
-          controller.addError(e);
-        }
-      } else {
-        controller.add(const NotAuthenticatedUser());
-      }
-    }, onDone: () => streamSubscription?.cancel());
+  Stream<UserEntity> userChanges() => _firebaseAuth.userChanges().switchMap(
+    (user) => .fromFuture(_processUser(user)),
+  );
 
-    return controller.stream;
+  Future<UserEntity> _processUser(User? data) async {
+    if (data == null) return const NotAuthenticatedUser();
+
+    final profile = await getProfile();
+    if (profile == null) return FirebaseUserDto.fromFirebase(data).toEntity();
+
+    return profile.mapRoleUser(
+      student: (student) => student,
+      master: (master) => master,
+    );
   }
 }

@@ -8,9 +8,9 @@ environment:
 
 dependencies:
   # Database 
-  drift: ^2.29.0
+  drift: ^2.32.1
   # Server
-  drift_dev: ^2.29.0
+  drift_dev: ^2.32.1
   firebase_admin: ^0.3.1
   logger: ^2.6.2
   rxdart: ^0.28.0
@@ -18,12 +18,12 @@ dependencies:
   shelf_cors_headers: ^0.1.5
   shelf_router: ^1.1.2
   shelf_web_socket: ^3.0.0
-  sqlite3: ^2.9.3
+  sqlite3: ^3.3.1
   web_socket_channel: ^3.0.3
 
 dev_dependencies:
   # Codegen
-  build_runner: ^2.10.0
+  build_runner: ^2.13.1
   http: ^1.2.2
   lints: ^6.0.0
   test: ^1.25.6

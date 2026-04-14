@@ -2,11 +2,11 @@ import '../../../../../core/database/database.dart';
 import '../../../repair_request.dart';
 
 abstract interface class IProblemRepository {
-  Future<List<FullProblem>> createProblems({
+  Future<List<FullProblemDto>> createProblems({
     required List<PartialProblem> problems,
   });
 
-  Stream<List<FullProblem>> watchProblems({required int requestId});
+  Stream<List<Problem>> watchProblems({required int requestId});
 }
 
 class ProblemRepositoryImpl implements IProblemRepository {
@@ -15,28 +15,25 @@ class ProblemRepositoryImpl implements IProblemRepository {
   final Database _database;
 
   @override
-  Future<List<FullProblem>> createProblems({
+  Future<List<FullProblemDto>> createProblems({
     required List<PartialProblem> problems,
   }) async {
-    final resultList = <FullProblem>[];
+    final list = <FullProblemDto>[];
     for (final problem in problems) {
       final dto = PartialProblemDto.fromEntity(problem);
       final data = await _database
           .into(_database.problems)
           .insertReturning(dto.toCompanion());
-      final result = FullProblemDto.fromData(data).toEntity();
-      resultList.add(result);
+      final result = FullProblemDto.fromData(data);
+      list.add(result);
     }
 
-    return resultList;
+    return list;
   }
 
   @override
-  Stream<List<FullProblem>> watchProblems({required int requestId}) =>
+  Stream<List<Problem>> watchProblems({required int requestId}) =>
       (_database.select(
         _database.problems,
-      )..where((row) => row.requestId.equals(requestId))).watch().map(
-        (rows) =>
-            rows.map((row) => FullProblemDto.fromData(row).toEntity()).toList(),
-      );
+      )..where((row) => row.requestId.equals(requestId))).watch();
 }

@@ -1,3 +1,9 @@
+import '../../../chat/chat.dart';
+import '../../../profile/profile.dart';
+import '../../../specialization/specialization.dart';
+import '../../repair_request.dart';
+import 'status.dart';
+
 enum Priority {
   ordinary(value: 'Обычный'),
   high(value: 'Высокий');
@@ -13,49 +19,29 @@ enum Priority {
   }
 }
 
-enum Status {
-  newRequest(value: 'Создан'),
-  inProgress(value: 'В работе'),
-  completed(value: 'Выполнен');
-
-  const Status({required this.value});
-  final String value;
-
-  factory Status.fromValue(String status) {
-    return values.firstWhere(
-      (element) => element.value == status,
-      orElse: () => throw FormatException('Unknown status: $status'),
-    );
-  }
-}
-
 sealed class RepairRequestEntity {
   const RepairRequestEntity({
-    required this.specId,
     required this.description,
     required this.priority,
-    required this.status,
-    required this.studentAbsent,
     required this.date,
     required this.startTime,
     required this.endTime,
+    required this.currentStatus,
   });
 
-  final int specId;
   final String description;
   final Priority priority;
-  final Status status;
-  final bool studentAbsent;
   final DateTime date;
   final int startTime;
   final int endTime;
+  final StatusEnum currentStatus;
 
   const factory RepairRequestEntity.partial({
     required final int specId,
     required final String description,
     required final Priority priority,
-    required final Status status,
-    required final bool studentAbsent,
+    required final StatusEnum currentStatus,
+    required final List<StatusEntity> status,
     required final DateTime date,
     required final int startTime,
     required final int endTime,
@@ -63,54 +49,59 @@ sealed class RepairRequestEntity {
   }) = PartialRepairRequest;
 
   const factory RepairRequestEntity.full({
-    required final int id,
-    required final String uid,
-    required final int specId,
     required final String description,
     required final Priority priority,
-    required final Status status,
-    required final bool studentAbsent,
+    required final StatusEnum currentStatus,
+    required final List<StatusEntity> status,
     required final DateTime date,
     required final int startTime,
     required final int endTime,
+    required final int id,
+    required final FullStudent student,
+    required final SpecializationEntity specialization,
+    required final List<FullProblem> problems,
+    required final FullChat chat,
+    required final MasterEntity? master,
     required final DateTime createdAt,
   }) = FullRepairRequest;
 }
 
 final class PartialRepairRequest extends RepairRequestEntity {
   const PartialRepairRequest({
-    required super.specId,
     required super.description,
     required super.priority,
-    required super.status,
-    required super.studentAbsent,
     required super.date,
     required super.startTime,
     required super.endTime,
+    required super.currentStatus,
+    required this.specId,
+    required this.status,
     required this.problems,
   });
 
+  final int specId;
+  final List<StatusEntity> status;
   final List<String> problems;
 
   PartialRepairRequest copyWith({
     int? specId,
     String? description,
     Priority? priority,
-    Status? status,
-    bool? studentAbsent,
+    List<StatusEntity>? status,
     DateTime? date,
     int? startTime,
     int? endTime,
+    StatusEnum? currentStatus,
     List<String>? problems,
   }) => PartialRepairRequest(
     specId: specId ?? this.specId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
     status: status ?? this.status,
-    studentAbsent: studentAbsent ?? this.studentAbsent,
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
+    currentStatus: currentStatus ?? this.currentStatus,
     problems: problems ?? this.problems,
   );
 
@@ -119,11 +110,12 @@ final class PartialRepairRequest extends RepairRequestEntity {
       'PartialRepairRequest('
       'specId: $specId, '
       'description: $description, '
+      'status: $status, '
       'priority: $priority, '
-      'studentAbsent: $studentAbsent, '
       'date: $date, '
       'startTime: $startTime, '
       'endTime: $endTime, '
+      'currentStatus: $currentStatus, '
       'problems: $problems)';
 
   @override
@@ -132,11 +124,12 @@ final class PartialRepairRequest extends RepairRequestEntity {
     return other is PartialRepairRequest &&
         other.specId == specId &&
         other.description == description &&
+        other.status == status &&
         other.priority == priority &&
-        other.studentAbsent == studentAbsent &&
         other.date == date &&
         other.startTime == startTime &&
         other.endTime == endTime &&
+        other.currentStatus == currentStatus &&
         other.problems == problems;
   }
 
@@ -144,73 +137,91 @@ final class PartialRepairRequest extends RepairRequestEntity {
   int get hashCode => Object.hash(
     specId,
     description,
+    status,
     priority,
-    studentAbsent,
     date,
     startTime,
     endTime,
+    currentStatus,
     problems,
   );
 }
 
 final class FullRepairRequest extends RepairRequestEntity {
   const FullRepairRequest({
-    required this.id,
-    required this.uid,
-    required super.specId,
     required super.description,
     required super.priority,
-    required super.status,
-    required super.studentAbsent,
     required super.date,
     required super.startTime,
     required super.endTime,
+    required super.currentStatus,
+    required this.id,
+    required this.student,
+    required this.specialization,
+    required this.status,
+    required this.problems,
+    required this.chat,
+    required this.master,
     required this.createdAt,
   });
 
   final int id;
-  final String uid;
+  final FullStudent student;
+  final SpecializationEntity specialization;
+  final List<StatusEntity> status;
+  final List<FullProblem> problems;
+  final FullChat chat;
+  final MasterEntity? master;
   final DateTime createdAt;
 
   FullRepairRequest copyWith({
-    int? id,
-    String? uid,
-    int? specId,
     String? description,
     Priority? priority,
-    Status? status,
-    bool? studentAbsent,
+    List<StatusEntity>? status,
     DateTime? date,
     int? startTime,
     int? endTime,
+    StatusEnum? currentStatus,
+    int? id,
+    FullStudent? student,
+    SpecializationEntity? specialization,
+    List<FullProblem>? problems,
+    FullChat? chat,
+    MasterEntity? master,
     DateTime? createdAt,
   }) => FullRepairRequest(
     id: id ?? this.id,
-    uid: uid ?? this.uid,
-    specId: specId ?? this.specId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
     status: status ?? this.status,
-    studentAbsent: studentAbsent ?? this.studentAbsent,
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
+    currentStatus: currentStatus ?? this.currentStatus,
     endTime: endTime ?? this.endTime,
+    student: student ?? this.student,
+    specialization: specialization ?? this.specialization,
+    problems: problems ?? this.problems,
+    chat: chat ?? this.chat,
+    master: master ?? this.master,
     createdAt: createdAt ?? this.createdAt,
   );
 
   @override
   String toString() =>
       'FullRepairRequest('
-      'id: $id,'
-      'uid: $uid, '
-      'specId: $specId, '
+      'id: $id, '
       'description: $description, '
       'priority: $priority, '
       'status: $status, '
-      'studentAbsent: $studentAbsent, '
+      'currentStatus: $currentStatus, '
       'date: $date, '
       'startTime: $startTime, '
       'endTime: $endTime, '
+      'student: $student, '
+      'specialization: $specialization, '
+      'problems: $problems, '
+      'chat: $chat, '
+      'master: $master, '
       'createdAt: $createdAt)';
 
   @override

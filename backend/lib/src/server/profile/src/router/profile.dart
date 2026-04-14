@@ -43,13 +43,7 @@ class ProfileRouter {
   Future<Response> _getStudent(String uid) async {
     final student = await _studentRepository.getStudent(uid: uid);
 
-    if (student == null) {
-      throw NotFoundException(
-        error: {'message': 'Student not found for the given uid.'},
-      );
-    }
-
-    final json = FullStudentDto.fromEntity(student).toJson();
+    final json = student.toJson();
     return _restApi.send(
       statusCode: 200,
       responseBody: {

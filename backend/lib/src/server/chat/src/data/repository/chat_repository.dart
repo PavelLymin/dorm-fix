@@ -2,7 +2,7 @@ import '../../../../../core/database/database.dart';
 import '../../../chat.dart';
 
 abstract interface class IChatRepository {
-  Future<FullChat> createChat({required PartialChat chat});
+  Future<FullChatDto> createChat({required PartialChat chat});
 
   Stream<FullChat> watchChat({required int requestId});
 
@@ -17,13 +17,13 @@ class ChatRepositoryImpl implements IChatRepository {
   final Database _database;
 
   @override
-  Future<FullChat> createChat({required PartialChat chat}) async {
+  Future<FullChatDto> createChat({required PartialChat chat}) async {
     final dto = PartialChatDto.fromEntity(chat);
     final data = await _database
         .into(_database.chats)
         .insertReturning(dto.toCompanion());
 
-    final result = FullChatDto.fromData(chat: data).toEntity();
+    final result = FullChatDto.fromData(chat: data);
 
     return result;
   }

@@ -95,6 +95,8 @@ class CompositionRoot {
     final assignmentsRepository = AssignmentsRepositoryImpl(database: database);
     // RepairRequest
     final requestRepository = RequestRepositoryImpl(database: database);
+
+    final statusRepository = StatusRepositoryImpl(database: database);
     final requestFacade = RepairRequestFacadeImpl(
       database: database,
       requestRepository: requestRepository,
@@ -102,6 +104,8 @@ class CompositionRoot {
       chatRepository: chatRepository,
       assignmentsRepository: assignmentsRepository,
       specRepository: specializationRepository,
+      studentRepository: studentRepository,
+      statusRepository: statusRepository,
     );
 
     // <--- RealTime Repositories --->

@@ -7,7 +7,7 @@ class DateTimeConverter extends TypeConverter<DateTime, String> {
   DateTime fromSql(String fromDb) => DateTime.parse(fromDb);
 
   @override
-  String toSql(DateTime value) => value.toLocal().toString();
+  String toSql(DateTime value) => value.toUtc().toIso8601String();
 }
 
 class Users extends Table {
@@ -73,11 +73,21 @@ class Requests extends Table {
       integer().named('spec_id').references(Specializations, #id)();
   TextColumn get description => text().named('description')();
   TextColumn get priority => text().named('priority')();
-  TextColumn get status => text().named('status')();
-  BoolColumn get studentAbsent => boolean().named('student_absent')();
   TextColumn get date => text().map(const DateTimeConverter()).named('date')();
   IntColumn get startTime => integer().named('start_time')();
   IntColumn get endTime => integer().named('end_time')();
+  TextColumn get currentStatus => text().named('current_status')();
+  TextColumn get createdAt => text()
+      .named('created_at')
+      .map(const DateTimeConverter())
+      .withDefault(currentDateAndTime.datetime)();
+}
+
+class Statuses extends Table {
+  IntColumn get id => integer().named('id').autoIncrement()();
+  IntColumn get requestId =>
+      integer().named('request_id').references(Requests, #id)();
+  TextColumn get title => text().named('title')();
   TextColumn get createdAt => text()
       .named('created_at')
       .map(const DateTimeConverter())

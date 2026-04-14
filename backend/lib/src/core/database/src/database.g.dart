@@ -2247,29 +2247,6 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _statusMeta = const VerificationMeta('status');
-  @override
-  late final GeneratedColumn<String> status = GeneratedColumn<String>(
-    'status',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _studentAbsentMeta = const VerificationMeta(
-    'studentAbsent',
-  );
-  @override
-  late final GeneratedColumn<bool> studentAbsent = GeneratedColumn<bool>(
-    'student_absent',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("student_absent" IN (0, 1))',
-    ),
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, String> date =
       GeneratedColumn<String>(
@@ -2301,6 +2278,17 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _currentStatusMeta = const VerificationMeta(
+    'currentStatus',
+  );
+  @override
+  late final GeneratedColumn<String> currentStatus = GeneratedColumn<String>(
+    'current_status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, String> createdAt =
       GeneratedColumn<String>(
@@ -2318,11 +2306,10 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
     specId,
     description,
     priority,
-    status,
-    studentAbsent,
     date,
     startTime,
     endTime,
+    currentStatus,
     createdAt,
   ];
   @override
@@ -2375,25 +2362,6 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
     } else if (isInserting) {
       context.missing(_priorityMeta);
     }
-    if (data.containsKey('status')) {
-      context.handle(
-        _statusMeta,
-        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_statusMeta);
-    }
-    if (data.containsKey('student_absent')) {
-      context.handle(
-        _studentAbsentMeta,
-        studentAbsent.isAcceptableOrUnknown(
-          data['student_absent']!,
-          _studentAbsentMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_studentAbsentMeta);
-    }
     if (data.containsKey('start_time')) {
       context.handle(
         _startTimeMeta,
@@ -2409,6 +2377,17 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
       );
     } else if (isInserting) {
       context.missing(_endTimeMeta);
+    }
+    if (data.containsKey('current_status')) {
+      context.handle(
+        _currentStatusMeta,
+        currentStatus.isAcceptableOrUnknown(
+          data['current_status']!,
+          _currentStatusMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_currentStatusMeta);
     }
     return context;
   }
@@ -2439,14 +2418,6 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
         DriftSqlType.string,
         data['${effectivePrefix}priority'],
       )!,
-      status: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}status'],
-      )!,
-      studentAbsent: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}student_absent'],
-      )!,
       date: $RequestsTable.$converterdate.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -2460,6 +2431,10 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
       endTime: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}end_time'],
+      )!,
+      currentStatus: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}current_status'],
       )!,
       createdAt: $RequestsTable.$convertercreatedAt.fromSql(
         attachedDatabase.typeMapping.read(
@@ -2487,11 +2462,10 @@ class Request extends DataClass implements Insertable<Request> {
   final int specId;
   final String description;
   final String priority;
-  final String status;
-  final bool studentAbsent;
   final DateTime date;
   final int startTime;
   final int endTime;
+  final String currentStatus;
   final DateTime createdAt;
   const Request({
     required this.id,
@@ -2499,11 +2473,10 @@ class Request extends DataClass implements Insertable<Request> {
     required this.specId,
     required this.description,
     required this.priority,
-    required this.status,
-    required this.studentAbsent,
     required this.date,
     required this.startTime,
     required this.endTime,
+    required this.currentStatus,
     required this.createdAt,
   });
   @override
@@ -2514,13 +2487,12 @@ class Request extends DataClass implements Insertable<Request> {
     map['spec_id'] = Variable<int>(specId);
     map['description'] = Variable<String>(description);
     map['priority'] = Variable<String>(priority);
-    map['status'] = Variable<String>(status);
-    map['student_absent'] = Variable<bool>(studentAbsent);
     {
       map['date'] = Variable<String>($RequestsTable.$converterdate.toSql(date));
     }
     map['start_time'] = Variable<int>(startTime);
     map['end_time'] = Variable<int>(endTime);
+    map['current_status'] = Variable<String>(currentStatus);
     {
       map['created_at'] = Variable<String>(
         $RequestsTable.$convertercreatedAt.toSql(createdAt),
@@ -2536,11 +2508,10 @@ class Request extends DataClass implements Insertable<Request> {
       specId: Value(specId),
       description: Value(description),
       priority: Value(priority),
-      status: Value(status),
-      studentAbsent: Value(studentAbsent),
       date: Value(date),
       startTime: Value(startTime),
       endTime: Value(endTime),
+      currentStatus: Value(currentStatus),
       createdAt: Value(createdAt),
     );
   }
@@ -2556,11 +2527,10 @@ class Request extends DataClass implements Insertable<Request> {
       specId: serializer.fromJson<int>(json['specId']),
       description: serializer.fromJson<String>(json['description']),
       priority: serializer.fromJson<String>(json['priority']),
-      status: serializer.fromJson<String>(json['status']),
-      studentAbsent: serializer.fromJson<bool>(json['studentAbsent']),
       date: serializer.fromJson<DateTime>(json['date']),
       startTime: serializer.fromJson<int>(json['startTime']),
       endTime: serializer.fromJson<int>(json['endTime']),
+      currentStatus: serializer.fromJson<String>(json['currentStatus']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -2573,11 +2543,10 @@ class Request extends DataClass implements Insertable<Request> {
       'specId': serializer.toJson<int>(specId),
       'description': serializer.toJson<String>(description),
       'priority': serializer.toJson<String>(priority),
-      'status': serializer.toJson<String>(status),
-      'studentAbsent': serializer.toJson<bool>(studentAbsent),
       'date': serializer.toJson<DateTime>(date),
       'startTime': serializer.toJson<int>(startTime),
       'endTime': serializer.toJson<int>(endTime),
+      'currentStatus': serializer.toJson<String>(currentStatus),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -2588,11 +2557,10 @@ class Request extends DataClass implements Insertable<Request> {
     int? specId,
     String? description,
     String? priority,
-    String? status,
-    bool? studentAbsent,
     DateTime? date,
     int? startTime,
     int? endTime,
+    String? currentStatus,
     DateTime? createdAt,
   }) => Request(
     id: id ?? this.id,
@@ -2600,11 +2568,10 @@ class Request extends DataClass implements Insertable<Request> {
     specId: specId ?? this.specId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
-    status: status ?? this.status,
-    studentAbsent: studentAbsent ?? this.studentAbsent,
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
+    currentStatus: currentStatus ?? this.currentStatus,
     createdAt: createdAt ?? this.createdAt,
   );
   Request copyWithCompanion(RequestsCompanion data) {
@@ -2616,13 +2583,12 @@ class Request extends DataClass implements Insertable<Request> {
           ? data.description.value
           : this.description,
       priority: data.priority.present ? data.priority.value : this.priority,
-      status: data.status.present ? data.status.value : this.status,
-      studentAbsent: data.studentAbsent.present
-          ? data.studentAbsent.value
-          : this.studentAbsent,
       date: data.date.present ? data.date.value : this.date,
       startTime: data.startTime.present ? data.startTime.value : this.startTime,
       endTime: data.endTime.present ? data.endTime.value : this.endTime,
+      currentStatus: data.currentStatus.present
+          ? data.currentStatus.value
+          : this.currentStatus,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -2635,11 +2601,10 @@ class Request extends DataClass implements Insertable<Request> {
           ..write('specId: $specId, ')
           ..write('description: $description, ')
           ..write('priority: $priority, ')
-          ..write('status: $status, ')
-          ..write('studentAbsent: $studentAbsent, ')
           ..write('date: $date, ')
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
+          ..write('currentStatus: $currentStatus, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -2652,11 +2617,10 @@ class Request extends DataClass implements Insertable<Request> {
     specId,
     description,
     priority,
-    status,
-    studentAbsent,
     date,
     startTime,
     endTime,
+    currentStatus,
     createdAt,
   );
   @override
@@ -2668,11 +2632,10 @@ class Request extends DataClass implements Insertable<Request> {
           other.specId == this.specId &&
           other.description == this.description &&
           other.priority == this.priority &&
-          other.status == this.status &&
-          other.studentAbsent == this.studentAbsent &&
           other.date == this.date &&
           other.startTime == this.startTime &&
           other.endTime == this.endTime &&
+          other.currentStatus == this.currentStatus &&
           other.createdAt == this.createdAt);
 }
 
@@ -2682,11 +2645,10 @@ class RequestsCompanion extends UpdateCompanion<Request> {
   final Value<int> specId;
   final Value<String> description;
   final Value<String> priority;
-  final Value<String> status;
-  final Value<bool> studentAbsent;
   final Value<DateTime> date;
   final Value<int> startTime;
   final Value<int> endTime;
+  final Value<String> currentStatus;
   final Value<DateTime> createdAt;
   const RequestsCompanion({
     this.id = const Value.absent(),
@@ -2694,11 +2656,10 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     this.specId = const Value.absent(),
     this.description = const Value.absent(),
     this.priority = const Value.absent(),
-    this.status = const Value.absent(),
-    this.studentAbsent = const Value.absent(),
     this.date = const Value.absent(),
     this.startTime = const Value.absent(),
     this.endTime = const Value.absent(),
+    this.currentStatus = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
   RequestsCompanion.insert({
@@ -2707,32 +2668,29 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     required int specId,
     required String description,
     required String priority,
-    required String status,
-    required bool studentAbsent,
     required DateTime date,
     required int startTime,
     required int endTime,
+    required String currentStatus,
     this.createdAt = const Value.absent(),
   }) : uid = Value(uid),
        specId = Value(specId),
        description = Value(description),
        priority = Value(priority),
-       status = Value(status),
-       studentAbsent = Value(studentAbsent),
        date = Value(date),
        startTime = Value(startTime),
-       endTime = Value(endTime);
+       endTime = Value(endTime),
+       currentStatus = Value(currentStatus);
   static Insertable<Request> custom({
     Expression<int>? id,
     Expression<String>? uid,
     Expression<int>? specId,
     Expression<String>? description,
     Expression<String>? priority,
-    Expression<String>? status,
-    Expression<bool>? studentAbsent,
     Expression<String>? date,
     Expression<int>? startTime,
     Expression<int>? endTime,
+    Expression<String>? currentStatus,
     Expression<String>? createdAt,
   }) {
     return RawValuesInsertable({
@@ -2741,11 +2699,10 @@ class RequestsCompanion extends UpdateCompanion<Request> {
       if (specId != null) 'spec_id': specId,
       if (description != null) 'description': description,
       if (priority != null) 'priority': priority,
-      if (status != null) 'status': status,
-      if (studentAbsent != null) 'student_absent': studentAbsent,
       if (date != null) 'date': date,
       if (startTime != null) 'start_time': startTime,
       if (endTime != null) 'end_time': endTime,
+      if (currentStatus != null) 'current_status': currentStatus,
       if (createdAt != null) 'created_at': createdAt,
     });
   }
@@ -2756,11 +2713,10 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     Value<int>? specId,
     Value<String>? description,
     Value<String>? priority,
-    Value<String>? status,
-    Value<bool>? studentAbsent,
     Value<DateTime>? date,
     Value<int>? startTime,
     Value<int>? endTime,
+    Value<String>? currentStatus,
     Value<DateTime>? createdAt,
   }) {
     return RequestsCompanion(
@@ -2769,11 +2725,10 @@ class RequestsCompanion extends UpdateCompanion<Request> {
       specId: specId ?? this.specId,
       description: description ?? this.description,
       priority: priority ?? this.priority,
-      status: status ?? this.status,
-      studentAbsent: studentAbsent ?? this.studentAbsent,
       date: date ?? this.date,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
+      currentStatus: currentStatus ?? this.currentStatus,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -2796,12 +2751,6 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     if (priority.present) {
       map['priority'] = Variable<String>(priority.value);
     }
-    if (status.present) {
-      map['status'] = Variable<String>(status.value);
-    }
-    if (studentAbsent.present) {
-      map['student_absent'] = Variable<bool>(studentAbsent.value);
-    }
     if (date.present) {
       map['date'] = Variable<String>(
         $RequestsTable.$converterdate.toSql(date.value),
@@ -2812,6 +2761,9 @@ class RequestsCompanion extends UpdateCompanion<Request> {
     }
     if (endTime.present) {
       map['end_time'] = Variable<int>(endTime.value);
+    }
+    if (currentStatus.present) {
+      map['current_status'] = Variable<String>(currentStatus.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<String>(
@@ -2829,11 +2781,311 @@ class RequestsCompanion extends UpdateCompanion<Request> {
           ..write('specId: $specId, ')
           ..write('description: $description, ')
           ..write('priority: $priority, ')
-          ..write('status: $status, ')
-          ..write('studentAbsent: $studentAbsent, ')
           ..write('date: $date, ')
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
+          ..write('currentStatus: $currentStatus, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $StatusesTable extends Statuses with TableInfo<$StatusesTable, Statuse> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $StatusesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _requestIdMeta = const VerificationMeta(
+    'requestId',
+  );
+  @override
+  late final GeneratedColumn<int> requestId = GeneratedColumn<int>(
+    'request_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES requests (id)',
+    ),
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, String> createdAt =
+      GeneratedColumn<String>(
+        'created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: currentDateAndTime.datetime,
+      ).withConverter<DateTime>($StatusesTable.$convertercreatedAt);
+  @override
+  List<GeneratedColumn> get $columns => [id, requestId, title, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'statuses';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Statuse> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('request_id')) {
+      context.handle(
+        _requestIdMeta,
+        requestId.isAcceptableOrUnknown(data['request_id']!, _requestIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_requestIdMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Statuse map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Statuse(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      requestId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}request_id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      createdAt: $StatusesTable.$convertercreatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}created_at'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $StatusesTable createAlias(String alias) {
+    return $StatusesTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, String> $convertercreatedAt =
+      const DateTimeConverter();
+}
+
+class Statuse extends DataClass implements Insertable<Statuse> {
+  final int id;
+  final int requestId;
+  final String title;
+  final DateTime createdAt;
+  const Statuse({
+    required this.id,
+    required this.requestId,
+    required this.title,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['request_id'] = Variable<int>(requestId);
+    map['title'] = Variable<String>(title);
+    {
+      map['created_at'] = Variable<String>(
+        $StatusesTable.$convertercreatedAt.toSql(createdAt),
+      );
+    }
+    return map;
+  }
+
+  StatusesCompanion toCompanion(bool nullToAbsent) {
+    return StatusesCompanion(
+      id: Value(id),
+      requestId: Value(requestId),
+      title: Value(title),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory Statuse.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Statuse(
+      id: serializer.fromJson<int>(json['id']),
+      requestId: serializer.fromJson<int>(json['requestId']),
+      title: serializer.fromJson<String>(json['title']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'requestId': serializer.toJson<int>(requestId),
+      'title': serializer.toJson<String>(title),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  Statuse copyWith({
+    int? id,
+    int? requestId,
+    String? title,
+    DateTime? createdAt,
+  }) => Statuse(
+    id: id ?? this.id,
+    requestId: requestId ?? this.requestId,
+    title: title ?? this.title,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  Statuse copyWithCompanion(StatusesCompanion data) {
+    return Statuse(
+      id: data.id.present ? data.id.value : this.id,
+      requestId: data.requestId.present ? data.requestId.value : this.requestId,
+      title: data.title.present ? data.title.value : this.title,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Statuse(')
+          ..write('id: $id, ')
+          ..write('requestId: $requestId, ')
+          ..write('title: $title, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, requestId, title, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Statuse &&
+          other.id == this.id &&
+          other.requestId == this.requestId &&
+          other.title == this.title &&
+          other.createdAt == this.createdAt);
+}
+
+class StatusesCompanion extends UpdateCompanion<Statuse> {
+  final Value<int> id;
+  final Value<int> requestId;
+  final Value<String> title;
+  final Value<DateTime> createdAt;
+  const StatusesCompanion({
+    this.id = const Value.absent(),
+    this.requestId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  StatusesCompanion.insert({
+    this.id = const Value.absent(),
+    required int requestId,
+    required String title,
+    this.createdAt = const Value.absent(),
+  }) : requestId = Value(requestId),
+       title = Value(title);
+  static Insertable<Statuse> custom({
+    Expression<int>? id,
+    Expression<int>? requestId,
+    Expression<String>? title,
+    Expression<String>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (requestId != null) 'request_id': requestId,
+      if (title != null) 'title': title,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  StatusesCompanion copyWith({
+    Value<int>? id,
+    Value<int>? requestId,
+    Value<String>? title,
+    Value<DateTime>? createdAt,
+  }) {
+    return StatusesCompanion(
+      id: id ?? this.id,
+      requestId: requestId ?? this.requestId,
+      title: title ?? this.title,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (requestId.present) {
+      map['request_id'] = Variable<int>(requestId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<String>(
+        $StatusesTable.$convertercreatedAt.toSql(createdAt.value),
+      );
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StatusesCompanion(')
+          ..write('id: $id, ')
+          ..write('requestId: $requestId, ')
+          ..write('title: $title, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -4258,6 +4510,7 @@ abstract class _$Database extends GeneratedDatabase {
   );
   late final $MastersTable masters = $MastersTable(this);
   late final $RequestsTable requests = $RequestsTable(this);
+  late final $StatusesTable statuses = $StatusesTable(this);
   late final $ProblemsTable problems = $ProblemsTable(this);
   late final $AssignmentsTable assignments = $AssignmentsTable(this);
   late final $ChatsTable chats = $ChatsTable(this);
@@ -4275,6 +4528,7 @@ abstract class _$Database extends GeneratedDatabase {
     specializations,
     masters,
     requests,
+    statuses,
     problems,
     assignments,
     chats,
@@ -7319,11 +7573,10 @@ typedef $$RequestsTableCreateCompanionBuilder =
       required int specId,
       required String description,
       required String priority,
-      required String status,
-      required bool studentAbsent,
       required DateTime date,
       required int startTime,
       required int endTime,
+      required String currentStatus,
       Value<DateTime> createdAt,
     });
 typedef $$RequestsTableUpdateCompanionBuilder =
@@ -7333,11 +7586,10 @@ typedef $$RequestsTableUpdateCompanionBuilder =
       Value<int> specId,
       Value<String> description,
       Value<String> priority,
-      Value<String> status,
-      Value<bool> studentAbsent,
       Value<DateTime> date,
       Value<int> startTime,
       Value<int> endTime,
+      Value<String> currentStatus,
       Value<DateTime> createdAt,
     });
 
@@ -7378,6 +7630,25 @@ final class $$RequestsTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$StatusesTable, List<Statuse>> _statusesRefsTable(
+    _$Database db,
+  ) => MultiTypedResultKey.fromTable(
+    db.statuses,
+    aliasName: $_aliasNameGenerator(db.requests.id, db.statuses.requestId),
+  );
+
+  $$StatusesTableProcessedTableManager get statusesRefs {
+    final manager = $$StatusesTableTableManager(
+      $_db,
+      $_db.statuses,
+    ).filter((f) => f.requestId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_statusesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 
@@ -7462,16 +7733,6 @@ class $$RequestsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get status => $composableBuilder(
-    column: $table.status,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get studentAbsent => $composableBuilder(
-    column: $table.studentAbsent,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnWithTypeConverterFilters<DateTime, DateTime, String> get date =>
       $composableBuilder(
         column: $table.date,
@@ -7485,6 +7746,11 @@ class $$RequestsTableFilterComposer
 
   ColumnFilters<int> get endTime => $composableBuilder(
     column: $table.endTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get currentStatus => $composableBuilder(
+    column: $table.currentStatus,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7538,6 +7804,31 @@ class $$RequestsTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> statusesRefs(
+    Expression<bool> Function($$StatusesTableFilterComposer f) f,
+  ) {
+    final $$StatusesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.statuses,
+      getReferencedColumn: (t) => t.requestId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$StatusesTableFilterComposer(
+            $db: $db,
+            $table: $db.statuses,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 
   Expression<bool> problemsRefs(
@@ -7640,16 +7931,6 @@ class $$RequestsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get status => $composableBuilder(
-    column: $table.status,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<bool> get studentAbsent => $composableBuilder(
-    column: $table.studentAbsent,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get date => $composableBuilder(
     column: $table.date,
     builder: (column) => ColumnOrderings(column),
@@ -7662,6 +7943,11 @@ class $$RequestsTableOrderingComposer
 
   ColumnOrderings<int> get endTime => $composableBuilder(
     column: $table.endTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get currentStatus => $composableBuilder(
+    column: $table.currentStatus,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -7737,14 +8023,6 @@ class $$RequestsTableAnnotationComposer
   GeneratedColumn<String> get priority =>
       $composableBuilder(column: $table.priority, builder: (column) => column);
 
-  GeneratedColumn<String> get status =>
-      $composableBuilder(column: $table.status, builder: (column) => column);
-
-  GeneratedColumn<bool> get studentAbsent => $composableBuilder(
-    column: $table.studentAbsent,
-    builder: (column) => column,
-  );
-
   GeneratedColumnWithTypeConverter<DateTime, String> get date =>
       $composableBuilder(column: $table.date, builder: (column) => column);
 
@@ -7753,6 +8031,11 @@ class $$RequestsTableAnnotationComposer
 
   GeneratedColumn<int> get endTime =>
       $composableBuilder(column: $table.endTime, builder: (column) => column);
+
+  GeneratedColumn<String> get currentStatus => $composableBuilder(
+    column: $table.currentStatus,
+    builder: (column) => column,
+  );
 
   GeneratedColumnWithTypeConverter<DateTime, String> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -7801,6 +8084,31 @@ class $$RequestsTableAnnotationComposer
           ),
     );
     return composer;
+  }
+
+  Expression<T> statusesRefs<T extends Object>(
+    Expression<T> Function($$StatusesTableAnnotationComposer a) f,
+  ) {
+    final $$StatusesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.statuses,
+      getReferencedColumn: (t) => t.requestId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$StatusesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.statuses,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 
   Expression<T> problemsRefs<T extends Object>(
@@ -7895,6 +8203,7 @@ class $$RequestsTableTableManager
           PrefetchHooks Function({
             bool uid,
             bool specId,
+            bool statusesRefs,
             bool problemsRefs,
             bool assignmentsRefs,
             bool chatsRefs,
@@ -7918,11 +8227,10 @@ class $$RequestsTableTableManager
                 Value<int> specId = const Value.absent(),
                 Value<String> description = const Value.absent(),
                 Value<String> priority = const Value.absent(),
-                Value<String> status = const Value.absent(),
-                Value<bool> studentAbsent = const Value.absent(),
                 Value<DateTime> date = const Value.absent(),
                 Value<int> startTime = const Value.absent(),
                 Value<int> endTime = const Value.absent(),
+                Value<String> currentStatus = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => RequestsCompanion(
                 id: id,
@@ -7930,11 +8238,10 @@ class $$RequestsTableTableManager
                 specId: specId,
                 description: description,
                 priority: priority,
-                status: status,
-                studentAbsent: studentAbsent,
                 date: date,
                 startTime: startTime,
                 endTime: endTime,
+                currentStatus: currentStatus,
                 createdAt: createdAt,
               ),
           createCompanionCallback:
@@ -7944,11 +8251,10 @@ class $$RequestsTableTableManager
                 required int specId,
                 required String description,
                 required String priority,
-                required String status,
-                required bool studentAbsent,
                 required DateTime date,
                 required int startTime,
                 required int endTime,
+                required String currentStatus,
                 Value<DateTime> createdAt = const Value.absent(),
               }) => RequestsCompanion.insert(
                 id: id,
@@ -7956,11 +8262,10 @@ class $$RequestsTableTableManager
                 specId: specId,
                 description: description,
                 priority: priority,
-                status: status,
-                studentAbsent: studentAbsent,
                 date: date,
                 startTime: startTime,
                 endTime: endTime,
+                currentStatus: currentStatus,
                 createdAt: createdAt,
               ),
           withReferenceMapper: (p0) => p0
@@ -7975,6 +8280,7 @@ class $$RequestsTableTableManager
               ({
                 uid = false,
                 specId = false,
+                statusesRefs = false,
                 problemsRefs = false,
                 assignmentsRefs = false,
                 chatsRefs = false,
@@ -7982,6 +8288,7 @@ class $$RequestsTableTableManager
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
+                    if (statusesRefs) db.statuses,
                     if (problemsRefs) db.problems,
                     if (assignmentsRefs) db.assignments,
                     if (chatsRefs) db.chats,
@@ -8033,6 +8340,27 @@ class $$RequestsTableTableManager
                       },
                   getPrefetchedDataCallback: (items) async {
                     return [
+                      if (statusesRefs)
+                        await $_getPrefetchedData<
+                          Request,
+                          $RequestsTable,
+                          Statuse
+                        >(
+                          currentTable: table,
+                          referencedTable: $$RequestsTableReferences
+                              ._statusesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$RequestsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).statusesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.requestId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                       if (problemsRefs)
                         await $_getPrefetchedData<
                           Request,
@@ -8119,10 +8447,304 @@ typedef $$RequestsTableProcessedTableManager =
       PrefetchHooks Function({
         bool uid,
         bool specId,
+        bool statusesRefs,
         bool problemsRefs,
         bool assignmentsRefs,
         bool chatsRefs,
       })
+    >;
+typedef $$StatusesTableCreateCompanionBuilder =
+    StatusesCompanion Function({
+      Value<int> id,
+      required int requestId,
+      required String title,
+      Value<DateTime> createdAt,
+    });
+typedef $$StatusesTableUpdateCompanionBuilder =
+    StatusesCompanion Function({
+      Value<int> id,
+      Value<int> requestId,
+      Value<String> title,
+      Value<DateTime> createdAt,
+    });
+
+final class $$StatusesTableReferences
+    extends BaseReferences<_$Database, $StatusesTable, Statuse> {
+  $$StatusesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $RequestsTable _requestIdTable(_$Database db) => db.requests
+      .createAlias($_aliasNameGenerator(db.statuses.requestId, db.requests.id));
+
+  $$RequestsTableProcessedTableManager get requestId {
+    final $_column = $_itemColumn<int>('request_id')!;
+
+    final manager = $$RequestsTableTableManager(
+      $_db,
+      $_db.requests,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_requestIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$StatusesTableFilterComposer
+    extends Composer<_$Database, $StatusesTable> {
+  $$StatusesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get createdAt =>
+      $composableBuilder(
+        column: $table.createdAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $$RequestsTableFilterComposer get requestId {
+    final $$RequestsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.requestId,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableFilterComposer(
+            $db: $db,
+            $table: $db.requests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$StatusesTableOrderingComposer
+    extends Composer<_$Database, $StatusesTable> {
+  $$StatusesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$RequestsTableOrderingComposer get requestId {
+    final $$RequestsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.requestId,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableOrderingComposer(
+            $db: $db,
+            $table: $db.requests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$StatusesTableAnnotationComposer
+    extends Composer<_$Database, $StatusesTable> {
+  $$StatusesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, String> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$RequestsTableAnnotationComposer get requestId {
+    final $$RequestsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.requestId,
+      referencedTable: $db.requests,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RequestsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.requests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$StatusesTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $StatusesTable,
+          Statuse,
+          $$StatusesTableFilterComposer,
+          $$StatusesTableOrderingComposer,
+          $$StatusesTableAnnotationComposer,
+          $$StatusesTableCreateCompanionBuilder,
+          $$StatusesTableUpdateCompanionBuilder,
+          (Statuse, $$StatusesTableReferences),
+          Statuse,
+          PrefetchHooks Function({bool requestId})
+        > {
+  $$StatusesTableTableManager(_$Database db, $StatusesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$StatusesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$StatusesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$StatusesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> requestId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => StatusesCompanion(
+                id: id,
+                requestId: requestId,
+                title: title,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int requestId,
+                required String title,
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => StatusesCompanion.insert(
+                id: id,
+                requestId: requestId,
+                title: title,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$StatusesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({requestId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (requestId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.requestId,
+                                referencedTable: $$StatusesTableReferences
+                                    ._requestIdTable(db),
+                                referencedColumn: $$StatusesTableReferences
+                                    ._requestIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$StatusesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $StatusesTable,
+      Statuse,
+      $$StatusesTableFilterComposer,
+      $$StatusesTableOrderingComposer,
+      $$StatusesTableAnnotationComposer,
+      $$StatusesTableCreateCompanionBuilder,
+      $$StatusesTableUpdateCompanionBuilder,
+      (Statuse, $$StatusesTableReferences),
+      Statuse,
+      PrefetchHooks Function({bool requestId})
     >;
 typedef $$ProblemsTableCreateCompanionBuilder =
     ProblemsCompanion Function({
@@ -10011,6 +10633,8 @@ class $DatabaseManager {
       $$MastersTableTableManager(_db, _db.masters);
   $$RequestsTableTableManager get requests =>
       $$RequestsTableTableManager(_db, _db.requests);
+  $$StatusesTableTableManager get statuses =>
+      $$StatusesTableTableManager(_db, _db.statuses);
   $$ProblemsTableTableManager get problems =>
       $$ProblemsTableTableManager(_db, _db.problems);
   $$AssignmentsTableTableManager get assignments =>
