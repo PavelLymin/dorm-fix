@@ -41,7 +41,6 @@ sealed class RepairRequestEntity {
     required final String description,
     required final Priority priority,
     required final StatusEnum currentStatus,
-    required final List<StatusEntity> status,
     required final DateTime date,
     required final int startTime,
     required final int endTime,
@@ -75,19 +74,16 @@ final class PartialRepairRequest extends RepairRequestEntity {
     required super.endTime,
     required super.currentStatus,
     required this.specId,
-    required this.status,
     required this.problems,
   });
 
   final int specId;
-  final List<StatusEntity> status;
   final List<String> problems;
 
   PartialRepairRequest copyWith({
     int? specId,
     String? description,
     Priority? priority,
-    List<StatusEntity>? status,
     DateTime? date,
     int? startTime,
     int? endTime,
@@ -97,7 +93,6 @@ final class PartialRepairRequest extends RepairRequestEntity {
     specId: specId ?? this.specId,
     description: description ?? this.description,
     priority: priority ?? this.priority,
-    status: status ?? this.status,
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
@@ -110,7 +105,6 @@ final class PartialRepairRequest extends RepairRequestEntity {
       'PartialRepairRequest('
       'specId: $specId, '
       'description: $description, '
-      'status: $status, '
       'priority: $priority, '
       'date: $date, '
       'startTime: $startTime, '
@@ -124,7 +118,6 @@ final class PartialRepairRequest extends RepairRequestEntity {
     return other is PartialRepairRequest &&
         other.specId == specId &&
         other.description == description &&
-        other.status == status &&
         other.priority == priority &&
         other.date == date &&
         other.startTime == startTime &&
@@ -137,7 +130,6 @@ final class PartialRepairRequest extends RepairRequestEntity {
   int get hashCode => Object.hash(
     specId,
     description,
-    status,
     priority,
     date,
     startTime,
@@ -155,10 +147,10 @@ final class FullRepairRequest extends RepairRequestEntity {
     required super.startTime,
     required super.endTime,
     required super.currentStatus,
+    required this.status,
     required this.id,
     required this.student,
     required this.specialization,
-    required this.status,
     required this.problems,
     required this.chat,
     required this.master,
@@ -168,8 +160,8 @@ final class FullRepairRequest extends RepairRequestEntity {
   final int id;
   final FullStudent student;
   final SpecializationEntity specialization;
-  final List<StatusEntity> status;
   final List<FullProblem> problems;
+  final List<StatusEntity> status;
   final FullChat chat;
   final MasterEntity? master;
   final DateTime createdAt;

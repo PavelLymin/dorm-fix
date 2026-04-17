@@ -7,7 +7,7 @@ abstract interface class IRequestRepository {
     bool uid = false,
     int? specId,
     int? dormId,
-    Status? status,
+    StatusEnum? status,
   });
 
   Future<FullRepairRequest> createRequest({
@@ -29,7 +29,7 @@ class RequestRepositoryImpl implements IRequestRepository {
     bool uid = false,
     int? specId,
     int? dormId,
-    Status? status,
+    StatusEnum? status,
   }) async* {
     final token = await _firebaseAuth.currentUser?.getIdToken();
     yield* _client

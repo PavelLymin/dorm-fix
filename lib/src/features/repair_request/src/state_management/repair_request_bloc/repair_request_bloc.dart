@@ -4,7 +4,6 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
 import '../../../request.dart';
-import '../../data/repository/problem_repository.dart';
 import '../request_form_bloc/request_form_model.dart';
 
 part 'repair_request_event.dart';
@@ -22,7 +21,7 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
         get: (event) => _getRequest(event, emit),
         create: (event) => _create(event, emit),
       );
-    }, transformer: droppable());
+    }, transformer: restartable());
   }
 
   final IRequestRepository _requestRepository;
@@ -34,18 +33,16 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
     Emitter<RepairRequestState> emit,
   ) async {
     try {
-      StreamSubscription? subscription;
-
-      subscription = _requestRepository
-          .getRequests(
-            uid: event.uid,
-            specId: event.specId,
-            dormId: event.dormId,
-            status: event.status,
-          )
-          .listen((requests) {
-            emit(.loaded(requests: requests));
-          }, onDone: () => subscription?.cancel());
+      await emit.forEach(
+        _requestRepository.getRequests(
+          uid: event.uid,
+          specId: event.specId,
+          dormId: event.dormId,
+          status: event.status,
+        ),
+        onData: (data) => .loaded(requests: data),
+        onError: (error, _) => .error(requests: state.requests, message: error),
+      );
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
       emit(.error(requests: state.requests, message: e));

@@ -17,10 +17,9 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
       foregroundAccent: Color(0xFF141414),
       disabled: Color(0xFFC2C2C2),
       disabledIcon: Color(0xFFD6D6D6),
-      inputPlaceholder: Color(0xFFEBEBEB),
+      action: Color(0xFFEBEBEB),
       card: Color(0xFFFFFFFF),
       destructive: Color(0xFFE84040),
-      step: Color(0xFFEBEBEB),
     );
   }
 
@@ -36,10 +35,9 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
     foregroundAccent: Color(0xFFFFFFFF),
     disabled: Color(0xFFC2C2C2),
     disabledIcon: Color(0xFFD6D6D6),
-    inputPlaceholder: Color(0xFFEBEBEB),
+    action: Color(0xFFEBEBEB),
     card: Color(0xFFFFFFFF),
     destructive: Color(0xFFE84040),
-    step: Color(0xFFEBEBEB),
   );
 }
 
@@ -56,10 +54,9 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     required this.foregroundAccent,
     required this.disabled,
     required this.disabledIcon,
-    required this.inputPlaceholder,
+    required this.action,
     required this.card,
     required this.destructive,
-    required this.step,
   });
 
   final Color background;
@@ -73,10 +70,9 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
   final Color foregroundAccent;
   final Color disabled;
   final Color disabledIcon;
-  final Color inputPlaceholder;
+  final Color action;
   final Color card;
   final Color destructive;
-  final Color step;
 
   @override
   ThemeExtension<ColorPalette2> copyWith({
@@ -91,7 +87,7 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     Color? foregroundAccent,
     Color? disabled,
     Color? disabledIcon,
-    Color? inputPlaceholder,
+    Color? action,
     Color? card,
     Color? destructive,
     Color? step,
@@ -107,10 +103,9 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     foregroundAccent: foregroundAccent ?? this.foregroundAccent,
     disabled: disabled ?? this.disabled,
     disabledIcon: disabledIcon ?? this.disabledIcon,
-    inputPlaceholder: inputPlaceholder ?? this.inputPlaceholder,
+    action: action ?? this.action,
     card: card ?? this.card,
     destructive: destructive ?? this.destructive,
-    step: step ?? this.step,
   );
 
   @override
@@ -139,10 +134,9 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
       foregroundAccent: .lerp(foregroundAccent, other.foregroundAccent, t)!,
       disabled: .lerp(disabled, other.disabled, t)!,
       disabledIcon: .lerp(disabledIcon, other.disabledIcon, t)!,
-      inputPlaceholder: .lerp(inputPlaceholder, other.inputPlaceholder, t)!,
+      action: .lerp(action, other.action, t)!,
       card: .lerp(card, other.card, t)!,
       destructive: .lerp(destructive, other.destructive, t)!,
-      step: .lerp(step, other.step, t)!,
     );
   }
 
@@ -158,9 +152,8 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     'foregroundAccent': foregroundAccent,
     'disabled': disabled,
     'disabledIcon': disabledIcon,
-    'inputPlaceholder': inputPlaceholder,
+    'action': action,
     'card': card,
     'destructive': destructive,
-    'step': step,
   };
 }

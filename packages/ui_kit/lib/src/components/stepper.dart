@@ -215,7 +215,7 @@ class StepperPainter {
         canvas.drawRRect(
           cardRect,
           Paint()
-            ..color = palette.step
+            ..color = palette.action
             ..style = .fill,
         );
       }
@@ -249,7 +249,7 @@ class StepperPainter {
 
     // 2. Отрисовка линий (с отступами lineSpacing)
     final linePaint = Paint()
-      ..color = palette.step
+      ..color = palette.action
       ..strokeWidth = lineThickness
       ..strokeCap = .round;
 
@@ -278,7 +278,7 @@ class StepperPainter {
       final r = (isActive ? currentPoint : point) / 2;
 
       // Активная точка - темная (или currentColor), неактивная - серая
-      final color = isActive ? (palette.secondary) : palette.step;
+      final color = isActive ? (palette.secondary) : palette.action;
 
       canvas.drawCircle(
         pointCenters[i],

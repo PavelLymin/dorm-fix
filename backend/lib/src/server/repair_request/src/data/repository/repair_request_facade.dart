@@ -63,7 +63,10 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
       chat = await _chatRepository.createChat(
         chat: PartialChat(requestId: request.id),
       );
-      status = await _statusRepository.createStatus(status: .newRequest);
+      status = await _statusRepository.createStatus(
+        requestId: request.id,
+        status: req.currentStatus,
+      );
       await _chatRepository.addMember(chatId: chat.id, uid: uid);
       specialization = await _specRepository.getSpecialization(id: req.specId);
       student = await _studentRepository.getStudent(uid: uid);

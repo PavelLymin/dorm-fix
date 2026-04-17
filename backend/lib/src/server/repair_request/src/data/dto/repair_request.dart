@@ -29,7 +29,6 @@ sealed class RepairRequestDto {
     required final String description,
     required final Priority priority,
     required final StatusEnum currentStatus,
-    required final List<StatusDto> status,
     required final DateTime date,
     required final int startTime,
     required final int endTime,
@@ -67,12 +66,10 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     required super.endTime,
     required super.currentStatus,
     required this.specId,
-    required this.status,
     required this.problems,
   });
 
   final int specId;
-  final List<StatusDto> status;
   final List<String> problems;
 
   @override
@@ -81,7 +78,6 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     description: description,
     priority: priority,
     currentStatus: currentStatus,
-    status: status.map((e) => e.toEntity()).toList(),
     date: date,
     startTime: startTime,
     endTime: endTime,
@@ -94,7 +90,6 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     'description': description,
     'priority': priority.value,
     'current_status': currentStatus.value,
-    'status': status.map((e) => e.toJson()).toList(),
     'date': date.toLocal().toString(),
     'start_time': startTime,
     'end_time': endTime,
@@ -118,7 +113,6 @@ final class PartialRepairRequestDto extends RepairRequestDto {
         description: entity.description,
         priority: entity.priority,
         currentStatus: entity.currentStatus,
-        status: entity.status.map(StatusDto.fromEntity).toList(),
         date: entity.date,
         startTime: entity.startTime,
         endTime: entity.endTime,
@@ -131,7 +125,6 @@ final class PartialRepairRequestDto extends RepairRequestDto {
       'description': final String description,
       'priority': final String priority,
       'current_status': final String currentStatus,
-      'status': final List<Object?> status,
       'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
@@ -142,10 +135,6 @@ final class PartialRepairRequestDto extends RepairRequestDto {
         description: description,
         priority: .fromValue(priority),
         currentStatus: .fromString(currentStatus),
-        status: status
-            .whereType<Map<String, Object?>>()
-            .map(StatusDto.fromJson)
-            .toList(),
         date: .parse(date),
         startTime: startTime,
         endTime: endTime,
@@ -165,10 +154,10 @@ final class FullRepairRequestDto extends RepairRequestDto {
     required super.startTime,
     required super.endTime,
     required super.currentStatus,
+    required this.status,
     required this.id,
     required this.student,
     required this.specialization,
-    required this.status,
     required this.problems,
     required this.chat,
     required this.master,
@@ -178,8 +167,8 @@ final class FullRepairRequestDto extends RepairRequestDto {
   final int id;
   final FullStudentDto student;
   final SpecializationDto specialization;
-  final List<StatusDto> status;
   final List<FullProblemDto> problems;
+  final List<StatusDto> status;
   final FullChatDto chat;
   final MasterDto? master;
   final DateTime createdAt;

@@ -2,6 +2,7 @@ import '../../../chat/chat.dart';
 import '../../../profile/profile.dart';
 import '../../../students/home/home.dart';
 import 'problem.dart';
+import 'status.dart';
 
 enum Priority {
   ordinary(value: 'Обычный'),
@@ -18,30 +19,11 @@ enum Priority {
   }
 }
 
-enum StatusEnum {
-  newRequest(value: 'Создано'),
-  inProgress(value: 'Передано мастеру'),
-  completed(value: 'Завершено'),
-  canceled(value: 'Отказано'),
-  notDone(value: 'Не сделано');
-
-  const StatusEnum({required this.value});
-  final String value;
-
-  factory StatusEnum.fromValue(String status) {
-    return StatusEnum.values.firstWhere(
-      (element) => element.value == status,
-      orElse: () => throw FormatException('Unknown status: $status'),
-    );
-  }
-}
-
 sealed class RepairRequestEntity {
   const RepairRequestEntity({
     required this.description,
     required this.priority,
     required this.currentStatus,
-    required this.studentAbsent,
     required this.date,
     required this.startTime,
     required this.endTime,
@@ -50,7 +32,6 @@ sealed class RepairRequestEntity {
   final String description;
   final Priority priority;
   final StatusEnum currentStatus;
-  final bool studentAbsent;
   final DateTime date;
   final int startTime;
   final int endTime;
@@ -60,7 +41,6 @@ sealed class RepairRequestEntity {
     required final String description,
     required final Priority priority,
     required final StatusEnum currentStatus,
-    required final bool studentAbsent,
     required final DateTime date,
     required final int startTime,
     required final int endTime,
@@ -73,7 +53,7 @@ sealed class RepairRequestEntity {
     required final String description,
     required final Priority priority,
     required final StatusEnum currentStatus,
-    required final bool studentAbsent,
+    required final List<StatusEntity> status,
     required final DateTime date,
     required final int startTime,
     required final int endTime,
@@ -100,7 +80,6 @@ final class PartialRepairRequest extends RepairRequestEntity {
     required super.description,
     required super.priority,
     required super.currentStatus,
-    required super.studentAbsent,
     required super.date,
     required super.startTime,
     required super.endTime,
@@ -127,7 +106,6 @@ final class PartialRepairRequest extends RepairRequestEntity {
     description: description ?? this.description,
     priority: priority ?? this.priority,
     currentStatus: currentStatus ?? this.currentStatus,
-    studentAbsent: studentAbsent ?? this.studentAbsent,
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
@@ -141,7 +119,6 @@ final class PartialRepairRequest extends RepairRequestEntity {
       'description: $description, '
       'priority: $priority, '
       'currentStatus: $currentStatus, '
-      'studentAbsent: $studentAbsent, '
       'date: $date, '
       'startTime: $startTime, '
       'endTime: $endTime, '
@@ -155,7 +132,6 @@ final class PartialRepairRequest extends RepairRequestEntity {
         other.description == description &&
         other.priority == priority &&
         other.currentStatus == currentStatus &&
-        other.studentAbsent == studentAbsent &&
         other.date == date &&
         other.startTime == startTime &&
         other.endTime == endTime &&
@@ -168,7 +144,6 @@ final class PartialRepairRequest extends RepairRequestEntity {
     description,
     priority,
     currentStatus,
-    studentAbsent,
     date,
     startTime,
     endTime,
@@ -183,10 +158,10 @@ final class FullRepairRequest extends RepairRequestEntity {
     required super.description,
     required super.priority,
     required super.currentStatus,
-    required super.studentAbsent,
     required super.date,
     required super.startTime,
     required super.endTime,
+    required this.status,
     required this.specialization,
     required this.problems,
     required this.chat,
@@ -199,6 +174,7 @@ final class FullRepairRequest extends RepairRequestEntity {
   final DateTime createdAt;
   final SpecializationEntity specialization;
   final List<FullProblem> problems;
+  final List<StatusEntity> status;
   final FullChat chat;
   final MasterUser? master;
 
@@ -209,6 +185,7 @@ final class FullRepairRequest extends RepairRequestEntity {
     String? description,
     Priority? priority,
     StatusEnum? currentStatus,
+    List<StatusEntity>? status,
     bool? studentAbsent,
     DateTime? date,
     int? startTime,
@@ -225,7 +202,7 @@ final class FullRepairRequest extends RepairRequestEntity {
     description: description ?? this.description,
     priority: priority ?? this.priority,
     currentStatus: currentStatus ?? this.currentStatus,
-    studentAbsent: studentAbsent ?? this.studentAbsent,
+    status: status ?? this.status,
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
@@ -243,8 +220,8 @@ final class FullRepairRequest extends RepairRequestEntity {
       'specialization: $specialization, '
       'description: $description, '
       'priority: $priority, '
-      'stacurrent_status: $currentStatus, '
-      'studentAbsent: $studentAbsent, '
+      'current_status: $currentStatus, '
+      'status: $status, '
       'date: $date, '
       'startTime: $startTime, '
       'endTime: $endTime, '
@@ -270,7 +247,7 @@ final class FakeFullRepairRequest extends FullRepairRequest {
     super.description = 'description',
     super.priority = .ordinary,
     super.currentStatus = .newRequest,
-    super.studentAbsent = false,
+    super.status = const [],
     super.startTime = 0,
     super.endTime = 24,
     super.specialization = const .fake(),

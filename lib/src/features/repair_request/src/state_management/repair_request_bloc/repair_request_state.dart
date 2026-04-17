@@ -35,11 +35,11 @@ sealed class RepairRequestState {
     RepairRequestStateMatch<R, _RepairRequestLoading>? loading,
     RepairRequestStateMatch<R, _RepairRequestLoaded>? loaded,
     RepairRequestStateMatch<R, _RepairRequestError>? error,
-    required R Function() orElse,
+    required R Function(RepairRequestState) orElse,
   }) => map<R>(
-    loading: loading ?? (_) => orElse(),
-    loaded: loaded ?? (_) => orElse(),
-    error: error ?? (_) => orElse(),
+    loading: loading ?? orElse,
+    loaded: loaded ?? orElse,
+    error: error ?? orElse,
   );
 
   R? mapOrNull<R>({

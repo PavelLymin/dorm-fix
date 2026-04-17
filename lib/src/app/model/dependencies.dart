@@ -30,6 +30,7 @@ class DependencyContainer {
     required this.chatRealTimeRepository,
     required this.messageRepository,
     required this.messageRealTimeRepository,
+    required this.problemRepository,
     required this.authenticationBloc,
     required this.specializationBloc,
     required this.repairRequestBloc,
@@ -63,6 +64,7 @@ class DependencyContainer {
   final IChatRealTimeRepository chatRealTimeRepository;
   final IMessageRepository messageRepository;
   final IMessageRealtimeRepository messageRealTimeRepository;
+  final IProblemRepository problemRepository;
 
   // BloC
   final AuthBloc authenticationBloc;

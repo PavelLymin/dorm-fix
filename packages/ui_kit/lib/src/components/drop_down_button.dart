@@ -74,8 +74,11 @@ class _UiDropDownButtonState<T extends Object>
       selectOnly: widget.selectOnly,
       showTrailingIcon: widget.showTrailingIcon,
       initialSelection: widget.initialSelection,
+      maxLines: 1,
       onSelected: (value) => widget.onSelected?.call(value),
-      textStyle: widget.textStyle,
+      textStyle:
+          widget.textStyle ??
+          theme.appTypography2.m.copyWith(overflow: .ellipsis),
       menuStyle: UiDropDownMenuStyle(palette: theme.colorPalette2),
       inputDecorationTheme: _buildInputDecorationTheme(
         palette: theme.colorPalette2,
@@ -143,8 +146,8 @@ InputDecorationTheme _buildInputDecorationTheme({
   );
   return InputDecorationTheme(
     isCollapsed: true,
-    labelStyle: typography.m.copyWith(color: palette.secondary),
-    hintStyle: typography.m.copyWith(color: palette.secondary),
+    labelStyle: typography.m.copyWith(color: palette.foreground),
+    hintStyle: typography.m.copyWith(color: palette.foreground),
     border: border,
     focusedBorder: border,
     enabledBorder: border,
@@ -152,7 +155,12 @@ InputDecorationTheme _buildInputDecorationTheme({
     focusedErrorBorder: border,
     fillColor: palette.card,
     filled: true,
-    contentPadding: const .symmetric(horizontal: 16, vertical: 12),
+    contentPadding: const .only(
+      left: 20.0,
+      right: 16.0,
+      top: 12.0,
+      bottom: 12.0,
+    ),
     isDense: true,
   );
 }

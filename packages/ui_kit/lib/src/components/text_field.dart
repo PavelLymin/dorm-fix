@@ -126,7 +126,7 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
   bool? get filled => true;
 
   @override
-  Color? get fillColor => palette.inputPlaceholder;
+  Color? get fillColor => palette.action;
 
   @override
   TextStyle? get textStyle => typography.m.copyWith(color: palette.foreground);

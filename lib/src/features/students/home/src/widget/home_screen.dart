@@ -17,6 +17,7 @@ class StudentHomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<StudentHomeScreen> {
+  late final RepairRequestBloc _repairRequestBloc;
   late final SpecializationBloc _specializationBloc;
 
   @override
@@ -25,12 +26,27 @@ class _HomeScreenState extends State<StudentHomeScreen> {
     final dependency = DependeciesScope.of(context);
     _specializationBloc = dependency.specializationBloc
       ..add(.getSpecializations());
+    _repairRequestBloc = RepairRequestBloc(
+      requestRepository: dependency.requestRepository,
+      problemRepository: dependency.problemRepository,
+      logger: dependency.logger,
+    )..add(.get(uid: true));
+  }
+
+  @override
+  void dispose() {
+    _specializationBloc.close();
+    _repairRequestBloc.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _specializationBloc,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _repairRequestBloc),
+        BlocProvider(create: (context) => _specializationBloc),
+      ],
       child: Scaffold(
         body: Padding(
           padding: AppInsets.screen,
@@ -43,7 +59,7 @@ class _HomeScreenState extends State<StudentHomeScreen> {
               const SliverToBoxAdapter(child: SpecializationsCarousel()),
               const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
               const SliverToBoxAdapter(child: RequestSection()),
-              const RepairRequests(itemCount: 2),
+              RepairRequest(itemCount: 2, bloc: _repairRequestBloc),
               const SliverToBoxAdapter(child: SizedBox(height: 12.0)),
               const SliverToBoxAdapter(child: CreateRequestButton()),
               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),

@@ -35,7 +35,6 @@ class RequestFormBloc extends Bloc<RequestFormEvent, RequestFormState> {
       specializationId: e.specializationId,
       description: e.description,
       priority: e.priority,
-      studentAbsent: e.studentAbsent,
       date: e.date,
       startTime: e.startTime,
       endTime: e.endTime,

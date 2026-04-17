@@ -15,7 +15,6 @@ import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
 import '../../features/repair_request/request.dart';
-import '../../features/repair_request/src/data/repository/problem_repository.dart';
 import '../../features/students/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/room/room.dart';
@@ -186,6 +185,7 @@ class CompositionRoot {
       chatRealTimeRepository: chatRealTimeRepository,
       messageRepository: messageRepository,
       messageRealTimeRepository: messageRealTimeRepository,
+      problemRepository: problemRepository,
       repairRequestBloc: repairRequestBloc,
     ).create();
   }
@@ -208,6 +208,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.chatRealTimeRepository,
     required this.messageRepository,
     required this.messageRealTimeRepository,
+    required this.problemRepository,
     required this.authenticationBloc,
     required this.specializationBloc,
     required this.repairRequestBloc,
@@ -241,6 +242,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final IChatRealTimeRepository chatRealTimeRepository;
   final IMessageRepository messageRepository;
   final IMessageRealtimeRepository messageRealTimeRepository;
+  final IProblemRepository problemRepository;
 
   // BloC
   final AuthBloc authenticationBloc;
@@ -264,6 +266,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     chatRealTimeRepository: chatRealTimeRepository,
     messageRepository: messageRepository,
     messageRealTimeRepository: messageRealTimeRepository,
+    problemRepository: problemRepository,
     authenticationBloc: authenticationBloc,
     specializationBloc: specializationBloc,
     repairRequestBloc: repairRequestBloc,

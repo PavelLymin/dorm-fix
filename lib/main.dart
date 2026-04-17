@@ -7,7 +7,6 @@ import 'l10n/gen/app_localizations.dart';
 import 'src/app/logic/composition_root.dart';
 import 'src/app/widget/dependencies_scope.dart';
 import 'src/features/authentication/authentication.dart';
-import 'src/features/repair_request/request.dart';
 import 'src/features/settings/settings.dart';
 
 void main() async {
@@ -50,23 +49,18 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   late final AuthBloc _authenticationBloc;
-  late final RepairRequestBloc _repairRequestBloc;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = DependeciesScope.of(context).authenticationBloc;
-    _repairRequestBloc = DependeciesScope.of(context).repairRequestBloc;
   }
 
   @override
   Widget build(BuildContext context) {
     final router = DependeciesScope.of(context).router;
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => _authenticationBloc),
-        BlocProvider(create: (context) => _repairRequestBloc),
-      ],
+      providers: [BlocProvider(create: (context) => _authenticationBloc)],
       child: MaterialApp.router(
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,

@@ -6,7 +6,6 @@ class RequestFormModel {
     this.description = '',
     this.priority = .ordinary,
     this.status = .newRequest,
-    this.studentAbsent = false,
     DateTime? date,
     DateTime? startTime,
     DateTime? endTime,
@@ -14,11 +13,11 @@ class RequestFormModel {
   }) : date = date ?? WorkingDateTime().today,
        startTime = startTime ?? WorkingDateTime().start,
        endTime = endTime ?? WorkingDateTime().end;
+
   final int specializationId;
   final String description;
   final Priority priority;
-  final Status status;
-  final bool studentAbsent;
+  final StatusEnum status;
   final DateTime date;
   final DateTime startTime;
   final DateTime endTime;
@@ -28,8 +27,7 @@ class RequestFormModel {
     int? specializationId,
     String? description,
     Priority? priority,
-    Status? status,
-    bool? studentAbsent,
+    StatusEnum? status,
     DateTime? date,
     DateTime? startTime,
     DateTime? endTime,
@@ -39,7 +37,6 @@ class RequestFormModel {
     description: description ?? this.description,
     priority: priority ?? this.priority,
     status: status ?? this.status,
-    studentAbsent: studentAbsent ?? this.studentAbsent,
     date: date ?? this.date,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
@@ -60,8 +57,7 @@ class RequestFormModel {
       specId: specializationId,
       description: description,
       priority: priority,
-      status: status,
-      studentAbsent: studentAbsent,
+      currentStatus: status,
       date: date,
       startTime: startTime.hour,
       endTime: endTime.hour,
@@ -75,7 +71,6 @@ class RequestFormModel {
       'specializationId: $specializationId, '
       'description: $description, '
       'priority: $priority, '
-      'studentAbsent: $studentAbsent, '
       'date: $date, '
       'startTime: $startTime, '
       'endTime: $endTime, '

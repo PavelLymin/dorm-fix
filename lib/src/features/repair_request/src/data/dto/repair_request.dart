@@ -1,15 +1,14 @@
 import '../../../../chat/chat.dart';
 import '../../../../profile/profile.dart';
 import '../../../../students/home/home.dart';
-import '../../model/repair_request.dart';
+import '../../../request.dart';
 import 'problem.dart';
 
 sealed class RepairRequestDto {
   const RepairRequestDto({
     required this.description,
     required this.priority,
-    required this.status,
-    required this.studentAbsent,
+    required this.currentStatus,
     required this.date,
     required this.startTime,
     required this.endTime,
@@ -17,8 +16,7 @@ sealed class RepairRequestDto {
 
   final String description;
   final Priority priority;
-  final Status status;
-  final bool studentAbsent;
+  final StatusEnum currentStatus;
   final DateTime date;
   final int startTime;
   final int endTime;
@@ -30,8 +28,7 @@ sealed class RepairRequestDto {
     required int specId,
     required String description,
     required Priority priority,
-    required Status status,
-    required bool studentAbsent,
+    required StatusEnum currentStatus,
     required DateTime date,
     required int startTime,
     required int endTime,
@@ -44,8 +41,8 @@ sealed class RepairRequestDto {
     required SpecializationDto specialization,
     required String description,
     required Priority priority,
-    required Status status,
-    required bool studentAbsent,
+    required StatusEnum currentStatus,
+    required List<StatusDto> status,
     required DateTime date,
     required int startTime,
     required int endTime,
@@ -60,8 +57,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
   const PartialRepairRequestDto({
     required super.description,
     required super.priority,
-    required super.status,
-    required super.studentAbsent,
+    required super.currentStatus,
     required super.date,
     required super.startTime,
     required super.endTime,
@@ -77,8 +73,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     specId: specId,
     description: description,
     priority: priority,
-    status: status,
-    studentAbsent: studentAbsent,
+    currentStatus: currentStatus,
     date: date,
     startTime: startTime,
     endTime: endTime,
@@ -90,8 +85,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     'spec_id': specId,
     'description': description,
     'priority': priority.value,
-    'status': status.value,
-    'student_absent': studentAbsent,
+    'current_status': currentStatus.value,
     'date': date.toLocal().toString(),
     'start_time': startTime,
     'end_time': endTime,
@@ -103,8 +97,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
         specId: entity.specId,
         description: entity.description,
         priority: entity.priority,
-        status: entity.status,
-        studentAbsent: entity.studentAbsent,
+        currentStatus: entity.currentStatus,
         date: entity.date,
         startTime: entity.startTime,
         endTime: entity.endTime,
@@ -116,8 +109,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
       'spec_id': final int specId,
       'description': final String description,
       'priority': final String priority,
-      'status': final String status,
-      'student_absent': final bool studentAbsent,
+      'current_status': final String currentStatus,
       'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
@@ -127,8 +119,7 @@ final class PartialRepairRequestDto extends RepairRequestDto {
         specId: specId,
         description: description,
         priority: .fromValue(priority),
-        status: .fromValue(status),
-        studentAbsent: studentAbsent,
+        currentStatus: .fromString(currentStatus),
         date: .parse(date),
         startTime: startTime,
         endTime: endTime,
@@ -146,11 +137,11 @@ final class FullRepairRequestDto extends RepairRequestDto {
   const FullRepairRequestDto({
     required super.description,
     required super.priority,
-    required super.status,
-    required super.studentAbsent,
+    required super.currentStatus,
     required super.date,
     required super.startTime,
     required super.endTime,
+    required this.status,
     required this.id,
     required this.student,
     required this.specialization,
@@ -164,6 +155,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
   final FullStudentDto student;
   final SpecializationDto specialization;
   final List<FullProblemDto> problems;
+  final List<StatusDto> status;
   final FullChatDto chat;
   final MasterDto? master;
   final DateTime createdAt;
@@ -175,8 +167,8 @@ final class FullRepairRequestDto extends RepairRequestDto {
     specialization: specialization.toEntity(),
     description: description,
     priority: priority,
-    status: status,
-    studentAbsent: studentAbsent,
+    currentStatus: currentStatus,
+    status: status.map((e) => e.toEntity()).toList(),
     date: date,
     startTime: startTime,
     endTime: endTime,
@@ -193,8 +185,8 @@ final class FullRepairRequestDto extends RepairRequestDto {
     'specialization': specialization.toJson(),
     'description': description,
     'priority': priority.value,
-    'status': status.value,
-    'student_absent': studentAbsent,
+    'current_status': currentStatus.value,
+    'status': status.map((e) => e.toJson()).toList(),
     'date': date.toLocal().toString(),
     'start_time': startTime,
     'end_time': endTime,
@@ -210,8 +202,8 @@ final class FullRepairRequestDto extends RepairRequestDto {
         specialization: .fromEntity(entity.specialization),
         description: entity.description,
         priority: entity.priority,
-        status: entity.status,
-        studentAbsent: entity.studentAbsent,
+        currentStatus: entity.currentStatus,
+        status: entity.status.map(StatusDto.fromEntity).toList(),
         date: entity.date,
         startTime: entity.startTime,
         endTime: entity.endTime,
@@ -228,8 +220,8 @@ final class FullRepairRequestDto extends RepairRequestDto {
       'specialization': final Map<String, Object?> specialization,
       'description': final String description,
       'priority': final String priority,
-      'status': final String status,
-      'student_absent': final bool studentAbsent,
+      'current_status': final String currentStatus,
+      'status': final List<Object?> status,
       'date': final String date,
       'start_time': final int startTime,
       'end_time': final int endTime,
@@ -244,8 +236,11 @@ final class FullRepairRequestDto extends RepairRequestDto {
         specialization: .fromJson(specialization),
         description: description,
         priority: .fromValue(priority),
-        status: .fromValue(status),
-        studentAbsent: studentAbsent,
+        currentStatus: .fromString(currentStatus),
+        status: status
+            .whereType<Map<String, Object?>>()
+            .map(StatusDto.fromJson)
+            .toList(),
         date: .parse(date),
         startTime: startTime,
         endTime: endTime,

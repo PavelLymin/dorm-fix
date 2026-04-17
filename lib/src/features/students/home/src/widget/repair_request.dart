@@ -11,7 +11,10 @@ class RequestSection extends StatelessWidget {
       crossAxisAlignment: .center,
       children: [
         UiText2.lBold('Ваши заявки'),
-        UiButton.icon(onPressed: () {}, icon: const Icon(Icons.timer_outlined)),
+        UiButton.icon(
+          onPressed: () => context.router.push(NamedRoute('HistoryScreen')),
+          icon: const Icon(Icons.timer_outlined),
+        ),
       ],
     );
   }

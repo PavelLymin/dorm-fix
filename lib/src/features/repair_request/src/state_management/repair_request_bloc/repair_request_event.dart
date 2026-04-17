@@ -10,7 +10,7 @@ sealed class RepairRequestEvent {
     bool uid,
     int? specId,
     int? dormId,
-    Status? status,
+    StatusEnum? status,
   }) = _GetRepairRequestsEvent;
 
   factory RepairRequestEvent.create({required RequestFormModel request}) =>
@@ -36,7 +36,7 @@ final class _GetRepairRequestsEvent extends RepairRequestEvent {
   final bool uid;
   final int? specId;
   final int? dormId;
-  final Status? status;
+  final StatusEnum? status;
 }
 
 final class _CreateRepairRequestsEvent extends RepairRequestEvent {

@@ -133,7 +133,7 @@ class PinInput extends StatelessWidget {
       width: isCurrentFocus ? 45 : 40,
       height: isCurrentFocus ? 60 : 50,
       decoration: BoxDecoration(
-        color: palette.inputPlaceholder,
+        color: palette.action,
         borderRadius: const .all(.circular(20.0)),
       ),
       child: Center(

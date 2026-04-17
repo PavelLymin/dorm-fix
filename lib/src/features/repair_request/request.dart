@@ -2,9 +2,12 @@ library;
 
 export 'src/model/repair_request.dart';
 export 'src/model/working_time.dart';
+export 'src/model/status.dart';
+export 'src/data/dto/status.dart';
 export 'src/data/dto/repair_request.dart';
 export 'src/data/repository/problem_image_repository.dart';
 export 'src/data/repository/request_repository.dart';
+export 'src/data/repository/problem_repository.dart';
 export 'src/state_management/request_form_bloc/request_form_bloc.dart';
 export 'src/state_management/repair_request_bloc/repair_request_bloc.dart';
 export 'src/widget/form/request_screen.dart';

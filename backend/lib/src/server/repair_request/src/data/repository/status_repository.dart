@@ -9,7 +9,10 @@ abstract interface class IStatusRepository {
 
   Stream<List<Statuse>> watchStatuses({required int requestId});
 
-  Future<StatusDto> createStatus({required StatusEnum status});
+  Future<StatusDto> createStatus({
+    required int requestId,
+    required StatusEnum status,
+  });
 }
 
 class StatusRepositoryImpl implements IStatusRepository {
@@ -32,10 +35,18 @@ class StatusRepositoryImpl implements IStatusRepository {
       )..where((row) => row.requestId.equals(requestId))).watch();
 
   @override
-  Future<StatusDto> createStatus({required StatusEnum status}) async {
+  Future<StatusDto> createStatus({
+    required int requestId,
+    required StatusEnum status,
+  }) async {
     final data = await _database
         .into(_database.statuses)
-        .insertReturning(StatusesCompanion(title: Value(status.value)));
+        .insertReturning(
+          StatusesCompanion(
+            requestId: Value(requestId),
+            title: Value(status.value),
+          ),
+        );
 
     final result = StatusDto.fromData(data);
     return result;
