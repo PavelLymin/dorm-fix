@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:ui_kit/calendar_preview.dart';
 import 'package:ui_kit/carousel_preview.dart';
 import 'package:ui_kit/detail_card_preview.dart';
 import 'package:ui_kit/ui.dart';
@@ -29,7 +30,6 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) => WindowSizeScope(
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      // darkTheme: darkTheme,
       theme: lightTheme,
       home: const UiPreview(),
     ),
@@ -162,6 +162,10 @@ class _UiPreviewState extends State<UiPreview>
                 const SizedBox(height: 8),
                 const LineCalendarPreview(),
                 const SizedBox(height: 24),
+                Align(alignment: .center, child: UiText2.h5Bold('Calendar')),
+                const SizedBox(height: 8),
+                const CalendarPreview(),
+                const SizedBox(height: 24),
                 Align(alignment: .center, child: UiText2.h5Bold('Choice chip')),
                 const SizedBox(height: 8),
                 ChoiceChipPreview(),
@@ -169,7 +173,9 @@ class _UiPreviewState extends State<UiPreview>
                 Align(alignment: .center, child: UiText2.h5Bold('Snack Bar')),
                 const SizedBox(height: 8),
                 const SnackBarPreview(),
-
+                const SizedBox(height: 24),
+                Align(alignment: .center, child: UiText2.h5Bold('Carousel')),
+                const SizedBox(height: 8),
                 const CarouselPreview(),
               ],
             ),
