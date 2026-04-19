@@ -1,40 +1,34 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+
 import '../../authentication.dart';
 
 class AuthButton extends StatelessWidget {
-  const AuthButton({
-    super.key,
-    required this.emailAndPassword,
-    required this.verifyPhoneNumber,
-    required this.phoneNumber,
-  });
+  const AuthButton({super.key, required this.controller});
 
-  final Function emailAndPassword;
-  final Function verifyPhoneNumber;
-  final Function phoneNumber;
+  final TextEditingController controller;
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<AuthButtonBloc, AuthButtonState>(
-        builder: (context, state) => UiButton.filledPrimary(
-          onPressed: () => state.mapOrNull(
-            isEmailPassword: () => emailAndPassword(),
-            isPhoneNumber: () => verifyPhoneNumber(),
-            isPin: () => phoneNumber(),
-          ),
-          enabled: state.isEnabled,
-          label: state.isLoading
-              ? SizedBox.square(
-                  dimension: 20.0,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Theme.of(
-                      context,
-                    ).colorPalette.primary.withValues(alpha: .38),
-                  ),
-                )
-              : const Text('Далее'),
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
+    return BlocBuilder<ButtonBloc, ButtonState>(
+      builder: (context, state) => UiButton.filledPrimary(
+        onPressed: () => context.read<AuthBloc>().add(
+          .verifyPhoneNumber(phoneNumber: controller.text),
         ),
-      );
+        enabled: state.isEnabled,
+        label: state.maybeMap(
+          orElse: (_) => const Text('Продолжить'),
+          loading: (_) => SizedBox.square(
+            dimension: 20.0,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: palette.foregroundAccent,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

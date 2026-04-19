@@ -18,8 +18,6 @@ class AuthButtonBloc extends Bloc<AuthButtonEvent, AuthButtonState> {
       AuthButtonState(
         isLoading: event.isLoading ?? state._isLoading,
         isCodeSent: event.isCodeSent ?? state._isCodeSent,
-        isEmail: event.isEmail ?? state._isEmail,
-        isPassword: event.isPassword ?? state._isPassword,
         isPhoneNumber: event.isPhoneNumber ?? state._isPhoneNumber,
         isPin: event.isPin ?? state._isPin,
       ),

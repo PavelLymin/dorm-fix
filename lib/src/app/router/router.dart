@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/ui.dart';
 import '../../features/authentication/authentication.dart';
-import '../../features/authentication/src/widget/splash_screen.dart';
+import '../../features/authentication/src/widget_old/splash_screen.dart';
 import '../../features/map/map.dart';
 import '../../features/master/home/home.dart';
 import '../../features/students/home/home.dart';
@@ -16,11 +16,11 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
     NamedRouteDef(
-      initial: true,
       name: 'SplashScreen',
       builder: (_, _) => const SplashScreen(),
     ),
     NamedRouteDef(
+      initial: true,
       name: 'SignIn',
       builder: (context, data) => const SignInScreen(),
     ),

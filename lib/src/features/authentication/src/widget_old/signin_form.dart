@@ -79,10 +79,6 @@ class _SignInFormState extends State<SignInForm> with _FormStateMixin {
               ),
       ),
       AuthButton(
-        emailAndPassword: () => _logInWithEmailAndPassword(
-          _emailController.text,
-          _passwordController.text,
-        ),
         phoneNumber: () => _signInWithPhoneNumber(_pinCodeController.text),
         verifyPhoneNumber: () => _verifyPhoneNumber(_phoneController.text),
       ),

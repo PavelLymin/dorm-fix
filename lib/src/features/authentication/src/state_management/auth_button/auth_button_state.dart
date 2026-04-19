@@ -3,16 +3,12 @@ part of 'auth_button_bloc.dart';
 class AuthButtonState {
   const AuthButtonState({
     this._isLoading = false,
-    this._isEmail = false,
-    this._isPassword = false,
     this._isPhoneNumber = false,
     this._isPin = false,
     this._isCodeSent = false,
   });
 
   final bool _isLoading;
-  final bool _isEmail;
-  final bool _isPassword;
   final bool _isPhoneNumber;
   final bool _isPin;
   final bool _isCodeSent;
@@ -20,8 +16,6 @@ class AuthButtonState {
   bool get isEnabled {
     if (_isLoading) {
       return false;
-    } else if (_isEmail && _isPassword) {
-      return true;
     } else if (_isPhoneNumber && !_isCodeSent) {
       return true;
     } else if (_isPin && _isCodeSent) {
@@ -33,13 +27,10 @@ class AuthButtonState {
 
   T map<T>({
     required T Function() isLoading,
-    required T Function() isEmailPassword,
     required T Function() isPhoneNumber,
     required T Function() isPin,
   }) {
-    if (_isEmail && _isPassword) {
-      return isEmailPassword();
-    } else if (_isPhoneNumber && !_isCodeSent) {
+    if (_isPhoneNumber && !_isCodeSent) {
       return isPhoneNumber();
     } else if (_isCodeSent) {
       return isPin();
@@ -50,23 +41,16 @@ class AuthButtonState {
 
   T maybeMap<T>({
     required T Function() orElse,
-    T Function()? isEmailPassword,
     T Function()? isPhoneNumber,
     T Function()? isPin,
   }) => map(
     isLoading: () => orElse(),
-    isEmailPassword: isEmailPassword ?? () => orElse(),
     isPhoneNumber: isPhoneNumber ?? () => orElse(),
     isPin: isPin ?? () => orElse(),
   );
 
-  T? mapOrNull<T>({
-    T Function()? isEmailPassword,
-    T Function()? isPhoneNumber,
-    T Function()? isPin,
-  }) => map(
+  T? mapOrNull<T>({T Function()? isPhoneNumber, T Function()? isPin}) => map(
     isLoading: () => null,
-    isEmailPassword: isEmailPassword ?? () => null,
     isPhoneNumber: isPhoneNumber ?? () => null,
     isPin: isPin ?? () => null,
   );
@@ -76,8 +60,6 @@ class AuthButtonState {
   @override
   String toString() =>
       'AuthButtonState(isLoading: $_isLoading, '
-      'isEmail: $_isEmail, '
-      'isPassword: $_isPassword, '
       'isPhoneNumber: $_isPhoneNumber, '
       'isPin: $_isPin, '
       'isCodeSent: $_isCodeSent)';
@@ -88,20 +70,12 @@ class AuthButtonState {
     if (other.runtimeType != runtimeType) return false;
     return other is AuthButtonState &&
         other._isLoading == _isLoading &&
-        other._isEmail == _isEmail &&
-        other._isPassword == _isPassword &&
         other._isPhoneNumber == _isPhoneNumber &&
         other._isPin == _isPin &&
         other._isCodeSent == _isCodeSent;
   }
 
   @override
-  int get hashCode => Object.hash(
-    _isLoading,
-    _isEmail,
-    _isPassword,
-    _isPhoneNumber,
-    _isPin,
-    _isCodeSent,
-  );
+  int get hashCode =>
+      Object.hash(_isLoading, _isPhoneNumber, _isPin, _isCodeSent);
 }
