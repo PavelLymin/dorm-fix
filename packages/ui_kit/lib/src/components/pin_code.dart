@@ -8,14 +8,12 @@ class PinCode extends StatefulWidget {
     this.isFocus = false,
     this.isEnable = true,
     this.length = 6,
-    this.height = 60,
   });
 
   final TextEditingController controller;
   final bool isFocus;
   final bool isEnable;
   final int length;
-  final double height;
 
   @override
   State<PinCode> createState() => _PinCodeState();
@@ -70,45 +68,42 @@ class _PinCodeState extends State<PinCode> {
   bool _isFilled(int index) => index < _pinCode.length;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    height: widget.height,
-    child: Column(
-      mainAxisAlignment: .center,
-      children: [
-        Opacity(
-          opacity: 0,
-          child: SizedBox(
-            height: 0,
-            child: TextField(
-              controller: widget.controller,
-              focusNode: _focusNode,
-              enabled: widget.isEnable,
-              keyboardType: .number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              maxLength: widget.length,
+  Widget build(BuildContext context) => Column(
+    mainAxisAlignment: .center,
+    children: [
+      Opacity(
+        opacity: 0,
+        child: SizedBox(
+          height: 0,
+          child: TextField(
+            controller: widget.controller,
+            focusNode: _focusNode,
+            enabled: widget.isEnable,
+            keyboardType: .number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            maxLength: widget.length,
+          ),
+        ),
+      ),
+      GestureDetector(
+        onTap: () {
+          if (widget.isFocus) {
+            setState(() => _focusNode.requestFocus());
+          }
+        },
+        child: Row(
+          mainAxisAlignment: .spaceEvenly,
+          children: List.generate(
+            widget.length,
+            (index) => PinInput(
+              isFocus: _focusNode.hasFocus,
+              isCurrentFocus: index == _pinCode.length && _focusNode.hasFocus,
+              number: _isFilled(index) ? _pinCode[index] : '',
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            if (widget.isFocus) {
-              setState(() => _focusNode.requestFocus());
-            }
-          },
-          child: Row(
-            mainAxisAlignment: .spaceEvenly,
-            children: List.generate(
-              widget.length,
-              (index) => PinInput(
-                isFocus: _focusNode.hasFocus,
-                isCurrentFocus: index == _pinCode.length && _focusNode.hasFocus,
-                number: _isFilled(index) ? _pinCode[index] : '',
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
+      ),
+    ],
   );
 }
 
@@ -127,20 +122,19 @@ class PinInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = Theme.of(context).colorPalette2;
-
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      width: isCurrentFocus ? 45 : 40,
-      height: isCurrentFocus ? 60 : 50,
+      width: isCurrentFocus ? 56 : 51,
+      height: isCurrentFocus ? 66 : 56,
       decoration: BoxDecoration(
-        color: palette.action,
-        borderRadius: const .all(.circular(20.0)),
+        color: palette.card,
+        borderRadius: const .all(.circular(16.0)),
       ),
       child: Center(
         child: number.isEmpty && isCurrentFocus
             ? Padding(
                 padding: const .symmetric(vertical: 12.0, horizontal: 16.0),
-                child: Container(color: palette.foreground, width: 1.2),
+                child: Container(color: palette.primary, width: 2),
               )
             : UiText.bodyLarge(number),
       ),

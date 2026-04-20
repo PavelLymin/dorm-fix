@@ -4,9 +4,9 @@ import 'package:ui_kit/ui.dart';
 import '../../authentication.dart';
 
 class AuthButton extends StatelessWidget {
-  const AuthButton({super.key, required this.controller});
+  const AuthButton({super.key, required this.onPressed});
 
-  final TextEditingController controller;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +14,9 @@ class AuthButton extends StatelessWidget {
     final palette = theme.colorPalette2;
     return BlocBuilder<ButtonBloc, ButtonState>(
       builder: (context, state) => UiButton.filledPrimary(
-        onPressed: () => context.read<AuthBloc>().add(
-          .verifyPhoneNumber(phoneNumber: controller.text),
+        onPressed: onPressed,
+        style: ButtonStyle(
+          backgroundColor: state.isLoading ? .all(palette.buttonLoading) : null,
         ),
         enabled: state.isEnabled,
         label: state.maybeMap(

@@ -13,6 +13,7 @@ import '../../server/profile/profile.dart';
 import '../../server/repair_request/repair_request.dart';
 import '../../server/room/room.dart';
 import '../../server/specialization/specialization.dart';
+import '../../server/student/student.dart';
 import '../model/application_config.dart';
 import '../model/dependencies_container.dart';
 
@@ -43,12 +44,20 @@ class CompositionRoot {
     );
     final app = FirebaseAdmin.instance.initializeApp(options);
 
-    // await app.auth().setCustomUserClaims('dyuy1YnZ8OULWnu86uREgNo98PX2', {
+    // await app.auth().setCustomUserClaims('6weAN4iCOqUbh67aY0H0ev8kgo73', {
     //   'role': Role.master.name,
     // });
 
-    // await app.auth().setCustomUserClaims('qt5rp4zdNhdtX5YAYlpNCsmXDii2', {
-    //   'role': Role.student.name,
+    // await app.auth().setCustomUserClaims('0iGGcmM9O6eNJ8ryWYLjihIQZyr2', {
+    //   'role': Role.master.name,
+    // });
+
+    // await app.auth().setCustomUserClaims('oeFZ2dPqplgg1gJYvOE4iLTqgE02', {
+    //   'role': Role.master.name,
+    // });
+
+    // await app.auth().setCustomUserClaims('oeFZ2dPqplgg1gJYvOE4iLTqgE02', {
+    //   'role': Role.master.name,
     // });
 
     // Database

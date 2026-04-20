@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../core/utils/utils.dart';
+
+import '../../../../core/utils/src/error_util.dart';
 import '../../authentication.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -10,7 +11,7 @@ class SplashScreen extends StatelessWidget {
   void transition(BuildContext context, AuthState state) => state.mapOrNull(
     error: (state) => ErrorUtil.showSnackBar(context, state.message),
     authenticated: (state) => state.authUser.mapAuthUser(
-      firebase: (_) => context.router.replace(const NamedRoute('Map')),
+      firebase: (_) => context.router.replace(const NamedRoute('MapScreen')),
       profile: (user) => user.mapRoleUser(
         student: (_) =>
             context.router.replace(const NamedRoute('StudentRootSreen')),

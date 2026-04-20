@@ -1,6 +1,6 @@
 import '../../../dormitory/dormitory.dart';
 import '../../../room/room.dart';
-import '../../profile.dart';
+import '../../../profile/profile.dart';
 
 sealed class StudentEntity {
   const StudentEntity({required this.user});

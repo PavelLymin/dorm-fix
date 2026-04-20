@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/ui.dart';
 import '../../features/authentication/authentication.dart';
-import '../../features/authentication/src/widget_old/splash_screen.dart';
 import '../../features/map/map.dart';
 import '../../features/master/home/home.dart';
 import '../../features/students/home/home.dart';
@@ -22,7 +21,18 @@ class AppRouter extends RootStackRouter {
     NamedRouteDef(
       initial: true,
       name: 'SignIn',
-      builder: (context, data) => const SignInScreen(),
+      builder: (context, data) => const AuthScreen(),
+    ),
+    NamedRouteDef(
+      name: 'PincodeScreen',
+      builder: (context, data) {
+        final phoneNumber = data.params.get('phone_number');
+        final verificationId = data.params.get('verification_id');
+        return PincodeScreen(
+          phoneNumber: phoneNumber,
+          verificationId: verificationId,
+        );
+      },
     ),
     NamedRouteDef(
       name: 'MapScreen',
@@ -34,8 +44,8 @@ class AppRouter extends RootStackRouter {
           UpdatePhoneScreen(user: data.params.get('user')),
     ),
     NamedRouteDef(
-      name: 'PersonalDataScreen',
-      builder: (context, data) => PersonalDataScreen(
+      name: 'ExtraDataScreen',
+      builder: (context, data) => ExtraDataScreen(
         dormitoryId: data.params.getInt('dormitory_id'),
         roomId: data.params.getInt('room_id'),
       ),

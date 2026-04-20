@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import '../../../../../core/database/database.dart';
-import '../../../profile.dart';
+import '../../../../profile/profile.dart';
 
 abstract interface class IStudentRepository {
   Future<void> createStudent({

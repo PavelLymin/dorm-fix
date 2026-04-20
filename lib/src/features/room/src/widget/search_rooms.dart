@@ -34,7 +34,7 @@ class _Item extends StatelessWidget {
 
   void onTap(BuildContext context) => context.router.push(
     NamedRoute(
-      'PersonalDataScreen',
+      'ExtraDataScreen',
       params: {'dormitory_id': dormitory.id, 'room_id': room.id},
     ),
   );

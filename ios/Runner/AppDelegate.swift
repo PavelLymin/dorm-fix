@@ -10,6 +10,7 @@ import YandexMapsMobile
   ) -> Bool {
     YMKMapKit.setLocale("ru_RU") // Your preferred language. Not required, defaults to system language
     YMKMapKit.setApiKey("1c457cdb-845b-46df-aa96-8682605cacba") // Your generated API key
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 

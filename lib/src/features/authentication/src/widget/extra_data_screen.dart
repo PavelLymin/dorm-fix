@@ -1,9 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+
 import '../../authentication.dart';
 
-class PersonalDataScreen extends StatefulWidget {
-  const PersonalDataScreen({
+class ExtraDataScreen extends StatefulWidget {
+  const ExtraDataScreen({
     super.key,
     required this.dormitoryId,
     required this.roomId,
@@ -13,10 +14,10 @@ class PersonalDataScreen extends StatefulWidget {
   final int roomId;
 
   @override
-  State<PersonalDataScreen> createState() => _PersonalDataScreenState();
+  State<ExtraDataScreen> createState() => _ExtraDataScreenState();
 }
 
-class _PersonalDataScreenState extends State<PersonalDataScreen>
+class _ExtraDataScreenState extends State<ExtraDataScreen>
     with _PersonalDataScreenStateMixin {
   @override
   Widget build(BuildContext context) {
@@ -81,7 +82,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen>
   }
 }
 
-mixin _PersonalDataScreenStateMixin on State<PersonalDataScreen> {
+mixin _PersonalDataScreenStateMixin on State<ExtraDataScreen> {
   final ValueNotifier<bool> _isEnabled = ValueNotifier(false);
 
   final _nameController = TextEditingController();

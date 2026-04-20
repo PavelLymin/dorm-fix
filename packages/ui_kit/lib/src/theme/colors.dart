@@ -20,6 +20,9 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
       action: Color(0xFFEBEBEB),
       card: Color(0xFFFFFFFF),
       destructive: Color(0xFFE84040),
+      buttonSecondary: Color(0xFFD6D6D6),
+      buttonLoading: Color(0xFF0C764C),
+      buttonDisabled: Color(0xFF8BD5B8),
     );
   }
 
@@ -38,6 +41,9 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
     action: Color(0xFFEBEBEB),
     card: Color(0xFFFFFFFF),
     destructive: Color(0xFFE84040),
+    buttonSecondary: Color(0xFFD6D6D6),
+    buttonLoading: Color(0xFF0C764C),
+    buttonDisabled: Color(0xFF8BD5B8),
   );
 }
 
@@ -57,6 +63,9 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     required this.action,
     required this.card,
     required this.destructive,
+    required this.buttonSecondary,
+    required this.buttonLoading,
+    required this.buttonDisabled,
   });
 
   final Color background;
@@ -73,6 +82,9 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
   final Color action;
   final Color card;
   final Color destructive;
+  final Color buttonSecondary;
+  final Color buttonLoading;
+  final Color buttonDisabled;
 
   @override
   ThemeExtension<ColorPalette2> copyWith({
@@ -90,7 +102,9 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     Color? action,
     Color? card,
     Color? destructive,
-    Color? step,
+    Color? buttonSecondary,
+    Color? buttonLoading,
+    Color? buttonDisabled,
   }) => ColorPalette2(
     background: background ?? this.background,
     primary: primary ?? this.primary,
@@ -106,6 +120,9 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     action: action ?? this.action,
     card: card ?? this.card,
     destructive: destructive ?? this.destructive,
+    buttonSecondary: buttonSecondary ?? this.buttonSecondary,
+    buttonLoading: buttonLoading ?? this.buttonLoading,
+    buttonDisabled: buttonDisabled ?? this.buttonDisabled,
   );
 
   @override
@@ -137,6 +154,9 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
       action: .lerp(action, other.action, t)!,
       card: .lerp(card, other.card, t)!,
       destructive: .lerp(destructive, other.destructive, t)!,
+      buttonSecondary: .lerp(buttonSecondary, other.buttonSecondary, t)!,
+      buttonLoading: .lerp(buttonLoading, other.buttonLoading, t)!,
+      buttonDisabled: .lerp(buttonDisabled, other.buttonDisabled, t)!,
     );
   }
 
@@ -155,5 +175,8 @@ class ColorPalette2 extends ThemeExtension<ColorPalette2> {
     'action': action,
     'card': card,
     'destructive': destructive,
+    'buttonSecondary': buttonSecondary,
+    'buttonLoading': buttonLoading,
+    'buttonDisabled': buttonDisabled,
   };
 }

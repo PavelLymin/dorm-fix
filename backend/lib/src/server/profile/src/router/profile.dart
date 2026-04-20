@@ -2,6 +2,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../../../../core/auth/src/require_user.dart';
 import '../../../../core/rest_api/src/rest_api.dart';
+import '../../../student/student.dart';
 import '../../profile.dart';
 
 class ProfileRouter {

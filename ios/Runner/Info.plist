@@ -2,23 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- Start of the Google Sign-in Section -->
-	<key>GIDClientID</key>
-	<string>889571705211-3m5otprqtm98lojcub115a29ed138lil.apps.googleusercontent.com</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.889571705211-3m5otprqtm98lojcub115a29ed138lil</string>
-			</array>
-		</dict>
-	</array>
-	<!-- End of the Google Sign-in Section -->
-	<!-- Camera -->
-	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<key>FirebaseAppDelegateProxyEnabled</key>
 	<true/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
@@ -40,8 +24,30 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.889571705211-3m5otprqtm98lojcub115a29ed138lil</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-889571705211-ios-131c58a10c2ea12ba7bdde
+</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>GIDClientID</key>
+	<string>889571705211-3m5otprqtm98lojcub115a29ed138lil.apps.googleusercontent.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
@@ -67,6 +73,10 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

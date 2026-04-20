@@ -114,14 +114,14 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
   @override
   WidgetStateProperty<Color?>? get foregroundColor =>
       WidgetStateMapper<Color?>({
-        WidgetState.disabled: colorPalette.foregroundDisabled,
+        WidgetState.disabled: colorPalette.background,
         WidgetState.any: colorPalette.foregroundAccent,
       });
 
   @override
   WidgetStateProperty<Color?>? get backgroundColor =>
       WidgetStateMapper<Color?>({
-        WidgetState.disabled: colorPalette.disabled,
+        WidgetState.disabled: colorPalette.buttonDisabled,
         WidgetState.any: colorPalette.primary,
       });
 

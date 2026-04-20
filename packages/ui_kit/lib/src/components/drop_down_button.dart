@@ -98,7 +98,7 @@ class UiDropDownMenuStyle extends MenuStyle {
 
   @override
   WidgetStateProperty<double?>? get elevation =>
-      const WidgetStatePropertyAll(1.0);
+      const WidgetStatePropertyAll(.0);
 
   @override
   WidgetStateProperty<EdgeInsetsGeometry?>? get padding =>
@@ -106,11 +106,11 @@ class UiDropDownMenuStyle extends MenuStyle {
 
   @override
   WidgetStateProperty<Size?>? get minimumSize =>
-      const WidgetStatePropertyAll(.fromHeight(100.0));
+      const WidgetStatePropertyAll(.zero);
 
   @override
   WidgetStateProperty<Size?>? get maximumSize =>
-      const WidgetStatePropertyAll(.fromHeight(200.0));
+      const WidgetStatePropertyAll(.fromHeight(.infinity));
 
   @override
   WidgetStateProperty<BorderSide?>? get side =>
@@ -157,7 +157,7 @@ InputDecorationTheme _buildInputDecorationTheme({
     filled: true,
     contentPadding: const .only(
       left: 20.0,
-      right: 16.0,
+      right: 12.0,
       top: 12.0,
       bottom: 12.0,
     ),

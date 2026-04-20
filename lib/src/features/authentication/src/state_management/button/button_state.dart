@@ -8,6 +8,12 @@ sealed class ButtonState {
   bool get isEnabled =>
       map(disabled: (_) => false, enabled: (_) => true, loading: (_) => false);
 
+  bool get isLoading =>
+      map(disabled: (_) => false, enabled: (_) => false, loading: (_) => true);
+
+  bool get isDisabled =>
+      map(disabled: (_) => true, enabled: (_) => false, loading: (_) => false);
+
   const factory ButtonState.disabled() = _ButtonDisabled;
   const factory ButtonState.enabled() = _ButtonEnabled;
   const factory ButtonState.loading() = _ButtonLoading;

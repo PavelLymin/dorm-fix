@@ -98,7 +98,7 @@ ColorPalette generatePaletteForBrightness(Brightness brightness) {
 AppBarTheme appBarTheme(ColorPalette2 palette, AppTypography2 typography) =>
     AppBarTheme(
       centerTitle: false,
-      titleSpacing: .0,
+      titleSpacing: 20.0,
       toolbarHeight: 32.0,
       backgroundColor: palette.background,
       surfaceTintColor: palette.background,
