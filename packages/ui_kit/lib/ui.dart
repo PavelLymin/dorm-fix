@@ -23,7 +23,8 @@ export 'package:ui_kit/src/components/status_indicator.dart';
 export 'package:ui_kit/src/components/detail_card.dart';
 export 'package:ui_kit/src/components/stepper.dart';
 export 'package:ui_kit/src/components/carousel.dart';
-export 'src/components/calendar/calendar.dart';
+export 'package:ui_kit/src/components/calendar/calendar.dart';
+export 'package:ui_kit/src/components/icons.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

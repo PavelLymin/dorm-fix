@@ -99,7 +99,7 @@ AppBarTheme appBarTheme(ColorPalette2 palette, AppTypography2 typography) =>
     AppBarTheme(
       centerTitle: false,
       titleSpacing: 20.0,
-      toolbarHeight: 32.0,
+      toolbarHeight: 42.0,
       backgroundColor: palette.background,
       surfaceTintColor: palette.background,
       foregroundColor: palette.foreground,

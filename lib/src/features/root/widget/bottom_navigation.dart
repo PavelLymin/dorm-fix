@@ -8,24 +8,25 @@ class BottomNavigation extends StatelessWidget {
   final List<AppPage> pages;
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-    child: SizedBox(
-      height: 80.0,
-      child: Row(
-        mainAxisAlignment: .spaceEvenly,
-        crossAxisAlignment: .center,
-        children: List.generate(pages.length, (index) {
-          final page = pages[index];
-          return TabItem(
-            index: index,
-            title: page.title,
-            icon: page.icon,
-            activeIcon: page.activeIcon,
-          );
-        }),
+  Widget build(BuildContext context) {
+    final palette = Theme.of(context).colorPalette2;
+    return ColoredBox(
+      color: palette.card,
+      child: SafeArea(
+        child: Padding(
+          padding: const .only(top: 16.0, bottom: 10.0),
+          child: Row(
+            mainAxisAlignment: .spaceEvenly,
+            crossAxisAlignment: .start,
+            children: List.generate(pages.length, (index) {
+              final page = pages[index];
+              return TabItem(index: index, title: page.title, icon: page.icon);
+            }),
+          ),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class TabItem extends StatefulWidget {
@@ -34,13 +35,11 @@ class TabItem extends StatefulWidget {
     required this.index,
     required this.title,
     required this.icon,
-    required this.activeIcon,
   });
 
   final int index;
   final String title;
   final IconData icon;
-  final IconData activeIcon;
 
   @override
   State<TabItem> createState() => _TabItemState();
@@ -58,26 +57,12 @@ class _TabItemState extends State<TabItem> {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final palette = Theme.of(context).colorPalette2;
     return GestureDetector(
       onTap: () => AutoTabsRouter.of(context).setActiveIndex(widget.index),
-      child: Column(
-        mainAxisAlignment: .center,
-        crossAxisAlignment: .center,
-        children: [
-          Icon(
-            _isActive ? widget.activeIcon : widget.icon,
-            color: _isActive
-                ? colorPalette.foreground
-                : colorPalette.mutedForeground,
-          ),
-          UiText.bodySmall(
-            widget.title,
-            color: _isActive
-                ? colorPalette.foreground
-                : colorPalette.mutedForeground,
-          ),
-        ],
+      child: Icon(
+        widget.icon,
+        color: _isActive ? palette.primary : palette.secondary,
       ),
     );
   }

@@ -44,22 +44,6 @@ class CompositionRoot {
     );
     final app = FirebaseAdmin.instance.initializeApp(options);
 
-    // await app.auth().setCustomUserClaims('6weAN4iCOqUbh67aY0H0ev8kgo73', {
-    //   'role': Role.master.name,
-    // });
-
-    // await app.auth().setCustomUserClaims('0iGGcmM9O6eNJ8ryWYLjihIQZyr2', {
-    //   'role': Role.master.name,
-    // });
-
-    // await app.auth().setCustomUserClaims('oeFZ2dPqplgg1gJYvOE4iLTqgE02', {
-    //   'role': Role.master.name,
-    // });
-
-    // await app.auth().setCustomUserClaims('oeFZ2dPqplgg1gJYvOE4iLTqgE02', {
-    //   'role': Role.master.name,
-    // });
-
     // Database
     final database = Database.lazy(file: File(Config.databasePath));
 

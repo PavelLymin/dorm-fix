@@ -1,19 +1,16 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dorm_fix/src/features/repair_request/request.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../app/widget/dependencies_scope.dart';
 import 'bottom_navigation.dart';
 
 class AppPage {
-  const AppPage({
-    required this.name,
-    required this.title,
-    required this.icon,
-    required this.activeIcon,
-  });
+  const AppPage({required this.name, required this.title, required this.icon});
 
   final String name;
   final String title;
   final IconData icon;
-  final IconData activeIcon;
 }
 
 class MasterDataScope extends InheritedWidget {
@@ -60,6 +57,44 @@ class MasterRootScreen extends StatelessWidget {
   );
 }
 
+class StudentRootScreen extends StatefulWidget {
+  const StudentRootScreen({super.key, required this.pages});
+
+  final List<AppPage> pages;
+
+  @override
+  State<StudentRootScreen> createState() => _StudentRootScreenState();
+}
+
+class _StudentRootScreenState extends State<StudentRootScreen> {
+  late final RepairRequestBloc _repairRequestBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    final dependency = DependeciesScope.of(context);
+    _repairRequestBloc = RepairRequestBloc(
+      requestRepository: dependency.requestRepository,
+      problemRepository: dependency.problemRepository,
+      logger: dependency.logger,
+    );
+  }
+
+  @override
+  void dispose() {
+    _repairRequestBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => _repairRequestBloc,
+      child: RootScreen(pages: widget.pages),
+    );
+  }
+}
+
 class RootScreen extends StatelessWidget {
   const RootScreen({super.key, required this.pages});
 
@@ -67,7 +102,6 @@ class RootScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final window = WindowSizeScope.of(context);
     return AutoTabsRouter(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeIn,
@@ -78,17 +112,8 @@ class RootScreen extends StatelessWidget {
         (index) => NamedRoute(pages[index].name),
       ),
       builder: (context, child) => Scaffold(
-        bottomNavigationBar: window.mapOrNull(
-          compact: (_) => BottomNavigation(pages: pages),
-        ),
-        // drawer: Drawer(child: MenuNavigation()),
-        body: window.maybeMap(
-          compact: (_) => child,
-          // medium: (_) => Burger(child: child),
-          // orElse: () => SidebarNavigation(pages: pages, child: child),
-          medium: (_) => child,
-          orElse: () => child,
-        ),
+        bottomNavigationBar: BottomNavigation(pages: pages),
+        body: child,
       ),
     );
   }

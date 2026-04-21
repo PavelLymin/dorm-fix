@@ -28,6 +28,7 @@ class _TimePickerState extends State<TimePicker> with _TimePickerStateMixin {
           children: [
             UiDropDownButton<DateTime>(
               controller: _startTime,
+              menuHeight: 200,
               selectOnly: true,
               showTrailingIcon: false,
               onSelected: _onSelectedStartTime,
@@ -49,6 +50,7 @@ class _TimePickerState extends State<TimePicker> with _TimePickerStateMixin {
                 _onChangeStart(startTime, endTime);
                 return UiDropDownButton<DateTime>(
                   controller: _endTime,
+                  menuHeight: 200,
                   selectOnly: true,
                   showTrailingIcon: false,
                   onSelected: _onSelectedEndTime,

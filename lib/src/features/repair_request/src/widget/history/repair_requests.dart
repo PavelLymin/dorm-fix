@@ -5,31 +5,27 @@ import '../../../../../app/model/application_config.dart';
 import '../../../request.dart';
 
 class RepairRequest extends StatelessWidget {
-  const RepairRequest({super.key, required this.bloc, this.itemCount});
+  const RepairRequest({super.key, this.itemCount});
 
-  final RepairRequestBloc bloc;
   final int? itemCount;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: bloc,
-      child: BlocBuilder<RepairRequestBloc, RepairRequestState>(
-        builder: (context, state) {
-          return state.maybeMap(
-            loading: (_) => SliverToBoxAdapter(
-              child: const Center(child: CircularProgressIndicator()),
-            ),
-            orElse: (state) {
-              final List<FullRepairRequest> requests = state.requests;
-              return _Loaded(
-                itemCount: itemCount ?? requests.length,
-                requests: requests,
-              );
-            },
-          );
-        },
-      ),
+    return BlocBuilder<RepairRequestBloc, RepairRequestState>(
+      builder: (context, state) {
+        return state.maybeMap(
+          loading: (_) => SliverToBoxAdapter(
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+          orElse: (state) {
+            final List<FullRepairRequest> requests = state.requests;
+            return _Loaded(
+              itemCount: itemCount ?? requests.length,
+              requests: requests,
+            );
+          },
+        );
+      },
     );
   }
 }

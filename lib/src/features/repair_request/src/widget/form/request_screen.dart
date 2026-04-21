@@ -27,78 +27,86 @@ class _FormRequestScreenState extends State<FormRequestScreen>
         BlocProvider(create: (context) => _requestFormBloc),
         BlocProvider.value(value: _specializationBloc),
       ],
-      child: BlocListener<RepairRequestBloc, RepairRequestState>(
-        listener: (context, state) => state.mapOrNull(
-          error: (state) => ErrorUtil.showSnackBar(context, state.message),
-        ),
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: AppInsets.screen,
-              sliver: SliverSafeArea(
-                sliver: SliverMainAxisGroup(
-                  slivers: [
-                    const SliverAppBar(
-                      title: Text('Создание заявки'),
-                      toolbarHeight: 42.0,
-                    ),
-                    SliverPadding(
-                      padding: const .only(top: 16.0, bottom: 10.0),
-                      sliver: SliverToBoxAdapter(
-                        child: UiText2.lBold('Выберите мастера или услугу'),
-                      ),
-                    ),
-                    const SliverToBoxAdapter(child: ChoosingService()),
-                    SliverPadding(
-                      padding: const .only(top: 24.0, bottom: 10.0),
-                      sliver: SliverToBoxAdapter(
-                        child: UiText2.lBold('Укажите дату'),
-                      ),
-                    ),
-                    const SliverToBoxAdapter(child: LineCalendarPicker()),
-                    SliverPadding(
-                      padding: const .only(top: 24.0, bottom: 10.0),
-                      sliver: SliverToBoxAdapter(
-                        child: UiText2.lBold('Укажите  время'),
-                      ),
-                    ),
-                    const SliverToBoxAdapter(child: TimePicker()),
-                    SliverPadding(
-                      padding: const .only(top: 24.0, bottom: 10.0),
-                      sliver: SliverToBoxAdapter(
-                        child: UiText2.lBold('Опишите проблему'),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: DescriptionText(
-                        controller: _descriptionController,
-                      ),
-                    ),
-                    SliverPadding(
-                      padding: const .only(top: 24.0, bottom: 10.0),
-                      sliver: SliverToBoxAdapter(
-                        child: UiText2.lBold('Загрузите фотографии'),
-                      ),
-                    ),
-                    const SliverToBoxAdapter(child: PhotoPicker()),
-                    SliverPadding(
-                      padding: .symmetric(vertical: 32.0),
-                      sliver: SliverToBoxAdapter(
-                        child: UiButton.filledPrimary(
-                          onPressed: _submitForm,
-                          label: Text('Отправить заявку'),
-                        ),
-                      ),
-                    ),
-                  ],
+      child: Scaffold(
+        appBar: AppBar(title: Text('Создание заявки')),
+        body: SafeArea(
+          child: Padding(
+            padding: AppInsets.screen,
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: const .only(top: 16.0, bottom: 10.0),
+                  sliver: SliverToBoxAdapter(
+                    child: UiText2.lBold('Выберите мастера или услугу'),
+                  ),
                 ),
-              ),
+                const SliverToBoxAdapter(child: ChoosingService()),
+                SliverPadding(
+                  padding: const .only(top: 24.0, bottom: 10.0),
+                  sliver: SliverToBoxAdapter(
+                    child: UiText2.lBold('Укажите дату'),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: LineCalendarPicker()),
+                SliverPadding(
+                  padding: const .only(top: 24.0, bottom: 10.0),
+                  sliver: SliverToBoxAdapter(
+                    child: UiText2.lBold('Укажите  время'),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: TimePicker()),
+                SliverPadding(
+                  padding: const .only(top: 24.0, bottom: 10.0),
+                  sliver: SliverToBoxAdapter(
+                    child: UiText2.lBold('Опишите проблему'),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: DescriptionText(controller: _descriptionController),
+                ),
+                SliverPadding(
+                  padding: const .only(top: 24.0, bottom: 10.0),
+                  sliver: SliverToBoxAdapter(
+                    child: UiText2.lBold('Загрузите фотографии'),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: PhotoPicker()),
+                SliverPadding(
+                  padding: .symmetric(vertical: 32.0),
+                  sliver: SliverToBoxAdapter(
+                    child: ButtonForm(onPressed: _submitForm),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     ),
   );
+}
+
+class ButtonForm extends StatelessWidget {
+  const ButtonForm({super.key, required this.onPressed});
+
+  final void Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        return BlocListener<RepairRequestBloc, RepairRequestState>(
+          listener: (context, state) => state.mapOrNull(
+            error: (state) => ErrorUtil.showSnackBar(context, state.message),
+          ),
+          child: UiButton.filledPrimary(
+            onPressed: onPressed,
+            label: Text('Отправить'),
+          ),
+        );
+      },
+    );
+  }
 }
 
 mixin _RequestScreenStateMixin on State<FormRequestScreen> {

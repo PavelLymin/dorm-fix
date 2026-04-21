@@ -74,13 +74,13 @@ class _NamePhotoEditState extends State<NamePhotoEdit> {
               textInputAction: .done,
               style: UiTextFieldStyle(
                 hintText: 'Иван Иванов',
-                prefixIcon: const Icon(Icons.person_outline),
+                prefixIcon: const Icon(UiIcons.userProfile),
                 suffixIcon: ValueListenableBuilder<TextEditingValue>(
                   valueListenable: _controller,
                   builder: (_, value, _) {
                     if (value.text.isEmpty) return const SizedBox.shrink();
                     return IconButton(
-                      icon: const Icon(Icons.clear),
+                      icon: const Icon(UiIcons.edit),
                       onPressed: () => _controller.clear(),
                     );
                   },
@@ -142,7 +142,7 @@ class UserAvatar extends StatelessWidget {
                       isEnabled.value = true;
                     }
                   },
-                  icon: const Icon(Icons.edit_outlined),
+                  icon: const Icon(UiIcons.edit),
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(palette.primary),
                     iconColor: WidgetStatePropertyAll(palette.foregroundAccent),

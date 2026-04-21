@@ -30,6 +30,7 @@ class _PersonalAvatarView extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     return UiCard.standart(
+      padding: .all(20.0),
       child: Row(
         crossAxisAlignment: .center,
         mainAxisAlignment: .start,

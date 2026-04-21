@@ -54,7 +54,7 @@ class _EmailAddressEditState extends State<EmailAddressEdit>
           builder: (_, value, _) => UiButton.filledPrimary(
             onPressed: () {},
             enabled: value,
-            label: UiText.titleMedium(AppLocalizations.of(context).update),
+            label: Text(AppLocalizations.of(context).update),
           ),
         ),
       ],
@@ -147,7 +147,7 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
             textInputAction: .done,
             style: UiTextFieldStyle(
               hintText: '+71234567890',
-              prefixIcon: Icon(Icons.phone_enabled_outlined),
+              prefixIcon: Icon(UiIcons.phone),
               suffixIcon: ValueListenableBuilder<TextEditingValue>(
                 valueListenable: _controller,
                 builder: (_, value, _) {
@@ -193,7 +193,7 @@ class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
           ),
         ),
         builder: (context, state) => state.maybeMap(
-          orElse: () => UiText.titleMedium(AppLocalizations.of(context).update),
+          orElse: () => Text(AppLocalizations.of(context).update),
           loading: (_) => SizedBox.square(
             dimension: 20,
             child: CircularProgressIndicator(

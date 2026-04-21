@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../core/utils/utils.dart';
@@ -29,27 +28,7 @@ class _PincodeFormState extends State<PincodeForm> with _PincodeFormStateMixiN {
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) => state.mapOrNull(
           loading: (_) => _buttonBloc.add(.addLoading()),
-          authenticated: (user) {
-            _buttonBloc.add(.addEnabled());
-            user.authUser.mapAuthUser(
-              firebase: (_) =>
-                  context.router.replace(const NamedRoute('MapScreen')),
-              profile: (p) => p.mapRoleUser(
-                student: (_) => context.router.replace(
-                  const NamedRoute('StudentRootSreen'),
-                ),
-                master: (m) => context.router.replace(
-                  NamedRoute(
-                    'MasterRootSreen',
-                    params: {
-                      'spec_id': m.specialization.id,
-                      'dorm_id': m.dormitory.id,
-                    },
-                  ),
-                ),
-              ),
-            );
-          },
+          authenticated: (user) => _buttonBloc.add(.addEnabled()),
           error: (state) {
             _buttonBloc.add(.addEnabled());
             ErrorUtil.showSnackBar(context, state.message);

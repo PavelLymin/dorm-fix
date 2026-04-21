@@ -30,7 +30,12 @@ class _HomeScreenState extends State<MasterHomeScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          // RepairRequestList(requests: requests)
+          SliverAppBar(
+            backgroundColor: Colors.white,
+            pinned: true,
+            title: const Text('Мои заявки'),
+          ),
+          SliverFillRemaining(),
         ],
       ),
     );

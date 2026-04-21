@@ -98,7 +98,7 @@ class UiDropDownMenuStyle extends MenuStyle {
 
   @override
   WidgetStateProperty<double?>? get elevation =>
-      const WidgetStatePropertyAll(.0);
+      const WidgetStatePropertyAll(1.0);
 
   @override
   WidgetStateProperty<EdgeInsetsGeometry?>? get padding =>

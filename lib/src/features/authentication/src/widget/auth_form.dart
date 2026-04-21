@@ -37,6 +37,27 @@ class _AuthFormState extends State<AuthForm> with _AuthFormStateMixin {
                 ),
               );
             },
+            authenticated: (user) {
+              _buttonBloc.add(.addEnabled());
+              user.authUser.mapAuthUser(
+                firebase: (_) =>
+                    context.router.replaceAll([const NamedRoute('MapScreen')]),
+                profile: (p) => p.mapRoleUser(
+                  student: (_) => context.router.replaceAll([
+                    const NamedRoute('StudentRootSreen'),
+                  ]),
+                  master: (m) => context.router.replaceAll([
+                    NamedRoute(
+                      'MasterRootSreen',
+                      params: {
+                        'spec_id': m.specialization.id,
+                        'dorm_id': m.dormitory.id,
+                      },
+                    ),
+                  ]),
+                ),
+              );
+            },
             error: (state) {
               _isValid()
                   ? _buttonBloc.add(.addEnabled())

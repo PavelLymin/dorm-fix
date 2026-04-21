@@ -51,10 +51,9 @@ Future<T?> showUiBottomSheet<T>(
               children: [
                 UiText2.lBold(title),
                 UiButton.icon(
-                  onPressed: () {
-                    Navigator.canPop(context) ? Navigator.pop(context) : null;
-                  },
-                  icon: const Icon(Icons.close_rounded),
+                  onPressed: () =>
+                      Navigator.canPop(context) ? Navigator.pop(context) : null,
+                  icon: Icon(UiIcons.close),
                 ),
               ],
             ),

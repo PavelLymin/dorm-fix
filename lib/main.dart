@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dorm_fix/src/features/students/home/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ui_kit/ui.dart';
@@ -49,18 +50,23 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   late final AuthBloc _authenticationBloc;
+  late final SpecializationBloc _specializationBloc;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = DependeciesScope.of(context).authenticationBloc;
+    _specializationBloc = DependeciesScope.of(context).specializationBloc;
   }
 
   @override
   Widget build(BuildContext context) {
     final router = DependeciesScope.of(context).router;
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => _authenticationBloc)],
+      providers: [
+        BlocProvider(create: (context) => _authenticationBloc),
+        BlocProvider(create: (context) => _specializationBloc),
+      ],
       child: MaterialApp.router(
         title: 'Dorm Fix',
         debugShowCheckedModeBanner: false,

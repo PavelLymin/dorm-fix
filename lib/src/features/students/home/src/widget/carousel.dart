@@ -68,7 +68,9 @@ class _Item extends StatelessWidget {
                 UiText2.lBold(spec.title),
                 UiText2.m(
                   spec.description,
+                  maxLines: 2,
                   color: Theme.of(context).colorPalette2.foregroundSecondary,
+                  overflow: .ellipsis,
                 ),
               ],
             ),

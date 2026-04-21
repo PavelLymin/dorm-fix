@@ -36,24 +36,12 @@ class PersonalData extends StatelessWidget {
     FirebaseUser user,
   ) {
     final localizations = AppLocalizations.of(context);
-    final icon = const Icon(Icons.chevron_right_rounded);
+    final icon = const Icon(UiIcons.chevronRight);
     return <TileGroupItem>[
-      TileGroupItem(
-        title: localizations.email_address,
-        sufixIcon: icon,
-        prefixIcon: Icon(Icons.email_outlined),
-        subTitle: user.email ?? 'Укажите почту',
-        onTap: () => showUiBottomSheet(
-          context,
-          title: localizations.email_address,
-          isScrollControlled: true,
-          widget: EmailAddressEdit(initialText: user.email ?? ''),
-        ),
-      ),
       TileGroupItem(
         title: localizations.phone_number,
         sufixIcon: icon,
-        prefixIcon: Icon(Icons.phone_rounded),
+        prefixIcon: Icon(UiIcons.phone),
         subTitle: user.phoneNumber ?? 'Укажите телефон',
         onTap: () => showUiBottomSheet(
           title: localizations.phone_number,
@@ -70,20 +58,20 @@ class PersonalData extends StatelessWidget {
     FullStudent student,
   ) {
     final localizations = AppLocalizations.of(context);
-    final icon = const Icon(Icons.chevron_right_rounded);
+    final icon = const Icon(UiIcons.chevronRight);
     return _createGeneralDataList(context, student.user)
       ..addAll(<TileGroupItem>[
         TileGroupItem(
           title: localizations.dormitory,
           sufixIcon: icon,
-          prefixIcon: Icon(Icons.apartment),
+          prefixIcon: Icon(UiIcons.home),
           subTitle: localizations.dormitory_name(student.dormitory.number),
           onTap: () {},
         ),
         TileGroupItem(
           title: localizations.room,
           sufixIcon: icon,
-          prefixIcon: Icon(Icons.room_outlined),
+          prefixIcon: Icon(UiIcons.key),
           subTitle: student.room.number,
           onTap: () {},
         ),
@@ -95,7 +83,7 @@ class PersonalData extends StatelessWidget {
     MasterUser master,
   ) {
     final localizations = AppLocalizations.of(context);
-    final icon = const Icon(Icons.chevron_right_rounded);
+    final icon = const Icon(UiIcons.chevronRight);
     return _createGeneralDataList(context, master.user)..addAll(<TileGroupItem>[
       TileGroupItem(
         title: localizations.dormitory,

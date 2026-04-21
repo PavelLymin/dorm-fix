@@ -45,21 +45,21 @@ class _SettingsState extends State<Settings> {
     SettingsEntity settings,
     TextStyle dataStyle,
   ) {
-    final icon = const Icon(Icons.expand_more_outlined);
+    final icon = const Icon(UiIcons.sortVertical);
 
     final l10n = AppLocalizations.of(context);
     return <TileGroupItem>[
       TileGroupItem(
         title: l10n.notifications,
         sufixIcon: icon,
-        prefixIcon: Icon(Icons.notifications_none_outlined),
+        prefixIcon: Icon(UiIcons.bell),
         subTitle: l10n.notifications_off,
         onTap: () {},
       ),
       TileGroupItem(
         title: l10n.theme,
         sufixIcon: icon,
-        prefixIcon: Icon(Icons.light_mode_outlined),
+        prefixIcon: Icon(UiIcons.palette),
         onTap: () {},
         initial: settings.themeMode.index,
         selectItem: TileSelectItem(
@@ -73,7 +73,7 @@ class _SettingsState extends State<Settings> {
       TileGroupItem(
         title: l10n.language,
         sufixIcon: icon,
-        prefixIcon: Icon(Icons.language_outlined),
+        prefixIcon: Icon(UiIcons.globe),
         subTitle: l10n.russian,
         onTap: () {},
         initial: settings.locale.index,
@@ -98,19 +98,15 @@ class LogOutButton extends StatelessWidget {
     return UiButton.filledPrimary(
       onPressed: () {
         context.read<AuthBloc>().add(.signOut());
-        context.router.replace(const NamedRoute('SignIn'));
+        context.router.replaceAll([const NamedRoute('SignIn')]);
       },
-      icon: Icon(Icons.logout_outlined, color: theme.colorPalette2.destructive),
-      label: UiText2.m(
+      icon: Icon(UiIcons.logOut, color: theme.colorPalette2.destructive),
+      label: Text(
         'Выйти из профиля',
-        color: theme.colorPalette2.destructive,
+        style: TextStyle(color: theme.colorPalette2.destructive),
       ),
       style: ButtonStyle(
-        shape: const WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: .all(.circular(24.0))),
-        ),
-        alignment: .centerStart,
-        backgroundColor: .all(theme.colorPalette2.card),
+        backgroundColor: .all(theme.colorPalette2.buttonSecondary),
       ),
     );
   }

@@ -65,7 +65,7 @@ class AppRouter extends RootStackRouter {
     ),
     NamedRouteDef(
       name: 'StudentRootSreen',
-      builder: (_, _) => const RootScreen(pages: studentPages),
+      builder: (_, _) => const StudentRootScreen(pages: studentPages),
       children: [
         NamedRouteDef(
           initial: true,
@@ -104,24 +104,13 @@ class AppRouter extends RootStackRouter {
 }
 
 const List<AppPage> studentPages = <AppPage>[
-  AppPage(
-    name: 'StudentHomeScreen',
-    title: 'Домашняя',
-    icon: Icons.home_outlined,
-    activeIcon: Icons.home,
-  ),
+  AppPage(name: 'StudentHomeScreen', title: 'Домашняя', icon: UiIcons.home),
   AppPage(
     name: 'FormRequestScreen',
     title: 'Заявка',
     icon: Icons.request_page_outlined,
-    activeIcon: Icons.request_page,
   ),
-  AppPage(
-    name: 'ProfileScreen',
-    title: 'Профиль',
-    icon: Icons.person_outline,
-    activeIcon: Icons.person,
-  ),
+  AppPage(name: 'ProfileScreen', title: 'Профиль', icon: UiIcons.filePlus),
 ];
 
 const List<AppPage> masterPages = <AppPage>[
@@ -129,12 +118,6 @@ const List<AppPage> masterPages = <AppPage>[
     name: 'MasterHomeScreen',
     title: 'Домашняя',
     icon: Icons.home_outlined,
-    activeIcon: Icons.home,
   ),
-  AppPage(
-    name: 'ProfileScreen',
-    title: 'Профиль',
-    icon: Icons.person_outline,
-    activeIcon: Icons.person,
-  ),
+  AppPage(name: 'ProfileScreen', title: 'Профиль', icon: UiIcons.userProfile),
 ];

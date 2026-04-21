@@ -39,5 +39,20 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '18.0'
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        'PERMISSION_LOCATION=1',
+      ]
+      
+      # Fix for yandex_mapkit Flutter.h header not found
+      if target.name == 'yandex_mapkit'
+        config.build_settings['HEADER_SEARCH_PATHS'] ||= '$(inherited)'
+        config.build_settings['HEADER_SEARCH_PATHS'] += ' "${PODS_ROOT}/../Flutter/Flutter.framework/Headers"'
+        config.build_settings['FRAMEWORK_SEARCH_PATHS'] ||= '$(inherited)'
+        config.build_settings['FRAMEWORK_SEARCH_PATHS'] += ' "${PODS_ROOT}/../Flutter"'
+      end
+    end
   end
 end

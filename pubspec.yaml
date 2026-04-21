@@ -75,3 +75,7 @@ flutter:
           weight: 400
         - asset: packages/ui_kit/fonts/Inter_SemiBold.ttf
           weight: 600
+
+    - family: UiIcons
+      fonts:
+        - asset: packages/ui_kit/fonts/Icons.ttf

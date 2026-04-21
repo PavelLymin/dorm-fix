@@ -1,11 +1,10 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 
 import '../../../../repair_request/request.dart';
 
 class HistoryFilter extends StatelessWidget {
-  const HistoryFilter({super.key, required this.bloc});
-
-  final RepairRequestBloc bloc;
+  const HistoryFilter({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,9 @@ class HistoryFilter extends StatelessWidget {
             Expanded(
               child: UiDropDownButton<StatusEnum>(
                 selectOnly: true,
-                onSelected: (value) => bloc.add(.get(uid: true, status: value)),
+                onSelected: (value) => context.read<RepairRequestBloc>().add(
+                  .get(uid: true, status: value),
+                ),
                 trailingIcon: const Icon(Icons.keyboard_arrow_down_rounded),
                 selectedTrailingIcon: const Icon(
                   Icons.keyboard_arrow_up_rounded,
