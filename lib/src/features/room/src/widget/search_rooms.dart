@@ -57,10 +57,10 @@ class _Item extends StatelessWidget {
             mainAxisSize: .min,
             spacing: 4.0,
             children: [
-              UiText.bodyMedium(room.number),
-              UiText.bodyMedium(
+              UiText2.m(room.number),
+              UiText2.m(
                 dormitory.name,
-                color: Theme.of(context).colorPalette.mutedForeground,
+                color: Theme.of(context).colorPalette2.foregroundSecondary,
               ),
             ],
           ),

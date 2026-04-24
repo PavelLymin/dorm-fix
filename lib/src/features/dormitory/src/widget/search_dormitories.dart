@@ -55,7 +55,7 @@ class _Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
+    final palette = theme.colorPalette2;
     return GestureDetector(
       behavior: .opaque,
       onTap: () => _showDormitoryDetails(context),
@@ -72,11 +72,8 @@ class _Item extends StatelessWidget {
             mainAxisSize: .min,
             spacing: 4.0,
             children: [
-              UiText.bodyMedium(dormitory.name),
-              UiText.bodyMedium(
-                dormitory.address,
-                color: palette.mutedForeground,
-              ),
+              UiText2.m(dormitory.name),
+              UiText2.m(dormitory.address, color: palette.foregroundSecondary),
             ],
           ),
         ],

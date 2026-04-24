@@ -9,11 +9,11 @@ class ColorPalettePreview extends StatelessWidget {
       crossAxisAlignment: .start,
       mainAxisSize: .min,
       children: [
-        UiText.titleMedium('Light'),
+        UiText2.m('Light'),
         const SizedBox(height: 8),
         _PalettePreview(colorPalette: lightColorPalette2),
         const SizedBox(height: 16),
-        UiText.titleMedium('Dark'),
+        UiText2.m('Dark'),
         const SizedBox(height: 8),
         _PalettePreview(colorPalette: darkColorPalette2),
       ],

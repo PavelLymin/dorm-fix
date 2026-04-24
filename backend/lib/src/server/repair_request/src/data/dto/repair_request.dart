@@ -1,8 +1,9 @@
 import 'package:drift/drift.dart';
 import '../../../../../core/database/database.dart';
 import '../../../../chat/chat.dart';
-import '../../../../profile/profile.dart';
+import '../../../../master/master.dart';
 import '../../../../specialization/specialization.dart';
+import '../../../../student/student.dart';
 import '../../../repair_request.dart';
 import '../../model/status.dart';
 import 'status.dart';

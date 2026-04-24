@@ -3,6 +3,7 @@ import '../../../../../core/database/database.dart';
 import '../../../../dormitory/dormitory.dart';
 import '../../../../room/room.dart';
 import '../../../../profile/profile.dart';
+import '../../../student.dart';
 
 sealed class StudentDto {
   const StudentDto();

@@ -1,9 +1,11 @@
 import 'package:drift/drift.dart';
 import '../../../../../core/database/database.dart';
-import '../../../profile.dart';
+import '../../../master.dart';
 
 abstract interface class IMasterRepository {
   Future<MasterEntity?> getMaster({required String uid});
+
+  Future<List<MasterEntity>> getMasters({int? dormId, int? specId});
 }
 
 class MasterRepository implements IMasterRepository {
@@ -38,5 +40,44 @@ class MasterRepository implements IMasterRepository {
     ).toEntity();
 
     return master;
+  }
+
+  @override
+  Future<List<MasterEntity>> getMasters({int? dormId, int? specId}) async {
+    final query = (_database.select(_database.masters).join([
+      innerJoin(
+        _database.users,
+        _database.users.uid.equalsExp(_database.masters.uid),
+      ),
+      innerJoin(
+        _database.dormitories,
+        _database.dormitories.id.equalsExp(_database.masters.dormitoryId),
+      ),
+      innerJoin(
+        _database.specializations,
+        _database.specializations.id.equalsExp(_database.masters.specId),
+      ),
+    ]));
+
+    if (dormId != null) {
+      query.where(_database.masters.dormitoryId.equals(dormId));
+    }
+
+    if (specId != null) query.where(_database.masters.specId.equals(specId));
+
+    final data = await query.get();
+
+    final masters = data
+        .map(
+          (e) => MasterDto.fromData(
+            e.readTable(_database.masters),
+            e.readTable(_database.users),
+            e.readTable(_database.dormitories),
+            e.readTable(_database.specializations),
+          ).toEntity(),
+        )
+        .toList();
+
+    return masters;
   }
 }

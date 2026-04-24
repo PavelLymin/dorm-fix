@@ -4,6 +4,7 @@ import '../../core/rest_api/src/rest_api.dart';
 import '../../core/ws/ws.dart';
 import '../../server/chat/chat.dart';
 import '../../server/chat/src/router/message.dart';
+import '../../server/master/master.dart';
 import '../../server/repair_request/repair_request.dart';
 import '../../server/dormitory/src/router/dormitory.dart';
 import '../../server/profile/src/router/profile.dart';
@@ -17,6 +18,7 @@ class DependencyContainer {
     required this.restApi,
     required this.wsRouter,
     required this.database,
+    required this.masterRouter,
     required this.userRouter,
     required this.profileRouter,
     required this.roomRouter,
@@ -34,6 +36,8 @@ class DependencyContainer {
   final WsRouter wsRouter;
 
   final Database database;
+
+  final MasterRouter masterRouter;
 
   final UserRouter userRouter;
 

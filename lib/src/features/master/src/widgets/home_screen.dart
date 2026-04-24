@@ -1,7 +1,7 @@
 import 'package:ui_kit/ui.dart';
-import '../../../../../app/widget/dependencies_scope.dart';
-import '../../../../repair_request/request.dart';
-import '../../../../root/widget/root_screen.dart';
+import '../../../../app/widget/dependencies_scope.dart';
+import '../../../repair_request/request.dart';
+import '../../../root/widget/root_screen.dart';
 
 class MasterHomeScreen extends StatefulWidget {
   const MasterHomeScreen({super.key});

@@ -1,4 +1,4 @@
-import '../../../home.dart';
+import '../../../specialization.dart';
 
 class SpecializationDto {
   const SpecializationDto({

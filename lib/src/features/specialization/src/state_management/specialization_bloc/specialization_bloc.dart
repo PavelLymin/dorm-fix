@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
-import '../../../../../../core/rest_client/rest_client.dart';
-import '../../../home.dart';
+import '../../../../../core/rest_client/rest_client.dart';
+import '../../../specialization.dart';
 
 part 'specialization_event.dart';
 part 'specialization_state.dart';

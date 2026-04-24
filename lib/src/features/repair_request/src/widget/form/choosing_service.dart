@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../students/home/home.dart';
+import '../../../../specialization/specialization.dart';
 import '../../../request.dart';
 
 class ChoosingService extends StatelessWidget {
@@ -16,7 +16,7 @@ class ChoosingService extends StatelessWidget {
           ),
           loaded: (state) =>
               _SpecializationOptions(specialization: state.specializations),
-          error: (state) => UiText.bodyLarge(state.message),
+          error: (state) => UiText2.lBold(state.message),
         ),
       );
 }

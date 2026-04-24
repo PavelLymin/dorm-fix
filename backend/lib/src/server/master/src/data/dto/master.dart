@@ -2,7 +2,8 @@ import 'package:drift/drift.dart';
 import '../../../../../core/database/database.dart';
 import '../../../../dormitory/dormitory.dart';
 import '../../../../specialization/specialization.dart';
-import '../../../profile.dart';
+import '../../../../profile/profile.dart';
+import '../../model/master.dart';
 
 class MasterDto {
   const MasterDto({

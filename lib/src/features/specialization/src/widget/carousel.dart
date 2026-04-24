@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../home.dart';
+import '../../specialization.dart';
 
 class SpecializationsCarousel extends StatefulWidget {
   const SpecializationsCarousel({super.key});
@@ -35,9 +35,8 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
             return _Item(spec: spec);
           },
         ),
-        error: (state) => UiCard.standart(
-          child: Center(child: UiText.bodyLarge(state.message)),
-        ),
+        error: (state) =>
+            UiCard.standart(child: Center(child: UiText2.lBold(state.message))),
       ),
     );
   }
@@ -50,7 +49,12 @@ class _Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UiCard.standart(
+    return UiCard.clickable(
+      onTap: () => showUiBottomSheet(
+        context,
+        title: spec.title,
+        widget: SpecializationScreen(specialization: spec),
+      ),
       padding: .only(left: 20.0, top: 12.0, right: 20.0, bottom: 16.0),
       child: Row(
         mainAxisAlignment: .center,

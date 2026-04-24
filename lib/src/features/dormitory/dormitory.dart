@@ -8,3 +8,4 @@ export 'src/state_management/search_dormitory_bloc/search_dormitory_bloc.dart';
 export 'src/widget/search_dormitory_screen.dart';
 export 'src/widget/search_dormitories.dart';
 export 'src/widget/search_dormitory_details.dart';
+export 'src/widget/drop_down_dormitories.dart';

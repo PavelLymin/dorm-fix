@@ -10,15 +10,15 @@ class SearchDormitoryDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
+    final palette = theme.colorPalette2;
     return Column(
       mainAxisAlignment: .center,
       crossAxisAlignment: .stretch,
       mainAxisSize: .min,
       children: [
-        UiText.titleLarge(dormitory.name),
+        UiText2.lBold(dormitory.name),
         const SizedBox(height: 8.0),
-        UiText.titleMedium(dormitory.address, color: palette.mutedForeground),
+        UiText2.m(dormitory.address, color: palette.foregroundSecondary),
         const SizedBox(height: 32.0),
         UiButton.filledPrimary(
           onPressed: () => showUiBottomSheet(
@@ -26,7 +26,7 @@ class SearchDormitoryDetails extends StatelessWidget {
             title: 'Выбор комнаты',
             widget: SearchRoomScreen(dormitory: dormitory),
           ),
-          label: UiText.titleMedium('Выбрать'),
+          label: UiText2.m('Выбрать'),
         ),
       ],
     );

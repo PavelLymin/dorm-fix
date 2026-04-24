@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../../../core/utils/src/error_util.dart';
-import '../../../../students/home/home.dart';
+import '../../../../specialization/specialization.dart';
 import '../../../request.dart';
 import 'choosing_service.dart';
 import 'line_calendar_picker.dart';

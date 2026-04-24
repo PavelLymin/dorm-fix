@@ -59,10 +59,10 @@ abstract final class ErrorUtil {
 
   static void showSnackBar(BuildContext context, Object error) {
     final theme = Theme.of(context);
-    final palette = theme.colorPalette;
+    final palette = theme.colorPalette2;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: palette.destructiveCard,
+        backgroundColor: palette.destructive.withValues(alpha: .38),
         duration: const Duration(seconds: 3),
         padding: AppInsets.sheet,
         behavior: .floating,
@@ -71,21 +71,19 @@ abstract final class ErrorUtil {
           crossAxisAlignment: .start,
           spacing: 8.0,
           children: [
-            UiText.bodyLarge(
+            UiText2.lBold(
               'Произошла ошибка',
-              style: TextStyle(color: palette.destructiveForeground),
+              style: TextStyle(color: palette.destructive),
             ),
-            UiText.bodyLarge(
+            UiText2.m(
               errorToString(error),
-              style: TextStyle(
-                color: Theme.of(context).colorPalette.mutedForeground,
-              ),
+              style: TextStyle(color: palette.foregroundSecondary),
             ),
           ],
         ),
         shape: RoundedRectangleBorder(
           borderRadius: .circular(16.0),
-          side: BorderSide(color: palette.borderDestructive),
+          side: BorderSide(color: palette.destructive),
         ),
       ),
       snackBarAnimationStyle: AnimationStyle(

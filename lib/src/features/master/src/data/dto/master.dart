@@ -1,7 +1,7 @@
-import '../../../../students/home/home.dart';
+import '../../../../dormitory/dormitory.dart';
+import '../../../../specialization/specialization.dart';
 import '../../../../profile/profile.dart';
-import 'user.dart';
-import '../../../../dormitory/src/data/dto/dormitory.dart';
+import '../../../../authentication/src/data/dto/user.dart';
 
 class MasterDto {
   const MasterDto({

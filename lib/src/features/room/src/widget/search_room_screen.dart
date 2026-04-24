@@ -47,7 +47,7 @@ class _SearchRoomScreenState extends State<SearchRoomScreen> {
                   dimension: 32.0,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Theme.of(context).colorPalette.mutedForeground,
+                    color: Theme.of(context).colorPalette2.foregroundSecondary,
                   ),
                 ),
               ),

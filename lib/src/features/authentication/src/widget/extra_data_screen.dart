@@ -68,7 +68,7 @@ class _ExtraDataScreenState extends State<ExtraDataScreen>
                 valueListenable: _isEnabled,
                 builder: (_, value, _) {
                   return UiButton.filledPrimary(
-                    label: UiText.titleMedium('Продолжить'),
+                    label: Text('Продолжить'),
                     enabled: value,
                     onPressed: () {},
                   );

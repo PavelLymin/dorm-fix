@@ -1,6 +1,7 @@
 import '../../../chat/chat.dart';
-import '../../../profile/profile.dart';
+import '../../../master/master.dart';
 import '../../../specialization/specialization.dart';
+import '../../../student/student.dart';
 import '../../repair_request.dart';
 import 'status.dart';
 

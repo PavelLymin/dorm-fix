@@ -21,15 +21,11 @@ flutter:
   uses-material-design: true
 
   fonts:
-    - family: Inter
+    - family: SF Pro
       fonts:
-        - asset: lib/fonts/Inter_Bold.ttf
-          weight: 700
-        - asset: lib/fonts/Inter_Medium.ttf
-          weight: 500
-        - asset: lib/fonts/Inter_Regular.ttf
+        - asset: lib/fonts/SF-Pro-Display-Regular.otf
           weight: 400
-        - asset: lib/fonts/Inter_SemiBold.ttf
+        - asset: lib/fonts/SF-Pro-Display-Semibold.otf
           weight: 600
 
     - family: UiIcons

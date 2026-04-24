@@ -2,7 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/ui.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/map/map.dart';
-import '../../features/master/home/home.dart';
+import '../../features/master/src/widgets/home_screen.dart';
+import '../../features/specialization/specialization.dart';
 import '../../features/students/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
@@ -10,16 +11,19 @@ import '../../features/root/widget/root_screen.dart';
 import '../../features/students/repair_requests/repair_requests.dart';
 
 class AppRouter extends RootStackRouter {
-  AppRouter();
+  AppRouter({required this.authGuard});
+
+  final AuthGuard authGuard;
 
   @override
   List<AutoRoute> get routes => [
     NamedRouteDef(
+      initial: true,
       name: 'SplashScreen',
+      guards: [authGuard],
       builder: (_, _) => const SplashScreen(),
     ),
     NamedRouteDef(
-      initial: true,
       name: 'SignIn',
       builder: (context, data) => const AuthScreen(),
     ),
@@ -49,6 +53,13 @@ class AppRouter extends RootStackRouter {
         dormitoryId: data.params.getInt('dormitory_id'),
         roomId: data.params.getInt('room_id'),
       ),
+    ),
+    NamedRouteDef(
+      name: 'SpecializationScreen',
+      builder: (_, data) {
+        final specialization = data.params.get('specialization');
+        return SpecializationScreen(specialization: specialization);
+      },
     ),
     NamedRouteDef(
       name: 'FormRequestScreen',
@@ -121,3 +132,20 @@ const List<AppPage> masterPages = <AppPage>[
   ),
   AppPage(name: 'ProfileScreen', title: 'Профиль', icon: UiIcons.userProfile),
 ];
+
+class AuthGuard extends AutoRouteGuard {
+  final AuthBloc authBloc;
+
+  AuthGuard(this.authBloc);
+
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) {
+    final state = authBloc.state;
+    state.mapOrNull(
+      initial: (_) => resolver.next(true),
+      authenticated: (_) => resolver.next(true),
+      notAuthenticated: (_) => resolver.redirectUntil(NamedRoute('SignIn')),
+      error: (_) => resolver.redirectUntil(NamedRoute('SignIn')),
+    );
+  }
+}

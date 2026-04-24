@@ -18,7 +18,19 @@ class AuthServices extends StatelessWidget {
         UiButton.filledPrimary(
           onPressed: () =>
               context.read<AuthBloc>().add(AuthEvent.signInWithGoogle()),
-          label: const Text('Войти с помощью Google'),
+          label: Row(
+            mainAxisAlignment: .start,
+            crossAxisAlignment: .center,
+            children: [
+              const Icon(UiIcons.vk),
+              Flexible(
+                child: Align(
+                  alignment: .center,
+                  child: const Text('Войти с помощью Google'),
+                ),
+              ),
+            ],
+          ),
           style: ButtonStyle(
             backgroundColor: .all(palette.buttonSecondary),
             foregroundColor: .all(palette.foreground),
@@ -27,7 +39,19 @@ class AuthServices extends StatelessWidget {
         UiButton.filledPrimary(
           onPressed: () =>
               context.read<AuthBloc>().add(AuthEvent.signInWithGoogle()),
-          label: const Text('Войти с помощью Telegram'),
+          label: Row(
+            mainAxisAlignment: .start,
+            crossAxisAlignment: .center,
+            children: [
+              const Icon(UiIcons.telegram),
+              Flexible(
+                child: Align(
+                  alignment: .center,
+                  child: const Text('Войти с помощью Telegram'),
+                ),
+              ),
+            ],
+          ),
           style: ButtonStyle(
             backgroundColor: .all(palette.buttonSecondary),
             foregroundColor: .all(palette.foreground),

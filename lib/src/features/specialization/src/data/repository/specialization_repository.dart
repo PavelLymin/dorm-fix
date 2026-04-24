@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../../../../../core/rest_client/rest_client.dart';
-import '../../../home.dart';
+import '../../../../../core/rest_client/rest_client.dart';
+import '../../../specialization.dart';
 
 abstract interface class ISpecializationRepository {
   Future<List<SpecializationEntity>> getSpecializations();

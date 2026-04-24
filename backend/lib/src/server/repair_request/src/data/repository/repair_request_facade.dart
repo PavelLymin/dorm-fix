@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../../../../core/database/database.dart';
 import '../../../../chat/chat.dart';
+import '../../../../master/master.dart';
 import '../../../../profile/profile.dart';
 import '../../../../specialization/specialization.dart';
 import '../../../../student/student.dart';

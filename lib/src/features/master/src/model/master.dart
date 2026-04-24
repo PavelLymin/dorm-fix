@@ -1,15 +1,14 @@
-part of 'user.dart';
+part of '../../../authentication/src/model/user.dart';
 
 class MasterUser extends ProfileUser {
   const MasterUser({
     required super.id,
     required super.user,
+    required super.dormitory,
     required this.specialization,
-    required this.dormitory,
   });
 
   final SpecializationEntity specialization;
-  final DormitoryEntity dormitory;
 
   const factory MasterUser.fake() = FakeMaster;
 

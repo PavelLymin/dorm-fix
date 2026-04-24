@@ -9,6 +9,7 @@ import '../../core/ws/ws.dart';
 import '../../server/chat/chat.dart';
 import '../../server/chat/src/router/message.dart';
 import '../../server/dormitory/dormitory.dart';
+import '../../server/master/master.dart';
 import '../../server/profile/profile.dart';
 import '../../server/repair_request/repair_request.dart';
 import '../../server/room/room.dart';
@@ -118,6 +119,11 @@ class CompositionRoot {
       chatRepository: chatRealTimeRepository,
       messageRepository: messageRealTimeRepository,
     );
+    // Master
+    final masterRouter = MasterRouter(
+      masterRepository: masterRepository,
+      restApi: restApi,
+    );
     // Profile
     final profileRouter = ProfileRouter(
       restApi: restApi,
@@ -157,6 +163,7 @@ class CompositionRoot {
       restApi: restApi,
       wsRouter: wsRouter,
       database: database,
+      masterRouter: masterRouter,
       userRouter: userRouter,
       repairRequestRouter: repairRequestRouter,
       profileRouter: profileRouter,
@@ -175,6 +182,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.restApi,
     required this.wsRouter,
     required this.database,
+    required this.masterRouter,
     required this.userRouter,
     required this.repairRequestRouter,
     required this.profileRouter,
@@ -192,6 +200,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final WsRouter wsRouter;
 
   final Database database;
+
+  final MasterRouter masterRouter;
 
   final UserRouter userRouter;
 
@@ -215,6 +225,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     restApi: restApi,
     wsRouter: wsRouter,
     database: database,
+    masterRouter: masterRouter,
     userRouter: userRouter,
     repairRequestRouter: repairRequestRouter,
     profileRouter: profileRouter,

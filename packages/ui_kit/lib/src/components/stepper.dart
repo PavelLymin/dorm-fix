@@ -129,15 +129,15 @@ class StepperPainter {
     final canvas = Canvas(recorder);
 
     final titlePainter = TextPainter(
-      textDirection: TextDirection.ltr,
-      textAlign: TextAlign.left,
+      textDirection: .ltr,
+      textAlign: .left,
       ellipsis: '...',
       maxLines: 2,
     );
 
     final subTitlePainter = TextPainter(
-      textDirection: TextDirection.ltr,
-      textAlign: TextAlign.left,
+      textDirection: .ltr,
+      textAlign: .left,
       ellipsis: '...',
       maxLines: 1,
     );

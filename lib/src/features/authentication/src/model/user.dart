@@ -1,13 +1,13 @@
 import '../../../../core/utils/utils.dart';
 import '../../../dormitory/dormitory.dart';
-import '../../../students/home/home.dart';
+import '../../../specialization/specialization.dart';
 import '../../../room/room.dart';
 import '../../../profile/profile.dart';
 
 part 'firebase_user.dart';
 part 'profile.dart';
 part 'student.dart';
-part 'master.dart';
+part '../../../master/src/model/master.dart';
 
 enum Role {
   student(name: 'student'),

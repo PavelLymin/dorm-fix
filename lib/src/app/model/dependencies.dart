@@ -1,3 +1,4 @@
+import 'package:dorm_fix/src/features/master/master.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 
@@ -6,7 +7,7 @@ import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
-import '../../features/students/home/home.dart';
+import '../../features/specialization/specialization.dart';
 import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
 import '../../features/room/room.dart';
@@ -31,9 +32,10 @@ class DependencyContainer {
     required this.messageRepository,
     required this.messageRealTimeRepository,
     required this.problemRepository,
+    required this.masterRepository,
     required this.authenticationBloc,
     required this.specializationBloc,
-    required this.repairRequestBloc,
+    required this.dormitoryBloc,
   });
 
   // Firebase
@@ -65,9 +67,10 @@ class DependencyContainer {
   final IMessageRepository messageRepository;
   final IMessageRealtimeRepository messageRealTimeRepository;
   final IProblemRepository problemRepository;
+  final IMasterRepository masterRepository;
 
   // BloC
   final AuthBloc authenticationBloc;
   final SpecializationBloc specializationBloc;
-  final RepairRequestBloc repairRequestBloc;
+  final DormitoryBloc dormitoryBloc;
 }

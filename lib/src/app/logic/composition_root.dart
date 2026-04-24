@@ -14,8 +14,9 @@ import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
+import '../../features/master/master.dart';
 import '../../features/repair_request/request.dart';
-import '../../features/students/home/home.dart';
+import '../../features/specialization/specialization.dart';
 import '../../features/profile/profile.dart';
 import '../../features/room/room.dart';
 import '../../features/settings/settings.dart';
@@ -79,9 +80,6 @@ class CompositionRoot {
     // BLoC observer
     Bloc.observer = AppBlocObserver(logger: logger);
 
-    // auto_route
-    final router = AppRouter();
-
     // Firebase User
     final firebaseUserRepository = FirebaseUserRepositoryImpl(
       firebaseAuth: firebaseAuth,
@@ -100,6 +98,11 @@ class CompositionRoot {
       supabase: supabase.client,
     );
 
+    final masterRepository = MasterRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+
     // Settings
     final settingsContainer = await _CreateSettings().create();
 
@@ -113,6 +116,11 @@ class CompositionRoot {
     final dormitoryRepository = DormitoryRepository(
       client: client,
       firebaseAuth: firebaseAuth,
+    );
+
+    final dormitoryBloc = DormitoryBloc(
+      dormitoryRepository: dormitoryRepository,
+      logger: logger,
     );
 
     // Room
@@ -161,11 +169,8 @@ class CompositionRoot {
 
     final problemRepository = ProblemRepositoryImpl(supabase: supabase.client);
 
-    final repairRequestBloc = RepairRequestBloc(
-      requestRepository: requestRepository,
-      problemRepository: problemRepository,
-      logger: logger,
-    );
+    // auto_route
+    final router = AppRouter(authGuard: AuthGuard(authenticationBloc));
 
     return _DependencyFactory(
       firebaseAuth: firebaseAuth,
@@ -186,7 +191,8 @@ class CompositionRoot {
       messageRepository: messageRepository,
       messageRealTimeRepository: messageRealTimeRepository,
       problemRepository: problemRepository,
-      repairRequestBloc: repairRequestBloc,
+      masterRepository: masterRepository,
+      dormitoryBloc: dormitoryBloc,
     ).create();
   }
 }
@@ -209,9 +215,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.messageRepository,
     required this.messageRealTimeRepository,
     required this.problemRepository,
+    required this.masterRepository,
     required this.authenticationBloc,
     required this.specializationBloc,
-    required this.repairRequestBloc,
+    required this.dormitoryBloc,
   });
 
   // Firebase
@@ -243,11 +250,12 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final IMessageRepository messageRepository;
   final IMessageRealtimeRepository messageRealTimeRepository;
   final IProblemRepository problemRepository;
+  final IMasterRepository masterRepository;
 
   // BloC
   final AuthBloc authenticationBloc;
   final SpecializationBloc specializationBloc;
-  final RepairRequestBloc repairRequestBloc;
+  final DormitoryBloc dormitoryBloc;
 
   @override
   DependencyContainer create() => DependencyContainer(
@@ -267,9 +275,10 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     messageRepository: messageRepository,
     messageRealTimeRepository: messageRealTimeRepository,
     problemRepository: problemRepository,
+    masterRepository: masterRepository,
     authenticationBloc: authenticationBloc,
     specializationBloc: specializationBloc,
-    repairRequestBloc: repairRequestBloc,
+    dormitoryBloc: dormitoryBloc,
   );
 }
 

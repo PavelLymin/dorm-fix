@@ -74,7 +74,7 @@ class LineCalendarStyle {
         color: palette.foreground,
       ),
       WidgetState.disabled: typography.lBold.copyWith(
-        color: palette.foregroundDisabled,
+        color: palette.foregroundSecondary,
       ),
       WidgetState.any: typography.lBold.copyWith(color: palette.foreground),
     });
@@ -87,7 +87,7 @@ class LineCalendarStyle {
     return AppWidgetStateMap<TextStyle>({
       WidgetState.selected: typography.m.copyWith(color: palette.foreground),
       WidgetState.disabled: typography.m.copyWith(
-        color: palette.foregroundDisabled,
+        color: palette.foregroundSecondary,
       ),
       WidgetState.any: typography.m.copyWith(color: palette.foreground),
     });

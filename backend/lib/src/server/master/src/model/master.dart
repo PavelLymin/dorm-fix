@@ -1,6 +1,6 @@
 import '../../../dormitory/dormitory.dart';
 import '../../../specialization/specialization.dart';
-import '../../profile.dart';
+import '../../../profile/profile.dart';
 
 final class MasterEntity {
   const MasterEntity({

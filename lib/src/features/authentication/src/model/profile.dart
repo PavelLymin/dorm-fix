@@ -1,10 +1,15 @@
 part of 'user.dart';
 
 sealed class ProfileUser extends AuthenticatedUser {
-  const ProfileUser({required this.id, required this.user});
+  const ProfileUser({
+    required this.id,
+    required this.user,
+    required this.dormitory,
+  });
 
   final int id;
   final FirebaseUser user;
+  final DormitoryEntity dormitory;
 
   const factory ProfileUser.student({
     required int id,

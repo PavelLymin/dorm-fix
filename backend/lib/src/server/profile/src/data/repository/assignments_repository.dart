@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import '../../../../../core/database/database.dart';
-import '../../../profile.dart';
+import '../../../../master/master.dart';
 
 abstract interface class IAssignmentsRepository {
   Stream<MasterDto?> watchAssignment({required int requestId});

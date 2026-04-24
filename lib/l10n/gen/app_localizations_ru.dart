@@ -46,7 +46,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String dormitory_name(int number) {
-    return 'Общежитие $number';
+    return 'Общежитие №$number';
   }
 
   @override

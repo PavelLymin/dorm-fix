@@ -198,7 +198,7 @@ class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
             dimension: 20,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: Theme.of(context).colorPalette.mutedForeground,
+              color: Theme.of(context).colorPalette2.foregroundAccent,
             ),
           ),
         ),

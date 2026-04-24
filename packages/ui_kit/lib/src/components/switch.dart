@@ -8,20 +8,18 @@ class UiSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final palette = Theme.of(context).colorPalette2;
     return Switch(
       value: value,
       onChanged: onChanged,
-      thumbColor: WidgetStateMapper<Color>({
-        WidgetState.any: colorPalette.card,
-      }),
+      thumbColor: WidgetStateMapper<Color>({WidgetState.any: palette.card}),
       trackOutlineColor: WidgetStateMapper<Color>({
-        WidgetState.selected: colorPalette.primary,
-        WidgetState.any: colorPalette.secondary,
+        WidgetState.selected: palette.primary,
+        WidgetState.any: palette.secondary,
       }),
       trackColor: WidgetStateMapper<Color>({
-        WidgetState.selected: colorPalette.primary,
-        WidgetState.any: colorPalette.secondary,
+        WidgetState.selected: palette.primary,
+        WidgetState.any: palette.secondary,
       }),
     );
   }

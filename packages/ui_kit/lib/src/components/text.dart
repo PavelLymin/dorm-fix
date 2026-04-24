@@ -1,7 +1,7 @@
 import 'package:ui_kit/ui.dart';
 
-class UiText extends StatelessWidget {
-  const UiText(
+class UiText2 extends StatelessWidget {
+  const UiText2(
     this.data, {
     this.color,
     this.style,
@@ -20,9 +20,9 @@ class UiText extends StatelessWidget {
   final int? maxLines;
   final Color? color;
   final bool? softWrap;
-  final TextStyle? Function(AppTypography)? _styleBuilder;
+  final TextStyle? Function(AppTypography2)? _styleBuilder;
 
-  factory UiText.displayLarge(
+  factory UiText2.h1(
     String data, {
     Color? color,
     TextStyle? style,
@@ -31,7 +31,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -39,11 +39,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.displayLarge,
+    styleBuilder: (typography) => typography.h1,
     key: key,
   );
 
-  factory UiText.displayMedium(
+  factory UiText2.h1Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -52,7 +52,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -60,11 +60,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.displayMedium,
+    styleBuilder: (typography) => typography.h1Bold,
     key: key,
   );
 
-  factory UiText.displaySmall(
+  factory UiText2.h2(
     String data, {
     Color? color,
     TextStyle? style,
@@ -73,7 +73,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -81,11 +81,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.displaySmall,
+    styleBuilder: (typography) => typography.h2,
     key: key,
   );
 
-  factory UiText.headlineLarge(
+  factory UiText2.h2Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -94,7 +94,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -102,11 +102,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.headlineLarge,
+    styleBuilder: (typography) => typography.h2Bold,
     key: key,
   );
 
-  factory UiText.headlineMedium(
+  factory UiText2.h3(
     String data, {
     Color? color,
     TextStyle? style,
@@ -115,7 +115,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -123,11 +123,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.headlineMedium,
+    styleBuilder: (typography) => typography.h3,
     key: key,
   );
 
-  factory UiText.headlineSmall(
+  factory UiText2.h3Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -136,7 +136,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -144,11 +144,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.headlineSmall,
+    styleBuilder: (typography) => typography.h3Bold,
     key: key,
   );
 
-  factory UiText.titleLarge(
+  factory UiText2.h4(
     String data, {
     Color? color,
     TextStyle? style,
@@ -157,7 +157,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -165,11 +165,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.titleLarge,
+    styleBuilder: (typography) => typography.h4,
     key: key,
   );
 
-  factory UiText.titleMedium(
+  factory UiText2.h4Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -178,7 +178,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -186,11 +186,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.titleMedium,
+    styleBuilder: (typography) => typography.h4Bold,
     key: key,
   );
 
-  factory UiText.titleSmall(
+  factory UiText2.h5(
     String data, {
     Color? color,
     TextStyle? style,
@@ -199,7 +199,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -207,11 +207,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.titleSmall,
+    styleBuilder: (typography) => typography.h5,
     key: key,
   );
 
-  factory UiText.bodyLarge(
+  factory UiText2.h5Bold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -220,7 +220,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -228,11 +228,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.bodyLarge,
+    styleBuilder: (typography) => typography.h5Bold,
     key: key,
   );
 
-  factory UiText.bodyMedium(
+  factory UiText2.l(
     String data, {
     Color? color,
     TextStyle? style,
@@ -241,7 +241,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -249,11 +249,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.bodyMedium,
+    styleBuilder: (typography) => typography.l,
     key: key,
   );
 
-  factory UiText.bodySmall(
+  factory UiText2.lBold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -262,7 +262,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -270,11 +270,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.bodySmall,
+    styleBuilder: (typography) => typography.lBold,
     key: key,
   );
 
-  factory UiText.labelLarge(
+  factory UiText2.m(
     String data, {
     Color? color,
     TextStyle? style,
@@ -283,7 +283,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -291,11 +291,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.labelLarge,
+    styleBuilder: (typography) => typography.m,
     key: key,
   );
 
-  factory UiText.labelMedium(
+  factory UiText2.mBold(
     String data, {
     Color? color,
     TextStyle? style,
@@ -304,7 +304,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -312,11 +312,11 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.labelMedium,
+    styleBuilder: (typography) => typography.mBold,
     key: key,
   );
 
-  factory UiText.labelSmall(
+  factory UiText2.s(
     String data, {
     Color? color,
     TextStyle? style,
@@ -325,7 +325,7 @@ class UiText extends StatelessWidget {
     int? maxLines,
     bool? softWrap,
     Key? key,
-  }) => UiText(
+  }) => UiText2(
     data,
     color: color,
     style: style,
@@ -333,16 +333,58 @@ class UiText extends StatelessWidget {
     overflow: overflow,
     maxLines: maxLines,
     softWrap: softWrap,
-    styleBuilder: (typography) => typography.labelSmall,
+    styleBuilder: (typography) => typography.s,
+    key: key,
+  );
+
+  factory UiText2.sBold(
+    String data, {
+    Color? color,
+    TextStyle? style,
+    TextAlign? textAlign,
+    TextOverflow? overflow,
+    int? maxLines,
+    bool? softWrap,
+    Key? key,
+  }) => UiText2(
+    data,
+    color: color,
+    style: style,
+    textAlign: textAlign,
+    overflow: overflow,
+    maxLines: maxLines,
+    softWrap: softWrap,
+    styleBuilder: (typography) => typography.sBold,
+    key: key,
+  );
+
+  factory UiText2.xs(
+    String data, {
+    Color? color,
+    TextStyle? style,
+    TextAlign? textAlign,
+    TextOverflow? overflow,
+    int? maxLines,
+    bool? softWrap,
+    Key? key,
+  }) => UiText2(
+    data,
+    color: color,
+    style: style,
+    textAlign: textAlign,
+    overflow: overflow,
+    maxLines: maxLines,
+    softWrap: softWrap,
+    styleBuilder: (typography) => typography.xs,
     key: key,
   );
 
   @override
   Widget build(BuildContext context) {
-    final typography = Theme.of(context).appTypography;
-    final palette = Theme.of(context).colorPalette;
+    final typography = Theme.of(context).appTypography2;
+    final palette = Theme.of(context).colorPalette2;
 
-    final baseStyle = _styleBuilder?.call(typography) ?? typography.bodyLarge;
+    final baseStyle = _styleBuilder?.call(typography) ?? typography.h4;
     return Text(
       data,
       textAlign: textAlign,
@@ -350,7 +392,7 @@ class UiText extends StatelessWidget {
       maxLines: maxLines,
       softWrap: softWrap,
       style: baseStyle
-          .copyWith(color: color ?? palette.foreground, height: 1)
+          .copyWith(color: color ?? palette.foreground)
           .merge(style),
     );
   }

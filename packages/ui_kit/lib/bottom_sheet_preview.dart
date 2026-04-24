@@ -14,16 +14,16 @@ class BottomSheetPreview extends StatelessWidget {
           crossAxisAlignment: .stretch,
           mainAxisSize: .min,
           children: [
-            UiText.titleMedium('Modal bottom sheet'),
+            UiText2.m('Modal bottom sheet'),
             const SizedBox(height: 24),
             UiButton.filledPrimary(
               onPressed: () => Navigator.pop(context),
-              label: UiText.bodyMedium('Close'),
+              label: UiText2.m('Close'),
             ),
           ],
         ),
       ),
-      label: UiText.bodyMedium('Show bottom sheet'),
+      label: Text('Show bottom sheet'),
     ),
   );
 }

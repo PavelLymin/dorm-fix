@@ -6,8 +6,8 @@ import '../../../../core/auth/src/require_user.dart';
 import '../../../../core/rest_api/src/rest_api.dart';
 import '../../student.dart';
 
-class UserRouter {
-  UserRouter({required this._restApi, required this._studentRepository});
+class StudentRouter {
+  StudentRouter({required this._restApi, required this._studentRepository});
 
   final RestApi _restApi;
   final IStudentRepository _studentRepository;

@@ -59,9 +59,12 @@ class _UiDropDownButtonState<T extends Object>
       dropdownMenuEntries: widget.dropdownMenuEntries ?? [],
       label: widget.label,
       hintText: widget.hintText,
+      trailingIcon:
+          widget.trailingIcon ?? const Icon(Icons.keyboard_arrow_down_rounded),
+      selectedTrailingIcon:
+          widget.selectedTrailingIcon ??
+          const Icon(Icons.keyboard_arrow_up_rounded),
       leadingIcon: widget.leadingIcon,
-      trailingIcon: widget.trailingIcon,
-      selectedTrailingIcon: widget.selectedTrailingIcon,
       width: widget.width,
       expandedInsets: widget.expandedInsets,
       controller: widget.controller,
@@ -110,7 +113,7 @@ class UiDropDownMenuStyle extends MenuStyle {
 
   @override
   WidgetStateProperty<Size?>? get maximumSize =>
-      const WidgetStatePropertyAll(.fromHeight(.infinity));
+      const WidgetStatePropertyAll(.infinite);
 
   @override
   WidgetStateProperty<BorderSide?>? get side =>
@@ -147,7 +150,7 @@ InputDecorationTheme _buildInputDecorationTheme({
   return InputDecorationTheme(
     isCollapsed: true,
     labelStyle: typography.m.copyWith(color: palette.foreground),
-    hintStyle: typography.m.copyWith(color: palette.foreground),
+    hintStyle: typography.m.copyWith(color: palette.foregroundSecondary),
     border: border,
     focusedBorder: border,
     enabledBorder: border,

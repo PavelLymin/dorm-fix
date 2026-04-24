@@ -7,6 +7,8 @@ sealed class AuthState {
 
   final UserEntity user;
 
+  const factory AuthState.initial() = _AuthInitialState;
+
   const factory AuthState.authenticated({
     required AuthenticatedUser authUser,
     required bool isNewUser,
@@ -27,6 +29,7 @@ sealed class AuthState {
   bool get isAuthenticated => currentUser.isAuthenticated;
 
   UserEntity get currentUser => map(
+    initial: (state) => state.user,
     authenticated: (state) => state.user,
     notAuthenticated: (state) => state.user,
     smsCodeSent: (state) => state.user,
@@ -39,18 +42,26 @@ sealed class AuthState {
     notAuthenticated: (_) => null,
   );
 
+  ProfileUser? get profileUserOrNull => currentUser.map(
+    notAuthenticated: (_) => null,
+    authenticated: (u) =>
+        u.mapAuthUser(firebase: (_) => null, profile: (p) => p),
+  );
+
   bool get isLoading => maybeMap(loading: (_) => true, orElse: () => false);
 
   bool get isSmsCodeSent =>
       maybeMap(smsCodeSent: (_) => true, orElse: () => false);
 
   R map<R>({
+    required AuthStateMatch<R, _AuthInitialState> initial,
     required AuthStateMatch<R, _Authenticated> authenticated,
     required AuthStateMatch<R, _NotAuthenticated> notAuthenticated,
     required AuthStateMatch<R, _SmsCodeSent> smsCodeSent,
     required AuthStateMatch<R, _Loading> loading,
     required AuthStateMatch<R, _Error> error,
   }) => switch (this) {
+    _AuthInitialState s => initial(s),
     _Authenticated s => authenticated(s),
     _NotAuthenticated s => notAuthenticated(s),
     _SmsCodeSent s => smsCodeSent(s),
@@ -60,12 +71,14 @@ sealed class AuthState {
 
   R maybeMap<R>({
     required R Function() orElse,
+    AuthStateMatch<R, _AuthInitialState>? initial,
     AuthStateMatch<R, _Authenticated>? authenticated,
     AuthStateMatch<R, _NotAuthenticated>? notAuthenticated,
     AuthStateMatch<R, _SmsCodeSent>? smsCodeSent,
     AuthStateMatch<R, _Loading>? loading,
     AuthStateMatch<R, _Error>? error,
   }) => map<R>(
+    initial: initial ?? (_) => orElse(),
     authenticated: authenticated ?? (_) => orElse(),
     notAuthenticated: notAuthenticated ?? (_) => orElse(),
     smsCodeSent: smsCodeSent ?? (_) => orElse(),
@@ -74,18 +87,24 @@ sealed class AuthState {
   );
 
   R? mapOrNull<R>({
+    AuthStateMatch<R, _AuthInitialState>? initial,
     AuthStateMatch<R, _Authenticated>? authenticated,
     AuthStateMatch<R, _NotAuthenticated>? notAuthenticated,
     AuthStateMatch<R, _SmsCodeSent>? smsCodeSent,
     AuthStateMatch<R, _Loading>? loading,
     AuthStateMatch<R, _Error>? error,
   }) => map<R?>(
+    initial: initial ?? (_) => null,
     authenticated: authenticated ?? (_) => null,
     notAuthenticated: notAuthenticated ?? (_) => null,
     smsCodeSent: smsCodeSent ?? (_) => null,
     loading: loading ?? (_) => null,
     error: error ?? (_) => null,
   );
+}
+
+final class _AuthInitialState extends AuthState {
+  const _AuthInitialState({super.user = const NotAuthenticatedUser()});
 }
 
 final class _Authenticated extends AuthState {

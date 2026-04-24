@@ -25,11 +25,10 @@ class FullStudent extends ProfileUser implements StudentUser {
   const FullStudent({
     required super.id,
     required super.user,
-    required this.dormitory,
+    required super.dormitory,
     required this.room,
   });
 
-  final DormitoryEntity dormitory;
   final RoomEntity room;
 
   const factory FullStudent.fake() = FakeStudent;

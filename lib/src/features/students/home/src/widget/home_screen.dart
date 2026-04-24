@@ -1,9 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../repair_request/request.dart';
-import '../../home.dart';
+import '../../../../specialization/specialization.dart';
 import 'advices.dart';
-import 'carousel.dart';
 import 'repair_request.dart';
 import 'searcher.dart';
 

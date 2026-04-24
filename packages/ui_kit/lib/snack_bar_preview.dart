@@ -5,13 +5,15 @@ class SnackBarPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
     return UiCard.standart(
       child: UiButton.filledPrimary(
         label: Text('Show SnackBar'),
         onPressed: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Theme.of(context).colorPalette.card,
+              backgroundColor: palette.card,
               duration: const Duration(seconds: 3),
               padding: const .all(24.0),
               behavior: .floating,
@@ -21,20 +23,16 @@ class SnackBarPreview extends StatelessWidget {
                 crossAxisAlignment: .start,
                 spacing: 8.0,
                 children: [
-                  UiText.bodyLarge('Button pressed'),
-                  UiText.bodyLarge(
-                    'We recommend placing FToaster in the builder method of MaterialApp/WidgetsApp/CupertinoApp',
-                    style: TextStyle(
-                      color: Theme.of(context).colorPalette.mutedForeground,
-                    ),
+                  UiText2.lBold('Button pressed'),
+                  UiText2.m(
+                    'This is a snackbar message',
+                    style: TextStyle(color: palette.foregroundSecondary),
                   ),
                 ],
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: .circular(16.0),
-                side: BorderSide(
-                  color: Theme.of(context).colorPalette.borderStrong,
-                ),
+                borderRadius: .circular(24.0),
+                side: BorderSide(color: palette.secondary),
               ),
             ),
             snackBarAnimationStyle: AnimationStyle(

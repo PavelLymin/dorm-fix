@@ -140,7 +140,7 @@ class MapAppbar extends StatelessWidget {
     child: SafeArea(
       child: Padding(
         padding: AppInsets.screen,
-        child: UiText.displayLarge(
+        child: UiText2.lBold(
           'Выберите общежитие',
           softWrap: true,
           textAlign: .left,

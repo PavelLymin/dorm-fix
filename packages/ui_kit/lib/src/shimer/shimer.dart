@@ -12,7 +12,7 @@ class Shimmer extends StatefulWidget {
 }
 
 class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
-  late final ColorPalette _palette;
+  late final ColorPalette2 _palette;
   late final _controller = AnimationController(vsync: this);
   late final _tween = Tween<double>(
     begin: -1,
@@ -31,7 +31,7 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final theme = Theme.of(context);
-    _palette = theme.colorPalette;
+    _palette = theme.colorPalette2;
   }
 
   @override

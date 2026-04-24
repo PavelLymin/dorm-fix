@@ -136,7 +136,7 @@ class PinInput extends StatelessWidget {
                 padding: const .symmetric(vertical: 12.0, horizontal: 16.0),
                 child: Container(color: palette.primary, width: 2),
               )
-            : UiText.bodyLarge(number),
+            : UiText2.m(number),
       ),
     );
   }

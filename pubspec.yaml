@@ -65,17 +65,13 @@ flutter:
     - packages/ui_kit/assets/icons/
 
   fonts:
-    - family: Inter
+    - family: SF Pro
       fonts:
-        - asset: packages/ui_kit/fonts/Inter_Bold.ttf
-          weight: 700
-        - asset: packages/ui_kit/fonts/Inter_Medium.ttf
-          weight: 500
-        - asset: packages/ui_kit/fonts/Inter_Regular.ttf
+        - asset: packages/ui_kit/lib/fonts/SF-Pro-Display-Regular.otf
           weight: 400
-        - asset: packages/ui_kit/fonts/Inter_SemiBold.ttf
+        - asset: packages/ui_kit/lib/fonts/SF-Pro-Display-Semibold.otf
           weight: 600
 
     - family: UiIcons
       fonts:
-        - asset: packages/ui_kit/fonts/Icons.ttf
+        - asset: packages/ui_kit/lib/fonts/Icons.ttf

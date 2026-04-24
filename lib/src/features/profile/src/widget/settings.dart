@@ -29,12 +29,9 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    final colorPallete = Theme.of(context).colorPalette;
-    final textStyle = TextStyle(color: colorPallete.primary);
-
     return SettingsBuilder(
       builder: (context, settings) {
-        final items = _createSettingsList(context, settings, textStyle);
+        final items = _createSettingsList(context, settings);
         return TileGroup(items: items);
       },
     );
@@ -43,7 +40,6 @@ class _SettingsState extends State<Settings> {
   List<TileGroupItem> _createSettingsList(
     BuildContext context,
     SettingsEntity settings,
-    TextStyle dataStyle,
   ) {
     final icon = const Icon(UiIcons.sortVertical);
 

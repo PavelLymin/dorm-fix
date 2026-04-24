@@ -18,7 +18,7 @@ class Surface extends StatelessWidget {
             offset: const Offset(0, 0),
             color: Theme.of(
               context,
-            ).colorPalette.foreground.withValues(alpha: .24),
+            ).colorPalette2.foreground.withValues(alpha: .24),
           ),
         ],
       ),

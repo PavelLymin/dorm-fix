@@ -1,6 +1,6 @@
 import '../../../chat/chat.dart';
 import '../../../profile/profile.dart';
-import '../../../students/home/home.dart';
+import '../../../specialization/specialization.dart';
 import 'problem.dart';
 import 'status.dart';
 

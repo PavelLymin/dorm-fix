@@ -13,7 +13,7 @@ abstract interface class IUserRepository {
 }
 
 class UserRepositoryImpl implements IUserRepository {
-  UserRepositoryImpl({
+  const UserRepositoryImpl({
     required this._client,
     required this._firebaseAuth,
     required this._supabase,

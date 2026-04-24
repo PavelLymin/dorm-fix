@@ -8,7 +8,7 @@ class UiCheckBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorPalette = Theme.of(context).colorPalette;
+    final colorPalette = Theme.of(context).colorPalette2;
     return Checkbox(
       value: value,
       onChanged: onChanged,

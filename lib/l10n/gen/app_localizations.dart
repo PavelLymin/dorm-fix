@@ -173,7 +173,7 @@ abstract class AppLocalizations {
   /// Dormitory name
   ///
   /// In en, this message translates to:
-  /// **'Dormitory {number}'**
+  /// **'Dormitory №{number}'**
   String dormitory_name(int number);
 
   /// No description provided for @room.
