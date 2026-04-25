@@ -1,4 +1,4 @@
-import '../../../authentication.dart';
+import '../../../../authentication/authentication.dart';
 import '../../../../dormitory/dormitory.dart';
 import '../../../../room/room.dart';
 

@@ -16,7 +16,9 @@ class _SplashScreenState extends State<SplashScreen> {
     return state.mapOrNull(
       error: (state) => ErrorUtil.showSnackBar(context, state.message),
       authenticated: (state) => state.authUser.mapAuthUser(
-        firebase: (_) => context.router.replace(const NamedRoute('MapScreen')),
+        firebase: (u) => context.router.replace(
+          NamedRoute('MapScreen', params: {'user': u}),
+        ),
         profile: (user) => user.mapRoleUser(
           student: (_) =>
               context.router.replace(const NamedRoute('StudentRootSreen')),

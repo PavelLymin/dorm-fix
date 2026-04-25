@@ -10,14 +10,7 @@ abstract interface class IStudentRepository {
     required PartialStudent student,
   });
 
-  Future<void> deleteStudent({required String uid});
-
   Future<FullStudentDto> getStudent({required String uid});
-
-  Future<void> updateStudent({
-    required String uid,
-    required PartialStudent student,
-  });
 }
 
 class StudentRepositoryImpl implements IStudentRepository {
@@ -46,19 +39,6 @@ class StudentRepositoryImpl implements IStudentRepository {
   }
 
   @override
-  Future<void> deleteStudent({required String uid}) async {
-    await _database.transaction(() async {
-      await (_database.delete(
-        _database.users,
-      )..where((row) => row.uid.equals(uid))).go();
-
-      await (_database.delete(
-        _database.students,
-      )..where((row) => row.uid.equals(uid))).go();
-    });
-  }
-
-  @override
   Future<FullStudentDto> getStudent({required String uid}) async {
     final data = await (_database.select(_database.students).join([
       innerJoin(
@@ -83,15 +63,5 @@ class StudentRepositoryImpl implements IStudentRepository {
     );
 
     return student;
-  }
-
-  @override
-  Future<void> updateStudent({
-    required String uid,
-    required PartialStudent student,
-  }) async {
-    await (_database.update(_database.students)
-          ..where((row) => row.uid.equals(uid)))
-        .replace(PartialStudentDto.fromEntity(student).toCompanion());
   }
 }

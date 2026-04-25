@@ -119,6 +119,12 @@ class CompositionRoot {
       chatRepository: chatRealTimeRepository,
       messageRepository: messageRealTimeRepository,
     );
+    // Student
+    final studentRouter = StudentRouter(
+      studentRepository: studentRepository,
+      firebaseAdmin: app,
+      restApi: restApi,
+    );
     // Master
     final masterRouter = MasterRouter(
       masterRepository: masterRepository,
@@ -172,6 +178,7 @@ class CompositionRoot {
       specializationRouter: specializationRouter,
       chatRouter: chatRouter,
       messageRouter: messageRouter,
+      studentRouter: studentRouter,
     ).create();
   }
 }
@@ -191,6 +198,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.specializationRouter,
     required this.chatRouter,
     required this.messageRouter,
+    required this.studentRouter,
   });
 
   final App firebaseAdmin;
@@ -219,6 +227,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final MessageRouter messageRouter;
 
+  final StudentRouter studentRouter;
+
   @override
   DependencyContainer create() => DependencyContainer(
     firebaseAdmin: firebaseAdmin,
@@ -234,6 +244,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     specializationRouter: specializationRouter,
     chatRouter: chatRouter,
     messageRouter: messageRouter,
+    studentRouter: studentRouter,
   );
 }
 

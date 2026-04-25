@@ -11,6 +11,7 @@ import '../../server/profile/src/router/profile.dart';
 import '../../server/room/src/router/room.dart';
 import '../../server/profile/src/router/user.dart';
 import '../../server/specialization/specialization.dart';
+import '../../server/student/student.dart';
 
 class DependencyContainer {
   const DependencyContainer({
@@ -27,6 +28,7 @@ class DependencyContainer {
     required this.specializationRouter,
     required this.chatRouter,
     required this.messageRouter,
+    required this.studentRouter,
   });
 
   final App firebaseAdmin;
@@ -54,4 +56,6 @@ class DependencyContainer {
   final CharRouter chatRouter;
 
   final MessageRouter messageRouter;
+
+  final StudentRouter studentRouter;
 }

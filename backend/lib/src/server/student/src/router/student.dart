@@ -1,15 +1,22 @@
 import 'dart:convert';
 
+import 'package:firebase_admin/testing.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../../../../core/auth/src/require_user.dart';
 import '../../../../core/rest_api/src/rest_api.dart';
+import '../../../profile/profile.dart';
 import '../../student.dart';
 
 class StudentRouter {
-  StudentRouter({required this._restApi, required this._studentRepository});
+  const StudentRouter({
+    required this._restApi,
+    required this.firebaseAdmin,
+    required this._studentRepository,
+  });
 
   final RestApi _restApi;
+  final App firebaseAdmin;
   final IStudentRepository _studentRepository;
 
   Handler get handler {
@@ -38,6 +45,10 @@ class StudentRouter {
 
     final student = PartialStudentDto.fromJson(json).toEntity();
     await _studentRepository.createStudent(uid: uid, student: student);
+
+    await firebaseAdmin.auth().setCustomUserClaims(uid, {
+      'role': Role.student.name,
+    });
 
     return _restApi.send(
       statusCode: 201,

@@ -139,16 +139,12 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
   TextStyle? get errorStyle => typography.xs.copyWith(color: palette.disabled);
 
   @override
-  TextStyle? get hintStyle => WidgetStateTextStyle.resolveWith((states) {
-    if (states.contains(WidgetState.disabled)) {
-      return typography.m.copyWith(color: palette.disabled);
-    }
-
-    return typography.m.copyWith(color: palette.secondary);
-  });
+  TextStyle? get hintStyle =>
+      typography.m.copyWith(color: palette.foregroundSecondary);
 
   @override
-  TextStyle? get helperStyle => typography.m.copyWith(color: palette.secondary);
+  TextStyle? get helperStyle =>
+      typography.m.copyWith(color: palette.foregroundSecondary);
 
   @override
   InputBorder? get border => OutlineInputBorder(
@@ -182,10 +178,19 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
   BoxConstraints? get constraints => const BoxConstraints(minHeight: 32);
 
   @override
-  Color? get cursorColor => palette.foreground;
+  Color? get cursorColor => palette.primary;
+
+  @override
+  double get cursorWidth => 2.0;
 
   @override
   bool? get isDense => true;
+
+  @override
+  Color? get suffixIconColor => palette.foregroundSecondary;
+
+  @override
+  Color? get prefixIconColor => palette.foregroundSecondary;
 }
 
 class UiTextFieldStyle extends InputDecoration {

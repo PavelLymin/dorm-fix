@@ -6,7 +6,7 @@ import '../../../profile/profile.dart';
 
 part 'firebase_user.dart';
 part 'profile.dart';
-part 'student.dart';
+part '../../../students/src/model/student.dart';
 part '../../../master/src/model/master.dart';
 
 enum Role {

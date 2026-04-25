@@ -38,7 +38,13 @@ class _SearchRoomScreenState extends State<SearchRoomScreen> {
     value: _roomSearcBloc,
     child: CustomScrollView(
       slivers: [
-        const SliverToBoxAdapter(child: _SearchInput()),
+        SliverAppBar(
+          titleSpacing: 0.0,
+          automaticallyImplyLeading: false,
+          pinned: true,
+          toolbarHeight: 48.0 + 32.0,
+          title: _SearchInput(),
+        ),
         BlocBuilder<SearcRoomBloc, SearchRoomState>(
           builder: (context, state) => state.map(
             loading: (_) => SliverToBoxAdapter(
@@ -86,23 +92,20 @@ class _SearchInputState extends State<_SearchInput> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: .only(bottom: AppSpacing.xxxl),
-    child: UiTextField.standard(
-      controller: _controller,
-      onChanged: context.read<SearcRoomBloc>().onQueryChanged.add,
-      style: .new(
-        hintText: 'Поиск комнаты...',
-        prefixIcon: const Icon(Icons.search_outlined),
-        suffixIcon: _controller.text.isEmpty
-            ? null
-            : IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  setState(() => _controller.clear());
-                },
-              ),
-      ),
+  Widget build(BuildContext context) => UiTextField.standard(
+    controller: _controller,
+    onChanged: context.read<SearcRoomBloc>().onQueryChanged.add,
+    style: .new(
+      hintText: 'Поиск',
+      prefixIcon: const Icon(UiIcons.search),
+      suffixIcon: _controller.text.isEmpty
+          ? null
+          : IconButton(
+              icon: const Icon(Icons.clear),
+              onPressed: () {
+                setState(() => _controller.clear());
+              },
+            ),
     ),
   );
 }

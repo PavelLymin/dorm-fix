@@ -20,6 +20,7 @@ import '../../features/specialization/specialization.dart';
 import '../../features/profile/profile.dart';
 import '../../features/room/room.dart';
 import '../../features/settings/settings.dart';
+import '../../features/students/student.dart';
 import '../bloc/app_bloc_observer.dart';
 import '../model/application_config.dart';
 import '../model/dependencies.dart';
@@ -98,6 +99,13 @@ class CompositionRoot {
       supabase: supabase.client,
     );
 
+    // Student
+    final studentRepository = StudentRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+
+    // Master
     final masterRepository = MasterRepositoryImpl(
       client: client,
       firebaseAuth: firebaseAuth,
@@ -192,6 +200,7 @@ class CompositionRoot {
       messageRealTimeRepository: messageRealTimeRepository,
       problemRepository: problemRepository,
       masterRepository: masterRepository,
+      studentRepository: studentRepository,
       dormitoryBloc: dormitoryBloc,
     ).create();
   }
@@ -216,6 +225,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.messageRealTimeRepository,
     required this.problemRepository,
     required this.masterRepository,
+    required this.studentRepository,
     required this.authenticationBloc,
     required this.specializationBloc,
     required this.dormitoryBloc,
@@ -251,6 +261,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final IMessageRealtimeRepository messageRealTimeRepository;
   final IProblemRepository problemRepository;
   final IMasterRepository masterRepository;
+  final IStudentRepository studentRepository;
 
   // BloC
   final AuthBloc authenticationBloc;
@@ -276,6 +287,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     messageRealTimeRepository: messageRealTimeRepository,
     problemRepository: problemRepository,
     masterRepository: masterRepository,
+    studentRepository: studentRepository,
     authenticationBloc: authenticationBloc,
     specializationBloc: specializationBloc,
     dormitoryBloc: dormitoryBloc,

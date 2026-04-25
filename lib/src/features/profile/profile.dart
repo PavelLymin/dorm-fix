@@ -1,6 +1,6 @@
 library;
 
-export '../authentication/src/data/dto/student.dart';
+export '../students/src/data/dto/student.dart';
 export '../master/src/data/dto/master.dart';
 export 'src/data/repository/profile_repository.dart';
 export 'src/data/repository/user_repository.dart';

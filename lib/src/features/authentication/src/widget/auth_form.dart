@@ -40,8 +40,9 @@ class _AuthFormState extends State<AuthForm> with _AuthFormStateMixin {
             authenticated: (user) {
               _buttonBloc.add(.addEnabled());
               user.authUser.mapAuthUser(
-                firebase: (_) =>
-                    context.router.replaceAll([const NamedRoute('MapScreen')]),
+                firebase: (u) => context.router.replaceAll([
+                  NamedRoute('MapScreen', params: {'user': u}),
+                ]),
                 profile: (p) => p.mapRoleUser(
                   student: (_) => context.router.replaceAll([
                     const NamedRoute('StudentRootSreen'),

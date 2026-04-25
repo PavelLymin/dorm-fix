@@ -34,7 +34,13 @@ class _SearchDormitoryScreenState extends State<SearchDormitoryScreen> {
     value: _searchBloc,
     child: CustomScrollView(
       slivers: [
-        const SliverToBoxAdapter(child: _SearchInput()),
+        SliverAppBar(
+          titleSpacing: 0.0,
+          automaticallyImplyLeading: false,
+          pinned: true,
+          toolbarHeight: 48.0 + 32.0,
+          title: _SearchInput(),
+        ),
         BlocBuilder<SearchDormitoryBloc, SearchDormitoryState>(
           builder: (context, state) => state.map(
             loading: (_) => SliverToBoxAdapter(
@@ -81,23 +87,20 @@ class _SearchInputState extends State<_SearchInput> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const .only(bottom: AppSpacing.xxxl),
-    child: UiTextField.standard(
-      controller: _controller,
-      onChanged: context.read<SearchDormitoryBloc>().onQueryChanged.add,
-      style: .new(
-        hintText: 'Поиск общежитий...',
-        prefixIcon: const Icon(Icons.search_outlined),
-        suffixIcon: _controller.text.isEmpty
-            ? null
-            : IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  setState(() => _controller.clear());
-                },
-              ),
-      ),
+  Widget build(BuildContext context) => UiTextField.standard(
+    controller: _controller,
+    onChanged: context.read<SearchDormitoryBloc>().onQueryChanged.add,
+    style: .new(
+      hintText: 'Поиск общежитий...',
+      prefixIcon: const Icon(Icons.search_outlined),
+      suffixIcon: _controller.text.isEmpty
+          ? null
+          : IconButton(
+              icon: const Icon(Icons.clear),
+              onPressed: () {
+                setState(() => _controller.clear());
+              },
+            ),
     ),
   );
 }

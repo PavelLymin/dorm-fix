@@ -10,26 +10,31 @@ class SearchDormitories extends StatelessWidget {
   final List<DormitoryEntity> dormitories;
 
   @override
-  Widget build(BuildContext context) => SliverFixedExtentList(
-    itemExtent: 48.0,
-    delegate: SliverChildBuilderDelegate(
-      (_, index) => Padding(
-        padding: index == 0
-            ? AppInsets.itemDense.copyWith(top: 0)
-            : index == dormitories.length - 1
-            ? AppInsets.itemDense.copyWith(bottom: 0)
-            : AppInsets.item,
-        child: _Item(dormitory: dormitories[index]),
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final typography = theme.appTypography2;
+    return SliverPadding(
+      padding: .only(top: 8.0),
+      sliver: SliverFixedExtentList(
+        itemExtent: _Item.getExtent(typography),
+        delegate: SliverChildBuilderDelegate(
+          (_, index) => Padding(
+            padding: AppInsets.item,
+            child: _Item(dormitory: dormitories[index]),
+          ),
+          childCount: dormitories.length,
+        ),
       ),
-      childCount: dormitories.length,
-    ),
-  );
+    );
+  }
 }
 
 class _Item extends StatelessWidget {
   const _Item({required this.dormitory});
 
   final DormitoryEntity dormitory;
+
+  static const _spacing = 4.0;
 
   void _moveCameraToPoint(
     YandexMapController? controller, {
@@ -47,35 +52,42 @@ class _Item extends StatelessWidget {
     _moveCameraToPoint(MapControllerScope.of(context));
     showUiBottomSheet(
       context,
+      spacing: 0.0,
       title: 'Общежитие',
       widget: SearchDormitoryDetails(dormitory: dormitory),
     );
+  }
+
+  static double getExtent(AppTypography2 typography) {
+    final title = TextPainter(textDirection: .ltr, maxLines: 1)
+      ..text = TextSpan(style: typography.m)
+      ..layout();
+
+    final subTitle = TextPainter(textDirection: .ltr, maxLines: 1)
+      ..text = TextSpan(style: typography.lBold)
+      ..layout();
+
+    return title.height +
+        subTitle.height +
+        _spacing +
+        AppInsets.card.vertical +
+        AppInsets.item.vertical;
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
-    return GestureDetector(
-      behavior: .opaque,
+    return UiCard.clickable(
       onTap: () => _showDormitoryDetails(context),
-      child: Row(
-        mainAxisAlignment: .start,
-        crossAxisAlignment: .center,
+      child: Column(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .start,
         mainAxisSize: .min,
-        spacing: 24.0,
+        spacing: _spacing,
         children: [
-          const Icon(Icons.apartment),
-          Column(
-            mainAxisAlignment: .center,
-            crossAxisAlignment: .start,
-            mainAxisSize: .min,
-            spacing: 4.0,
-            children: [
-              UiText2.m(dormitory.name),
-              UiText2.m(dormitory.address, color: palette.foregroundSecondary),
-            ],
-          ),
+          UiText2.lBold(dormitory.name),
+          UiText2.m(dormitory.address, color: palette.foregroundSecondary),
         ],
       ),
     );

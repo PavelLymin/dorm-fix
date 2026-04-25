@@ -1,4 +1,4 @@
-part of 'user.dart';
+part of '../../../authentication/src/model/user.dart';
 
 sealed class StudentUser {
   const StudentUser();

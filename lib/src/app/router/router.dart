@@ -4,11 +4,10 @@ import '../../features/authentication/authentication.dart';
 import '../../features/map/map.dart';
 import '../../features/master/src/widgets/home_screen.dart';
 import '../../features/specialization/specialization.dart';
-import '../../features/students/home/home.dart';
 import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
 import '../../features/root/widget/root_screen.dart';
-import '../../features/students/repair_requests/repair_requests.dart';
+import '../../features/students/student.dart';
 
 class AppRouter extends RootStackRouter {
   AppRouter({required this.authGuard});

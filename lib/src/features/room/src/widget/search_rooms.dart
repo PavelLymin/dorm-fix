@@ -10,20 +10,20 @@ class SearchRooms extends StatelessWidget {
   final List<RoomEntity> rooms;
 
   @override
-  Widget build(BuildContext context) => SliverFixedExtentList(
-    itemExtent: 48.0,
-    delegate: SliverChildBuilderDelegate(
-      (_, index) => Padding(
-        padding: index == 0
-            ? AppInsets.itemDense.copyWith(top: 0)
-            : index == rooms.length - 1
-            ? AppInsets.itemDense.copyWith(bottom: 0)
-            : AppInsets.item,
-        child: _Item(dormitory: dormitory, room: rooms[index]),
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final typography = theme.appTypography2;
+    return SliverFixedExtentList(
+      itemExtent: _Item.getExtent(typography),
+      delegate: SliverChildBuilderDelegate(
+        (_, index) => Padding(
+          padding: AppInsets.item,
+          child: _Item(dormitory: dormitory, room: rooms[index]),
+        ),
+        childCount: rooms.length,
       ),
-      childCount: rooms.length,
-    ),
-  );
+    );
+  }
 }
 
 class _Item extends StatelessWidget {
@@ -32,6 +32,8 @@ class _Item extends StatelessWidget {
   final DormitoryEntity dormitory;
   final RoomEntity room;
 
+  static const _spacing = 4.0;
+
   void onTap(BuildContext context) => context.router.push(
     NamedRoute(
       'ExtraDataScreen',
@@ -39,31 +41,36 @@ class _Item extends StatelessWidget {
     ),
   );
 
+  static double getExtent(AppTypography2 typography) {
+    final title = TextPainter(textDirection: .ltr, maxLines: 1)
+      ..text = TextSpan(style: typography.m)
+      ..layout();
+
+    final subTitle = TextPainter(textDirection: .ltr, maxLines: 1)
+      ..text = TextSpan(style: typography.lBold)
+      ..layout();
+
+    return title.height +
+        subTitle.height +
+        _spacing +
+        AppInsets.card.vertical +
+        AppInsets.item.vertical;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: .opaque,
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
+    return UiCard.clickable(
       onTap: () => onTap(context),
-      child: Row(
-        mainAxisAlignment: .start,
-        crossAxisAlignment: .center,
+      child: Column(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .start,
         mainAxisSize: .min,
-        spacing: 24.0,
+        spacing: _spacing,
         children: [
-          const Icon(Icons.room_outlined),
-          Column(
-            mainAxisAlignment: .center,
-            crossAxisAlignment: .start,
-            mainAxisSize: .min,
-            spacing: 4.0,
-            children: [
-              UiText2.m(room.number),
-              UiText2.m(
-                dormitory.name,
-                color: Theme.of(context).colorPalette2.foregroundSecondary,
-              ),
-            ],
-          ),
+          UiText2.lBold(room.number),
+          UiText2.m(dormitory.name, color: palette.foregroundSecondary),
         ],
       ),
     );

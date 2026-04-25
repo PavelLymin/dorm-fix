@@ -12,6 +12,7 @@ import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
 import '../../features/room/room.dart';
 import '../../features/settings/settings.dart';
+import '../../features/students/student.dart';
 import '../router/router.dart';
 
 class DependencyContainer {
@@ -33,6 +34,7 @@ class DependencyContainer {
     required this.messageRealTimeRepository,
     required this.problemRepository,
     required this.masterRepository,
+    required this.studentRepository,
     required this.authenticationBloc,
     required this.specializationBloc,
     required this.dormitoryBloc,
@@ -68,6 +70,7 @@ class DependencyContainer {
   final IMessageRealtimeRepository messageRealTimeRepository;
   final IProblemRepository problemRepository;
   final IMasterRepository masterRepository;
+  final IStudentRepository studentRepository;
 
   // BloC
   final AuthBloc authenticationBloc;

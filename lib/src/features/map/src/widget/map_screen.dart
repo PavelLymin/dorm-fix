@@ -32,36 +32,48 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> with _MapScreenStateMixin {
   @override
-  Widget build(BuildContext context) => BlocProvider.value(
-    value: _dormitoryBloc,
-    child: Scaffold(
-      body: Stack(
-        children: [
-          BlocBuilder<DormitoryBloc, DormitoryState>(
-            builder: (context, state) => YandexMap(
-              nightModeEnabled: false,
-              mapObjects: _mapObjects(state.dormitories),
-              onMapCreated: _onMapCreated,
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocProvider.value(
+      value: _dormitoryBloc,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            BlocBuilder<DormitoryBloc, DormitoryState>(
+              builder: (context, state) =>
+                  FutureBuilder<List<PlacemarkMapObject>>(
+                    future: _mapObjects(state.dormitories, theme),
+                    builder: (context, snapshot) => YandexMap(
+                      nightModeEnabled: false,
+                      mapObjects: [
+                        _getClusterizedCollection(
+                          theme: theme,
+                          placemarks: snapshot.data ?? const [],
+                        ),
+                      ],
+                      onMapCreated: _onMapCreated,
+                      onCameraPositionChanged: (cameraPosition, _, _) =>
+                          _mapZoom = cameraPosition.zoom,
+                    ),
+                  ),
             ),
-          ),
-          const MapAppbar(),
-          ValueListenableBuilder(
-            valueListenable: _controllerNotifier,
-            builder: (_, value, _) => MapControllerScope(
-              controller: value,
-              child: const SearchButton(),
+            ValueListenableBuilder(
+              valueListenable: _controllerNotifier,
+              builder: (_, value, _) =>
+                  MapControllerScope(controller: value, child: SearchButton()),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 mixin _MapScreenStateMixin on State<MapScreen> {
   late final DormitoryBloc _dormitoryBloc;
   late final ValueNotifier<YandexMapController?> _controllerNotifier;
   YandexMapController? _controller;
+  double _mapZoom = 0.0;
 
   @override
   void initState() {
@@ -86,6 +98,7 @@ mixin _MapScreenStateMixin on State<MapScreen> {
     _controllerNotifier.value = _controller;
     final position = const Position();
     _controller?.moveCamera(
+      animation: const MapAnimation(type: .linear, duration: 0.3),
       .newCameraPosition(
         CameraPosition(
           target: Point(
@@ -98,24 +111,72 @@ mixin _MapScreenStateMixin on State<MapScreen> {
     );
   }
 
-  List<MapObject> _mapObjects(List<DormitoryEntity> dormitories) => dormitories
-      .map(
-        (dormitory) => PlacemarkMapObject(
-          mapId: MapObjectId(dormitory.id.toString()),
-          point: Point(latitude: dormitory.lat, longitude: dormitory.long),
-          icon: .single(
-            .new(image: .fromAssetImage(ImagesHelper.dormPin), scale: 5.0),
+  Future<List<PlacemarkMapObject>> _mapObjects(
+    List<DormitoryEntity> dormitories,
+    ThemeData theme,
+  ) => Future.wait(
+    dormitories.map(
+      (dormitory) async => PlacemarkMapObject(
+        mapId: MapObjectId(dormitory.id.toString()),
+        point: Point(latitude: dormitory.lat, longitude: dormitory.long),
+        icon: .single(
+          PlacemarkIconStyle(
+            image: .fromBytes(
+              await PinIconPainter(
+                dormitory.number.toString(),
+              ).getClusterIconBytes(theme: theme),
+            ),
           ),
-          onTap: (_, point) => _showDormitoryDetails(context, point, dormitory),
         ),
-      )
-      .toList();
+        onTap: (_, point) => _showDormitoryDetails(context, point, dormitory),
+      ),
+    ),
+  );
 
   void _moveCameraToPoint(Point target, {double zoom = 17}) async =>
       await _controller?.moveCamera(
         .newCameraPosition(.new(target: target, zoom: zoom)),
         animation: const .new(type: .smooth, duration: 1.0),
       );
+
+  ClusterizedPlacemarkCollection _getClusterizedCollection({
+    required ThemeData theme,
+    required List<PlacemarkMapObject> placemarks,
+  }) {
+    return ClusterizedPlacemarkCollection(
+      mapId: const MapObjectId('clusterized-1'),
+      placemarks: placemarks,
+      radius: 50,
+      minZoom: 15,
+      onClusterAdded: (self, cluster) async {
+        return cluster.copyWith(
+          appearance: cluster.appearance.copyWith(
+            opacity: 1.0,
+            icon: .single(
+              PlacemarkIconStyle(
+                image: .fromBytes(
+                  await ClusterIconPainter(
+                    cluster.size,
+                  ).getClusterIconBytes(theme: theme),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      onClusterTap: (self, cluster) async {
+        await _controller?.moveCamera(
+          animation: const MapAnimation(type: .linear, duration: 0.3),
+          .newCameraPosition(
+            CameraPosition(
+              target: cluster.placemarks.first.point,
+              zoom: _mapZoom + 1,
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void _showDormitoryDetails(
     BuildContext context,
@@ -125,6 +186,7 @@ mixin _MapScreenStateMixin on State<MapScreen> {
     _moveCameraToPoint(point);
     showUiBottomSheet(
       context,
+      spacing: 0.0,
       title: 'Общежитие',
       widget: SearchDormitoryDetails(dormitory: dormitory),
     );
@@ -155,27 +217,48 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
     return Align(
       alignment: .bottomCenter,
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: AppInsets.screen,
-          child: GestureDetector(
-            onTap: () => showUiBottomSheet(
-              context,
-              title: 'Выбор общежития',
-              widget: MapControllerScope(
-                controller: MapControllerScope.of(context),
-                child: const SearchDormitoryScreen(),
-              ),
-            ),
-            child: UiTextField.standard(
-              enabled: false,
-              style: .new(
-                hintText: 'Поиск общежитий...',
-                prefixIcon: const Icon(Icons.search_outlined),
-              ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: palette.card,
+          borderRadius: .horizontal(
+            left: .circular(24.0),
+            right: .circular(24.0),
+          ),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: AppInsets.screen.copyWith(top: 20.0),
+            child: Column(
+              mainAxisAlignment: .start,
+              crossAxisAlignment: .start,
+              mainAxisSize: .min,
+              spacing: 24.0,
+              children: [
+                UiText2.lBold('Выбор общежития'),
+                GestureDetector(
+                  onTap: () => showUiBottomSheet(
+                    context,
+                    spacing: 0.0,
+                    title: 'Выбор общежития',
+                    widget: MapControllerScope(
+                      controller: MapControllerScope.of(context),
+                      child: SearchDormitoryScreen(),
+                    ),
+                  ),
+                  child: UiTextField.standard(
+                    enabled: false,
+                    style: .new(
+                      hintText: 'Поиск общежитий...',
+                      prefixIcon: const Icon(UiIcons.search),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui.dart';
@@ -105,12 +107,12 @@ class UserAvatar extends StatelessWidget {
   const UserAvatar({
     super.key,
     required this.user,
-    required this.isEnabled,
     required this.photoURL,
+    this.isEnabled,
   });
 
   final FirebaseUser user;
-  final ValueNotifier<bool> isEnabled;
+  final ValueNotifier<bool>? isEnabled;
   final ValueNotifier<String?> photoURL;
 
   @override
@@ -122,12 +124,19 @@ class UserAvatar extends StatelessWidget {
         : Stack(
             alignment: .center,
             children: [
-              CircleAvatar(
-                radius: 37.0,
-                backgroundColor: palette.secondary,
-                backgroundImage: user.photoURL != null
-                    ? NetworkImage(user.photoURL!)
-                    : null,
+              ValueListenableBuilder(
+                valueListenable: photoURL,
+                builder: (_, value, _) {
+                  return CircleAvatar(
+                    radius: 37.0,
+                    backgroundColor: palette.secondary,
+                    backgroundImage: value != null
+                        ? FileImage(File(value))
+                        : user.photoURL != null
+                        ? NetworkImage(user.photoURL!)
+                        : null,
+                  );
+                },
               ),
               Positioned(
                 right: .0,
@@ -139,7 +148,7 @@ class UserAvatar extends StatelessWidget {
                     );
                     photoURL.value = image?.path;
                     if (photoURL.value != null) {
-                      isEnabled.value = true;
+                      isEnabled?.value = true;
                     }
                   },
                   icon: const Icon(UiIcons.edit),

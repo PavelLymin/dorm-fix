@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-
+import '../../../../app/widget/dependencies_scope.dart';
+import '../../../profile/src/widget/name_photo_edit.dart';
+import '../../../students/student.dart';
 import '../../authentication.dart';
 
 class ExtraDataScreen extends StatefulWidget {
@@ -21,60 +23,82 @@ class _ExtraDataScreenState extends State<ExtraDataScreen>
     with _PersonalDataScreenStateMixin {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Личные данные')),
-      body: SafeArea(
-        child: Padding(
-          padding: AppInsets.screen,
-          child: Column(
-            mainAxisAlignment: .center,
-            crossAxisAlignment: .stretch,
-            mainAxisSize: .min,
-            spacing: 16.0,
-            children: [
-              const SizedBox(height: 128.0),
-              UiTextField.standard(
-                controller: _nameController,
-                keyboardType: .name,
-                textInputAction: .next,
-                enabled: _isNameEditable,
-                style: UiTextFieldStyle(
-                  hintText: 'Иван Иванов',
-                  prefixIcon: const Icon(Icons.person),
+    return BlocProvider<StudentBloc>.value(
+      value: _studentBloc,
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Ваши данные')),
+        body: SafeArea(
+          child: Padding(
+            padding: AppInsets.screen,
+            child: Column(
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .start,
+              mainAxisSize: .min,
+              children: [
+                Padding(
+                  padding: const .only(top: 24.0, bottom: 10.0),
+                  child: UiText2.lBold('Добавьте фото'),
                 ),
-              ),
-              UiTextField.standard(
-                controller: _emailController,
-                keyboardType: .emailAddress,
-                textInputAction: .next,
-                enabled: _isEmailEditable,
-                style: UiTextFieldStyle(
-                  hintText: 'name@mail.ru',
-                  prefixIcon: const Icon(Icons.email_outlined),
+                Align(
+                  alignment: .center,
+                  child: UserAvatar(user: _user, photoURL: _photoURL),
                 ),
-              ),
-              UiTextField.standard(
-                controller: _phoneController,
-                keyboardType: .phone,
-                textInputAction: .done,
-                enabled: _isPhoneEditable,
-                style: UiTextFieldStyle(
-                  hintText: '+71234567890',
-                  prefixIcon: Icon(Icons.phone_enabled_outlined),
+                Padding(
+                  padding: const .only(top: 24.0, bottom: 10.0),
+                  child: UiText2.lBold('Укажите имя'),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              ValueListenableBuilder(
-                valueListenable: _isEnabled,
-                builder: (_, value, _) {
-                  return UiButton.filledPrimary(
-                    label: Text('Продолжить'),
-                    enabled: value,
-                    onPressed: () {},
-                  );
-                },
-              ),
-            ],
+                UiTextField.standard(
+                  controller: _nameController,
+                  keyboardType: .name,
+                  textInputAction: .next,
+                  enabled: _isNameEditable,
+                  style: UiTextFieldStyle(hintText: 'Иван Иванов'),
+                ),
+                Padding(
+                  padding: const .only(top: 24.0, bottom: 10.0),
+                  child: UiText2.lBold('Укажите почту'),
+                ),
+                UiTextField.standard(
+                  controller: _emailController,
+                  keyboardType: .emailAddress,
+                  textInputAction: .next,
+                  enabled: _isEmailEditable,
+                  style: UiTextFieldStyle(hintText: 'name@mail.ru'),
+                ),
+                Padding(
+                  padding: const .only(top: 24.0, bottom: 10.0),
+                  child: UiText2.lBold('Укажите телефон'),
+                ),
+                UiTextField.standard(
+                  controller: _phoneController,
+                  keyboardType: .phone,
+                  textInputAction: .done,
+                  enabled: _isPhoneEditable,
+                  style: UiTextFieldStyle(hintText: '+900 000 00-00'),
+                ),
+                const SizedBox(height: 32.0),
+                ValueListenableBuilder(
+                  valueListenable: _isEnabled,
+                  builder: (_, value, _) {
+                    return SizedBox(
+                      width: .infinity,
+                      child: UiButton.filledPrimary(
+                        label: BlocBuilder<StudentBloc, StudentState>(
+                          builder: (context, state) {
+                            return state.maybeMap(
+                              orElse: () => Text('Продолжить'),
+                              loading: (_) => const CircularProgressIndicator(),
+                            );
+                          },
+                        ),
+                        enabled: value,
+                        onPressed: _onCreateStudent,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -83,7 +107,10 @@ class _ExtraDataScreenState extends State<ExtraDataScreen>
 }
 
 mixin _PersonalDataScreenStateMixin on State<ExtraDataScreen> {
+  late final StudentBloc _studentBloc;
+  late final FirebaseUser _user;
   final ValueNotifier<bool> _isEnabled = ValueNotifier(false);
+  final ValueNotifier<String?> _photoURL = ValueNotifier(null);
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -100,28 +127,35 @@ mixin _PersonalDataScreenStateMixin on State<ExtraDataScreen> {
   @override
   void initState() {
     super.initState();
+    _user = context.read<AuthBloc>().state.authenticatedOrNull!.mapAuthUser(
+      firebase: (f) => f,
+      profile: (p) => p.user,
+    );
+    final dependency = DependeciesScope.of(context);
+    _studentBloc = StudentBloc(
+      repository: dependency.studentRepository,
+      logger: dependency.logger,
+    );
+    _initTextControllers();
     _nameController.addListener(_checkValidation);
     _emailController.addListener(_checkValidation);
     _phoneController.addListener(_checkValidation);
-    _initTextControllers();
     _checkValidation();
   }
 
   void _initTextControllers() {
-    final user = context.read<AuthBloc>().state.currentUser;
-    setState(() {
-      user.mapOrNull(
-        authenticated: (user) {
-          _nameController.text = user.displayName ?? '';
-          _emailController.text = user.email ?? '';
-          _phoneController.text = user.phoneNumber ?? '';
-        },
-      );
-    });
+    _user.mapOrNull(
+      authenticated: (user) {
+        _nameController.text = user.displayName ?? '';
+        _emailController.text = user.email ?? '';
+        _phoneController.text = user.phoneNumber ?? '';
+      },
+    );
   }
 
   @override
   void dispose() {
+    _studentBloc.close();
     _nameController.removeListener(_checkValidation);
     _emailController.removeListener(_checkValidation);
     _phoneController.removeListener(_checkValidation);
@@ -136,5 +170,22 @@ mixin _PersonalDataScreenStateMixin on State<ExtraDataScreen> {
         _nameValidator.validate(_nameController.text) &&
         _emailValidator.validate(_emailController.text) &&
         _phoneValidator.validate(_phoneController.text);
+  }
+
+  void _onCreateStudent() {
+    final user = _user.copyWith(
+      displayName: _nameController.text,
+      email: _emailController.text,
+      phoneNumber: _phoneController.text,
+    );
+    _studentBloc.add(
+      .add(
+        student: PartialStudent(
+          user: user,
+          dormitoryId: widget.dormitoryId,
+          roomId: widget.roomId,
+        ),
+      ),
+    );
   }
 }
