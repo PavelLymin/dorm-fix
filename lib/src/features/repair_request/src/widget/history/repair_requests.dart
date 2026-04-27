@@ -46,7 +46,7 @@ class _Loaded extends StatelessWidget {
         : length;
     return SliverList.builder(
       itemBuilder: (_, index) {
-        final request = requests[index];
+        final request = requests[requests.length - 1 - index];
         return Padding(
           padding: const .symmetric(vertical: 8.0),
           child: UiDetailCard<StatusEnum>(

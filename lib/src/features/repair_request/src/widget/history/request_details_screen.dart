@@ -11,57 +11,46 @@ class RequestDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: AppInsets.screen,
-            sliver: SliverSafeArea(
-              sliver: SliverMainAxisGroup(
-                slivers: [
-                  const SliverAppBar(
-                    title: Text('Заявка'),
-                    toolbarHeight: 42.0,
-                  ),
-                  if (request.problems.isNotEmpty)
-                    Carousel(problems: request.problems),
-                  SliverPadding(
-                    padding: .only(top: 24.0, bottom: 10.0),
-                    sliver: SliverToBoxAdapter(child: UiText2.lBold('Детали')),
-                  ),
-                  Details(request: request),
-                  SliverPadding(
-                    padding: const .only(top: 24.0, bottom: 10.0),
-                    sliver: SliverToBoxAdapter(
-                      child: UiText2.lBold('Описание'),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: UiCard.standart(
-                      child: UiText2.m(request.description),
-                    ),
-                  ),
-                  SliverPadding(
-                    padding: const .only(top: 24.0, bottom: 10.0),
-                    sliver: SliverToBoxAdapter(
-                      child: UiText2.lBold('Дата и время ремонта'),
-                    ),
-                  ),
-                  DateTimeRequest(request: request),
-                  SliverPadding(
-                    padding: const .only(top: 24.0, bottom: 10.0),
-                    sliver: SliverToBoxAdapter(
-                      child: UiText2.lBold('Статус заявки'),
-                    ),
-                  ),
-                  StatusRequest(
-                    currentStatus: request.currentStatus,
-                    status: request.status,
-                  ),
-                ],
+      appBar: AppBar(title: Text('Заявка')),
+      body: SafeArea(
+        child: Padding(
+          padding: AppInsets.screen,
+          child: CustomScrollView(
+            slivers: [
+              if (request.problems.isNotEmpty)
+                Carousel(problems: request.problems),
+              SliverPadding(
+                padding: .only(top: 24.0, bottom: 10.0),
+                sliver: SliverToBoxAdapter(child: UiText2.lBold('Детали')),
               ),
-            ),
+              Details(request: request),
+              SliverPadding(
+                padding: const .only(top: 24.0, bottom: 10.0),
+                sliver: SliverToBoxAdapter(child: UiText2.lBold('Описание')),
+              ),
+              SliverToBoxAdapter(
+                child: UiCard.standart(child: UiText2.m(request.description)),
+              ),
+              SliverPadding(
+                padding: const .only(top: 24.0, bottom: 10.0),
+                sliver: SliverToBoxAdapter(
+                  child: UiText2.lBold('Дата и время ремонта'),
+                ),
+              ),
+              DateTimeRequest(request: request),
+              SliverPadding(
+                padding: const .only(top: 24.0, bottom: 10.0),
+                sliver: SliverToBoxAdapter(
+                  child: UiText2.lBold('Статус заявки'),
+                ),
+              ),
+              StatusRequest(
+                currentStatus: request.currentStatus,
+                status: request.status,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

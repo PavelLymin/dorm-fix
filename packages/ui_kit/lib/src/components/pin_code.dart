@@ -70,6 +70,7 @@ class _PinCodeState extends State<PinCode> {
   @override
   Widget build(BuildContext context) => Column(
     mainAxisAlignment: .center,
+    mainAxisSize: .min,
     children: [
       Opacity(
         opacity: 0,
@@ -91,14 +92,17 @@ class _PinCodeState extends State<PinCode> {
             setState(() => _focusNode.requestFocus());
           }
         },
-        child: Row(
-          mainAxisAlignment: .spaceEvenly,
-          children: List.generate(
-            widget.length,
-            (index) => PinInput(
-              isFocus: _focusNode.hasFocus,
-              isCurrentFocus: index == _pinCode.length && _focusNode.hasFocus,
-              number: _isFilled(index) ? _pinCode[index] : '',
+        child: SizedBox(
+          height: 66.0,
+          child: Row(
+            mainAxisAlignment: .spaceEvenly,
+            children: List.generate(
+              widget.length,
+              (index) => PinInput(
+                isFocus: _focusNode.hasFocus,
+                isCurrentFocus: index == _pinCode.length && _focusNode.hasFocus,
+                number: _isFilled(index) ? _pinCode[index] : '',
+              ),
             ),
           ),
         ),

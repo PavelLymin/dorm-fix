@@ -164,44 +164,4 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
       return Rx.combineLatestList(requestStreams.toList());
     });
   }
-
-  // Stream<RequestAggregate> _watchRequestAggregate(int requestId) {
-  //   final request = _requestRepository.watchRequest(id: requestId);
-  //   final problems = _problemRepository.watchProblems(requestId: requestId);
-  //   final master = _assignmentsRepository.watchAssignment(requestId: requestId);
-  //   final specialization = _specRepository.watchSpec(requestId: requestId);
-  //   final chat = _chatRepository.watchChat(requestId: requestId);
-  //   return Rx.combineLatest5(
-  //     request,
-  //     problems,
-  //     master,
-  //     specialization,
-  //     chat,
-  //     (request, problems, master, specialization, chat) => RequestAggregate(
-  //       request: request,
-  //       problems: problems,
-  //       master: master,
-  //       specialization: specialization,
-  //       chat: chat,
-  //     ),
-  //   );
-  // }
-
-  // @override
-  // Stream<List<RequestAggregate>> watchRequests({
-  //   String? uid,
-  //   int? specId,
-  //   int? dormId,
-  //   String? status,
-  // }) => _requestRepository
-  //     .watchRequests(uid: uid, specId: specId, dormId: dormId, status: status)
-  //     .switchMap((requests) {
-  //       if (requests.isEmpty) return const .empty();
-
-  //       final streams = requests
-  //           .map((r) => _watchRequestAggregate(r.id))
-  //           .toList();
-
-  //       return Rx.combineLatestList(streams);
-  //     });
 }

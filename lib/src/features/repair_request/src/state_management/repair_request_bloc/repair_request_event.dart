@@ -16,12 +16,18 @@ sealed class RepairRequestEvent {
   factory RepairRequestEvent.create({required RequestFormModel request}) =>
       _CreateRepairRequestsEvent(request: request);
 
+  const factory RepairRequestEvent.filterChanged({
+    required RequestFilterType filter,
+  }) = _FilterChangedEvent;
+
   FutureOr<R> map<R>({
     required RepairRequestEventMatch<R, _GetRepairRequestsEvent> get,
     required RepairRequestEventMatch<R, _CreateRepairRequestsEvent> create,
+    required RepairRequestEventMatch<R, _FilterChangedEvent> filterChanged,
   }) => switch (this) {
     _GetRepairRequestsEvent e => get(e),
     _CreateRepairRequestsEvent e => create(e),
+    _FilterChangedEvent e => filterChanged(e),
   };
 }
 
@@ -43,4 +49,10 @@ final class _CreateRepairRequestsEvent extends RepairRequestEvent {
   const _CreateRepairRequestsEvent({required this.request});
 
   final RequestFormModel request;
+}
+
+final class _FilterChangedEvent extends RepairRequestEvent {
+  const _FilterChangedEvent({required this.filter});
+
+  final RequestFilterType filter;
 }

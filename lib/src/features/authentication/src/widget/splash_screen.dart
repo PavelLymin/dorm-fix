@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
               context.router.replace(const NamedRoute('StudentRootSreen')),
           master: (m) => context.router.replace(
             NamedRoute(
-              'MasterRootSreen',
+              'MasterRootTabs',
               params: {
                 'spec_id': m.specialization.id,
                 'dorm_id': m.dormitory.id,

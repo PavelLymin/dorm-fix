@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dorm_fix/src/app/widget/dependencies_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/map/map.dart';
-import '../../features/master/src/widgets/home_screen.dart';
+import '../../features/master/master.dart';
 import '../../features/specialization/specialization.dart';
 import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
@@ -61,39 +63,55 @@ class AppRouter extends RootStackRouter {
       },
     ),
     NamedRouteDef(
-      name: 'FormRequestScreen',
-      builder: (context, data) => const FormRequestScreen(),
-    ),
-    NamedRouteDef(
-      name: 'HistoryScreen',
-      builder: (context, data) => const HistoryScreen(),
-    ),
-    NamedRouteDef(
       name: 'RequestDetailsScreen',
       builder: (_, data) =>
           RequestDetailsScreen(request: data.params.get('request')),
     ),
     NamedRouteDef(
       name: 'StudentRootSreen',
-      builder: (_, _) => const StudentRootScreen(pages: studentPages),
+      builder: (context, data) {
+        final dependency = DependeciesScope.of(context);
+        return BlocProvider(
+          create: (context) => RepairRequestBloc(
+            requestRepository: dependency.requestRepository,
+            problemRepository: dependency.problemRepository,
+            logger: dependency.logger,
+          ),
+          child: const AutoRouter(),
+        );
+      },
       children: [
         NamedRouteDef(
           initial: true,
-          name: 'StudentHomeScreen',
-          builder: (_, _) => const StudentHomeScreen(),
+          name: 'StudentTabsScreen',
+          builder: (context, data) => RootScreen(pages: studentPages),
+          children: [
+            NamedRouteDef(
+              name: 'StudentHomeTab',
+              builder: (_, _) => const StudentHomeScreen(),
+            ),
+            NamedRouteDef(
+              name: 'FormRequestTab',
+              builder: (_, _) => const FormRequestScreen(),
+            ),
+            NamedRouteDef(
+              name: 'ProfileTab',
+              builder: (_, _) => const ProfileScreen(),
+            ),
+          ],
         ),
         NamedRouteDef(
           name: 'FormRequestScreen',
           builder: (_, _) => const FormRequestScreen(),
         ),
         NamedRouteDef(
-          name: 'ProfileScreen',
-          builder: (_, _) => const ProfileScreen(),
+          name: 'HistoryScreen',
+          builder: (context, data) => const HistoryScreen(),
         ),
       ],
     ),
     NamedRouteDef(
-      name: 'MasterRootSreen',
+      name: 'MasterRootTabs',
       builder: (_, data) => MasterRootScreen(
         pages: masterPages,
         specializationId: data.params.getInt('spec_id'),
@@ -101,11 +119,17 @@ class AppRouter extends RootStackRouter {
       ),
       children: [
         NamedRouteDef(
-          name: 'MasterHomeScreen',
-          builder: (_, _) => const MasterHomeScreen(),
+          name: 'MasterHomeTab',
+          builder: (_, data) {
+            final parentParams = data.parent!.params;
+            return RepairRequestScreen(
+              specId: parentParams.getInt('spec_id'),
+              dormId: parentParams.getInt('dorm_id'),
+            );
+          },
         ),
         NamedRouteDef(
-          name: 'ProfileScreen',
+          name: 'ProfileTab',
           builder: (_, _) => const ProfileScreen(),
         ),
       ],
@@ -114,22 +138,14 @@ class AppRouter extends RootStackRouter {
 }
 
 const List<AppPage> studentPages = <AppPage>[
-  AppPage(name: 'StudentHomeScreen', title: 'Домашняя', icon: UiIcons.home),
-  AppPage(
-    name: 'FormRequestScreen',
-    title: 'Заявка',
-    icon: Icons.request_page_outlined,
-  ),
-  AppPage(name: 'ProfileScreen', title: 'Профиль', icon: UiIcons.filePlus),
+  AppPage(name: 'StudentHomeTab', title: 'Домашняя', icon: UiIcons.home),
+  AppPage(name: 'FormRequestTab', title: 'Заявка', icon: UiIcons.filePlus),
+  AppPage(name: 'ProfileTab', title: 'Профиль', icon: UiIcons.userProfile),
 ];
 
 const List<AppPage> masterPages = <AppPage>[
-  AppPage(
-    name: 'MasterHomeScreen',
-    title: 'Домашняя',
-    icon: Icons.home_outlined,
-  ),
-  AppPage(name: 'ProfileScreen', title: 'Профиль', icon: UiIcons.userProfile),
+  AppPage(name: 'MasterHomeTab', title: 'Домашняя', icon: UiIcons.home),
+  AppPage(name: 'ProfileTab', title: 'Профиль', icon: UiIcons.userProfile),
 ];
 
 class AuthGuard extends AutoRouteGuard {
@@ -143,8 +159,9 @@ class AuthGuard extends AutoRouteGuard {
     state.mapOrNull(
       initial: (_) => resolver.next(true),
       authenticated: (_) => resolver.next(true),
-      notAuthenticated: (_) => resolver.redirectUntil(NamedRoute('SignIn')),
-      error: (_) => resolver.redirectUntil(NamedRoute('SignIn')),
+      notAuthenticated: (_) =>
+          resolver.redirectUntil(const NamedRoute('SignIn')),
+      error: (_) => resolver.redirectUntil(const NamedRoute('SignIn')),
     );
   }
 }

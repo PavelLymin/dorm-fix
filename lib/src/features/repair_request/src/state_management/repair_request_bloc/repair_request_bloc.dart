@@ -9,19 +9,30 @@ import '../request_form_bloc/request_form_model.dart';
 part 'repair_request_event.dart';
 part 'repair_request_state.dart';
 
+enum RequestFilterType {
+  all(value: 'Все'),
+  active(value: 'Активные');
+
+  const RequestFilterType({required this.value});
+  final String value;
+}
+
 class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
     with _SetStateMixin {
   RepairRequestBloc({
     required this._requestRepository,
     required this._problemRepository,
     required this._logger,
-  }) : super(const .loading(requests: [])) {
-    on<RepairRequestEvent>((event, emit) async {
-      await event.map(
-        get: (event) => _getRequest(event, emit),
-        create: (event) => _create(event, emit),
-      );
-    }, transformer: restartable());
+  }) : super(const .loading(requests: [], filter: .all)) {
+    on<_GetRepairRequestsEvent>(
+      (event, emit) => _getRequest(event, emit),
+      transformer: restartable(),
+    );
+    on<_CreateRepairRequestsEvent>(
+      (event, emit) => _create(event, emit),
+      transformer: sequential(),
+    );
+    on<_FilterChangedEvent>((event, emit) => _filterChanged(event, emit));
   }
 
   final IRequestRepository _requestRepository;
@@ -40,12 +51,16 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
           dormId: event.dormId,
           status: event.status,
         ),
-        onData: (data) => .loaded(requests: data),
-        onError: (error, _) => .error(requests: state.requests, message: error),
+        onData: (data) => .loaded(requests: data, filter: state.filter),
+        onError: (error, _) => .error(
+          requests: state.requests,
+          filter: state.filter,
+          message: error,
+        ),
       );
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(.error(requests: state.requests, message: e));
+      emit(.error(requests: state.requests, filter: state.filter, message: e));
     }
   }
 
@@ -66,14 +81,17 @@ class RepairRequestBloc extends Bloc<RepairRequestEvent, RepairRequestState>
     } on Object catch (e, stackTrace) {
       addError(e, stackTrace);
       _logger.e(e, stackTrace: stackTrace);
-      emit(.error(requests: state.requests, message: e));
+      emit(.error(requests: state.requests, filter: state.filter, message: e));
     }
   }
+
+  Future<void> _filterChanged(
+    _FilterChangedEvent event,
+    Emitter<RepairRequestState> emit,
+  ) async => emit(state.copyWith(filter: event.filter));
 }
 
 mixin _SetStateMixin<State extends RepairRequestState>
     implements Emittable<State> {
-  void setState(State state) {
-    emit(state);
-  }
+  void setState(State state) => emit(state);
 }

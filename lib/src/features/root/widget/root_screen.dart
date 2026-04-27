@@ -13,31 +13,31 @@ class AppPage {
   final IconData icon;
 }
 
-class MasterDataScope extends InheritedWidget {
-  const MasterDataScope({
-    super.key,
-    required this.specializationId,
-    required this.dormitoryId,
-    required super.child,
-  });
+// class MasterDataScope extends InheritedWidget {
+//   const MasterDataScope({
+//     super.key,
+//     required this.specializationId,
+//     required this.dormitoryId,
+//     required super.child,
+//   });
 
-  final int specializationId;
-  final int dormitoryId;
+//   final int specializationId;
+//   final int dormitoryId;
 
-  static MasterDataScope of(BuildContext context) {
-    final scope = context.dependOnInheritedWidgetOfExactType<MasterDataScope>();
-    assert(scope != null, 'MasterDataScope not found');
-    return scope!;
-  }
+//   static MasterDataScope of(BuildContext context) {
+//     final scope = context.dependOnInheritedWidgetOfExactType<MasterDataScope>();
+//     assert(scope != null, 'MasterDataScope not found');
+//     return scope!;
+//   }
 
-  @override
-  bool updateShouldNotify(MasterDataScope oldWidget) {
-    return specializationId != oldWidget.specializationId ||
-        dormitoryId != oldWidget.dormitoryId;
-  }
-}
+//   @override
+//   bool updateShouldNotify(MasterDataScope oldWidget) {
+//     return specializationId != oldWidget.specializationId ||
+//         dormitoryId != oldWidget.dormitoryId;
+//   }
+// }
 
-class MasterRootScreen extends StatelessWidget {
+class MasterRootScreen extends StatefulWidget {
   const MasterRootScreen({
     super.key,
     required this.pages,
@@ -50,10 +50,27 @@ class MasterRootScreen extends StatelessWidget {
   final int dormitoryId;
 
   @override
-  Widget build(BuildContext context) => MasterDataScope(
-    specializationId: specializationId,
-    dormitoryId: dormitoryId,
-    child: RootScreen(pages: pages),
+  State<MasterRootScreen> createState() => _MasterRootScreenState();
+}
+
+class _MasterRootScreenState extends State<MasterRootScreen> {
+  late final RepairRequestBloc _repairRequestBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    final dependency = DependeciesScope.of(context);
+    _repairRequestBloc = RepairRequestBloc(
+      requestRepository: dependency.requestRepository,
+      problemRepository: dependency.problemRepository,
+      logger: dependency.logger,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => BlocProvider(
+    create: (context) => _repairRequestBloc,
+    child: RootScreen(pages: widget.pages),
   );
 }
 
@@ -81,14 +98,8 @@ class _StudentRootScreenState extends State<StudentRootScreen> {
   }
 
   @override
-  void dispose() {
-    _repairRequestBloc.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<RepairRequestBloc>(
       create: (context) => _repairRequestBloc,
       child: RootScreen(pages: widget.pages),
     );

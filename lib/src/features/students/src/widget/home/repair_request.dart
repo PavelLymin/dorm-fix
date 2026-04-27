@@ -12,7 +12,8 @@ class RequestSection extends StatelessWidget {
       children: [
         UiText2.lBold('Ваши заявки'),
         UiButton.icon(
-          onPressed: () => context.router.push(NamedRoute('HistoryScreen')),
+          onPressed: () =>
+              context.router.push(const NamedRoute('HistoryScreen')),
           icon: const Icon(Icons.timer_outlined),
         ),
       ],
