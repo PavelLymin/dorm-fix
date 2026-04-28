@@ -1,9 +1,6 @@
-import 'dart:developer';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../repair_request/request.dart';
-import 'history_filter.dart';
+import 'request_filter.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -15,7 +12,6 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
-    log(context.read<RepairRequestBloc>().toString());
     return Scaffold(
       appBar: AppBar(title: Text('История заявок')),
       body: SafeArea(
@@ -24,7 +20,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
           child: CustomScrollView(
             slivers: [
               const HistorySearch(),
-              const HistoryFilter(),
+              SliverPadding(
+                padding: .only(top: 16.0),
+                sliver: SliverToBoxAdapter(child: const RequestFilter()),
+              ),
               const SliverPadding(
                 padding: .only(top: 24.0),
                 sliver: RepairRequest(),

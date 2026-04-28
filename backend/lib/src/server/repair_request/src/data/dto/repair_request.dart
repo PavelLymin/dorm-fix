@@ -48,7 +48,7 @@ sealed class RepairRequestDto {
     required final FullStudentDto student,
     required final SpecializationDto specialization,
     required final List<FullProblemDto> problems,
-    required final FullChatDto chat,
+    required final ChatDto chat,
     required final MasterDto? master,
     required final DateTime createdAt,
   }) = FullRepairRequestDto;
@@ -97,16 +97,18 @@ final class PartialRepairRequestDto extends RepairRequestDto {
     'problems': problems,
   };
 
-  RequestsCompanion toCompanion({required String uid}) => RequestsCompanion(
-    uid: Value(uid),
-    specId: Value(specId),
-    description: Value(description),
-    priority: Value(priority.value),
-    currentStatus: Value(currentStatus.value),
-    date: Value(date),
-    startTime: Value(startTime),
-    endTime: Value(endTime),
-  );
+  RequestsCompanion toCompanion({required String uid, required int chatId}) =>
+      RequestsCompanion(
+        uid: Value(uid),
+        specId: Value(specId),
+        description: Value(description),
+        priority: Value(priority.value),
+        currentStatus: Value(currentStatus.value),
+        date: Value(date),
+        startTime: Value(startTime),
+        endTime: Value(endTime),
+        chatId: Value(chatId),
+      );
 
   factory PartialRepairRequestDto.fromEntity(PartialRepairRequest entity) =>
       PartialRepairRequestDto(
@@ -170,7 +172,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
   final SpecializationDto specialization;
   final List<FullProblemDto> problems;
   final List<StatusDto> status;
-  final FullChatDto chat;
+  final ChatDto chat;
   final MasterDto? master;
   final DateTime createdAt;
 
@@ -280,7 +282,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
     required List<StatusDto> status,
     required SpecializationDto specialization,
     required List<FullProblemDto> problems,
-    required FullChatDto chat,
+    required ChatDto chat,
     MasterDto? master,
   }) => FullRepairRequestDto(
     id: request.id,

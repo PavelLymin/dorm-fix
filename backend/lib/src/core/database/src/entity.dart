@@ -71,6 +71,7 @@ class Requests extends Table {
   TextColumn get uid => text().named('uid').references(Users, #uid)();
   IntColumn get specId =>
       integer().named('spec_id').references(Specializations, #id)();
+  IntColumn get chatId => integer().named('chat_id').references(Chats, #id)();
   TextColumn get description => text().named('description')();
   TextColumn get priority => text().named('priority')();
   TextColumn get date => text().map(const DateTimeConverter()).named('date')();
@@ -114,8 +115,6 @@ class Assignments extends Table {
 
 class Chats extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
-  IntColumn get requestId =>
-      integer().named('request_id').references(Requests, #id)();
   TextColumn get createdAt => text()
       .named('created_at')
       .map(const DateTimeConverter())

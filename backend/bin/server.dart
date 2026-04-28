@@ -45,7 +45,7 @@ void main(List<String> args) async {
                 .add(dependency.dormitoryRouter.handler)
                 .add(dependency.specializationRouter.handler)
                 .add(dependency.roomRouter.handler)
-                .add(dependency.repairRequestRouter.handler)
+                .add(dependency.repairRequestRouter.handler.call)
                 .add(dependency.chatRouter.handler)
                 .add(dependency.messageRouter.handler)
                 .handler,
@@ -395,3 +395,10 @@ Future<void> createFirebaseClaims(DependencyContainer dependency) async {
     ),
   ]);
 }
+
+      // await createSpecializations(dependency);
+      // await createDormitories(dependency);
+      // await createRooms(dependency);
+      // await createStudents(dependency);
+      // await createMasters(dependency);
+      // print('end');

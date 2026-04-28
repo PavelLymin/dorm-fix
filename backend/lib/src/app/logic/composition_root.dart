@@ -157,11 +157,9 @@ class CompositionRoot {
       restApi: restApi,
     );
     // RepairRequest
-    final repairRequestRouter = RepairRequestRouter(
-      requestRepository: requestRepository,
+    final repairRequestRouter = RepairRequests(
       requestFacade: requestFacade,
       restApi: restApi,
-      wsConnection: ws,
     );
 
     return _DependencyFactory(
@@ -213,7 +211,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final UserRouter userRouter;
 
-  final RepairRequestRouter repairRequestRouter;
+  final RepairRequests repairRequestRouter;
 
   final ProfileRouter profileRouter;
 

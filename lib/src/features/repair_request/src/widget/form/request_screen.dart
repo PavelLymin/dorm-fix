@@ -3,7 +3,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../../../core/utils/src/error_util.dart';
-import '../../../../specialization/specialization.dart';
 import '../../../request.dart';
 import 'choosing_service.dart';
 import 'line_calendar_picker.dart';
@@ -25,7 +24,7 @@ class _FormRequestScreenState extends State<FormRequestScreen>
     body: MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => _requestFormBloc),
-        BlocProvider.value(value: _specializationBloc),
+        BlocProvider(create: (context) => _repairActionBloc),
       ],
       child: Scaffold(
         appBar: AppBar(title: Text('Создание заявки')),
@@ -95,7 +94,7 @@ class ButtonForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return BlocListener<RepairRequestBloc, RepairRequestState>(
+        return BlocListener<RepairActionBloc, RepairActionState>(
           listener: (context, state) => state.mapOrNull(
             error: (state) => ErrorUtil.showSnackBar(context, state.message),
           ),
@@ -112,7 +111,7 @@ class ButtonForm extends StatelessWidget {
 mixin _RequestScreenStateMixin on State<FormRequestScreen> {
   final _descriptionController = TextEditingController();
   late final RequestFormBloc _requestFormBloc;
-  late final SpecializationBloc _specializationBloc;
+  late final RepairActionBloc _repairActionBloc;
 
   @override
   void initState() {
@@ -124,12 +123,16 @@ mixin _RequestScreenStateMixin on State<FormRequestScreen> {
       requestRepository: dependency.requestRepository,
       logger: dependency.logger,
     );
-    _specializationBloc = dependency.specializationBloc;
+    _repairActionBloc = RepairActionBloc(
+      requestRepository: dependency.requestRepository,
+      problemRepository: dependency.problemRepository,
+      logger: dependency.logger,
+    );
   }
 
   void _submitForm() {
     final request = _requestFormBloc.state.currentFormModel;
-    context.read<RepairRequestBloc>().add(.create(request: request));
+    context.read<RepairActionBloc>().add(.create(request: request));
     _descriptionController.clear();
     _requestFormBloc.add(.clearForm());
   }

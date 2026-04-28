@@ -63,18 +63,17 @@ class AppRouter extends RootStackRouter {
       },
     ),
     NamedRouteDef(
-      name: 'RequestDetailsScreen',
+      name: 'RepairRequestDetails',
       builder: (_, data) =>
-          RequestDetailsScreen(request: data.params.get('request')),
+          RepairRequestDetails(request: data.params.get('request')),
     ),
     NamedRouteDef(
       name: 'StudentRootSreen',
       builder: (context, data) {
         final dependency = DependeciesScope.of(context);
         return BlocProvider(
-          create: (context) => RepairRequestBloc(
+          create: (context) => RepairWatcherBloc(
             requestRepository: dependency.requestRepository,
-            problemRepository: dependency.problemRepository,
             logger: dependency.logger,
           ),
           child: const AutoRouter(),
@@ -111,26 +110,49 @@ class AppRouter extends RootStackRouter {
       ],
     ),
     NamedRouteDef(
-      name: 'MasterRootTabs',
-      builder: (_, data) => MasterRootScreen(
-        pages: masterPages,
-        specializationId: data.params.getInt('spec_id'),
-        dormitoryId: data.params.getInt('dorm_id'),
-      ),
+      name: 'MasterRootSreen',
+      builder: (context, data) {
+        final dependency = DependeciesScope.of(context);
+        return BlocProvider(
+          create: (context) => RepairWatcherBloc(
+            requestRepository: dependency.requestRepository,
+            logger: dependency.logger,
+          ),
+          child: const AutoRouter(),
+        );
+      },
       children: [
         NamedRouteDef(
-          name: 'MasterHomeTab',
-          builder: (_, data) {
-            final parentParams = data.parent!.params;
-            return RepairRequestScreen(
-              specId: parentParams.getInt('spec_id'),
-              dormId: parentParams.getInt('dorm_id'),
-            );
-          },
+          name: 'MasterRootTabs',
+          initial: true,
+          builder: (_, data) => MasterRootScreen(
+            pages: masterPages,
+            specializationId: data.params.getInt('spec_id'),
+            dormitoryId: data.params.getInt('dorm_id'),
+          ),
+          children: [
+            NamedRouteDef(
+              name: 'MasterHomeTab',
+              builder: (_, data) {
+                final parentParams = data.parent!.params;
+                return RepairRequestScreen(
+                  specId: parentParams.getInt('spec_id'),
+                  dormId: parentParams.getInt('dorm_id'),
+                );
+              },
+            ),
+            NamedRouteDef(
+              name: 'ProfileTab',
+              builder: (_, _) => const ProfileScreen(),
+            ),
+          ],
         ),
         NamedRouteDef(
-          name: 'ProfileTab',
-          builder: (_, _) => const ProfileScreen(),
+          name: 'MasterRequestDetails',
+          builder: (_, data) {
+            final request = data.params.get('request');
+            return MasterRequestDetails(request: request);
+          },
         ),
       ],
     ),

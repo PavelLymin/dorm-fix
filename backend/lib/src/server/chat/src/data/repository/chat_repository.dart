@@ -2,11 +2,11 @@ import '../../../../../core/database/database.dart';
 import '../../../chat.dart';
 
 abstract interface class IChatRepository {
-  Future<FullChatDto> createChat({required PartialChat chat});
+  Future<ChatDto> createChat();
 
-  Stream<FullChat> watchChat({required int requestId});
+  Stream<ChatEntity> watchChat({required int id});
 
-  Future<FullChat?> getChat({required int requestId});
+  Future<ChatEntity?> getChat({required int id});
 
   Future<void> addMember({required int chatId, required String uid});
 }
@@ -17,33 +17,31 @@ class ChatRepositoryImpl implements IChatRepository {
   final Database _database;
 
   @override
-  Future<FullChatDto> createChat({required PartialChat chat}) async {
-    final dto = PartialChatDto.fromEntity(chat);
+  Future<ChatDto> createChat() async {
     final data = await _database
         .into(_database.chats)
-        .insertReturning(dto.toCompanion());
+        .insertReturning(ChatsCompanion());
 
-    final result = FullChatDto.fromData(chat: data);
+    final result = ChatDto.fromData(chat: data);
 
     return result;
   }
 
   @override
-  Stream<FullChat> watchChat({required int requestId}) =>
-      (_database.select(_database.chats)
-            ..where((row) => row.requestId.equals(requestId)))
+  Stream<ChatEntity> watchChat({required int id}) =>
+      (_database.select(_database.chats)..where((row) => row.id.equals(id)))
           .watchSingle()
-          .map((row) => FullChatDto.fromData(chat: row).toEntity());
+          .map((row) => ChatDto.fromData(chat: row).toEntity());
 
   @override
-  Future<FullChat?> getChat({required int requestId}) async {
+  Future<ChatEntity?> getChat({required int id}) async {
     final data = await (_database.select(
       _database.chats,
-    )..where((row) => row.requestId.equals(requestId))).getSingleOrNull();
+    )..where((row) => row.id.equals(id))).getSingleOrNull();
 
     if (data == null) return null;
 
-    final chat = FullChatDto.fromData(chat: data).toEntity();
+    final chat = ChatDto.fromData(chat: data).toEntity();
 
     return chat;
   }

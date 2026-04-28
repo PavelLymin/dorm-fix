@@ -60,7 +60,7 @@ sealed class RepairRequestEntity {
     required final FullStudent student,
     required final SpecializationEntity specialization,
     required final List<FullProblem> problems,
-    required final FullChat chat,
+    required final ChatEntity chat,
     required final MasterEntity? master,
     required final DateTime createdAt,
   }) = FullRepairRequest;
@@ -163,7 +163,7 @@ final class FullRepairRequest extends RepairRequestEntity {
   final SpecializationEntity specialization;
   final List<FullProblem> problems;
   final List<StatusEntity> status;
-  final FullChat chat;
+  final ChatEntity chat;
   final MasterEntity? master;
   final DateTime createdAt;
 
@@ -179,7 +179,7 @@ final class FullRepairRequest extends RepairRequestEntity {
     FullStudent? student,
     SpecializationEntity? specialization,
     List<FullProblem>? problems,
-    FullChat? chat,
+    ChatEntity? chat,
     MasterEntity? master,
     DateTime? createdAt,
   }) => FullRepairRequest(

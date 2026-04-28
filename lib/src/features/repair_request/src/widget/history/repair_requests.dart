@@ -11,7 +11,7 @@ class RepairRequest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RepairRequestBloc, RepairRequestState>(
+    return BlocBuilder<RepairWatcherBloc, RepairWatcherState>(
       builder: (context, state) {
         return state.maybeMap(
           loading: (_) => SliverToBoxAdapter(
@@ -66,7 +66,7 @@ class _Loaded extends StatelessWidget {
             onTap: () {
               context.router.push(
                 NamedRoute(
-                  'RequestDetailsScreen',
+                  'RepairRequestDetails',
                   params: {'request': request},
                 ),
               );

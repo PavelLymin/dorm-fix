@@ -13,6 +13,8 @@ abstract interface class IRequestRepository {
   Future<FullRepairRequest> createRequest({
     required PartialRepairRequest request,
   });
+
+  Future<void> acceptRequest({required int id});
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
@@ -81,6 +83,16 @@ class RequestRepositoryImpl implements IRequestRepository {
     throw StructuredBackendException(
       error: {'description': 'Invalid data received from server.'},
       statusCode: 500,
+    );
+  }
+
+  @override
+  Future<void> acceptRequest({required int id}) async {
+    final token = await _firebaseAuth.currentUser?.getIdToken();
+    await _client.send(
+      path: '/requests/$id/accept',
+      method: 'POST',
+      headers: {'Authorization': 'Bearer $token'},
     );
   }
 }

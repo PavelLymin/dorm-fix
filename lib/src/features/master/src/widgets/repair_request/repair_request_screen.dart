@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../repair_request/request.dart';
+import 'request_filter.dart';
 
 class RepairRequestScreen extends StatefulWidget {
   const RepairRequestScreen({
@@ -20,7 +22,7 @@ class _RepairRequestScreenState extends State<RepairRequestScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<RepairRequestBloc>().add(
+    context.read<RepairWatcherBloc>().add(
       .get(specId: widget.specId, dormId: 7),
     );
   }
@@ -40,26 +42,38 @@ class _RepairRequestScreenState extends State<RepairRequestScreen> {
       ),
       body: Padding(
         padding: AppInsets.screen,
-        child: CustomScrollView(
-          slivers: [
-            const SliverToBoxAdapter(child: RequestFilter()),
-            BlocBuilder<RepairRequestBloc, RepairRequestState>(
-              builder: (context, state) {
-                return state.maybeMap(
-                  orElse: (s) =>
-                      const SliverToBoxAdapter(child: SizedBox.shrink()),
-                  loaded: (s) {
-                    return SliverList.separated(
-                      itemCount: s.filteredRequests.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 16.0),
-                      itemBuilder: (context, index) {
-                        final request = s.filteredRequests[index];
-                        return _Item(request: request);
-                      },
-                    );
-                  },
-                );
-              },
+        child: Column(
+          mainAxisAlignment: .start,
+          crossAxisAlignment: .start,
+          mainAxisSize: .min,
+          children: [
+            const Padding(
+              padding: .only(top: 16.0),
+              child: RequestSlectedFilter(),
+            ),
+            Padding(
+              padding: .symmetric(vertical: 16.0),
+              child: RequestFilter(specId: widget.specId),
+            ),
+            Expanded(
+              child: BlocBuilder<RepairWatcherBloc, RepairWatcherState>(
+                builder: (context, state) {
+                  return state.maybeMap(
+                    orElse: (s) => const SizedBox.shrink(),
+                    loaded: (s) {
+                      return ListView.separated(
+                        itemCount: s.filteredRequests.length,
+                        separatorBuilder: (_, _) =>
+                            const SizedBox(height: 16.0),
+                        itemBuilder: (context, index) {
+                          final request = s.filteredRequests[index];
+                          return _Item(request: request);
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -78,7 +92,9 @@ class _Item extends StatelessWidget {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
     return UiCard.clickable(
-      onTap: () {},
+      onTap: () => context.router.push(
+        NamedRoute('MasterRequestDetails', params: {'request': request}),
+      ),
       child: Column(
         mainAxisAlignment: .center,
         crossAxisAlignment: .start,
@@ -107,14 +123,14 @@ class _Item extends StatelessWidget {
   }
 }
 
-class RequestFilter extends StatefulWidget {
-  const RequestFilter({super.key});
+class RequestSlectedFilter extends StatefulWidget {
+  const RequestSlectedFilter({super.key});
 
   @override
-  State<RequestFilter> createState() => _RequestFilterState();
+  State<RequestSlectedFilter> createState() => _RequestSlectedFilterState();
 }
 
-class _RequestFilterState extends State<RequestFilter> {
+class _RequestSlectedFilterState extends State<RequestSlectedFilter> {
   late final ValueNotifier<RequestFilterType> _filter;
 
   @override
@@ -125,17 +141,29 @@ class _RequestFilterState extends State<RequestFilter> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
+    final style = theme.appStyle;
     return ValueListenableBuilder(
       valueListenable: _filter,
       builder: (context, value, child) {
-        return UiChoiceChip<RequestFilterType>(
+        return UiSelectedControl<RequestFilterType>(
           options: RequestFilterType.values
-              .map((e) => ChipItem(value: e, title: e.value))
+              .map((e) => SlectedItem(value: e, title: e.value))
               .toList(),
           initial: value,
+          style: SelectedControlStyle(
+            barColor: palette.action,
+            indicatorColor: palette.card,
+            borderRadius: style.borderRadius,
+            padding: AppInsets.card,
+            textStyle: TextStyle(color: palette.secondary),
+          ),
           onChange: (v) {
             _filter.value = v;
-            context.read<RepairRequestBloc>().add(.filterChanged(filter: v));
+            context.read<RepairWatcherBloc>().add(
+              RepairWatcherEvent.filterChanged(filter: v),
+            );
           },
         );
       },

@@ -49,7 +49,7 @@ class DependencyContainer {
 
   final DormitoryRouter dormitoryRouter;
 
-  final RepairRequestRouter repairRequestRouter;
+  final RepairRequests repairRequestRouter;
 
   final SpecializationRouter specializationRouter;
 

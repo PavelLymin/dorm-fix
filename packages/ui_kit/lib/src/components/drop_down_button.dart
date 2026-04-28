@@ -10,7 +10,7 @@ class UiDropDownButton<T extends Object> extends StatefulWidget {
     this.trailingIcon,
     this.selectedTrailingIcon,
     this.width,
-    this.expandedInsets,
+    this.expandedInsets = .zero,
     this.controller,
     this.menuHeight,
     this.textAlign = .center,
@@ -32,7 +32,7 @@ class UiDropDownButton<T extends Object> extends StatefulWidget {
   final Widget? trailingIcon;
   final Widget? selectedTrailingIcon;
   final double? width;
-  final EdgeInsetsGeometry? expandedInsets;
+  final EdgeInsetsGeometry expandedInsets;
   final TextEditingController? controller;
   final TextAlign textAlign;
   final double? menuHeight;
@@ -150,7 +150,7 @@ InputDecorationTheme _buildInputDecorationTheme({
   return InputDecorationTheme(
     isCollapsed: true,
     labelStyle: typography.m.copyWith(color: palette.foreground),
-    hintStyle: typography.m.copyWith(color: palette.foregroundSecondary),
+    hintStyle: typography.m.copyWith(color: palette.foreground),
     border: border,
     focusedBorder: border,
     enabledBorder: border,

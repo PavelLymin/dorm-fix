@@ -47,7 +47,7 @@ sealed class RepairRequestDto {
     required int startTime,
     required int endTime,
     required List<FullProblemDto> problems,
-    required FullChatDto chat,
+    required ChatDto chat,
     required MasterDto? master,
     required DateTime createdAt,
   }) = FullRepairRequestDto;
@@ -156,7 +156,7 @@ final class FullRepairRequestDto extends RepairRequestDto {
   final SpecializationDto specialization;
   final List<FullProblemDto> problems;
   final List<StatusDto> status;
-  final FullChatDto chat;
+  final ChatDto chat;
   final MasterDto? master;
   final DateTime createdAt;
 

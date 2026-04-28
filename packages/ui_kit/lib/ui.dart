@@ -12,8 +12,8 @@ export 'package:ui_kit/src/components/pin_code.dart';
 export 'package:ui_kit/src/components/app_padding.dart';
 export 'package:ui_kit/src/components/switch.dart';
 export 'package:ui_kit/src/components/bottom_sheet.dart';
-export 'package:ui_kit/src/components/choice_chip.dart';
-export 'src/components/tile_group/tile_group.dart';
+export 'package:ui_kit/src/components/scrollable_control.dart';
+export 'package:ui_kit/src/components/tile_group/tile_group.dart';
 export 'package:ui_kit/src/components/check_box.dart';
 export 'package:ui_kit/src/components/line_calendar/line_calendar.dart';
 export 'package:ui_kit/src/components/drop_down_button.dart';
@@ -24,6 +24,7 @@ export 'package:ui_kit/src/components/stepper.dart';
 export 'package:ui_kit/src/components/carousel.dart';
 export 'package:ui_kit/src/components/calendar/calendar.dart';
 export 'package:ui_kit/src/components/icons.dart';
+export 'package:ui_kit/src/components/selected_control.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

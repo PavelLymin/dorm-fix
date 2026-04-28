@@ -3,10 +3,11 @@ import 'dart:math' as math;
 import 'package:ui_kit/calendar_preview.dart';
 import 'package:ui_kit/carousel_preview.dart';
 import 'package:ui_kit/detail_card_preview.dart';
+import 'package:ui_kit/selected_control_preview.dart';
 import 'package:ui_kit/ui.dart';
 import 'button_previews.dart';
 import 'check_box_preview.dart';
-import 'choice_options_preview.dart';
+import 'scrollable_control_preview.dart';
 import 'color_palette_preview.dart';
 import 'drop_down_button_preview.dart';
 import 'tile_group_preview.dart';
@@ -166,9 +167,19 @@ class _UiPreviewState extends State<UiPreview>
                 const SizedBox(height: 8),
                 const CalendarPreview(),
                 const SizedBox(height: 24),
-                Align(alignment: .center, child: UiText2.h5Bold('Choice chip')),
+                Align(
+                  alignment: .center,
+                  child: UiText2.h5Bold('Scrollable control'),
+                ),
                 const SizedBox(height: 8),
-                ChoiceChipPreview(),
+                const ScrollableControlPreview(),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: .center,
+                  child: UiText2.h5Bold('Scrollable control'),
+                ),
+                const SizedBox(height: 8),
+                const SelectedControlPreview(),
                 const SizedBox(height: 24),
                 Align(alignment: .center, child: UiText2.h5Bold('Snack Bar')),
                 const SizedBox(height: 8),

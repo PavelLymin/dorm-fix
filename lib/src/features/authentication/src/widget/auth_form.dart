@@ -87,18 +87,16 @@ class _AuthFormState extends State<AuthForm> with _AuthFormStateMixin {
                 mainAxisSize: .min,
                 spacing: 8.0,
                 children: [
-                  UiDropDownButton<String>(
-                    width: 116.0,
-                    controller: _codeController,
-                    trailingIcon: const Icon(Icons.keyboard_arrow_down_rounded),
-                    selectedTrailingIcon: const Icon(
-                      Icons.keyboard_arrow_up_rounded,
+                  Flexible(
+                    child: UiDropDownButton<String>(
+                      controller: _codeController,
+                      selectOnly: true,
+                      initialSelection: '+7',
+                      dropdownMenuEntries: _dropdownMenuEntries,
                     ),
-                    selectOnly: true,
-                    initialSelection: '+7',
-                    dropdownMenuEntries: _dropdownMenuEntries,
                   ),
                   Expanded(
+                    flex: 2,
                     child: UiTextField.standard(
                       controller: _phonneController,
                       keyboardType: .number,

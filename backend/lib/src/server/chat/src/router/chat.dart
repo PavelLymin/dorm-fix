@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../../../../core/auth/auth.dart';
@@ -15,61 +13,32 @@ class CharRouter {
   Handler get handler {
     final router = Router();
 
-    router.post('/chats', _createChat);
     router.get('/chats', _getChatByRequestId);
     router.post('/chats/members', _addMember);
     return router.call;
   }
 
-  Future<Map<String, Object?>> _readJson(Request request) async {
-    final body = await request.readAsString();
-    if (body.trim().isEmpty) {
-      throw BadRequestException(
-        error: {'description': 'Request body is empty.', 'field': 'body'},
-      );
-    }
-
-    final json = jsonDecode(body);
-    return json;
-  }
-
-  Future<Response> _createChat(Request request) async {
-    final json = await _readJson(request);
-    final uid = RequireUser.getUserId(request);
-    final entity = PartialChatDto.fromJson(json).toEntity();
-
-    final createdChat = await _chatRepository.createChat(chat: entity);
-    await _chatRepository.addMember(chatId: createdChat.id, uid: uid);
-
-    return _restApi.send(
-      statusCode: 201,
-      responseBody: {
-        'data': {'message': 'The chat was successfully created.'},
-      },
-    );
-  }
-
   Future<Response> _getChatByRequestId(Request request) async {
     final params = request.url.queryParameters;
-    final requestIdParam = params['request_id'];
-    if (requestIdParam == null || int.tryParse(requestIdParam) == null) {
+    final idParam = params['id'];
+    if (idParam == null || int.tryParse(idParam) == null) {
       throw BadRequestException(
         error: {
-          'description': 'Missing or invalid request_id parameter.',
-          'field': 'request_id',
+          'description': 'Missing or invalid id parameter.',
+          'field': 'id',
         },
       );
     }
 
-    final requestId = int.parse(requestIdParam);
-    final chat = await _chatRepository.getChat(requestId: requestId);
+    final id = int.parse(idParam);
+    final chat = await _chatRepository.getChat(id: id);
     if (chat == null) {
       throw NotFoundException(
-        error: {'message': 'Chat not found for the given request_id.'},
+        error: {'message': 'Chat not found for the given id.'},
       );
     }
 
-    final chatJson = FullChatDto.fromEntity(chat).toJson();
+    final chatJson = ChatDto.fromEntity(chat).toJson();
     return _restApi.send(statusCode: 200, responseBody: {'data': chatJson});
   }
 

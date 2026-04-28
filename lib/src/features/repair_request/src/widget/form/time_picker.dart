@@ -26,40 +26,43 @@ class _TimePickerState extends State<TimePicker> with _TimePickerStateMixin {
           crossAxisAlignment: .center,
           mainAxisSize: .min,
           children: [
-            UiDropDownButton<DateTime>(
-              controller: _startTime,
-              menuHeight: 200,
-              selectOnly: true,
-              showTrailingIcon: false,
-              onSelected: _onSelectedStartTime,
-              width: 150.0,
-              dropdownMenuEntries: _startTimes,
-              initialSelection: _workingDateTime.start,
-              textStyle: theme.appTypography2.m,
+            Expanded(
+              child: UiDropDownButton<DateTime>(
+                controller: _startTime,
+                menuHeight: 200,
+                selectOnly: true,
+                showTrailingIcon: false,
+                onSelected: _onSelectedStartTime,
+                dropdownMenuEntries: _startTimes,
+                initialSelection: _workingDateTime.start,
+                textStyle: theme.appTypography2.m,
+              ),
             ),
-            const Spacer(),
-            const Icon(Icons.chevron_right_rounded),
-            const Spacer(),
-            BlocBuilder<RequestFormBloc, RequestFormState>(
-              buildWhen: (previous, current) =>
-                  previous.currentFormModel.startTime !=
-                  current.currentFormModel.startTime,
-              builder: (_, state) {
-                final startTime = state.currentFormModel.startTime;
-                final endTime = state.currentFormModel.endTime;
-                _onChangeStart(startTime, endTime);
-                return UiDropDownButton<DateTime>(
-                  controller: _endTime,
-                  menuHeight: 200,
-                  selectOnly: true,
-                  showTrailingIcon: false,
-                  onSelected: _onSelectedEndTime,
-                  width: 150.0,
-                  dropdownMenuEntries: _endTimes,
-                  initialSelection: _workingDateTime.end,
-                  textStyle: theme.appTypography2.m,
-                );
-              },
+            const Padding(
+              padding: .symmetric(horizontal: 10.0),
+              child: Icon(UiIcons.chevronRight),
+            ),
+            Expanded(
+              child: BlocBuilder<RequestFormBloc, RequestFormState>(
+                buildWhen: (previous, current) =>
+                    previous.currentFormModel.startTime !=
+                    current.currentFormModel.startTime,
+                builder: (_, state) {
+                  final startTime = state.currentFormModel.startTime;
+                  final endTime = state.currentFormModel.endTime;
+                  _onChangeStart(startTime, endTime);
+                  return UiDropDownButton<DateTime>(
+                    controller: _endTime,
+                    menuHeight: 200,
+                    selectOnly: true,
+                    showTrailingIcon: false,
+                    onSelected: _onSelectedEndTime,
+                    dropdownMenuEntries: _endTimes,
+                    initialSelection: _workingDateTime.end,
+                    textStyle: theme.appTypography2.m,
+                  );
+                },
+              ),
             ),
           ],
         ),

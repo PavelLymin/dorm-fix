@@ -18,7 +18,7 @@ class _HomeScreenState extends State<StudentHomeScreen> {
   void initState() {
     super.initState();
     context.read<SpecializationBloc>().add(.getSpecializations());
-    context.read<RepairRequestBloc>().add(.get(uid: true));
+    context.read<RepairWatcherBloc>().add(.get(uid: true));
   }
 
   @override

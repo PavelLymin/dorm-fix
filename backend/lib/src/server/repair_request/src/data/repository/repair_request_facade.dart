@@ -15,6 +15,11 @@ abstract interface class IRepairRequestFacade {
     required PartialRepairRequest req,
   });
 
+  Future<void> acceptRequest({
+    required int requestId,
+    required String masterUid,
+  });
+
   Stream<List<FullRepairRequest>> watchRequests({
     String? uid,
     int? specId,
@@ -51,20 +56,23 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
   }) async {
     late final Request request;
     late final List<FullProblemDto> problems;
-    late final FullChatDto chat;
+    late final ChatDto chat;
     late final SpecializationDto specialization;
     late final FullStudentDto student;
     late final StatusDto status;
     await _db.transaction(() async {
-      request = await _requestRepository.createRequest(uid: uid, request: req);
+      chat = await _chatRepository.createChat();
+      request = await _requestRepository.createRequest(
+        uid: uid,
+        chatId: chat.id,
+        request: req,
+      );
       problems = await _problemRepository.createProblems(
         problems: req.problems
             .map((e) => PartialProblem(requestId: request.id, photoPath: e))
             .toList(),
       );
-      chat = await _chatRepository.createChat(
-        chat: PartialChat(requestId: request.id),
-      );
+
       status = await _statusRepository.createStatus(
         requestId: request.id,
         status: req.currentStatus,
@@ -84,6 +92,28 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
     ).toEntity();
 
     return result;
+  }
+
+  @override
+  Future<void> acceptRequest({
+    required int requestId,
+    required String masterUid,
+  }) async {
+    await _db.transaction(() async {
+      await _assignmentsRepository.createAssignment(
+        requestId: requestId,
+        masterUid: masterUid,
+      );
+      await _statusRepository.createStatus(
+        requestId: requestId,
+        status: .inProgress,
+      );
+      final request = await _requestRepository.updateStatus(
+        requestId: requestId,
+        status: .inProgress,
+      );
+      await _chatRepository.addMember(chatId: request.chatId, uid: masterUid);
+    });
   }
 
   @override
@@ -107,7 +137,7 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
         _db.specializations,
         _db.specializations.id.equalsExp(_db.requests.specId),
       ),
-      innerJoin(_db.chats, _db.chats.requestId.equalsExp(_db.requests.id)),
+      innerJoin(_db.chats, _db.chats.id.equalsExp(_db.requests.chatId)),
     ]);
 
     if (uid != null) query.where(_db.requests.uid.equals(uid));

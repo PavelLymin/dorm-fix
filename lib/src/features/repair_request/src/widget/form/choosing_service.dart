@@ -32,7 +32,7 @@ class _SpecializationOptions extends StatefulWidget {
 
 class _SpecializationOptionsState extends State<_SpecializationOptions> {
   late final RequestFormBloc _requestFormBloc;
-  late final List<ChipItem<int>> options;
+  late final List<ScrollableItem<int>> options;
 
   @override
   void initState() {
@@ -40,8 +40,10 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
     _requestFormBloc = context.read<RequestFormBloc>();
     options = widget.specialization
         .map(
-          (specialization) =>
-              ChipItem(value: specialization.id, title: specialization.title),
+          (specialization) => ScrollableItem(
+            value: specialization.id,
+            title: specialization.title,
+          ),
         )
         .toList();
   }
@@ -55,10 +57,10 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
       buildWhen: (previous, current) =>
           previous.currentFormModel.specializationId !=
           current.currentFormModel.specializationId,
-      builder: (context, state) => UiChoiceChip<int>(
+      builder: (context, state) => UiScrollableControl<int>(
         options: options,
         initial: state.currentFormModel.specializationId,
-        style: ChoiceChipStyle(
+        style: ScrollableControlStyle(
           barColor: palette.background,
           indicatorColor: palette.card,
           borderRadius: style.borderRadius,

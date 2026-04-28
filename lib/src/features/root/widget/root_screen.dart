@@ -1,8 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:dorm_fix/src/features/repair_request/request.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../app/widget/dependencies_scope.dart';
 import 'bottom_navigation.dart';
 
 class AppPage {
@@ -12,30 +9,6 @@ class AppPage {
   final String title;
   final IconData icon;
 }
-
-// class MasterDataScope extends InheritedWidget {
-//   const MasterDataScope({
-//     super.key,
-//     required this.specializationId,
-//     required this.dormitoryId,
-//     required super.child,
-//   });
-
-//   final int specializationId;
-//   final int dormitoryId;
-
-//   static MasterDataScope of(BuildContext context) {
-//     final scope = context.dependOnInheritedWidgetOfExactType<MasterDataScope>();
-//     assert(scope != null, 'MasterDataScope not found');
-//     return scope!;
-//   }
-
-//   @override
-//   bool updateShouldNotify(MasterDataScope oldWidget) {
-//     return specializationId != oldWidget.specializationId ||
-//         dormitoryId != oldWidget.dormitoryId;
-//   }
-// }
 
 class MasterRootScreen extends StatefulWidget {
   const MasterRootScreen({
@@ -54,24 +27,8 @@ class MasterRootScreen extends StatefulWidget {
 }
 
 class _MasterRootScreenState extends State<MasterRootScreen> {
-  late final RepairRequestBloc _repairRequestBloc;
-
   @override
-  void initState() {
-    super.initState();
-    final dependency = DependeciesScope.of(context);
-    _repairRequestBloc = RepairRequestBloc(
-      requestRepository: dependency.requestRepository,
-      problemRepository: dependency.problemRepository,
-      logger: dependency.logger,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) => BlocProvider(
-    create: (context) => _repairRequestBloc,
-    child: RootScreen(pages: widget.pages),
-  );
+  Widget build(BuildContext context) => RootScreen(pages: widget.pages);
 }
 
 class StudentRootScreen extends StatefulWidget {
@@ -84,25 +41,9 @@ class StudentRootScreen extends StatefulWidget {
 }
 
 class _StudentRootScreenState extends State<StudentRootScreen> {
-  late final RepairRequestBloc _repairRequestBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    final dependency = DependeciesScope.of(context);
-    _repairRequestBloc = RepairRequestBloc(
-      requestRepository: dependency.requestRepository,
-      problemRepository: dependency.problemRepository,
-      logger: dependency.logger,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<RepairRequestBloc>(
-      create: (context) => _repairRequestBloc,
-      child: RootScreen(pages: widget.pages),
-    );
+    return RootScreen(pages: widget.pages);
   }
 }
 

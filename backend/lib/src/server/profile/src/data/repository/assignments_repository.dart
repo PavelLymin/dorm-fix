@@ -4,6 +4,11 @@ import '../../../../master/master.dart';
 
 abstract interface class IAssignmentsRepository {
   Stream<MasterDto?> watchAssignment({required int requestId});
+
+  Future<void> createAssignment({
+    required int requestId,
+    required String masterUid,
+  });
 }
 
 class AssignmentsRepositoryImpl implements IAssignmentsRepository {
@@ -43,4 +48,14 @@ class AssignmentsRepositoryImpl implements IAssignmentsRepository {
       );
     });
   }
+
+  @override
+  Future<void> createAssignment({
+    required int requestId,
+    required String masterUid,
+  }) async => await _database
+      .into(_database.assignments)
+      .insert(
+        AssignmentsCompanion.insert(requestId: requestId, uid: masterUid),
+      );
 }

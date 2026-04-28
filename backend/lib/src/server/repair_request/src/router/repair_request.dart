@@ -5,50 +5,50 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../../../../core/auth/auth.dart';
 import '../../../../core/rest_api/src/rest_api.dart';
-import '../../../../core/ws/ws.dart';
 import '../../repair_request.dart';
 
-class RepairRequestRouter {
-  const RepairRequestRouter({
-    required this._restApi,
-    required IRequestRepository requestRepository,
-    required this._requestFacade,
-    required WebSocketBase wsConnection,
-  });
+part 'repair_request.g.dart';
+
+class RepairRequests {
+  const RepairRequests({required this._restApi, required this._requestFacade});
+
+  Router get handler => _$RepairRequestsRouter(this);
 
   final RestApi _restApi;
   final IRepairRequestFacade _requestFacade;
 
-  Handler get handler {
-    final router = Router();
+  // Handler get handler {
+  //   final router = Router();
+  //   router.post('/requests/{id}/accept', _acceptRepairRequest);
+  //   router.post('/requests', _createRepairRequest);
+  //   router.get('/requests/stream', _watchRepairRequests);
+  //   return router.call;
+  // }
 
-    router.post('/requests', _createRepairRequest);
-    router.get('/requests/stream', _watchRepairRequests);
-    return router.call;
-  }
-
-  Future<Map<String, Object?>> _readJson(Request request) async {
-    final body = await request.readAsString();
-    if (body.trim().isEmpty) {
-      throw BadRequestException(
-        error: {'description': 'Request body is empty.', 'field': 'body'},
-      );
-    }
-    final json = jsonDecode(body);
-    return json;
-  }
-
+  @Route.post('/requests')
   Future<Response> _createRepairRequest(Request request) async {
-    final uid = RequireUser.getUserId(request);
-    final json = await _readJson(request);
-    final entity = PartialRepairRequestDto.fromJson(json).toEntity();
-    final result = await _requestFacade.createRequest(uid: uid, req: entity);
+    final dto = await request.body(PartialRepairRequestDto.fromJson);
+    final result = await _requestFacade.createRequest(
+      uid: request.userId,
+      req: dto.toEntity(),
+    );
 
     final data = FullRepairRequestDto.fromEntity(result).toJson();
 
     return _restApi.send(statusCode: 200, responseBody: {'data': data});
   }
 
+  @Route.post('/requests/<id>/accept')
+  Future<Response> _acceptRepairRequest(Request request, String id) async {
+    await _requestFacade.acceptRequest(
+      masterUid: request.userId,
+      requestId: int.parse(id),
+    );
+
+    return _restApi.send(statusCode: 200, responseBody: {'data': null});
+  }
+
+  @Route.get('/requests/stream')
   Future<Response> _watchRepairRequests(Request request) async {
     final qp = request.url.queryParameters;
     final useUid = bool.parse(qp['use_uid'] ?? 'false');
@@ -91,5 +91,29 @@ class RepairRequestRouter {
       },
       context: {'shelf.io.buffer_output': false},
     );
+  }
+}
+
+extension RequestContextExtension on Request {
+  String get userId {
+    final uid = context['user_id'];
+    if (uid is! String || uid.isEmpty) {
+      throw BadRequestException(
+        error: {
+          'description': 'Missing or invalid user id in request context.',
+          'context': 'user_id',
+        },
+      );
+    }
+
+    return uid;
+  }
+}
+
+extension RequestBodyExtension on Request {
+  Future<T> body<T>(T Function(Map<String, Object?>) fromJson) async {
+    final payload = await readAsString();
+    final json = jsonDecode(payload) as Map<String, Object?>;
+    return fromJson(json);
   }
 }

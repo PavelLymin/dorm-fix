@@ -3,9 +3,7 @@ import '../../../../../core/rest_client/rest_client.dart';
 import '../../../chat.dart';
 
 abstract interface class IChatRepository {
-  Future<void> createChat({required PartialChat chat});
-
-  Future<FullChat> getChatByRequestId({required int requestId});
+  Future<ChatEntity> getChat({required int id});
 
   Future<void> addMember({required int chatId});
 }
@@ -20,29 +18,17 @@ class ChatRepositoryImpl implements IChatRepository {
   final FirebaseAuth _firebaseAuth;
 
   @override
-  Future<void> createChat({required PartialChat chat}) async {
-    final token = await _firebaseAuth.currentUser?.getIdToken();
-    final body = PartialChatDto.fromEntity(chat).toJson();
-    await _client.send(
-      path: '/chats',
-      method: 'POST',
-      body: body,
-      headers: {'Authorization': 'Bearer $token'},
-    );
-  }
-
-  @override
-  Future<FullChat> getChatByRequestId({required int requestId}) async {
+  Future<ChatEntity> getChat({required int id}) async {
     final token = await _firebaseAuth.currentUser?.getIdToken();
     final response = await _client.send(
       path: '/chats',
       method: 'GET',
-      queryParams: {'request_id': requestId.toString()},
+      queryParams: {'id': id.toString()},
       headers: {'Authorization': 'Bearer $token'},
     );
 
     if (response case Map<String, Object?> json) {
-      final chat = FullChatDto.fromJson(json).toEntity();
+      final chat = ChatDto.fromJson(json).toEntity();
       return chat;
     }
 
