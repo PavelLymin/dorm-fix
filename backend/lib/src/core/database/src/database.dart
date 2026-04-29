@@ -21,6 +21,8 @@ part 'entity.dart';
     Chats,
     ChatMembers,
     Messages,
+    MaterialTypes,
+    Materials,
   ],
 )
 class Database extends _$Database {

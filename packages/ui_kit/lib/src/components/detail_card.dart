@@ -5,9 +5,10 @@ class UiDetailCard<T extends Enum> extends StatelessWidget {
     super.key,
     required this.statusText,
     required this.status,
-    required this.colors,
     required this.title,
     required this.subTitle1,
+    this.colors,
+    this.textColors,
     this.subTitle2,
     this.style,
     this.images,
@@ -17,7 +18,8 @@ class UiDetailCard<T extends Enum> extends StatelessWidget {
 
   final String statusText;
   final T status;
-  final Map<T, Color> colors;
+  final Map<T, Color>? colors;
+  final Map<T, Color>? textColors;
   final List<String>? images;
   final String title;
   final String subTitle1;
@@ -52,6 +54,7 @@ class UiDetailCard<T extends Enum> extends StatelessWidget {
                 text: statusText,
                 value: status,
                 colors: colors,
+                textColors: textColors,
               ),
               if (images != null && images!.isNotEmpty)
                 _ImageDetail(

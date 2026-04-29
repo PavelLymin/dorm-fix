@@ -6,8 +6,9 @@ import 'package:shelf_router/shelf_router.dart';
 import '../../../../core/auth/auth.dart';
 import '../../../../core/rest_api/src/rest_api.dart';
 import '../../repair_request.dart';
+import '../model/status.dart';
 
-part 'repair_request.g.dart';
+part 'repair_requests.g.dart';
 
 class RepairRequests {
   const RepairRequests({required this._restApi, required this._requestFacade});
@@ -17,13 +18,40 @@ class RepairRequests {
   final RestApi _restApi;
   final IRepairRequestFacade _requestFacade;
 
-  // Handler get handler {
-  //   final router = Router();
-  //   router.post('/requests/{id}/accept', _acceptRepairRequest);
-  //   router.post('/requests', _createRepairRequest);
-  //   router.get('/requests/stream', _watchRepairRequests);
-  //   return router.call;
-  // }
+  @Route.put('/requests/<id>/update-status')
+  Future<Response> _updateRepairRequestStatus(
+    Request request,
+    String id,
+  ) async {
+    final status = await request.body(StatusEnum.fromJson);
+    await _requestFacade.updateStatus(
+      masterUid: request.userId,
+      requestId: int.parse(id),
+      status: status,
+    );
+
+    return _restApi.send(
+      statusCode: 200,
+      responseBody: {
+        'data': {'message': 'Successfully accepted the request.'},
+      },
+    );
+  }
+
+  @Route.put('/requests/<id>/accept')
+  Future<Response> _acceptRepairRequest(Request request, String id) async {
+    await _requestFacade.acceptRequest(
+      masterUid: request.userId,
+      requestId: int.parse(id),
+    );
+
+    return _restApi.send(
+      statusCode: 201,
+      responseBody: {
+        'data': {'message': 'Successfully accepted the request.'},
+      },
+    );
+  }
 
   @Route.post('/requests')
   Future<Response> _createRepairRequest(Request request) async {
@@ -35,17 +63,7 @@ class RepairRequests {
 
     final data = FullRepairRequestDto.fromEntity(result).toJson();
 
-    return _restApi.send(statusCode: 200, responseBody: {'data': data});
-  }
-
-  @Route.post('/requests/<id>/accept')
-  Future<Response> _acceptRepairRequest(Request request, String id) async {
-    await _requestFacade.acceptRequest(
-      masterUid: request.userId,
-      requestId: int.parse(id),
-    );
-
-    return _restApi.send(statusCode: 200, responseBody: {'data': null});
+    return _restApi.send(statusCode: 201, responseBody: {'data': data});
   }
 
   @Route.get('/requests/stream')

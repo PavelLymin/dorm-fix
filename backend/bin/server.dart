@@ -48,6 +48,7 @@ void main(List<String> args) async {
                 .add(dependency.repairRequestRouter.handler.call)
                 .add(dependency.chatRouter.handler)
                 .add(dependency.messageRouter.handler)
+                .add(dependency.materialRouter.handler.call)
                 .handler,
           );
 

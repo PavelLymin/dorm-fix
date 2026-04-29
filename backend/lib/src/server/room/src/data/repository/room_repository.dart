@@ -14,6 +14,7 @@ abstract interface class IRoomRepository {
 
 class RoomRepository implements IRoomRepository {
   RoomRepository({required this._database});
+
   final Database _database;
 
   @override

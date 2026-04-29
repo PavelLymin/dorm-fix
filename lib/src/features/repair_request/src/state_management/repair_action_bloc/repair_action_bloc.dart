@@ -19,6 +19,7 @@ class RepairActionBloc extends Bloc<RepairActionEvent, RepairActionState> {
       (event, emit) async => await event.map(
         create: (e) => _create(e, emit),
         accept: (e) => _accept(e, emit),
+        updateStatus: (e) => _updateStatus(e, emit),
       ),
       transformer: droppable(),
     );
@@ -56,6 +57,20 @@ class RepairActionBloc extends Bloc<RepairActionEvent, RepairActionState> {
   ) async {
     try {
       await _requestRepository.acceptRequest(id: e.requestId);
+      emit(const .success());
+    } on Object catch (e, stackTrace) {
+      addError(e, stackTrace);
+      _logger.e(e, stackTrace: stackTrace);
+      emit(.error(message: e));
+    }
+  }
+
+  Future<void> _updateStatus(
+    _UpdateStatusRepairRequestsEvent e,
+    Emitter<RepairActionState> emit,
+  ) async {
+    try {
+      await _requestRepository.updateStatus(id: e.id, status: e.status);
       emit(const .success());
     } on Object catch (e, stackTrace) {
       addError(e, stackTrace);

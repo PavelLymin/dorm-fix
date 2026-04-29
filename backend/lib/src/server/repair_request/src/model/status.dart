@@ -14,6 +14,14 @@ enum StatusEnum {
       orElse: () => throw FormatException('Unknown status: $status'),
     );
   }
+
+  factory StatusEnum.fromJson(Map<String, Object?> json) {
+    if (json case <String, Object?>{'status': String status}) {
+      return StatusEnum.fromString(status);
+    }
+
+    throw FormatException('Invalid JSON format for StatusEnum: $json');
+  }
 }
 
 class StatusEntity {

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'repair_request.dart';
+part of 'repair_requests.dart';
 
 // **************************************************************************
 // ShelfRouterGenerator
@@ -8,8 +8,13 @@ part of 'repair_request.dart';
 
 Router _$RepairRequestsRouter(RepairRequests service) {
   final router = Router();
+  router.add(
+    'PUT',
+    r'/requests/<id>/update-status',
+    service._updateRepairRequestStatus,
+  );
+  router.add('PUT', r'/requests/<id>/accept', service._acceptRepairRequest);
   router.add('POST', r'/requests', service._createRepairRequest);
-  router.add('POST', r'/requests/<id>/accept', service._acceptRepairRequest);
   router.add('GET', r'/requests/stream', service._watchRepairRequests);
   return router;
 }

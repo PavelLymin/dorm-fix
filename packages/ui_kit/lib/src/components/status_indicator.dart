@@ -6,11 +6,13 @@ class UiStatusIndicator<T extends Enum> extends StatelessWidget {
     required this.text,
     required this.value,
     required this.colors,
+    required this.textColors,
   });
 
   final String text;
   final T value;
-  final Map<T, Color> colors;
+  final Map<T, Color>? colors;
+  final Map<T, Color>? textColors;
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +20,12 @@ class UiStatusIndicator<T extends Enum> extends StatelessWidget {
     final palette = theme.colorPalette2;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors[value] ?? palette.card,
+        color: colors?[value] ?? palette.card,
         borderRadius: const .all(.circular(12.0)),
       ),
       child: Padding(
         padding: const .symmetric(vertical: 6.0, horizontal: 12.0),
-        child: UiText2.s(text),
+        child: UiText2.s(text, color: textColors?[value] ?? palette.foreground),
       ),
     );
   }

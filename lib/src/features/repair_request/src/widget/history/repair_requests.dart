@@ -38,6 +38,8 @@ class _Loaded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
     int length = requests.length;
     int count = itemCount != null
         ? itemCount! <= length
@@ -55,10 +57,19 @@ class _Loaded extends StatelessWidget {
             subTitle2: request.specialization.title,
             status: request.currentStatus,
             statusText: request.currentStatus.value,
-            colors: const {
-              .completed: Colors.green,
-              .inProgress: Colors.red,
-              .newRequest: Colors.yellow,
+            colors: {
+              .completed: palette.primary,
+              .inProgress: palette.background,
+              .newRequest: palette.background,
+              .canceled: palette.destructive,
+              .notDone: palette.foreground,
+            },
+            textColors: {
+              .completed: palette.foregroundAccent,
+              .inProgress: palette.foreground,
+              .newRequest: palette.foreground,
+              .canceled: palette.foregroundAccent,
+              .notDone: palette.foreground,
             },
             images: request.problems.map((e) {
               return '${Config.storageBaseUrl}${Config.problemsBucket}${e.photoPath}';

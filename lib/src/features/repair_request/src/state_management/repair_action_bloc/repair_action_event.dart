@@ -12,12 +12,20 @@ sealed class RepairActionEvent {
   const factory RepairActionEvent.accept({required int requestId}) =
       _AcceptRepairRequestsEvent;
 
+  const factory RepairActionEvent.updateStatus({
+    required int id,
+    required StatusEnum status,
+  }) = _UpdateStatusRepairRequestsEvent;
+
   FutureOr<R> map<R>({
     required RepairActionEventMatch<R, _CreateRepairRequestsEvent> create,
     required RepairActionEventMatch<R, _AcceptRepairRequestsEvent> accept,
+    required RepairActionEventMatch<R, _UpdateStatusRepairRequestsEvent>
+    updateStatus,
   }) => switch (this) {
     _CreateRepairRequestsEvent e => create(e),
     _AcceptRepairRequestsEvent e => accept(e),
+    _UpdateStatusRepairRequestsEvent e => updateStatus(e),
   };
 }
 
@@ -31,4 +39,14 @@ final class _AcceptRepairRequestsEvent extends RepairActionEvent {
   const _AcceptRepairRequestsEvent({required this.requestId});
 
   final int requestId;
+}
+
+final class _UpdateStatusRepairRequestsEvent extends RepairActionEvent {
+  const _UpdateStatusRepairRequestsEvent({
+    required this.id,
+    required this.status,
+  });
+
+  final int id;
+  final StatusEnum status;
 }

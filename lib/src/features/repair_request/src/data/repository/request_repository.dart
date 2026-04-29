@@ -15,6 +15,8 @@ abstract interface class IRequestRepository {
   });
 
   Future<void> acceptRequest({required int id});
+
+  Future<void> updateStatus({required int id, required StatusEnum status});
 }
 
 class RequestRepositoryImpl implements IRequestRepository {
@@ -92,6 +94,20 @@ class RequestRepositoryImpl implements IRequestRepository {
     await _client.send(
       path: '/requests/$id/accept',
       method: 'POST',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+  }
+
+  @override
+  Future<void> updateStatus({
+    required int id,
+    required StatusEnum status,
+  }) async {
+    final token = await _firebaseAuth.currentUser?.getIdToken();
+    await _client.send(
+      path: '/requests/$id/update-status',
+      method: 'PUT',
+      body: {'status': status.value},
       headers: {'Authorization': 'Bearer $token'},
     );
   }

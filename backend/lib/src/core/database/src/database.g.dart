@@ -4489,6 +4489,499 @@ class MessagesCompanion extends UpdateCompanion<Message> {
   }
 }
 
+class $MaterialTypesTable extends MaterialTypes
+    with TableInfo<$MaterialTypesTable, MaterialType> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MaterialTypesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, name];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'material_types';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<MaterialType> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MaterialType map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MaterialType(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+    );
+  }
+
+  @override
+  $MaterialTypesTable createAlias(String alias) {
+    return $MaterialTypesTable(attachedDatabase, alias);
+  }
+}
+
+class MaterialType extends DataClass implements Insertable<MaterialType> {
+  final int id;
+  final String name;
+  const MaterialType({required this.id, required this.name});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    return map;
+  }
+
+  MaterialTypesCompanion toCompanion(bool nullToAbsent) {
+    return MaterialTypesCompanion(id: Value(id), name: Value(name));
+  }
+
+  factory MaterialType.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MaterialType(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+    };
+  }
+
+  MaterialType copyWith({int? id, String? name}) =>
+      MaterialType(id: id ?? this.id, name: name ?? this.name);
+  MaterialType copyWithCompanion(MaterialTypesCompanion data) {
+    return MaterialType(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MaterialType(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MaterialType && other.id == this.id && other.name == this.name);
+}
+
+class MaterialTypesCompanion extends UpdateCompanion<MaterialType> {
+  final Value<int> id;
+  final Value<String> name;
+  const MaterialTypesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+  });
+  MaterialTypesCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+  }) : name = Value(name);
+  static Insertable<MaterialType> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+    });
+  }
+
+  MaterialTypesCompanion copyWith({Value<int>? id, Value<String>? name}) {
+    return MaterialTypesCompanion(id: id ?? this.id, name: name ?? this.name);
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MaterialTypesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MaterialsTable extends Materials
+    with TableInfo<$MaterialsTable, Material> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MaterialsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _typeIdMeta = const VerificationMeta('typeId');
+  @override
+  late final GeneratedColumn<int> typeId = GeneratedColumn<int>(
+    'type_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES material_types (id)',
+    ),
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _photoPathMeta = const VerificationMeta(
+    'photoPath',
+  );
+  @override
+  late final GeneratedColumn<String> photoPath = GeneratedColumn<String>(
+    'photo_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, typeId, description, photoPath];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'materials';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Material> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('type_id')) {
+      context.handle(
+        _typeIdMeta,
+        typeId.isAcceptableOrUnknown(data['type_id']!, _typeIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeIdMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('photo_path')) {
+      context.handle(
+        _photoPathMeta,
+        photoPath.isAcceptableOrUnknown(data['photo_path']!, _photoPathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_photoPathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Material map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Material(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      typeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}type_id'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      )!,
+      photoPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}photo_path'],
+      )!,
+    );
+  }
+
+  @override
+  $MaterialsTable createAlias(String alias) {
+    return $MaterialsTable(attachedDatabase, alias);
+  }
+}
+
+class Material extends DataClass implements Insertable<Material> {
+  final int id;
+  final int typeId;
+  final String description;
+  final String photoPath;
+  const Material({
+    required this.id,
+    required this.typeId,
+    required this.description,
+    required this.photoPath,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['type_id'] = Variable<int>(typeId);
+    map['description'] = Variable<String>(description);
+    map['photo_path'] = Variable<String>(photoPath);
+    return map;
+  }
+
+  MaterialsCompanion toCompanion(bool nullToAbsent) {
+    return MaterialsCompanion(
+      id: Value(id),
+      typeId: Value(typeId),
+      description: Value(description),
+      photoPath: Value(photoPath),
+    );
+  }
+
+  factory Material.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Material(
+      id: serializer.fromJson<int>(json['id']),
+      typeId: serializer.fromJson<int>(json['typeId']),
+      description: serializer.fromJson<String>(json['description']),
+      photoPath: serializer.fromJson<String>(json['photoPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'typeId': serializer.toJson<int>(typeId),
+      'description': serializer.toJson<String>(description),
+      'photoPath': serializer.toJson<String>(photoPath),
+    };
+  }
+
+  Material copyWith({
+    int? id,
+    int? typeId,
+    String? description,
+    String? photoPath,
+  }) => Material(
+    id: id ?? this.id,
+    typeId: typeId ?? this.typeId,
+    description: description ?? this.description,
+    photoPath: photoPath ?? this.photoPath,
+  );
+  Material copyWithCompanion(MaterialsCompanion data) {
+    return Material(
+      id: data.id.present ? data.id.value : this.id,
+      typeId: data.typeId.present ? data.typeId.value : this.typeId,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Material(')
+          ..write('id: $id, ')
+          ..write('typeId: $typeId, ')
+          ..write('description: $description, ')
+          ..write('photoPath: $photoPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, typeId, description, photoPath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Material &&
+          other.id == this.id &&
+          other.typeId == this.typeId &&
+          other.description == this.description &&
+          other.photoPath == this.photoPath);
+}
+
+class MaterialsCompanion extends UpdateCompanion<Material> {
+  final Value<int> id;
+  final Value<int> typeId;
+  final Value<String> description;
+  final Value<String> photoPath;
+  const MaterialsCompanion({
+    this.id = const Value.absent(),
+    this.typeId = const Value.absent(),
+    this.description = const Value.absent(),
+    this.photoPath = const Value.absent(),
+  });
+  MaterialsCompanion.insert({
+    this.id = const Value.absent(),
+    required int typeId,
+    required String description,
+    required String photoPath,
+  }) : typeId = Value(typeId),
+       description = Value(description),
+       photoPath = Value(photoPath);
+  static Insertable<Material> custom({
+    Expression<int>? id,
+    Expression<int>? typeId,
+    Expression<String>? description,
+    Expression<String>? photoPath,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (typeId != null) 'type_id': typeId,
+      if (description != null) 'description': description,
+      if (photoPath != null) 'photo_path': photoPath,
+    });
+  }
+
+  MaterialsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? typeId,
+    Value<String>? description,
+    Value<String>? photoPath,
+  }) {
+    return MaterialsCompanion(
+      id: id ?? this.id,
+      typeId: typeId ?? this.typeId,
+      description: description ?? this.description,
+      photoPath: photoPath ?? this.photoPath,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (typeId.present) {
+      map['type_id'] = Variable<int>(typeId.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (photoPath.present) {
+      map['photo_path'] = Variable<String>(photoPath.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MaterialsCompanion(')
+          ..write('id: $id, ')
+          ..write('typeId: $typeId, ')
+          ..write('description: $description, ')
+          ..write('photoPath: $photoPath')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   $DatabaseManager get managers => $DatabaseManager(this);
@@ -4507,6 +5000,8 @@ abstract class _$Database extends GeneratedDatabase {
   late final $AssignmentsTable assignments = $AssignmentsTable(this);
   late final $ChatMembersTable chatMembers = $ChatMembersTable(this);
   late final $MessagesTable messages = $MessagesTable(this);
+  late final $MaterialTypesTable materialTypes = $MaterialTypesTable(this);
+  late final $MaterialsTable materials = $MaterialsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4525,6 +5020,8 @@ abstract class _$Database extends GeneratedDatabase {
     assignments,
     chatMembers,
     messages,
+    materialTypes,
+    materials,
   ];
 }
 
@@ -10573,6 +11070,530 @@ typedef $$MessagesTableProcessedTableManager =
       Message,
       PrefetchHooks Function({bool chatId, bool uid})
     >;
+typedef $$MaterialTypesTableCreateCompanionBuilder =
+    MaterialTypesCompanion Function({Value<int> id, required String name});
+typedef $$MaterialTypesTableUpdateCompanionBuilder =
+    MaterialTypesCompanion Function({Value<int> id, Value<String> name});
+
+final class $$MaterialTypesTableReferences
+    extends BaseReferences<_$Database, $MaterialTypesTable, MaterialType> {
+  $$MaterialTypesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static MultiTypedResultKey<$MaterialsTable, List<Material>>
+  _materialsRefsTable(_$Database db) => MultiTypedResultKey.fromTable(
+    db.materials,
+    aliasName: $_aliasNameGenerator(db.materialTypes.id, db.materials.typeId),
+  );
+
+  $$MaterialsTableProcessedTableManager get materialsRefs {
+    final manager = $$MaterialsTableTableManager(
+      $_db,
+      $_db.materials,
+    ).filter((f) => f.typeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_materialsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$MaterialTypesTableFilterComposer
+    extends Composer<_$Database, $MaterialTypesTable> {
+  $$MaterialTypesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> materialsRefs(
+    Expression<bool> Function($$MaterialsTableFilterComposer f) f,
+  ) {
+    final $$MaterialsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.materials,
+      getReferencedColumn: (t) => t.typeId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MaterialsTableFilterComposer(
+            $db: $db,
+            $table: $db.materials,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$MaterialTypesTableOrderingComposer
+    extends Composer<_$Database, $MaterialTypesTable> {
+  $$MaterialTypesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$MaterialTypesTableAnnotationComposer
+    extends Composer<_$Database, $MaterialTypesTable> {
+  $$MaterialTypesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  Expression<T> materialsRefs<T extends Object>(
+    Expression<T> Function($$MaterialsTableAnnotationComposer a) f,
+  ) {
+    final $$MaterialsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.materials,
+      getReferencedColumn: (t) => t.typeId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MaterialsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.materials,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$MaterialTypesTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $MaterialTypesTable,
+          MaterialType,
+          $$MaterialTypesTableFilterComposer,
+          $$MaterialTypesTableOrderingComposer,
+          $$MaterialTypesTableAnnotationComposer,
+          $$MaterialTypesTableCreateCompanionBuilder,
+          $$MaterialTypesTableUpdateCompanionBuilder,
+          (MaterialType, $$MaterialTypesTableReferences),
+          MaterialType,
+          PrefetchHooks Function({bool materialsRefs})
+        > {
+  $$MaterialTypesTableTableManager(_$Database db, $MaterialTypesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MaterialTypesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MaterialTypesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MaterialTypesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+              }) => MaterialTypesCompanion(id: id, name: name),
+          createCompanionCallback:
+              ({Value<int> id = const Value.absent(), required String name}) =>
+                  MaterialTypesCompanion.insert(id: id, name: name),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$MaterialTypesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({materialsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (materialsRefs) db.materials],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (materialsRefs)
+                    await $_getPrefetchedData<
+                      MaterialType,
+                      $MaterialTypesTable,
+                      Material
+                    >(
+                      currentTable: table,
+                      referencedTable: $$MaterialTypesTableReferences
+                          ._materialsRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$MaterialTypesTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).materialsRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.typeId == item.id),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$MaterialTypesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $MaterialTypesTable,
+      MaterialType,
+      $$MaterialTypesTableFilterComposer,
+      $$MaterialTypesTableOrderingComposer,
+      $$MaterialTypesTableAnnotationComposer,
+      $$MaterialTypesTableCreateCompanionBuilder,
+      $$MaterialTypesTableUpdateCompanionBuilder,
+      (MaterialType, $$MaterialTypesTableReferences),
+      MaterialType,
+      PrefetchHooks Function({bool materialsRefs})
+    >;
+typedef $$MaterialsTableCreateCompanionBuilder =
+    MaterialsCompanion Function({
+      Value<int> id,
+      required int typeId,
+      required String description,
+      required String photoPath,
+    });
+typedef $$MaterialsTableUpdateCompanionBuilder =
+    MaterialsCompanion Function({
+      Value<int> id,
+      Value<int> typeId,
+      Value<String> description,
+      Value<String> photoPath,
+    });
+
+final class $$MaterialsTableReferences
+    extends BaseReferences<_$Database, $MaterialsTable, Material> {
+  $$MaterialsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $MaterialTypesTable _typeIdTable(_$Database db) =>
+      db.materialTypes.createAlias(
+        $_aliasNameGenerator(db.materials.typeId, db.materialTypes.id),
+      );
+
+  $$MaterialTypesTableProcessedTableManager get typeId {
+    final $_column = $_itemColumn<int>('type_id')!;
+
+    final manager = $$MaterialTypesTableTableManager(
+      $_db,
+      $_db.materialTypes,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_typeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$MaterialsTableFilterComposer
+    extends Composer<_$Database, $MaterialsTable> {
+  $$MaterialsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$MaterialTypesTableFilterComposer get typeId {
+    final $$MaterialTypesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.typeId,
+      referencedTable: $db.materialTypes,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MaterialTypesTableFilterComposer(
+            $db: $db,
+            $table: $db.materialTypes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$MaterialsTableOrderingComposer
+    extends Composer<_$Database, $MaterialsTable> {
+  $$MaterialsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$MaterialTypesTableOrderingComposer get typeId {
+    final $$MaterialTypesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.typeId,
+      referencedTable: $db.materialTypes,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MaterialTypesTableOrderingComposer(
+            $db: $db,
+            $table: $db.materialTypes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$MaterialsTableAnnotationComposer
+    extends Composer<_$Database, $MaterialsTable> {
+  $$MaterialsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get photoPath =>
+      $composableBuilder(column: $table.photoPath, builder: (column) => column);
+
+  $$MaterialTypesTableAnnotationComposer get typeId {
+    final $$MaterialTypesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.typeId,
+      referencedTable: $db.materialTypes,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MaterialTypesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.materialTypes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$MaterialsTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $MaterialsTable,
+          Material,
+          $$MaterialsTableFilterComposer,
+          $$MaterialsTableOrderingComposer,
+          $$MaterialsTableAnnotationComposer,
+          $$MaterialsTableCreateCompanionBuilder,
+          $$MaterialsTableUpdateCompanionBuilder,
+          (Material, $$MaterialsTableReferences),
+          Material,
+          PrefetchHooks Function({bool typeId})
+        > {
+  $$MaterialsTableTableManager(_$Database db, $MaterialsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MaterialsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MaterialsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MaterialsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> typeId = const Value.absent(),
+                Value<String> description = const Value.absent(),
+                Value<String> photoPath = const Value.absent(),
+              }) => MaterialsCompanion(
+                id: id,
+                typeId: typeId,
+                description: description,
+                photoPath: photoPath,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int typeId,
+                required String description,
+                required String photoPath,
+              }) => MaterialsCompanion.insert(
+                id: id,
+                typeId: typeId,
+                description: description,
+                photoPath: photoPath,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$MaterialsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({typeId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (typeId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.typeId,
+                                referencedTable: $$MaterialsTableReferences
+                                    ._typeIdTable(db),
+                                referencedColumn: $$MaterialsTableReferences
+                                    ._typeIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$MaterialsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $MaterialsTable,
+      Material,
+      $$MaterialsTableFilterComposer,
+      $$MaterialsTableOrderingComposer,
+      $$MaterialsTableAnnotationComposer,
+      $$MaterialsTableCreateCompanionBuilder,
+      $$MaterialsTableUpdateCompanionBuilder,
+      (Material, $$MaterialsTableReferences),
+      Material,
+      PrefetchHooks Function({bool typeId})
+    >;
 
 class $DatabaseManager {
   final _$Database _db;
@@ -10603,4 +11624,8 @@ class $DatabaseManager {
       $$ChatMembersTableTableManager(_db, _db.chatMembers);
   $$MessagesTableTableManager get messages =>
       $$MessagesTableTableManager(_db, _db.messages);
+  $$MaterialTypesTableTableManager get materialTypes =>
+      $$MaterialTypesTableTableManager(_db, _db.materialTypes);
+  $$MaterialsTableTableManager get materials =>
+      $$MaterialsTableTableManager(_db, _db.materials);
 }

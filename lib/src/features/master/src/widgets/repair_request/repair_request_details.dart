@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
@@ -35,11 +33,10 @@ class _MasterRequestDetailsState extends State<MasterRequestDetails> {
 
   @override
   Widget build(BuildContext context) {
-    log(widget.request.currentStatus.value);
     return BlocProvider.value(
       value: _repairActionBloc,
       child: Scaffold(
-        appBar: AppBar(title: Text('Заявка')),
+        appBar: AppBar(title: const Text('Заявка')),
         body: SafeArea(
           child: Padding(
             padding: AppInsets.screen,
@@ -68,7 +65,17 @@ class _MasterRequestDetailsState extends State<MasterRequestDetails> {
                   ),
                 ),
                 RequestDateTime(request: widget.request),
-                _Button(requestId: widget.request.id),
+                if (widget.request.currentStatus == .inProgress ||
+                    widget.request.currentStatus == .completed)
+                  _AcceptCancelButton(
+                    id: widget.request.id,
+                    status: widget.request.currentStatus,
+                  ),
+                if (widget.request.currentStatus == .inProgress)
+                  _CancelButton(
+                    id: widget.request.id,
+                    status: widget.request.currentStatus,
+                  ),
               ],
             ),
           ),
@@ -78,10 +85,11 @@ class _MasterRequestDetailsState extends State<MasterRequestDetails> {
   }
 }
 
-class _Button extends StatelessWidget {
-  const _Button({required this.requestId});
+class _AcceptCancelButton extends StatelessWidget {
+  const _AcceptCancelButton({required this.id, required this.status});
 
-  final int requestId;
+  final int id;
+  final StatusEnum status;
 
   @override
   Widget build(BuildContext context) {
@@ -89,10 +97,42 @@ class _Button extends StatelessWidget {
       padding: .only(top: 32.0),
       sliver: SliverToBoxAdapter(
         child: UiButton.filledPrimary(
+          onPressed: () => status == .inProgress
+              ? context.read<RepairActionBloc>().add(
+                  .updateStatus(id: id, status: .completed),
+                )
+              : context.read<RepairActionBloc>().add(.accept(requestId: id)),
+          label: status == .inProgress
+              ? const Text('Завершить заявку')
+              : const Text('Принять заявку'),
+        ),
+      ),
+    );
+  }
+}
+
+class _CancelButton extends StatelessWidget {
+  const _CancelButton({required this.id, required this.status});
+
+  final int id;
+  final StatusEnum status;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
+    return SliverPadding(
+      padding: const .only(top: 16.0),
+      sliver: SliverToBoxAdapter(
+        child: UiButton.filledPrimary(
           onPressed: () => context.read<RepairActionBloc>().add(
-            .accept(requestId: requestId),
+            .updateStatus(id: id, status: .canceled),
           ),
-          label: const Text('Принять заявку'),
+          style: ButtonStyle(backgroundColor: .all(palette.action)),
+          label: Text(
+            'Отменить заявку',
+            style: TextStyle(color: palette.destructive),
+          ),
         ),
       ),
     );

@@ -8,4 +8,4 @@ export 'src/data/repository/repair_request_repository.dart';
 export 'src/data/repository/problem_repository.dart';
 export 'src/data/repository/status_repository.dart';
 export 'src/data/repository/repair_request_facade.dart';
-export 'src/router/repair_request.dart';
+export 'src/router/repair_requests.dart';

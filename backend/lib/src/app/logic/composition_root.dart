@@ -10,6 +10,7 @@ import '../../server/chat/chat.dart';
 import '../../server/chat/src/router/message.dart';
 import '../../server/dormitory/dormitory.dart';
 import '../../server/master/master.dart';
+import '../../server/material/material.dart';
 import '../../server/profile/profile.dart';
 import '../../server/repair_request/repair_request.dart';
 import '../../server/room/room.dart';
@@ -162,6 +163,13 @@ class CompositionRoot {
       restApi: restApi,
     );
 
+    // Material
+    final materialRepository = MaterialRepositoryImpl(database: database);
+    final materialRouter = MaterialService(
+      restApi: restApi,
+      repository: materialRepository,
+    );
+
     return _DependencyFactory(
       firebaseAdmin: app,
       restApi: restApi,
@@ -177,6 +185,7 @@ class CompositionRoot {
       chatRouter: chatRouter,
       messageRouter: messageRouter,
       studentRouter: studentRouter,
+      materialRouter: materialRouter,
     ).create();
   }
 }
@@ -197,6 +206,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.chatRouter,
     required this.messageRouter,
     required this.studentRouter,
+    required this.materialRouter,
   });
 
   final App firebaseAdmin;
@@ -227,6 +237,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final StudentRouter studentRouter;
 
+  final MaterialService materialRouter;
+
   @override
   DependencyContainer create() => DependencyContainer(
     firebaseAdmin: firebaseAdmin,
@@ -243,6 +255,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     chatRouter: chatRouter,
     messageRouter: messageRouter,
     studentRouter: studentRouter,
+    materialRouter: materialRouter,
   );
 }
 

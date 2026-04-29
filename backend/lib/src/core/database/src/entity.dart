@@ -137,3 +137,16 @@ class Messages extends Table {
       .map(const DateTimeConverter())
       .withDefault(currentDateAndTime.datetime)();
 }
+
+class MaterialTypes extends Table {
+  IntColumn get id => integer().named('id').autoIncrement()();
+  TextColumn get name => text().named('name')();
+}
+
+class Materials extends Table {
+  IntColumn get id => integer().named('id').autoIncrement()();
+  IntColumn get typeId =>
+      integer().named('type_id').references(MaterialTypes, #id)();
+  TextColumn get description => text().named('description')();
+  TextColumn get photoPath => text().named('photo_path')();
+}

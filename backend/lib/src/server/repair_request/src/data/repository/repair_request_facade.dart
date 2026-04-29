@@ -7,6 +7,7 @@ import '../../../../profile/profile.dart';
 import '../../../../specialization/specialization.dart';
 import '../../../../student/student.dart';
 import '../../../repair_request.dart';
+import '../../model/status.dart';
 import '../dto/status.dart';
 
 abstract interface class IRepairRequestFacade {
@@ -18,6 +19,12 @@ abstract interface class IRepairRequestFacade {
   Future<void> acceptRequest({
     required int requestId,
     required String masterUid,
+  });
+
+  Future<void> updateStatus({
+    required int requestId,
+    required String masterUid,
+    required StatusEnum status,
   });
 
   Stream<List<FullRepairRequest>> watchRequests({
@@ -113,6 +120,24 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
         status: .inProgress,
       );
       await _chatRepository.addMember(chatId: request.chatId, uid: masterUid);
+    });
+  }
+
+  @override
+  Future<void> updateStatus({
+    required int requestId,
+    required String masterUid,
+    required StatusEnum status,
+  }) async {
+    await _db.transaction(() async {
+      await _requestRepository.updateStatus(
+        requestId: requestId,
+        status: status,
+      );
+      await _statusRepository.createStatus(
+        requestId: requestId,
+        status: status,
+      );
     });
   }
 

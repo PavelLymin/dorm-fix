@@ -49,6 +49,14 @@ class RoomDto {
     isOccupied: data.isOccupied,
   );
 
+  Map<String, Object?> toJson() => {
+    'id': id,
+    'dormitory_id': dormitoryId,
+    'floor': floor,
+    'number': number,
+    'is_occupied': isOccupied,
+  };
+
   factory RoomDto.fromJson(Map<String, Object?> json) {
     if (json case <String, Object?>{
       'id': final int id,
@@ -68,12 +76,4 @@ class RoomDto {
 
     throw ArgumentError('Invalid JSON format for RoomDto: $json');
   }
-
-  Map<String, Object?> toJson() => {
-    'id': id,
-    'dormitory_id': dormitoryId,
-    'floor': floor,
-    'number': number,
-    'is_occupied': isOccupied,
-  };
 }
