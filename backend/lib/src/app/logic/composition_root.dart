@@ -165,9 +165,13 @@ class CompositionRoot {
 
     // Material
     final materialRepository = MaterialRepositoryImpl(database: database);
+    final materialTypeRepository = MaterialTypeRepositoryImpl(
+      database: database,
+    );
     final materialRouter = MaterialService(
       restApi: restApi,
       repository: materialRepository,
+      repositoryType: materialTypeRepository,
     );
 
     return _DependencyFactory(

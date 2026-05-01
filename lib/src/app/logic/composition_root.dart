@@ -15,6 +15,7 @@ import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
 import '../../features/master/master.dart';
+import '../../features/material/material.dart';
 import '../../features/repair_request/request.dart';
 import '../../features/specialization/specialization.dart';
 import '../../features/profile/profile.dart';
@@ -177,6 +178,16 @@ class CompositionRoot {
 
     final problemRepository = ProblemRepositoryImpl(supabase: supabase.client);
 
+    // Material
+    final materialRepository = MaterialRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+    final materialTypeRepository = MaterialTypeRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+
     // auto_route
     final router = AppRouter(authGuard: AuthGuard(authenticationBloc));
 
@@ -201,6 +212,8 @@ class CompositionRoot {
       problemRepository: problemRepository,
       masterRepository: masterRepository,
       studentRepository: studentRepository,
+      materialRepository: materialRepository,
+      materialTypeRepository: materialTypeRepository,
       dormitoryBloc: dormitoryBloc,
     ).create();
   }
@@ -226,6 +239,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.problemRepository,
     required this.masterRepository,
     required this.studentRepository,
+    required this.materialRepository,
+    required this.materialTypeRepository,
     required this.authenticationBloc,
     required this.specializationBloc,
     required this.dormitoryBloc,
@@ -262,6 +277,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final IProblemRepository problemRepository;
   final IMasterRepository masterRepository;
   final IStudentRepository studentRepository;
+  final IMaterialRepository materialRepository;
+  final IMaterialTypeRepository materialTypeRepository;
 
   // BloC
   final AuthBloc authenticationBloc;
@@ -288,6 +305,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     problemRepository: problemRepository,
     masterRepository: masterRepository,
     studentRepository: studentRepository,
+    materialRepository: materialRepository,
+    materialTypeRepository: materialTypeRepository,
     authenticationBloc: authenticationBloc,
     specializationBloc: specializationBloc,
     dormitoryBloc: dormitoryBloc,

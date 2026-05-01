@@ -1,6 +1,6 @@
 import 'package:ui_kit/ui.dart';
 
-enum ButtonVariant { filledPrimary, icon }
+enum ButtonVariant { filledPrimary, filledSecondary, icon }
 
 class UiButton extends ButtonStyleButton {
   UiButton.filledPrimary({
@@ -20,6 +20,33 @@ class UiButton extends ButtonStyleButton {
     super.isSemanticButton,
     super.key,
   }) : variant = .filledPrimary,
+       super(
+         child: _ButtonIconAndLabel(
+           icon: icon,
+           label: label,
+           iconAlignment: iconAlignment,
+         ),
+         onPressed: enabled ? onPressed : null,
+         onLongPress: enabled ? onLongPress : null,
+       );
+
+  UiButton.filledSecondary({
+    required VoidCallback? onPressed,
+    bool enabled = true,
+    IconAlignment iconAlignment = .start,
+    Widget? label,
+    Widget? icon,
+    VoidCallback? onLongPress,
+    super.autofocus = false,
+    super.onHover,
+    super.onFocusChange,
+    super.style,
+    super.focusNode,
+    super.clipBehavior,
+    super.statesController,
+    super.isSemanticButton,
+    super.key,
+  }) : variant = .filledSecondary,
        super(
          child: _ButtonIconAndLabel(
            icon: icon,
@@ -65,7 +92,10 @@ class UiButton extends ButtonStyleButton {
         colorPalette: colors,
         typography: typography,
       ),
-
+      ButtonVariant.filledSecondary => _FilledButtonSecondaryStyle(
+        colorPalette: colors,
+        typography: typography,
+      ),
       ButtonVariant.icon => _IconButtonBaseStyle(
         colorPalette: colors,
         typography: typography,
@@ -124,6 +154,37 @@ class _FilledButtonPrimaryStyle extends _UiBaseButtonStyle {
         WidgetState.disabled: colorPalette.buttonDisabled,
         WidgetState.any: colorPalette.primary,
       });
+
+  @override
+  WidgetStateProperty<Color?>? get overlayColor => AppWidgetStateMap<Color?>({
+    WidgetState.pressed: colorPalette.foreground.withValues(alpha: .2),
+    WidgetState.hovered: colorPalette.foreground.withValues(alpha: .1),
+    WidgetState.focused: colorPalette.foreground.withValues(alpha: .1),
+  });
+
+  @override
+  WidgetStateProperty<double>? get elevation =>
+      WidgetStatePropertyAll<double>(0.0);
+
+  @override
+  WidgetStateProperty<Color>? get shadowColor => WidgetStatePropertyAll<Color>(
+    colorPalette.foreground.withValues(alpha: .18),
+  );
+}
+
+class _FilledButtonSecondaryStyle extends _UiBaseButtonStyle {
+  const _FilledButtonSecondaryStyle({
+    required super.colorPalette,
+    required super.typography,
+  });
+
+  @override
+  WidgetStateProperty<Color?>? get foregroundColor =>
+      .all(colorPalette.foreground);
+
+  @override
+  WidgetStateProperty<Color?>? get backgroundColor =>
+      .all(colorPalette.buttonSecondary);
 
   @override
   WidgetStateProperty<Color?>? get overlayColor => AppWidgetStateMap<Color?>({

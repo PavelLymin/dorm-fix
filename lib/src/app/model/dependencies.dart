@@ -1,12 +1,12 @@
-import 'package:dorm_fix/src/features/master/master.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
-
 import '../../core/rest_client/rest_client.dart';
 import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
+import '../../features/master/master.dart';
+import '../../features/material/material.dart';
 import '../../features/specialization/specialization.dart';
 import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
@@ -35,6 +35,8 @@ class DependencyContainer {
     required this.problemRepository,
     required this.masterRepository,
     required this.studentRepository,
+    required this.materialRepository,
+    required this.materialTypeRepository,
     required this.authenticationBloc,
     required this.specializationBloc,
     required this.dormitoryBloc,
@@ -71,6 +73,8 @@ class DependencyContainer {
   final IProblemRepository problemRepository;
   final IMasterRepository masterRepository;
   final IStudentRepository studentRepository;
+  final IMaterialRepository materialRepository;
+  final IMaterialTypeRepository materialTypeRepository;
 
   // BloC
   final AuthBloc authenticationBloc;

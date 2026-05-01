@@ -93,7 +93,7 @@ class RequestRepositoryImpl implements IRequestRepository {
     final token = await _firebaseAuth.currentUser?.getIdToken();
     await _client.send(
       path: '/requests/$id/accept',
-      method: 'POST',
+      method: 'PUT',
       headers: {'Authorization': 'Bearer $token'},
     );
   }

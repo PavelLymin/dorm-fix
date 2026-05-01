@@ -154,6 +154,12 @@ class AppRouter extends RootStackRouter {
             return MasterRequestDetails(request: request);
           },
         ),
+        NamedRouteDef(
+          name: 'AcceptRequestScreen',
+          builder: (_, _) {
+            return const AcceptRequestScreen();
+          },
+        ),
       ],
     ),
   ];

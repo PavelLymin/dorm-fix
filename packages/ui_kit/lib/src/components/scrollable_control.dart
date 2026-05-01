@@ -9,18 +9,18 @@ class ScrollableItem<T extends Object> {
 }
 
 class UiScrollableControl<T extends Object> extends StatefulWidget {
-  const UiScrollableControl({
+  UiScrollableControl({
     super.key,
     required this.options,
     required this.initial,
     required this.onChange,
-    this.style = const ScrollableControlStyle(),
-  });
+    ScrollableControlStyle? style,
+  }) : _style = style ?? ScrollableControlStyle();
 
   final List<ScrollableItem<T>> options;
   final T initial;
   final void Function(T) onChange;
-  final ScrollableControlStyle style;
+  final ScrollableControlStyle _style;
 
   @override
   State<UiScrollableControl<T>> createState() => _UiScrollableControlState<T>();
@@ -101,22 +101,23 @@ class _UiScrollableControlState<T extends Object>
       scrollDirection: .horizontal,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: widget.style.barColor ?? palette.background,
-          borderRadius: widget.style.borderRadius ?? style.borderRadius,
+          color: widget._style.barColor ?? palette.background,
+          borderRadius: widget._style.borderRadius ?? style.borderRadius,
         ),
         child: Stack(
           children: [
             AnimatedPositioned(
-              duration: widget.style.duration,
-              curve: widget.style.curve,
+              duration: widget._style.duration,
+              curve: widget._style.curve,
               left: _indicatorLeft,
-              top: 0,
-              bottom: 0,
+              top: 0.0,
+              bottom: 0.0,
               width: _indicatorWidth,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: widget.style.indicatorColor ?? palette.primary,
-                  borderRadius: widget.style.borderRadius ?? style.borderRadius,
+                  color: widget._style.indicatorColor ?? palette.card,
+                  borderRadius:
+                      widget._style.borderRadius ?? style.borderRadius,
                 ),
               ),
             ),
@@ -131,7 +132,7 @@ class _UiScrollableControlState<T extends Object>
                   item: widget.options[index],
                   onChange: widget.onChange,
                   indicator: index == _initial,
-                  style: widget.style,
+                  style: widget._style,
                 ),
               ),
             ),
@@ -143,7 +144,7 @@ class _UiScrollableControlState<T extends Object>
 }
 
 class ScrollableControlStyle {
-  const ScrollableControlStyle({
+  ScrollableControlStyle({
     this.barColor,
     this.indicatorColor,
     this.padding,
@@ -158,8 +159,8 @@ class ScrollableControlStyle {
   final Color? indicatorColor;
   final EdgeInsets? padding;
   final BorderRadius? borderRadius;
-  final TextStyle? textStyle;
-  final TextStyle? indicatorTextStyle;
+  TextStyle? textStyle;
+  TextStyle? indicatorTextStyle;
   final Duration duration;
   final Curve curve;
 }
@@ -180,11 +181,19 @@ class _ButtonItemOption<T extends Object> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.colorPalette2;
+
+    final textStyle = indicator
+        ? (style.indicatorTextStyle ??
+              theme.appTypography2.m.copyWith(color: palette.foreground))
+        : (style.textStyle ??
+              theme.appTypography2.m.copyWith(color: palette.secondary));
     return GestureDetector(
       behavior: .opaque,
       onTap: () => onChange(item.value),
       child: Padding(
-        padding: AppInsets.card,
+        padding: .symmetric(horizontal: 20.0, vertical: 12.0),
         child: Row(
           mainAxisAlignment: .center,
           crossAxisAlignment: .center,
@@ -192,11 +201,7 @@ class _ButtonItemOption<T extends Object> extends StatelessWidget {
           children: [
             if (item.icon != null) item.icon!,
             if (item.icon != null) const SizedBox(width: 8.0),
-            UiText2.m(
-              item.title,
-              overflow: .ellipsis,
-              style: indicator ? style.indicatorTextStyle : style.textStyle,
-            ),
+            UiText2.m(item.title, overflow: .ellipsis, style: textStyle),
           ],
         ),
       ),

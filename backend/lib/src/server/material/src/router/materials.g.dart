@@ -9,5 +9,6 @@ part of 'materials.dart';
 Router _$MaterialServiceRouter(MaterialService service) {
   final router = Router();
   router.add('GET', r'/materials', service.getMaterials);
+  router.add('GET', r'/material-types', service.getMaterialTypes);
   return router;
 }

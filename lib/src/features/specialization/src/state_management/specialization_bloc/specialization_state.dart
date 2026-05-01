@@ -16,15 +16,12 @@ sealed class SpecializationState {
   }) = _SpecializationLoaded;
   const factory SpecializationState.error({
     required List<SpecializationEntity> specializations,
-    required String message,
+    required Object message,
   }) = _SpecializationError;
 
   R map<R>({
-    // ignore: library_private_types_in_public_api
     required SpecializationStateMatch<R, _SpecializationLoading> loading,
-    // ignore: library_private_types_in_public_api
     required SpecializationStateMatch<R, _SpecializationLoaded> loaded,
-    // ignore: library_private_types_in_public_api
     required SpecializationStateMatch<R, _SpecializationError> error,
   }) => switch (this) {
     _SpecializationLoading s => loading(s),
@@ -34,11 +31,8 @@ sealed class SpecializationState {
 
   R maybeMap<R>({
     required R Function() orElse,
-    // ignore: library_private_types_in_public_api
     SpecializationStateMatch<R, _SpecializationLoading>? loading,
-    // ignore: library_private_types_in_public_api
     SpecializationStateMatch<R, _SpecializationLoaded>? loaded,
-    // ignore: library_private_types_in_public_api
     SpecializationStateMatch<R, _SpecializationError>? error,
   }) => map<R>(
     loading: loading ?? (_) => orElse(),
@@ -47,11 +41,8 @@ sealed class SpecializationState {
   );
 
   R? mapOrNull<R>({
-    // ignore: library_private_types_in_public_api
     SpecializationStateMatch<R, _SpecializationLoading>? loading,
-    // ignore: library_private_types_in_public_api
     SpecializationStateMatch<R, _SpecializationLoaded>? loaded,
-    // ignore: library_private_types_in_public_api
     SpecializationStateMatch<R, _SpecializationError>? error,
   }) => map<R?>(
     loading: loading ?? (_) => null,
@@ -74,5 +65,5 @@ final class _SpecializationError extends SpecializationState {
     required this.message,
   });
 
-  final String message;
+  final Object message;
 }

@@ -1,7 +1,7 @@
 import '../../material.dart';
 
 class MaterialEntity {
-  const MaterialEntity({
+  MaterialEntity({
     required this.id,
     required this.type,
     required this.name,
@@ -16,6 +16,19 @@ class MaterialEntity {
   final String description;
   final String photoPath;
   final int quantity;
+
+  int _curQuantity = 0;
+
+  int get curQuantity => _curQuantity;
+
+  void increaseCurQuantity() => _curQuantity++;
+
+  void decreaseCurQuantity() {
+    if (_curQuantity == 0) return;
+    _curQuantity--;
+  }
+
+  void resetCurQuantity() => _curQuantity = 0;
 
   MaterialEntity copyWith({
     int? id,
@@ -40,7 +53,7 @@ class MaterialEntity {
       'type: $type, '
       'name: $name, '
       'description: $description, '
-      'photoPath: $photoPath, '
+      'photoPath: $photoPath'
       'quantity: $quantity)';
 
   @override

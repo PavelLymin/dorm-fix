@@ -132,7 +132,7 @@ mixin _RequestScreenStateMixin on State<FormRequestScreen> {
 
   void _submitForm() {
     final request = _requestFormBloc.state.currentFormModel;
-    context.read<RepairActionBloc>().add(.create(request: request));
+    _repairActionBloc.add(.create(request: request));
     _descriptionController.clear();
     _requestFormBloc.add(.clearForm());
   }

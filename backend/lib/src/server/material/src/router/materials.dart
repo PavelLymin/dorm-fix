@@ -6,12 +6,17 @@ import '../../material.dart';
 part 'materials.g.dart';
 
 class MaterialService {
-  const MaterialService({required this._restApi, required this._repository});
+  const MaterialService({
+    required this._restApi,
+    required this._repositoryType,
+    required this._repository,
+  });
 
   Router get handler => _$MaterialServiceRouter(this);
 
   final RestApi _restApi;
   final IMaterialRepository _repository;
+  final IMaterialTypeRepository _repositoryType;
 
   @Route.get('/materials')
   Future<Response> getMaterials(Request request) async {
@@ -23,6 +28,20 @@ class MaterialService {
       statusCode: 200,
       responseBody: {
         'data': {'materials': json},
+      },
+    );
+  }
+
+  @Route.get('/material-types')
+  Future<Response> getMaterialTypes(Request request) async {
+    final data = await _repositoryType.getMaterialTypes();
+    final json = data
+        .map((e) => MaterialTypeDto.fromEntity(e).toJson())
+        .toList();
+    return _restApi.send(
+      statusCode: 200,
+      responseBody: {
+        'data': {'material_types': json},
       },
     );
   }

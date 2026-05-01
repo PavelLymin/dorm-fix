@@ -147,6 +147,8 @@ class Materials extends Table {
   IntColumn get id => integer().named('id').autoIncrement()();
   IntColumn get typeId =>
       integer().named('type_id').references(MaterialTypes, #id)();
+  TextColumn get name => text().named('name')();
   TextColumn get description => text().named('description')();
   TextColumn get photoPath => text().named('photo_path')();
+  IntColumn get quantity => integer().named('quantity')();
 }

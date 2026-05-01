@@ -10,7 +10,6 @@ sealed class SpecializationEvent {
       const _GetSpecializationsEvent();
 
   R map<R>({
-    // ignore: library_private_types_in_public_api
     required SpecializationEventMatch<R, _GetSpecializationsEvent>
     getSpecializations,
   }) => switch (this) {

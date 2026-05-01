@@ -4707,6 +4707,15 @@ class $MaterialsTable extends Materials
       'REFERENCES material_types (id)',
     ),
   );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _descriptionMeta = const VerificationMeta(
     'description',
   );
@@ -4729,8 +4738,26 @@ class $MaterialsTable extends Materials
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _quantityMeta = const VerificationMeta(
+    'quantity',
+  );
   @override
-  List<GeneratedColumn> get $columns => [id, typeId, description, photoPath];
+  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
+    'quantity',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    typeId,
+    name,
+    description,
+    photoPath,
+    quantity,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -4754,6 +4781,14 @@ class $MaterialsTable extends Materials
     } else if (isInserting) {
       context.missing(_typeIdMeta);
     }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
     if (data.containsKey('description')) {
       context.handle(
         _descriptionMeta,
@@ -4773,6 +4808,14 @@ class $MaterialsTable extends Materials
     } else if (isInserting) {
       context.missing(_photoPathMeta);
     }
+    if (data.containsKey('quantity')) {
+      context.handle(
+        _quantityMeta,
+        quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
     return context;
   }
 
@@ -4790,6 +4833,10 @@ class $MaterialsTable extends Materials
         DriftSqlType.int,
         data['${effectivePrefix}type_id'],
       )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}description'],
@@ -4797,6 +4844,10 @@ class $MaterialsTable extends Materials
       photoPath: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}photo_path'],
+      )!,
+      quantity: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}quantity'],
       )!,
     );
   }
@@ -4810,21 +4861,27 @@ class $MaterialsTable extends Materials
 class Material extends DataClass implements Insertable<Material> {
   final int id;
   final int typeId;
+  final String name;
   final String description;
   final String photoPath;
+  final int quantity;
   const Material({
     required this.id,
     required this.typeId,
+    required this.name,
     required this.description,
     required this.photoPath,
+    required this.quantity,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['type_id'] = Variable<int>(typeId);
+    map['name'] = Variable<String>(name);
     map['description'] = Variable<String>(description);
     map['photo_path'] = Variable<String>(photoPath);
+    map['quantity'] = Variable<int>(quantity);
     return map;
   }
 
@@ -4832,8 +4889,10 @@ class Material extends DataClass implements Insertable<Material> {
     return MaterialsCompanion(
       id: Value(id),
       typeId: Value(typeId),
+      name: Value(name),
       description: Value(description),
       photoPath: Value(photoPath),
+      quantity: Value(quantity),
     );
   }
 
@@ -4845,8 +4904,10 @@ class Material extends DataClass implements Insertable<Material> {
     return Material(
       id: serializer.fromJson<int>(json['id']),
       typeId: serializer.fromJson<int>(json['typeId']),
+      name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String>(json['description']),
       photoPath: serializer.fromJson<String>(json['photoPath']),
+      quantity: serializer.fromJson<int>(json['quantity']),
     );
   }
   @override
@@ -4855,30 +4916,38 @@ class Material extends DataClass implements Insertable<Material> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'typeId': serializer.toJson<int>(typeId),
+      'name': serializer.toJson<String>(name),
       'description': serializer.toJson<String>(description),
       'photoPath': serializer.toJson<String>(photoPath),
+      'quantity': serializer.toJson<int>(quantity),
     };
   }
 
   Material copyWith({
     int? id,
     int? typeId,
+    String? name,
     String? description,
     String? photoPath,
+    int? quantity,
   }) => Material(
     id: id ?? this.id,
     typeId: typeId ?? this.typeId,
+    name: name ?? this.name,
     description: description ?? this.description,
     photoPath: photoPath ?? this.photoPath,
+    quantity: quantity ?? this.quantity,
   );
   Material copyWithCompanion(MaterialsCompanion data) {
     return Material(
       id: data.id.present ? data.id.value : this.id,
       typeId: data.typeId.present ? data.typeId.value : this.typeId,
+      name: data.name.present ? data.name.value : this.name,
       description: data.description.present
           ? data.description.value
           : this.description,
       photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
     );
   }
 
@@ -4887,68 +4956,89 @@ class Material extends DataClass implements Insertable<Material> {
     return (StringBuffer('Material(')
           ..write('id: $id, ')
           ..write('typeId: $typeId, ')
+          ..write('name: $name, ')
           ..write('description: $description, ')
-          ..write('photoPath: $photoPath')
+          ..write('photoPath: $photoPath, ')
+          ..write('quantity: $quantity')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, typeId, description, photoPath);
+  int get hashCode =>
+      Object.hash(id, typeId, name, description, photoPath, quantity);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Material &&
           other.id == this.id &&
           other.typeId == this.typeId &&
+          other.name == this.name &&
           other.description == this.description &&
-          other.photoPath == this.photoPath);
+          other.photoPath == this.photoPath &&
+          other.quantity == this.quantity);
 }
 
 class MaterialsCompanion extends UpdateCompanion<Material> {
   final Value<int> id;
   final Value<int> typeId;
+  final Value<String> name;
   final Value<String> description;
   final Value<String> photoPath;
+  final Value<int> quantity;
   const MaterialsCompanion({
     this.id = const Value.absent(),
     this.typeId = const Value.absent(),
+    this.name = const Value.absent(),
     this.description = const Value.absent(),
     this.photoPath = const Value.absent(),
+    this.quantity = const Value.absent(),
   });
   MaterialsCompanion.insert({
     this.id = const Value.absent(),
     required int typeId,
+    required String name,
     required String description,
     required String photoPath,
+    required int quantity,
   }) : typeId = Value(typeId),
+       name = Value(name),
        description = Value(description),
-       photoPath = Value(photoPath);
+       photoPath = Value(photoPath),
+       quantity = Value(quantity);
   static Insertable<Material> custom({
     Expression<int>? id,
     Expression<int>? typeId,
+    Expression<String>? name,
     Expression<String>? description,
     Expression<String>? photoPath,
+    Expression<int>? quantity,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (typeId != null) 'type_id': typeId,
+      if (name != null) 'name': name,
       if (description != null) 'description': description,
       if (photoPath != null) 'photo_path': photoPath,
+      if (quantity != null) 'quantity': quantity,
     });
   }
 
   MaterialsCompanion copyWith({
     Value<int>? id,
     Value<int>? typeId,
+    Value<String>? name,
     Value<String>? description,
     Value<String>? photoPath,
+    Value<int>? quantity,
   }) {
     return MaterialsCompanion(
       id: id ?? this.id,
       typeId: typeId ?? this.typeId,
+      name: name ?? this.name,
       description: description ?? this.description,
       photoPath: photoPath ?? this.photoPath,
+      quantity: quantity ?? this.quantity,
     );
   }
 
@@ -4961,11 +5051,17 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
     if (typeId.present) {
       map['type_id'] = Variable<int>(typeId.value);
     }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
     if (photoPath.present) {
       map['photo_path'] = Variable<String>(photoPath.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
     }
     return map;
   }
@@ -4975,8 +5071,10 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
     return (StringBuffer('MaterialsCompanion(')
           ..write('id: $id, ')
           ..write('typeId: $typeId, ')
+          ..write('name: $name, ')
           ..write('description: $description, ')
-          ..write('photoPath: $photoPath')
+          ..write('photoPath: $photoPath, ')
+          ..write('quantity: $quantity')
           ..write(')'))
         .toString();
   }
@@ -11302,15 +11400,19 @@ typedef $$MaterialsTableCreateCompanionBuilder =
     MaterialsCompanion Function({
       Value<int> id,
       required int typeId,
+      required String name,
       required String description,
       required String photoPath,
+      required int quantity,
     });
 typedef $$MaterialsTableUpdateCompanionBuilder =
     MaterialsCompanion Function({
       Value<int> id,
       Value<int> typeId,
+      Value<String> name,
       Value<String> description,
       Value<String> photoPath,
+      Value<int> quantity,
     });
 
 final class $$MaterialsTableReferences
@@ -11351,6 +11453,11 @@ class $$MaterialsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get description => $composableBuilder(
     column: $table.description,
     builder: (column) => ColumnFilters(column),
@@ -11358,6 +11465,11 @@ class $$MaterialsTableFilterComposer
 
   ColumnFilters<String> get photoPath => $composableBuilder(
     column: $table.photoPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get quantity => $composableBuilder(
+    column: $table.quantity,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -11399,6 +11511,11 @@ class $$MaterialsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get description => $composableBuilder(
     column: $table.description,
     builder: (column) => ColumnOrderings(column),
@@ -11406,6 +11523,11 @@ class $$MaterialsTableOrderingComposer
 
   ColumnOrderings<String> get photoPath => $composableBuilder(
     column: $table.photoPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get quantity => $composableBuilder(
+    column: $table.quantity,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -11445,6 +11567,9 @@ class $$MaterialsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
   GeneratedColumn<String> get description => $composableBuilder(
     column: $table.description,
     builder: (column) => column,
@@ -11452,6 +11577,9 @@ class $$MaterialsTableAnnotationComposer
 
   GeneratedColumn<String> get photoPath =>
       $composableBuilder(column: $table.photoPath, builder: (column) => column);
+
+  GeneratedColumn<int> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
 
   $$MaterialTypesTableAnnotationComposer get typeId {
     final $$MaterialTypesTableAnnotationComposer composer = $composerBuilder(
@@ -11507,25 +11635,33 @@ class $$MaterialsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<int> typeId = const Value.absent(),
+                Value<String> name = const Value.absent(),
                 Value<String> description = const Value.absent(),
                 Value<String> photoPath = const Value.absent(),
+                Value<int> quantity = const Value.absent(),
               }) => MaterialsCompanion(
                 id: id,
                 typeId: typeId,
+                name: name,
                 description: description,
                 photoPath: photoPath,
+                quantity: quantity,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 required int typeId,
+                required String name,
                 required String description,
                 required String photoPath,
+                required int quantity,
               }) => MaterialsCompanion.insert(
                 id: id,
                 typeId: typeId,
+                name: name,
                 description: description,
                 photoPath: photoPath,
+                quantity: quantity,
               ),
           withReferenceMapper: (p0) => p0
               .map(

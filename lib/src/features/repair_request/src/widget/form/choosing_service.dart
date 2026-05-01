@@ -16,7 +16,7 @@ class ChoosingService extends StatelessWidget {
           ),
           loaded: (state) =>
               _SpecializationOptions(specialization: state.specializations),
-          error: (state) => UiText2.lBold(state.message),
+          error: (state) => UiText2.lBold(state.message.toString()),
         ),
       );
 }
@@ -52,7 +52,6 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
-    final style = theme.appStyle;
     return BlocBuilder<RequestFormBloc, RequestFormState>(
       buildWhen: (previous, current) =>
           previous.currentFormModel.specializationId !=
@@ -61,10 +60,6 @@ class _SpecializationOptionsState extends State<_SpecializationOptions> {
         options: options,
         initial: state.currentFormModel.specializationId,
         style: ScrollableControlStyle(
-          barColor: palette.background,
-          indicatorColor: palette.card,
-          borderRadius: style.borderRadius,
-          padding: AppInsets.card,
           textStyle: TextStyle(color: palette.secondary),
         ),
         onChange: (id) {

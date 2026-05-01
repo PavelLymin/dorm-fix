@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
-import '../../../../../core/rest_client/rest_client.dart';
 import '../../../specialization.dart';
 
 part 'specialization_event.dart';
@@ -27,23 +26,10 @@ class SpecializationBloc
     try {
       final specializations = await _specializationRepository
           .getSpecializations();
-      emit(SpecializationState.loaded(specializations: specializations));
-    } on RestClientException catch (e, stackTrace) {
-      _logger.e(e.message, stackTrace: stackTrace);
-      emit(
-        SpecializationState.error(
-          specializations: state.specializations,
-          message: e.message,
-        ),
-      );
+      emit(.loaded(specializations: specializations));
     } on Object catch (e, stackTrace) {
       _logger.e(e, stackTrace: stackTrace);
-      emit(
-        SpecializationState.error(
-          specializations: state.specializations,
-          message: e.toString(),
-        ),
-      );
+      emit(.error(specializations: state.specializations, message: e));
     }
   }
 }

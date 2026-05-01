@@ -35,8 +35,9 @@ class _SpecializationsCarouselState extends State<SpecializationsCarousel> {
             return _Item(spec: spec);
           },
         ),
-        error: (state) =>
-            UiCard.standart(child: Center(child: UiText2.lBold(state.message))),
+        error: (state) => UiCard.standart(
+          child: Center(child: UiText2.lBold(state.message.toString())),
+        ),
       ),
     );
   }

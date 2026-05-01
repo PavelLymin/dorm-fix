@@ -1,5 +1,3 @@
-import 'package:backend/src/core/database/database.dart';
-import 'package:drift/drift.dart';
 import '../../../material.dart';
 
 class MaterialDto {
@@ -36,25 +34,6 @@ class MaterialDto {
     photoPath: entity.photoPath,
     quantity: entity.quantity,
   );
-
-  MaterialsCompanion toCompanion() => MaterialsCompanion(
-    id: Value(id),
-    typeId: Value(type.id),
-    name: Value(name),
-    description: Value(description),
-    photoPath: Value(photoPath),
-    quantity: Value(quantity),
-  );
-
-  factory MaterialDto.fromData(Material material, MaterialType type) =>
-      MaterialDto(
-        id: material.id,
-        type: .fromData(type),
-        name: material.name,
-        description: material.description,
-        photoPath: material.photoPath,
-        quantity: material.quantity,
-      );
 
   Map<String, Object?> toJson() => {
     'id': id,

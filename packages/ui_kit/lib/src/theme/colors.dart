@@ -41,7 +41,7 @@ ColorPalette2 generatePaletteByBrightness(Brightness brightness) {
     action: Color(0xFFEBEBEB),
     card: Color(0xFFFFFFFF),
     destructive: Color(0xFFDB0505),
-    buttonSecondary: Color(0xFFD6D6D6),
+    buttonSecondary: Color(0xFFEBEBEB),
     buttonLoading: Color(0xFF0C764C),
     buttonDisabled: Color(0xFF8BD5B8),
   );

@@ -381,7 +381,7 @@ Future<void> createMasters(DependencyContainer dependency) async {
 }
 
 Future<void> createFirebaseClaims(DependencyContainer dependency) async {
-  Future.wait([
+  await Future.wait([
     dependency.firebaseAdmin.auth().setCustomUserClaims(
       'l2HstRraMJOxYVG9Gx2gWsTW8gO2',
       {'role': Role.master.name},
@@ -394,6 +394,58 @@ Future<void> createFirebaseClaims(DependencyContainer dependency) async {
       'cz3WOJku5ph00sQCYDkL5oNwb703',
       {'role': Role.master.name},
     ),
+  ]);
+}
+
+Future<void> createMaterials(DependencyContainer dependency) async {
+  await Future.wait([
+    dependency.database
+        .into(dependency.database.materialTypes)
+        .insert(MaterialTypesCompanion.insert(name: 'Электрика')),
+    dependency.database
+        .into(dependency.database.materialTypes)
+        .insert(MaterialTypesCompanion.insert(name: 'Фурнитура')),
+    dependency.database
+        .into(dependency.database.materialTypes)
+        .insert(MaterialTypesCompanion.insert(name: 'Сантехника')),
+  ]);
+  await Future.wait([
+    dependency.database
+        .into(dependency.database.materials)
+        .insert(
+          MaterialsCompanion.insert(
+            typeId: 1,
+            name: 'Лампа светодиодная LED',
+            description:
+                'Тип колбы — A60; цоколь — E27; мощность — 10 Вт; цветовая температура — 4000 K; световой поток — 850–900 лм; напряжение — 175–250 В; габариты — около 60×60×117 мм.',
+            photoPath: 'lamp.webp',
+            quantity: 48,
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.materials)
+        .insert(
+          MaterialsCompanion.insert(
+            typeId: 2,
+            name: 'Ручка дверная на планке 85 мм, хром',
+            description:
+                'Тип — на планке (розеточная); межцентровое расстояние — 85 мм; материал — сплав цинка (Zamak); покрытие — хром (глянцевый); ширина планки (розетки) — стандарт 18–20 мм; глубина установки — под стандартный квадрат 8 мм; комплектация — винты, ключ-шестигранник, ответная планка (защёлка в комплект не входит); габариты (общая длина ручки) — около 130×60×60 мм.',
+            photoPath: 'door_handle.webp',
+            quantity: 48,
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.materials)
+        .insert(
+          MaterialsCompanion.insert(
+            typeId: 3,
+            name: 'Смеситель для раковины',
+            description:
+                'Тип — шаровой; материал корпуса — латунь ЦАМ (ЦАМ 4-1); длина излива — 125 мм; высота общая — 230 мм; высота до излива — 120 мм; вращение излива — 360°; аэратор — есть, перлатор (экономия до 30% воды); покрытие — хром (электрохимическое); диаметр стакана — 35 мм; гибкая подводка — 2 шт. (длина 500 мм); давление — от 0,5 до 12 бар; температура — до +95 °C; габариты — около 230×190×60 мм.',
+            photoPath: 'sink_mixer.webp',
+            quantity: 48,
+          ),
+        ),
   ]);
 }
 
