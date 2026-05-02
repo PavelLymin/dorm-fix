@@ -17,19 +17,6 @@ class MaterialEntity {
   final String photoPath;
   final int quantity;
 
-  int _curQuantity = 0;
-
-  int get curQuantity => _curQuantity;
-
-  void increaseCurQuantity() => _curQuantity++;
-
-  void decreaseCurQuantity() {
-    if (_curQuantity == 0) return;
-    _curQuantity--;
-  }
-
-  void resetCurQuantity() => _curQuantity = 0;
-
   MaterialEntity copyWith({
     int? id,
     MaterialTypeEntity? type,
@@ -53,7 +40,7 @@ class MaterialEntity {
       'type: $type, '
       'name: $name, '
       'description: $description, '
-      'photoPath: $photoPath'
+      'photoPath: $photoPath, '
       'quantity: $quantity)';
 
   @override

@@ -37,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SliverToBoxAdapter(child: Settings()),
               const SliverPadding(
-                padding: .only(top: 32.0),
+                padding: .symmetric(vertical: 32.0),
                 sliver: SliverToBoxAdapter(child: LogOutButton()),
               ),
             ],

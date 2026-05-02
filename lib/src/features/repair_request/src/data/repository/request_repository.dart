@@ -16,6 +16,8 @@ abstract interface class IRequestRepository {
 
   Future<void> acceptRequest({required int id});
 
+  Future<void> completeRequest({required int id, Map<int, int>? materialUsage});
+
   Future<void> updateStatus({required int id, required StatusEnum status});
 }
 
@@ -93,7 +95,28 @@ class RequestRepositoryImpl implements IRequestRepository {
     final token = await _firebaseAuth.currentUser?.getIdToken();
     await _client.send(
       path: '/requests/$id/accept',
-      method: 'PUT',
+      method: 'POST',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+  }
+
+  @override
+  Future<void> completeRequest({
+    required int id,
+    Map<int, int>? materialUsage,
+  }) async {
+    final token = await _firebaseAuth.currentUser?.getIdToken();
+    final body = materialUsage != null
+        ? {
+            'material_usage': materialUsage.entries
+                .map((e) => {'id': e.key, 'quantity': e.value})
+                .toList(),
+          }
+        : null;
+    await _client.send(
+      path: '/requests/$id/complete',
+      method: 'POST',
+      body: body,
       headers: {'Authorization': 'Bearer $token'},
     );
   }
@@ -106,7 +129,7 @@ class RequestRepositoryImpl implements IRequestRepository {
     final token = await _firebaseAuth.currentUser?.getIdToken();
     await _client.send(
       path: '/requests/$id/update-status',
-      method: 'PUT',
+      method: 'POST',
       body: {'status': status.value},
       headers: {'Authorization': 'Bearer $token'},
     );

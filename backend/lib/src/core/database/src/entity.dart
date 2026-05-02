@@ -76,7 +76,8 @@ class Requests extends Table {
   TextColumn get priority => text().named('priority')();
   TextColumn get date => text().map(const DateTimeConverter()).named('date')();
   IntColumn get startTime => integer().named('start_time')();
-  IntColumn get endTime => integer().named('end_time')();
+  IntColumn get endTime =>
+      integer().check(endTime.isBiggerThan(startTime)).named('end_time')();
   TextColumn get currentStatus => text().named('current_status')();
   TextColumn get createdAt => text()
       .named('created_at')
@@ -150,5 +151,6 @@ class Materials extends Table {
   TextColumn get name => text().named('name')();
   TextColumn get description => text().named('description')();
   TextColumn get photoPath => text().named('photo_path')();
-  IntColumn get quantity => integer().named('quantity')();
+  IntColumn get quantity =>
+      integer().check(quantity.isBiggerThanValue(0)).named('quantity')();
 }

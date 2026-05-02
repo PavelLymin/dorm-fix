@@ -91,7 +91,7 @@ class __ItemIndicatorState extends State<_ItemIndicator> {
   void initState() {
     super.initState();
     _count = ValueNotifier(
-      widget.materialsNotifier.value[widget.material.id]?.$2 ?? 0,
+      widget.materialsNotifier.value[widget.material.id]?.quantity ?? 0,
     );
     _count.addListener(_countChanged);
   }

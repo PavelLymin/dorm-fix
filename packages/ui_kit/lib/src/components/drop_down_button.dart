@@ -82,7 +82,10 @@ class _UiDropDownButtonState<T extends Object>
       textStyle:
           widget.textStyle ??
           theme.appTypography2.m.copyWith(overflow: .ellipsis),
-      menuStyle: UiDropDownMenuStyle(palette: theme.colorPalette2),
+      menuStyle: UiDropDownMenuStyle(
+        palette: theme.colorPalette2,
+        typography: theme.appTypography2,
+      ),
       inputDecorationTheme: _buildInputDecorationTheme(
         palette: theme.colorPalette2,
         typography: theme.appTypography2,
@@ -92,8 +95,9 @@ class _UiDropDownButtonState<T extends Object>
 }
 
 class UiDropDownMenuStyle extends MenuStyle {
-  const UiDropDownMenuStyle({required this.palette});
+  const UiDropDownMenuStyle({required this.palette, required this.typography});
   final ColorPalette2 palette;
+  final AppTypography2 typography;
 
   @override
   WidgetStateProperty<Color?>? get backgroundColor =>

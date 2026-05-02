@@ -67,9 +67,7 @@ class _MasterRequestDetailsState extends State<MasterRequestDetails> {
                   ),
                 ),
                 RequestDateTime(request: widget.request),
-                if (status == .inProgress ||
-                    status == .completed ||
-                    status == .newRequest)
+                if (status == .inProgress || status == .newRequest)
                   _AcceptCancelButton(
                     id: widget.request.id,
                     status: widget.request.currentStatus,
@@ -94,15 +92,24 @@ class _AcceptCancelButton extends StatelessWidget {
   final int id;
   final StatusEnum status;
 
+  void onPressed(BuildContext context) {
+    if (status == .inProgress) {
+      context.router.push(
+        NamedRoute('AcceptRequestScreen', params: {'request_id': id}),
+      );
+    } else {
+      context.read<RepairActionBloc>().add(.accept(requestId: id));
+      context.router.pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
       padding: .only(top: 32.0),
       sliver: SliverToBoxAdapter(
         child: UiButton.filledPrimary(
-          onPressed: () => status == .inProgress
-              ? context.router.push(const NamedRoute('AcceptRequestScreen'))
-              : context.read<RepairActionBloc>().add(.accept(requestId: id)),
+          onPressed: () => onPressed(context),
           label: status == .inProgress
               ? const Text('Завершить заявку')
               : const Text('Принять заявку'),

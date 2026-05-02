@@ -2482,6 +2482,7 @@ class $RequestsTable extends Requests with TableInfo<$RequestsTable, Request> {
     'end_time',
     aliasedName,
     false,
+    check: () => ComparableExpr(endTime).isBiggerThan(startTime),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
@@ -4746,6 +4747,7 @@ class $MaterialsTable extends Materials
     'quantity',
     aliasedName,
     false,
+    check: () => ComparableExpr(quantity).isBiggerThanValue(0),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );

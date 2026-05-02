@@ -3,6 +3,7 @@ import 'package:rxdart/rxdart.dart';
 import '../../../../../core/database/database.dart';
 import '../../../../chat/chat.dart';
 import '../../../../master/master.dart';
+import '../../../../material/material.dart';
 import '../../../../profile/profile.dart';
 import '../../../../specialization/specialization.dart';
 import '../../../../student/student.dart';
@@ -19,6 +20,12 @@ abstract interface class IRepairRequestFacade {
   Future<void> acceptRequest({
     required int requestId,
     required String masterUid,
+  });
+
+  Future<void> completeRequest({
+    required int requestId,
+    required String masterUid,
+    required Map<int, int>? materialUsage,
   });
 
   Future<void> updateStatus({
@@ -45,6 +52,7 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
     required this._assignmentsRepository,
     required this._chatRepository,
     required this._studentRepository,
+    required this._materialRepository,
   }) : _db = database;
 
   final Database _db;
@@ -55,6 +63,7 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
   final IChatRepository _chatRepository;
   final IAssignmentsRepository _assignmentsRepository;
   final IStudentRepository _studentRepository;
+  final IMaterialRepository _materialRepository;
 
   @override
   Future<FullRepairRequest> createRequest({
@@ -120,6 +129,29 @@ class RepairRequestFacadeImpl implements IRepairRequestFacade {
         status: .inProgress,
       );
       await _chatRepository.addMember(chatId: request.chatId, uid: masterUid);
+    });
+  }
+
+  @override
+  Future<void> completeRequest({
+    required int requestId,
+    required String masterUid,
+    required Map<int, int>? materialUsage,
+  }) async {
+    await _db.transaction(() async {
+      await _statusRepository.createStatus(
+        requestId: requestId,
+        status: .completed,
+      );
+      await _requestRepository.updateStatus(
+        requestId: requestId,
+        status: .completed,
+      );
+      if (materialUsage != null) {
+        for (final entry in materialUsage.entries) {
+          await _materialRepository.consumeMaterial(entry.key, entry.value);
+        }
+      }
     });
   }
 

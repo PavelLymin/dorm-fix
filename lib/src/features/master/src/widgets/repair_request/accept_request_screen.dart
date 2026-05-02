@@ -1,3 +1,4 @@
+import 'package:dorm_fix/src/features/repair_request/request.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 
@@ -6,7 +7,9 @@ import '../../../../material/material.dart';
 import 'selection_materials_screen.dart';
 
 class AcceptRequestScreen extends StatefulWidget {
-  const AcceptRequestScreen({super.key});
+  const AcceptRequestScreen({super.key, required this.requestId});
+
+  final int requestId;
 
   @override
   State<AcceptRequestScreen> createState() => _AcceptRequestScreenState();
@@ -14,6 +17,7 @@ class AcceptRequestScreen extends StatefulWidget {
 
 class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
   late final MaterialsUsedController _materialsNotifier;
+  late final RepairActionBloc _repairActionBloc;
   late final MaterialBloc _materialBloc;
   late final MaterialTypeBloc _materialTypeBloc;
 
@@ -22,19 +26,25 @@ class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
     super.initState();
     _materialsNotifier = MaterialsUsedController({});
     final dependency = DependeciesScope.of(context);
+    _repairActionBloc = RepairActionBloc(
+      requestRepository: dependency.requestRepository,
+      problemRepository: dependency.problemRepository,
+      logger: dependency.logger,
+    );
     _materialTypeBloc = MaterialTypeBloc(
       materialTypeRepository: dependency.materialTypeRepository,
       logger: dependency.logger,
-    )..add(MaterialTypeEvent.get());
+    )..add(.get());
     _materialBloc = MaterialBloc(
       materialRepository: dependency.materialRepository,
       logger: dependency.logger,
-    )..add(MaterialEvent.get());
+    )..add(.get());
   }
 
   @override
   void dispose() {
     _materialsNotifier.dispose();
+    _repairActionBloc.close();
     _materialTypeBloc.close();
     _materialBloc.close();
     super.dispose();
@@ -75,14 +85,12 @@ class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
                 label: Text('Выбрать материалы'),
               ),
               const Spacer(),
-              UiButton.filledSecondary(
-                onPressed: () {},
-                label: Text('Ремонт без материалов'),
-              ),
-              const SizedBox(height: 16.0),
-              UiButton.filledPrimary(
-                onPressed: () {},
-                label: Text('Завершить'),
+              BlocProvider.value(
+                value: _repairActionBloc,
+                child: _CompleteButton(
+                  requestId: widget.requestId,
+                  materialsNotifier: _materialsNotifier,
+                ),
               ),
             ],
           ),
@@ -113,8 +121,8 @@ class _AddedMaterials extends StatelessWidget {
                         mainAxisAlignment: .spaceBetween,
                         crossAxisAlignment: .center,
                         children: [
-                          UiText2.m(material.value.$1),
-                          UiText2.m(material.value.$2.toString()),
+                          UiText2.m(material.value.name),
+                          UiText2.m(material.value.quantity.toString()),
                         ],
                       ),
                     )
@@ -125,6 +133,40 @@ class _AddedMaterials extends StatelessWidget {
         }
         return SizedBox.shrink();
       },
+    );
+  }
+}
+
+class _CompleteButton extends StatelessWidget {
+  const _CompleteButton({
+    required this.requestId,
+    required this._materialsNotifier,
+  });
+  final int requestId;
+  final MaterialsUsedController _materialsNotifier;
+
+  @override
+  Widget build(BuildContext context) {
+    return UiButton.filledSecondary(
+      onPressed: () {
+        context.read<RepairActionBloc>().add(
+          .complete(
+            requestId: requestId,
+            materialUsage: _materialsNotifier.value.map(
+              (key, value) => MapEntry(key, value.quantity),
+            ),
+          ),
+        );
+      },
+      label: ListenableBuilder(
+        listenable: _materialsNotifier,
+        builder: (context, child) {
+          if (_materialsNotifier.value.isNotEmpty) {
+            return Text('Завершить');
+          }
+          return Text('Ремонт без материалов');
+        },
+      ),
     );
   }
 }

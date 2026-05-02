@@ -18,7 +18,7 @@ class RepairRequests {
   final RestApi _restApi;
   final IRepairRequestFacade _requestFacade;
 
-  @Route.put('/requests/<id>/update-status')
+  @Route.post('/requests/<id>/update-status')
   Future<Response> _updateRepairRequestStatus(
     Request request,
     String id,
@@ -38,7 +38,7 @@ class RepairRequests {
     );
   }
 
-  @Route.put('/requests/<id>/accept')
+  @Route.post('/requests/<id>/accept')
   Future<Response> _acceptRepairRequest(Request request, String id) async {
     await _requestFacade.acceptRequest(
       masterUid: request.userId,
@@ -49,6 +49,37 @@ class RepairRequests {
       statusCode: 201,
       responseBody: {
         'data': {'message': 'Successfully accepted the request.'},
+      },
+    );
+  }
+
+  @Route.post('/requests/<id>/complete')
+  Future<Response> _completeRepairRequest(Request request, String id) async {
+    final body = await request.body((json) {
+      if (json['material_usage'] case List<Object?> materialUsage) {
+        return {
+          for (final item in materialUsage)
+            if (item case <String, Object?>{
+              'material_id': int materialId,
+              'quantity': int quantity,
+            })
+              materialId: quantity,
+        };
+      }
+
+      return null;
+    });
+
+    await _requestFacade.completeRequest(
+      masterUid: request.userId,
+      requestId: int.parse(id),
+      materialUsage: body,
+    );
+
+    return _restApi.send(
+      statusCode: 201,
+      responseBody: {
+        'data': {'message': 'Successfully completed the request.'},
       },
     );
   }

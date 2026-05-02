@@ -91,7 +91,20 @@ class CompositionRoot {
     // RepairRequest
     final requestRepository = RequestRepositoryImpl(database: database);
 
+    // Status
     final statusRepository = StatusRepositoryImpl(database: database);
+
+    // Material
+    final materialRepository = MaterialRepositoryImpl(database: database);
+    final materialTypeRepository = MaterialTypeRepositoryImpl(
+      database: database,
+    );
+    final materialRouter = MaterialService(
+      restApi: restApi,
+      repository: materialRepository,
+      repositoryType: materialTypeRepository,
+    );
+
     final requestFacade = RepairRequestFacadeImpl(
       database: database,
       requestRepository: requestRepository,
@@ -101,6 +114,7 @@ class CompositionRoot {
       specRepository: specializationRepository,
       studentRepository: studentRepository,
       statusRepository: statusRepository,
+      materialRepository: materialRepository,
     );
 
     // <--- RealTime Repositories --->
@@ -161,17 +175,6 @@ class CompositionRoot {
     final repairRequestRouter = RepairRequests(
       requestFacade: requestFacade,
       restApi: restApi,
-    );
-
-    // Material
-    final materialRepository = MaterialRepositoryImpl(database: database);
-    final materialTypeRepository = MaterialTypeRepositoryImpl(
-      database: database,
-    );
-    final materialRouter = MaterialService(
-      restApi: restApi,
-      repository: materialRepository,
-      repositoryType: materialTypeRepository,
     );
 
     return _DependencyFactory(

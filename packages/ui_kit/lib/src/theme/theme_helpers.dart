@@ -11,6 +11,12 @@ ThemeData createThemeData({
   scaffoldBackgroundColor: palette2.background,
   appBarTheme: appBarTheme(palette2, typography2),
   iconTheme: iconThemeData(palette2),
+  menuButtonTheme: MenuButtonThemeData(
+    style: MenuItemButton.styleFrom(
+      textStyle: typography2.m,
+      foregroundColor: palette2.foreground,
+    ),
+  ),
   extensions: {palette2, style},
 );
 

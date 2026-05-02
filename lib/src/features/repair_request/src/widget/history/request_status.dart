@@ -44,13 +44,13 @@ class _RequestStatusState extends State<RequestStatus> {
           : StepItem(title: StatusEnum.newRequest.value),
       second != null
           ? StepItem(
-              title: second.title.name,
+              title: second.title.value,
               subtitle: second.createdAt.toLocal().toIso8601String(),
             )
           : StepItem(title: StatusEnum.inProgress.value),
       last != null
           ? StepItem(
-              title: last.title.name,
+              title: last.title.value,
               subtitle: last.createdAt.toLocal().toIso8601String(),
             )
           : StepItem(title: StatusEnum.completed.value),

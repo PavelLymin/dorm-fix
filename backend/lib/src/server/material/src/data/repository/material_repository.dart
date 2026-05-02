@@ -4,6 +4,8 @@ import '../../../material.dart';
 
 abstract interface class IMaterialRepository {
   Future<List<MaterialEntity>> getMaterials({int? typeId});
+
+  Future<void> consumeMaterial(int materialId, int usedQuantity);
 }
 
 class MaterialRepositoryImpl implements IMaterialRepository {
@@ -31,5 +33,16 @@ class MaterialRepositoryImpl implements IMaterialRepository {
           ).toEntity(),
         )
         .toList();
+  }
+
+  @override
+  Future<void> consumeMaterial(int materialId, int usedQuantity) async {
+    await (_database.update(
+      _database.materials,
+    )..where((t) => t.id.equals(materialId))).write(
+      MaterialsCompanion.custom(
+        quantity: _database.materials.quantity - Constant(usedQuantity),
+      ),
+    );
   }
 }

@@ -21,17 +21,23 @@ class _DropDownDormitoriesState extends State<DropDownDormitories> {
 
   @override
   Widget build(BuildContext context) {
+    final typography = Theme.of(context).appTypography2;
     return BlocBuilder<DormitoryBloc, DormitoryState>(
       builder: (context, state) {
         final items = state.dormitories
-            .map((d) => DropdownMenuEntry<int>(label: d.name, value: d.id))
+            .map(
+              (d) => DropdownMenuEntry<int>(
+                label: d.name,
+                value: d.id,
+                style: ButtonStyle(textStyle: .all(typography.m)),
+              ),
+            )
             .toList();
         return UiDropDownButton<int>(
           hintText: 'Общежитие',
           initialSelection: widget.initialId,
           selectOnly: true,
           textAlign: .start,
-          width: MediaQuery.sizeOf(context).width - AppInsets.screen.horizontal,
           dropdownMenuEntries: items,
           onSelected: widget.onSelected,
         );
