@@ -49,6 +49,7 @@ void main(List<String> args) async {
                 .add(dependency.chatRouter.handler)
                 .add(dependency.messageRouter.handler)
                 .add(dependency.materialRouter.handler.call)
+                .add(dependency.instructionRouter.handler.call)
                 .handler,
           );
 
@@ -449,9 +450,203 @@ Future<void> createMaterials(DependencyContainer dependency) async {
   ]);
 }
 
-      // await createSpecializations(dependency);
-      // await createDormitories(dependency);
-      // await createRooms(dependency);
-      // await createStudents(dependency);
-      // await createMasters(dependency);
+Future<void> createRecommendations(DependencyContainer dependency) async {
+  await Future.wait([
+    dependency.database
+        .into(dependency.database.instructions)
+        .insert(
+          InstructionsCompanion.insert(
+            title: 'Замена лампочки',
+            complexity: 'Легко',
+            durationMinutes: 2,
+            photoPath: 'replacing_lamp.webp',
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructions)
+        .insert(
+          InstructionsCompanion.insert(
+            title: 'Пищит датчик',
+            complexity: 'Легко',
+            durationMinutes: 2,
+            photoPath: 'sensor_beeps.webp',
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructions)
+        .insert(
+          InstructionsCompanion.insert(
+            title: 'Протекает кран',
+            complexity: 'Нормально',
+            durationMinutes: 15,
+            photoPath: 'faucet_leak.webp',
+          ),
+        ),
+  ]);
+  await Future.wait([
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 1,
+            step: 1,
+            description:
+                'Перед началом работы необходимо выключить свет с помощью выключателя. Для большей безопасности рекомендуется также убедиться, что лампа не нагрета, и подождать несколько минут, если она горела до этого.',
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 1,
+            step: 2,
+            description:
+                'Далее нужно подготовить новую лампочку, которая подходит по типу и мощности к установленному светильнику. Обычно эта информация указана на старой лампочке или на самом осветительном приборе. Использование лампы с неподходящей мощностью может привести к перегреву или поломке светильника.',
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 1,
+            step: 3,
+            description:
+                'После этого необходимо аккуратно выкрутить перегоревшую лампочку, поворачивая её против часовой стрелки. Делать это нужно осторожно, не прилагая лишней силы.',
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 1,
+            step: 4,
+            description:
+                'Новую лампочку нужно вкрутить на её место, поворачивая по часовой стрелке до лёгкой фиксации. Не стоит закручивать её слишком сильно, чтобы не повредить цоколь или патрон. После установки следует включить свет и проверить, работает ли лампа.',
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 1,
+            step: 5,
+            description:
+                'Если после замены лампочка не загорается, возможно, проблема связана не с ней, а с самим светильником, проводкой или выключателем. В таком случае не нужно пытаться самостоятельно разбирать электроприборы. Следует обратиться к коменданту общежития, электрику или ответственному сотруднику.',
+            isOptional: const Value(true),
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 2,
+            step: 1,
+            description:
+                "Первым делом убедитесь, что датчик действительно пищит, а не другой прибор (например, пожарная сигнализация соседей). Обратите внимание на частоту и характер звука: постоянный писк раз в минуту обычно означает севшую батарейку, частые прерывистые сигналы — задымление или неисправность.",
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 2,
+            step: 2,
+            description:
+                "Если датчик питается от батареек — замените их на новые (обычно используются элементы типа CR123A, AA или «Крона»). Перед заменой убедитесь, что датчик отключён от сети (если он комбинированный). Полярность соблюдайте по маркировке внутри отсека.",
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 2,
+            step: 3,
+            description:
+                "Если замена батареек не помогла или датчик подключён к 220В — нажмите и удерживайте кнопку «Test/Silence» на корпусе в течение 5–10 секунд. Это часто сбрасывает ложную тревогу. При этом датчик должен издать короткий звуковой сигнал, подтверждающий сброс.",
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 2,
+            step: 4,
+            description:
+                "Протрите корпус и вентиляционные отверстия датчика сухой мягкой тканью или пылесосом с узкой насадкой. Скопление пыли, паутины или насекомых внутри часто вызывает ложные срабатывания. Не используйте влажные салфетки и не разбирайте датчик, если не уверены в своих действиях.",
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 2,
+            step: 5,
+            description:
+                "Если после всех шагов датчик продолжает пищать — возможно, он вышел из строя или срок его службы истёк (обычно 7–10 лет). Обратитесь в управляющую компанию или к коменданту для замены прибора. Самостоятельно вскрывать или отключать датчик системы безопасности запрещено.",
+            isOptional: const Value(true),
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 3,
+            step: 1,
+            description:
+                "Перекройте воду. Найдите вентили или шаровые краны на трубах под раковиной (горячая и холодная вода отдельно). Поверните их по часовой стрелке до упора. Откройте кран на смесителе, чтобы слить остатки воды и убедиться, что подача действительно прекращена.",
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 3,
+            step: 2,
+            description:
+                "Определите источник течи. Если вода капает из-под рычага или маховика — скорее всего, износился кран-букса или картридж. Если течёт под раковиной, из соединений гибких шлангов — подтяните гайки разводным ключом (не переусердствуйте). Капание из носика при закрытом кране говорит о неисправности запорного механизма внутри.",
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 3,
+            step: 3,
+            description:
+                "Для устранения капли из-под рычага: открутите декоративный колпачок, выкрутите винт (обычно под шестигранник или крестовую отвёртку), снимите рычаг. Замените картридж (для однорычажного смесителя) или прокладку кран-буксы (для двухвентильного). Новые детали продаются в любом хозмаге — берите старые с собой для образца.",
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 3,
+            step: 4,
+            description:
+                "Если течёт под гайкой гибкой подводки — попробуйте аккуратно подтянуть её рожковым ключом на 17 или 19. Иногда помогает замена резиновой прокладки внутри шланга. Перед этим подставьте тазик — в шланге останется немного воды.",
+          ),
+        ),
+    dependency.database
+        .into(dependency.database.instructionSteps)
+        .insert(
+          InstructionStepsCompanion.insert(
+            instructionId: 3,
+            step: 5,
+            description:
+                "Если вода продолжает течь, а вы не уверены в своих силах — не пытайтесь затягивать резьбу с усилием (можно сорвать). Перекройте общий кран на стояк (в подъезде или в квартире) и вызовите сантехника из управляющей компании или мастера по объявлению. Самостоятельный ремонт при отсутствии опыта может привести к потопу.",
+            isOptional: const Value(true),
+          ),
+        ),
+  ]);
+}
+
+      // await Future.wait([
+      //   createSpecializations(dependency),
+      //   createDormitories(dependency),
+      //   createRooms(dependency),
+      //   createStudents(dependency),
+      //   createMasters(dependency),
+      //   createMaterials(dependency),
+      //   createRecommendations(dependency),
+      // ]);
       // print('end');

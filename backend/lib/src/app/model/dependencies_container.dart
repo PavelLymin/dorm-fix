@@ -4,6 +4,7 @@ import '../../core/rest_api/src/rest_api.dart';
 import '../../core/ws/ws.dart';
 import '../../server/chat/chat.dart';
 import '../../server/chat/src/router/message.dart';
+import '../../server/instruction/src/router/instruction.dart';
 import '../../server/master/master.dart';
 import '../../server/material/material.dart';
 import '../../server/repair_request/repair_request.dart';
@@ -31,6 +32,7 @@ class DependencyContainer {
     required this.messageRouter,
     required this.studentRouter,
     required this.materialRouter,
+    required this.instructionRouter,
   });
 
   final App firebaseAdmin;
@@ -62,4 +64,6 @@ class DependencyContainer {
   final StudentRouter studentRouter;
 
   final MaterialService materialRouter;
+
+  final InstructionService instructionRouter;
 }

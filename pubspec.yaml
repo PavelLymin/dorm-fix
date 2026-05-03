@@ -27,29 +27,29 @@ dependencies:
   # Route
   auto_route: ^10.1.2
   # Firebase
-  firebase_auth: ^6.3.0
-  firebase_core: ^4.6.0
+  firebase_auth: ^6.4.0
+  firebase_core: ^4.7.0
   # Google sign in
   google_sign_in: ^7.2.0
   # Logs
-  logger: ^2.6.2
+  logger: ^2.7.0
   # RX
   rxdart: ^0.28.0
   # Http clients  
   http: ^1.6.0
   # Local storage
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.5.5
   # Image picker
-  image_picker: ^1.2.1
-  video_player: ^2.10.1
+  image_picker: ^1.2.2
+  video_player: ^2.11.1
   mime: ^2.0.0
   # Animations
-  animations: ^2.1.1
+  animations: ^2.2.0
   # DotEnv
   flutter_dotenv: ^6.0.0
   # Yandex MapKit
   yandex_mapkit: ^4.2.1
-  supabase_flutter: ^2.12.2
+  supabase_flutter: ^2.12.4
 
 dev_dependencies:
   flutter_test:

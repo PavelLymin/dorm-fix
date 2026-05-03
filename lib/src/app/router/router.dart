@@ -3,6 +3,7 @@ import 'package:dorm_fix/src/app/widget/dependencies_scope.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../features/authentication/authentication.dart';
+import '../../features/instructions/instructions.dart';
 import '../../features/map/map.dart';
 import '../../features/master/master.dart';
 import '../../features/specialization/specialization.dart';
@@ -71,11 +72,21 @@ class AppRouter extends RootStackRouter {
       name: 'StudentRootSreen',
       builder: (context, data) {
         final dependency = DependeciesScope.of(context);
-        return BlocProvider(
-          create: (context) => RepairWatcherBloc(
-            requestRepository: dependency.requestRepository,
-            logger: dependency.logger,
-          ),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => RepairWatcherBloc(
+                requestRepository: dependency.requestRepository,
+                logger: dependency.logger,
+              ),
+            ),
+            BlocProvider(
+              create: (context) => InstructionBloc(
+                instructionRepository: dependency.instructionRepository,
+                logger: dependency.logger,
+              ),
+            ),
+          ],
           child: const AutoRouter(),
         );
       },
@@ -98,6 +109,15 @@ class AppRouter extends RootStackRouter {
               builder: (_, _) => const ProfileScreen(),
             ),
           ],
+        ),
+        NamedRouteDef(
+          name: 'InstructionsScreen',
+          builder: (_, _) => const InstructionsScreen(),
+        ),
+        NamedRouteDef(
+          name: 'InstructionDetails',
+          builder: (_, data) =>
+              InstructionDetails(instruction: data.params.get('instruction')),
         ),
         NamedRouteDef(
           name: 'FormRequestScreen',

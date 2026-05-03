@@ -77,6 +77,7 @@ class Requests extends Table {
   TextColumn get date => text().map(const DateTimeConverter()).named('date')();
   IntColumn get startTime => integer().named('start_time')();
   IntColumn get endTime =>
+      // ignore: recursive_getters
       integer().check(endTime.isBiggerThan(startTime)).named('end_time')();
   TextColumn get currentStatus => text().named('current_status')();
   TextColumn get createdAt => text()
@@ -152,5 +153,24 @@ class Materials extends Table {
   TextColumn get description => text().named('description')();
   TextColumn get photoPath => text().named('photo_path')();
   IntColumn get quantity =>
+      // ignore: recursive_getters
       integer().check(quantity.isBiggerThanValue(0)).named('quantity')();
+}
+
+class Instructions extends Table {
+  IntColumn get id => integer().named('id').autoIncrement()();
+  TextColumn get title => text().named('title')();
+  TextColumn get complexity => text().named('complexity')();
+  IntColumn get durationMinutes => integer().named('duration_minutes')();
+  TextColumn get photoPath => text().named('photo_path')();
+}
+
+class InstructionSteps extends Table {
+  IntColumn get id => integer().named('id').autoIncrement()();
+  IntColumn get instructionId =>
+      integer().named('instruction_id').references(Instructions, #id)();
+  IntColumn get step => integer().named('step')();
+  TextColumn get description => text().named('description')();
+  BoolColumn get isOptional =>
+      boolean().named('is_optional').withDefault(const Constant(false))();
 }

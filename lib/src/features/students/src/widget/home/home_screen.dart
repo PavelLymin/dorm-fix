@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../instructions/instructions.dart';
 import '../../../../repair_request/request.dart';
 import '../../../../specialization/specialization.dart';
-import 'advices.dart';
 import 'repair_request.dart';
 import 'searcher.dart';
 
@@ -17,6 +17,8 @@ class _HomeScreenState extends State<StudentHomeScreen> {
   @override
   void initState() {
     super.initState();
+
+    context.read<InstructionBloc>().add(.get());
     context.read<SpecializationBloc>().add(.getSpecializations());
     context.read<RepairWatcherBloc>().add(.get(uid: true));
   }
@@ -50,7 +52,7 @@ class _HomeScreenState extends State<StudentHomeScreen> {
               const SliverToBoxAdapter(child: SizedBox(height: 12.0)),
               const SliverToBoxAdapter(child: CreateRequestButton()),
               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
-              const SliverToBoxAdapter(child: Advices()),
+              const SliverToBoxAdapter(child: InstructionsHorizont()),
             ],
           ),
         ),

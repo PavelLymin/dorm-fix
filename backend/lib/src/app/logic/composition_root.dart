@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
-
 import '../../core/database/database.dart';
 import '../../core/rest_api/src/rest_api.dart';
 import '../../core/ws/ws.dart';
 import '../../server/chat/chat.dart';
 import '../../server/chat/src/router/message.dart';
 import '../../server/dormitory/dormitory.dart';
+import '../../server/instruction/instruction.dart';
 import '../../server/master/master.dart';
 import '../../server/material/material.dart';
 import '../../server/profile/profile.dart';
@@ -62,34 +62,41 @@ class CompositionRoot {
       userRepository: userRepository,
       restApi: restApi,
     );
+
     // Student
     final studentRepository = StudentRepositoryImpl(
       database: database,
       firebaseApp: app,
     );
+
     // Master
     final masterRepository = MasterRepository(database: database);
+
     // Problem
     final problemRepository = ProblemRepositoryImpl(database: database);
+
     // Specialization
     final specializationRepository = SpecializationRepositoryImpl(
       database: database,
     );
+
     // Dormitory
     final dormitoryRepository = DormitoryRepository(database: database);
-    final dormitoryRouter = DormitoryRouter(
-      dormitoryRepository: dormitoryRepository,
-      restApi: restApi,
-    );
+
     // Room
     final roomRepository = RoomRepository(database: database);
-    // Message
-    final messageRepository = MessageRepositoryImpl(database: database);
+
     // Chat
     final chatRepository = ChatRepositoryImpl(database: database);
-    final assignmentsRepository = AssignmentsRepositoryImpl(database: database);
+
+    // Message
+    final messageRepository = MessageRepositoryImpl(database: database);
+
     // RepairRequest
     final requestRepository = RequestRepositoryImpl(database: database);
+
+    // Assignments
+    final assignmentsRepository = AssignmentsRepositoryImpl(database: database);
 
     // Status
     final statusRepository = StatusRepositoryImpl(database: database);
@@ -99,11 +106,8 @@ class CompositionRoot {
     final materialTypeRepository = MaterialTypeRepositoryImpl(
       database: database,
     );
-    final materialRouter = MaterialService(
-      restApi: restApi,
-      repository: materialRepository,
-      repositoryType: materialTypeRepository,
-    );
+
+    final instructionRepository = InstructionRepositoryImpl(database: database);
 
     final requestFacade = RepairRequestFacadeImpl(
       database: database,
@@ -151,6 +155,11 @@ class CompositionRoot {
       studentRepository: studentRepository,
       masterRepository: masterRepository,
     );
+    // Dormitory
+    final dormitoryRouter = DormitoryRouter(
+      dormitoryRepository: dormitoryRepository,
+      restApi: restApi,
+    );
     // Specialization
     final specializationRouter = SpecializationRouter(
       specializationRepository: specializationRepository,
@@ -176,6 +185,15 @@ class CompositionRoot {
       requestFacade: requestFacade,
       restApi: restApi,
     );
+    final materialRouter = MaterialService(
+      restApi: restApi,
+      repository: materialRepository,
+      repositoryType: materialTypeRepository,
+    );
+    final instructionRouter = InstructionService(
+      restApi: restApi,
+      repository: instructionRepository,
+    );
 
     return _DependencyFactory(
       firebaseAdmin: app,
@@ -193,6 +211,7 @@ class CompositionRoot {
       messageRouter: messageRouter,
       studentRouter: studentRouter,
       materialRouter: materialRouter,
+      instructionRouter: instructionRouter,
     ).create();
   }
 }
@@ -214,6 +233,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.messageRouter,
     required this.studentRouter,
     required this.materialRouter,
+    required this.instructionRouter,
   });
 
   final App firebaseAdmin;
@@ -246,6 +266,8 @@ class _DependencyFactory extends Factory<DependencyContainer> {
 
   final MaterialService materialRouter;
 
+  final InstructionService instructionRouter;
+
   @override
   DependencyContainer create() => DependencyContainer(
     firebaseAdmin: firebaseAdmin,
@@ -263,6 +285,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     messageRouter: messageRouter,
     studentRouter: studentRouter,
     materialRouter: materialRouter,
+    instructionRouter: instructionRouter,
   );
 }
 

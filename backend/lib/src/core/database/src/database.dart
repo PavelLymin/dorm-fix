@@ -23,6 +23,8 @@ part 'entity.dart';
     Messages,
     MaterialTypes,
     Materials,
+    Instructions,
+    InstructionSteps,
   ],
 )
 class Database extends _$Database {

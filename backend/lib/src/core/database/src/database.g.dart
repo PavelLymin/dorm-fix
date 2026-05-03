@@ -5082,6 +5082,731 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
   }
 }
 
+class $InstructionsTable extends Instructions
+    with TableInfo<$InstructionsTable, Instruction> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InstructionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _complexityMeta = const VerificationMeta(
+    'complexity',
+  );
+  @override
+  late final GeneratedColumn<String> complexity = GeneratedColumn<String>(
+    'complexity',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _durationMinutesMeta = const VerificationMeta(
+    'durationMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> durationMinutes = GeneratedColumn<int>(
+    'duration_minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _photoPathMeta = const VerificationMeta(
+    'photoPath',
+  );
+  @override
+  late final GeneratedColumn<String> photoPath = GeneratedColumn<String>(
+    'photo_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    title,
+    complexity,
+    durationMinutes,
+    photoPath,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'instructions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Instruction> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('complexity')) {
+      context.handle(
+        _complexityMeta,
+        complexity.isAcceptableOrUnknown(data['complexity']!, _complexityMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_complexityMeta);
+    }
+    if (data.containsKey('duration_minutes')) {
+      context.handle(
+        _durationMinutesMeta,
+        durationMinutes.isAcceptableOrUnknown(
+          data['duration_minutes']!,
+          _durationMinutesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_durationMinutesMeta);
+    }
+    if (data.containsKey('photo_path')) {
+      context.handle(
+        _photoPathMeta,
+        photoPath.isAcceptableOrUnknown(data['photo_path']!, _photoPathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_photoPathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Instruction map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Instruction(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      complexity: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}complexity'],
+      )!,
+      durationMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_minutes'],
+      )!,
+      photoPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}photo_path'],
+      )!,
+    );
+  }
+
+  @override
+  $InstructionsTable createAlias(String alias) {
+    return $InstructionsTable(attachedDatabase, alias);
+  }
+}
+
+class Instruction extends DataClass implements Insertable<Instruction> {
+  final int id;
+  final String title;
+  final String complexity;
+  final int durationMinutes;
+  final String photoPath;
+  const Instruction({
+    required this.id,
+    required this.title,
+    required this.complexity,
+    required this.durationMinutes,
+    required this.photoPath,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['title'] = Variable<String>(title);
+    map['complexity'] = Variable<String>(complexity);
+    map['duration_minutes'] = Variable<int>(durationMinutes);
+    map['photo_path'] = Variable<String>(photoPath);
+    return map;
+  }
+
+  InstructionsCompanion toCompanion(bool nullToAbsent) {
+    return InstructionsCompanion(
+      id: Value(id),
+      title: Value(title),
+      complexity: Value(complexity),
+      durationMinutes: Value(durationMinutes),
+      photoPath: Value(photoPath),
+    );
+  }
+
+  factory Instruction.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Instruction(
+      id: serializer.fromJson<int>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      complexity: serializer.fromJson<String>(json['complexity']),
+      durationMinutes: serializer.fromJson<int>(json['durationMinutes']),
+      photoPath: serializer.fromJson<String>(json['photoPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'title': serializer.toJson<String>(title),
+      'complexity': serializer.toJson<String>(complexity),
+      'durationMinutes': serializer.toJson<int>(durationMinutes),
+      'photoPath': serializer.toJson<String>(photoPath),
+    };
+  }
+
+  Instruction copyWith({
+    int? id,
+    String? title,
+    String? complexity,
+    int? durationMinutes,
+    String? photoPath,
+  }) => Instruction(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    complexity: complexity ?? this.complexity,
+    durationMinutes: durationMinutes ?? this.durationMinutes,
+    photoPath: photoPath ?? this.photoPath,
+  );
+  Instruction copyWithCompanion(InstructionsCompanion data) {
+    return Instruction(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      complexity: data.complexity.present
+          ? data.complexity.value
+          : this.complexity,
+      durationMinutes: data.durationMinutes.present
+          ? data.durationMinutes.value
+          : this.durationMinutes,
+      photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Instruction(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('complexity: $complexity, ')
+          ..write('durationMinutes: $durationMinutes, ')
+          ..write('photoPath: $photoPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, title, complexity, durationMinutes, photoPath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Instruction &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.complexity == this.complexity &&
+          other.durationMinutes == this.durationMinutes &&
+          other.photoPath == this.photoPath);
+}
+
+class InstructionsCompanion extends UpdateCompanion<Instruction> {
+  final Value<int> id;
+  final Value<String> title;
+  final Value<String> complexity;
+  final Value<int> durationMinutes;
+  final Value<String> photoPath;
+  const InstructionsCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.complexity = const Value.absent(),
+    this.durationMinutes = const Value.absent(),
+    this.photoPath = const Value.absent(),
+  });
+  InstructionsCompanion.insert({
+    this.id = const Value.absent(),
+    required String title,
+    required String complexity,
+    required int durationMinutes,
+    required String photoPath,
+  }) : title = Value(title),
+       complexity = Value(complexity),
+       durationMinutes = Value(durationMinutes),
+       photoPath = Value(photoPath);
+  static Insertable<Instruction> custom({
+    Expression<int>? id,
+    Expression<String>? title,
+    Expression<String>? complexity,
+    Expression<int>? durationMinutes,
+    Expression<String>? photoPath,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (complexity != null) 'complexity': complexity,
+      if (durationMinutes != null) 'duration_minutes': durationMinutes,
+      if (photoPath != null) 'photo_path': photoPath,
+    });
+  }
+
+  InstructionsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? title,
+    Value<String>? complexity,
+    Value<int>? durationMinutes,
+    Value<String>? photoPath,
+  }) {
+    return InstructionsCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      complexity: complexity ?? this.complexity,
+      durationMinutes: durationMinutes ?? this.durationMinutes,
+      photoPath: photoPath ?? this.photoPath,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (complexity.present) {
+      map['complexity'] = Variable<String>(complexity.value);
+    }
+    if (durationMinutes.present) {
+      map['duration_minutes'] = Variable<int>(durationMinutes.value);
+    }
+    if (photoPath.present) {
+      map['photo_path'] = Variable<String>(photoPath.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InstructionsCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('complexity: $complexity, ')
+          ..write('durationMinutes: $durationMinutes, ')
+          ..write('photoPath: $photoPath')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $InstructionStepsTable extends InstructionSteps
+    with TableInfo<$InstructionStepsTable, InstructionStep> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InstructionStepsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _instructionIdMeta = const VerificationMeta(
+    'instructionId',
+  );
+  @override
+  late final GeneratedColumn<int> instructionId = GeneratedColumn<int>(
+    'instruction_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES instructions (id)',
+    ),
+  );
+  static const VerificationMeta _stepMeta = const VerificationMeta('step');
+  @override
+  late final GeneratedColumn<int> step = GeneratedColumn<int>(
+    'step',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isOptionalMeta = const VerificationMeta(
+    'isOptional',
+  );
+  @override
+  late final GeneratedColumn<bool> isOptional = GeneratedColumn<bool>(
+    'is_optional',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_optional" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    instructionId,
+    step,
+    description,
+    isOptional,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'instruction_steps';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<InstructionStep> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('instruction_id')) {
+      context.handle(
+        _instructionIdMeta,
+        instructionId.isAcceptableOrUnknown(
+          data['instruction_id']!,
+          _instructionIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_instructionIdMeta);
+    }
+    if (data.containsKey('step')) {
+      context.handle(
+        _stepMeta,
+        step.isAcceptableOrUnknown(data['step']!, _stepMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_stepMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('is_optional')) {
+      context.handle(
+        _isOptionalMeta,
+        isOptional.isAcceptableOrUnknown(data['is_optional']!, _isOptionalMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  InstructionStep map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return InstructionStep(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      instructionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}instruction_id'],
+      )!,
+      step: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}step'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      )!,
+      isOptional: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_optional'],
+      )!,
+    );
+  }
+
+  @override
+  $InstructionStepsTable createAlias(String alias) {
+    return $InstructionStepsTable(attachedDatabase, alias);
+  }
+}
+
+class InstructionStep extends DataClass implements Insertable<InstructionStep> {
+  final int id;
+  final int instructionId;
+  final int step;
+  final String description;
+  final bool isOptional;
+  const InstructionStep({
+    required this.id,
+    required this.instructionId,
+    required this.step,
+    required this.description,
+    required this.isOptional,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['instruction_id'] = Variable<int>(instructionId);
+    map['step'] = Variable<int>(step);
+    map['description'] = Variable<String>(description);
+    map['is_optional'] = Variable<bool>(isOptional);
+    return map;
+  }
+
+  InstructionStepsCompanion toCompanion(bool nullToAbsent) {
+    return InstructionStepsCompanion(
+      id: Value(id),
+      instructionId: Value(instructionId),
+      step: Value(step),
+      description: Value(description),
+      isOptional: Value(isOptional),
+    );
+  }
+
+  factory InstructionStep.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return InstructionStep(
+      id: serializer.fromJson<int>(json['id']),
+      instructionId: serializer.fromJson<int>(json['instructionId']),
+      step: serializer.fromJson<int>(json['step']),
+      description: serializer.fromJson<String>(json['description']),
+      isOptional: serializer.fromJson<bool>(json['isOptional']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'instructionId': serializer.toJson<int>(instructionId),
+      'step': serializer.toJson<int>(step),
+      'description': serializer.toJson<String>(description),
+      'isOptional': serializer.toJson<bool>(isOptional),
+    };
+  }
+
+  InstructionStep copyWith({
+    int? id,
+    int? instructionId,
+    int? step,
+    String? description,
+    bool? isOptional,
+  }) => InstructionStep(
+    id: id ?? this.id,
+    instructionId: instructionId ?? this.instructionId,
+    step: step ?? this.step,
+    description: description ?? this.description,
+    isOptional: isOptional ?? this.isOptional,
+  );
+  InstructionStep copyWithCompanion(InstructionStepsCompanion data) {
+    return InstructionStep(
+      id: data.id.present ? data.id.value : this.id,
+      instructionId: data.instructionId.present
+          ? data.instructionId.value
+          : this.instructionId,
+      step: data.step.present ? data.step.value : this.step,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      isOptional: data.isOptional.present
+          ? data.isOptional.value
+          : this.isOptional,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InstructionStep(')
+          ..write('id: $id, ')
+          ..write('instructionId: $instructionId, ')
+          ..write('step: $step, ')
+          ..write('description: $description, ')
+          ..write('isOptional: $isOptional')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, instructionId, step, description, isOptional);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is InstructionStep &&
+          other.id == this.id &&
+          other.instructionId == this.instructionId &&
+          other.step == this.step &&
+          other.description == this.description &&
+          other.isOptional == this.isOptional);
+}
+
+class InstructionStepsCompanion extends UpdateCompanion<InstructionStep> {
+  final Value<int> id;
+  final Value<int> instructionId;
+  final Value<int> step;
+  final Value<String> description;
+  final Value<bool> isOptional;
+  const InstructionStepsCompanion({
+    this.id = const Value.absent(),
+    this.instructionId = const Value.absent(),
+    this.step = const Value.absent(),
+    this.description = const Value.absent(),
+    this.isOptional = const Value.absent(),
+  });
+  InstructionStepsCompanion.insert({
+    this.id = const Value.absent(),
+    required int instructionId,
+    required int step,
+    required String description,
+    this.isOptional = const Value.absent(),
+  }) : instructionId = Value(instructionId),
+       step = Value(step),
+       description = Value(description);
+  static Insertable<InstructionStep> custom({
+    Expression<int>? id,
+    Expression<int>? instructionId,
+    Expression<int>? step,
+    Expression<String>? description,
+    Expression<bool>? isOptional,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (instructionId != null) 'instruction_id': instructionId,
+      if (step != null) 'step': step,
+      if (description != null) 'description': description,
+      if (isOptional != null) 'is_optional': isOptional,
+    });
+  }
+
+  InstructionStepsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? instructionId,
+    Value<int>? step,
+    Value<String>? description,
+    Value<bool>? isOptional,
+  }) {
+    return InstructionStepsCompanion(
+      id: id ?? this.id,
+      instructionId: instructionId ?? this.instructionId,
+      step: step ?? this.step,
+      description: description ?? this.description,
+      isOptional: isOptional ?? this.isOptional,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (instructionId.present) {
+      map['instruction_id'] = Variable<int>(instructionId.value);
+    }
+    if (step.present) {
+      map['step'] = Variable<int>(step.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (isOptional.present) {
+      map['is_optional'] = Variable<bool>(isOptional.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InstructionStepsCompanion(')
+          ..write('id: $id, ')
+          ..write('instructionId: $instructionId, ')
+          ..write('step: $step, ')
+          ..write('description: $description, ')
+          ..write('isOptional: $isOptional')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   $DatabaseManager get managers => $DatabaseManager(this);
@@ -5102,6 +5827,10 @@ abstract class _$Database extends GeneratedDatabase {
   late final $MessagesTable messages = $MessagesTable(this);
   late final $MaterialTypesTable materialTypes = $MaterialTypesTable(this);
   late final $MaterialsTable materials = $MaterialsTable(this);
+  late final $InstructionsTable instructions = $InstructionsTable(this);
+  late final $InstructionStepsTable instructionSteps = $InstructionStepsTable(
+    this,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -5122,6 +5851,8 @@ abstract class _$Database extends GeneratedDatabase {
     messages,
     materialTypes,
     materials,
+    instructions,
+    instructionSteps,
   ];
 }
 
@@ -11732,6 +12463,643 @@ typedef $$MaterialsTableProcessedTableManager =
       Material,
       PrefetchHooks Function({bool typeId})
     >;
+typedef $$InstructionsTableCreateCompanionBuilder =
+    InstructionsCompanion Function({
+      Value<int> id,
+      required String title,
+      required String complexity,
+      required int durationMinutes,
+      required String photoPath,
+    });
+typedef $$InstructionsTableUpdateCompanionBuilder =
+    InstructionsCompanion Function({
+      Value<int> id,
+      Value<String> title,
+      Value<String> complexity,
+      Value<int> durationMinutes,
+      Value<String> photoPath,
+    });
+
+final class $$InstructionsTableReferences
+    extends BaseReferences<_$Database, $InstructionsTable, Instruction> {
+  $$InstructionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$InstructionStepsTable, List<InstructionStep>>
+  _instructionStepsRefsTable(_$Database db) => MultiTypedResultKey.fromTable(
+    db.instructionSteps,
+    aliasName: $_aliasNameGenerator(
+      db.instructions.id,
+      db.instructionSteps.instructionId,
+    ),
+  );
+
+  $$InstructionStepsTableProcessedTableManager get instructionStepsRefs {
+    final manager = $$InstructionStepsTableTableManager(
+      $_db,
+      $_db.instructionSteps,
+    ).filter((f) => f.instructionId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _instructionStepsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$InstructionsTableFilterComposer
+    extends Composer<_$Database, $InstructionsTable> {
+  $$InstructionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get complexity => $composableBuilder(
+    column: $table.complexity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationMinutes => $composableBuilder(
+    column: $table.durationMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> instructionStepsRefs(
+    Expression<bool> Function($$InstructionStepsTableFilterComposer f) f,
+  ) {
+    final $$InstructionStepsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.instructionSteps,
+      getReferencedColumn: (t) => t.instructionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InstructionStepsTableFilterComposer(
+            $db: $db,
+            $table: $db.instructionSteps,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$InstructionsTableOrderingComposer
+    extends Composer<_$Database, $InstructionsTable> {
+  $$InstructionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get complexity => $composableBuilder(
+    column: $table.complexity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationMinutes => $composableBuilder(
+    column: $table.durationMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$InstructionsTableAnnotationComposer
+    extends Composer<_$Database, $InstructionsTable> {
+  $$InstructionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get complexity => $composableBuilder(
+    column: $table.complexity,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get durationMinutes => $composableBuilder(
+    column: $table.durationMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get photoPath =>
+      $composableBuilder(column: $table.photoPath, builder: (column) => column);
+
+  Expression<T> instructionStepsRefs<T extends Object>(
+    Expression<T> Function($$InstructionStepsTableAnnotationComposer a) f,
+  ) {
+    final $$InstructionStepsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.instructionSteps,
+      getReferencedColumn: (t) => t.instructionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InstructionStepsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.instructionSteps,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$InstructionsTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $InstructionsTable,
+          Instruction,
+          $$InstructionsTableFilterComposer,
+          $$InstructionsTableOrderingComposer,
+          $$InstructionsTableAnnotationComposer,
+          $$InstructionsTableCreateCompanionBuilder,
+          $$InstructionsTableUpdateCompanionBuilder,
+          (Instruction, $$InstructionsTableReferences),
+          Instruction,
+          PrefetchHooks Function({bool instructionStepsRefs})
+        > {
+  $$InstructionsTableTableManager(_$Database db, $InstructionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$InstructionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$InstructionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$InstructionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> complexity = const Value.absent(),
+                Value<int> durationMinutes = const Value.absent(),
+                Value<String> photoPath = const Value.absent(),
+              }) => InstructionsCompanion(
+                id: id,
+                title: title,
+                complexity: complexity,
+                durationMinutes: durationMinutes,
+                photoPath: photoPath,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String title,
+                required String complexity,
+                required int durationMinutes,
+                required String photoPath,
+              }) => InstructionsCompanion.insert(
+                id: id,
+                title: title,
+                complexity: complexity,
+                durationMinutes: durationMinutes,
+                photoPath: photoPath,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$InstructionsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({instructionStepsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (instructionStepsRefs) db.instructionSteps,
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (instructionStepsRefs)
+                    await $_getPrefetchedData<
+                      Instruction,
+                      $InstructionsTable,
+                      InstructionStep
+                    >(
+                      currentTable: table,
+                      referencedTable: $$InstructionsTableReferences
+                          ._instructionStepsRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$InstructionsTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).instructionStepsRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where(
+                            (e) => e.instructionId == item.id,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$InstructionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $InstructionsTable,
+      Instruction,
+      $$InstructionsTableFilterComposer,
+      $$InstructionsTableOrderingComposer,
+      $$InstructionsTableAnnotationComposer,
+      $$InstructionsTableCreateCompanionBuilder,
+      $$InstructionsTableUpdateCompanionBuilder,
+      (Instruction, $$InstructionsTableReferences),
+      Instruction,
+      PrefetchHooks Function({bool instructionStepsRefs})
+    >;
+typedef $$InstructionStepsTableCreateCompanionBuilder =
+    InstructionStepsCompanion Function({
+      Value<int> id,
+      required int instructionId,
+      required int step,
+      required String description,
+      Value<bool> isOptional,
+    });
+typedef $$InstructionStepsTableUpdateCompanionBuilder =
+    InstructionStepsCompanion Function({
+      Value<int> id,
+      Value<int> instructionId,
+      Value<int> step,
+      Value<String> description,
+      Value<bool> isOptional,
+    });
+
+final class $$InstructionStepsTableReferences
+    extends
+        BaseReferences<_$Database, $InstructionStepsTable, InstructionStep> {
+  $$InstructionStepsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $InstructionsTable _instructionIdTable(_$Database db) =>
+      db.instructions.createAlias(
+        $_aliasNameGenerator(
+          db.instructionSteps.instructionId,
+          db.instructions.id,
+        ),
+      );
+
+  $$InstructionsTableProcessedTableManager get instructionId {
+    final $_column = $_itemColumn<int>('instruction_id')!;
+
+    final manager = $$InstructionsTableTableManager(
+      $_db,
+      $_db.instructions,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_instructionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$InstructionStepsTableFilterComposer
+    extends Composer<_$Database, $InstructionStepsTable> {
+  $$InstructionStepsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get step => $composableBuilder(
+    column: $table.step,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isOptional => $composableBuilder(
+    column: $table.isOptional,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$InstructionsTableFilterComposer get instructionId {
+    final $$InstructionsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.instructionId,
+      referencedTable: $db.instructions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InstructionsTableFilterComposer(
+            $db: $db,
+            $table: $db.instructions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$InstructionStepsTableOrderingComposer
+    extends Composer<_$Database, $InstructionStepsTable> {
+  $$InstructionStepsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get step => $composableBuilder(
+    column: $table.step,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isOptional => $composableBuilder(
+    column: $table.isOptional,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$InstructionsTableOrderingComposer get instructionId {
+    final $$InstructionsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.instructionId,
+      referencedTable: $db.instructions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InstructionsTableOrderingComposer(
+            $db: $db,
+            $table: $db.instructions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$InstructionStepsTableAnnotationComposer
+    extends Composer<_$Database, $InstructionStepsTable> {
+  $$InstructionStepsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get step =>
+      $composableBuilder(column: $table.step, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isOptional => $composableBuilder(
+    column: $table.isOptional,
+    builder: (column) => column,
+  );
+
+  $$InstructionsTableAnnotationComposer get instructionId {
+    final $$InstructionsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.instructionId,
+      referencedTable: $db.instructions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$InstructionsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.instructions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$InstructionStepsTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $InstructionStepsTable,
+          InstructionStep,
+          $$InstructionStepsTableFilterComposer,
+          $$InstructionStepsTableOrderingComposer,
+          $$InstructionStepsTableAnnotationComposer,
+          $$InstructionStepsTableCreateCompanionBuilder,
+          $$InstructionStepsTableUpdateCompanionBuilder,
+          (InstructionStep, $$InstructionStepsTableReferences),
+          InstructionStep,
+          PrefetchHooks Function({bool instructionId})
+        > {
+  $$InstructionStepsTableTableManager(
+    _$Database db,
+    $InstructionStepsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$InstructionStepsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$InstructionStepsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$InstructionStepsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> instructionId = const Value.absent(),
+                Value<int> step = const Value.absent(),
+                Value<String> description = const Value.absent(),
+                Value<bool> isOptional = const Value.absent(),
+              }) => InstructionStepsCompanion(
+                id: id,
+                instructionId: instructionId,
+                step: step,
+                description: description,
+                isOptional: isOptional,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int instructionId,
+                required int step,
+                required String description,
+                Value<bool> isOptional = const Value.absent(),
+              }) => InstructionStepsCompanion.insert(
+                id: id,
+                instructionId: instructionId,
+                step: step,
+                description: description,
+                isOptional: isOptional,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$InstructionStepsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({instructionId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (instructionId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.instructionId,
+                                referencedTable:
+                                    $$InstructionStepsTableReferences
+                                        ._instructionIdTable(db),
+                                referencedColumn:
+                                    $$InstructionStepsTableReferences
+                                        ._instructionIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$InstructionStepsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $InstructionStepsTable,
+      InstructionStep,
+      $$InstructionStepsTableFilterComposer,
+      $$InstructionStepsTableOrderingComposer,
+      $$InstructionStepsTableAnnotationComposer,
+      $$InstructionStepsTableCreateCompanionBuilder,
+      $$InstructionStepsTableUpdateCompanionBuilder,
+      (InstructionStep, $$InstructionStepsTableReferences),
+      InstructionStep,
+      PrefetchHooks Function({bool instructionId})
+    >;
 
 class $DatabaseManager {
   final _$Database _db;
@@ -11766,4 +13134,8 @@ class $DatabaseManager {
       $$MaterialTypesTableTableManager(_db, _db.materialTypes);
   $$MaterialsTableTableManager get materials =>
       $$MaterialsTableTableManager(_db, _db.materials);
+  $$InstructionsTableTableManager get instructions =>
+      $$InstructionsTableTableManager(_db, _db.instructions);
+  $$InstructionStepsTableTableManager get instructionSteps =>
+      $$InstructionStepsTableTableManager(_db, _db.instructionSteps);
 }

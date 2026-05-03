@@ -5,6 +5,7 @@ import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
+import '../../features/instructions/instructions.dart';
 import '../../features/master/master.dart';
 import '../../features/material/material.dart';
 import '../../features/specialization/specialization.dart';
@@ -40,6 +41,7 @@ class DependencyContainer {
     required this.authenticationBloc,
     required this.specializationBloc,
     required this.dormitoryBloc,
+    required this.instructionRepository,
   });
 
   // Firebase
@@ -75,6 +77,7 @@ class DependencyContainer {
   final IStudentRepository studentRepository;
   final IMaterialRepository materialRepository;
   final IMaterialTypeRepository materialTypeRepository;
+  final IInstructionRepository instructionRepository;
 
   // BloC
   final AuthBloc authenticationBloc;

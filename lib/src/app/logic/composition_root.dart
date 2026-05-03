@@ -14,6 +14,7 @@ import '../../core/ws/ws.dart';
 import '../../features/authentication/authentication.dart';
 import '../../features/chat/chat.dart';
 import '../../features/dormitory/dormitory.dart';
+import '../../features/instructions/instructions.dart';
 import '../../features/master/master.dart';
 import '../../features/material/material.dart';
 import '../../features/repair_request/request.dart';
@@ -188,6 +189,12 @@ class CompositionRoot {
       firebaseAuth: firebaseAuth,
     );
 
+    // Instruction
+    final instructionRepository = InstructionRepositoryImpl(
+      client: client,
+      firebaseAuth: firebaseAuth,
+    );
+
     // auto_route
     final router = AppRouter(authGuard: AuthGuard(authenticationBloc));
 
@@ -213,6 +220,7 @@ class CompositionRoot {
       masterRepository: masterRepository,
       studentRepository: studentRepository,
       materialRepository: materialRepository,
+      instructionRepository: instructionRepository,
       materialTypeRepository: materialTypeRepository,
       dormitoryBloc: dormitoryBloc,
     ).create();
@@ -244,6 +252,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     required this.authenticationBloc,
     required this.specializationBloc,
     required this.dormitoryBloc,
+    required this.instructionRepository,
   });
 
   // Firebase
@@ -279,6 +288,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
   final IStudentRepository studentRepository;
   final IMaterialRepository materialRepository;
   final IMaterialTypeRepository materialTypeRepository;
+  final IInstructionRepository instructionRepository;
 
   // BloC
   final AuthBloc authenticationBloc;
@@ -307,6 +317,7 @@ class _DependencyFactory extends Factory<DependencyContainer> {
     studentRepository: studentRepository,
     materialRepository: materialRepository,
     materialTypeRepository: materialTypeRepository,
+    instructionRepository: instructionRepository,
     authenticationBloc: authenticationBloc,
     specializationBloc: specializationBloc,
     dormitoryBloc: dormitoryBloc,
