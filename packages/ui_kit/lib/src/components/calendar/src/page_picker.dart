@@ -34,6 +34,7 @@ class _PagePickerState extends State<PagePicker> with _PagePickerStateMixin {
   static const double _gapY = 8.0;
 
   Widget _buildWeekRangeBackground(
+    Color color,
     List<_DayCell> week,
     double cellWidth,
     double cellHeight,
@@ -52,10 +53,10 @@ class _PagePickerState extends State<PagePicker> with _PagePickerStateMixin {
       top: 0,
       width: width,
       height: cellHeight,
-      child: const DecoratedBox(
+      child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Color(0xFFD1EEE3),
-          borderRadius: .all(.circular(24.0)),
+          color: color,
+          borderRadius: const .all(.circular(24.0)),
         ),
       ),
     );
@@ -142,6 +143,7 @@ class _PagePickerState extends State<PagePicker> with _PagePickerStateMixin {
                             children: [
                               if (_weekHasRange(weeks[week]))
                                 _buildWeekRangeBackground(
+                                  Theme.of(context).colorPalette2.calendarRange,
                                   weeks[week],
                                   cellWidth,
                                   cellHeight,

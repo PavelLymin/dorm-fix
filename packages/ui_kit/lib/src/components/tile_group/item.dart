@@ -9,7 +9,6 @@ class Item extends StatefulWidget {
     this.isFirst = false,
     this.isLast = false,
     required this.constraints,
-    required this.style,
   });
 
   final TileGroupItem item;
@@ -17,7 +16,6 @@ class Item extends StatefulWidget {
   final bool isFirst;
   final bool isLast;
   final BoxConstraints constraints;
-  final TileGroupStyle? style;
 
   @override
   State<Item> createState() => _ItemState();
@@ -47,11 +45,7 @@ class _ItemState extends State<Item>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _style = TileGroupStyle.defaultStyle(
-      context,
-      widget.isFirst,
-      widget.isLast,
-    );
+    _style = .defaultStyle(context, widget.isFirst, widget.isLast);
   }
 
   @override
@@ -60,13 +54,6 @@ class _ItemState extends State<Item>
     _updateStates();
     if (widget.item.initial != oldWidget.item.initial) {
       _controller?.value = widget.item.initial;
-    }
-    if (widget.style != oldWidget.style) {
-      _style = TileGroupStyle.defaultStyle(
-        context,
-        widget.isFirst,
-        widget.isLast,
-      );
     }
   }
 
@@ -81,6 +68,7 @@ class _ItemState extends State<Item>
         child: _ItemContent(
           item: widget.item,
           hasSelect: _hasSelect,
+          isInitial: widget.isInitial,
           style: _style,
           controller: _controller,
         ),
@@ -93,11 +81,14 @@ class _ItemContent extends StatelessWidget {
   const _ItemContent({
     required this.item,
     required this.hasSelect,
+    required this.isInitial,
     required this.style,
     this.controller,
   });
+
   final TileGroupItem item;
   final bool hasSelect;
+  final bool isInitial;
   final TileGroupStyle style;
   final ValueNotifier<int?>? controller;
 
@@ -184,7 +175,6 @@ mixin _ItemMenuLinkMixin on State<Item> {
 
   void show(TileGroupStyle style) async {
     await hide();
-    _animationController!.forward();
     _overlayEntry = OverlayEntry(
       builder: (_) => Positioned(
         width: _widthMenu,
@@ -195,12 +185,15 @@ mixin _ItemMenuLinkMixin on State<Item> {
           followerAnchor: .topRight,
           child: FadeTransition(
             opacity: _animationController!,
-            child: TileGroup(items: _toItems(), style: widget.style),
+            child: TileGroup(items: _toItems()),
           ),
         ),
       ),
     );
-    if (mounted) Overlay.of(context).insert(_overlayEntry!);
+    if (mounted) {
+      Overlay.of(context).insert(_overlayEntry!);
+      _animationController!.forward();
+    }
   }
 
   List<TileGroupItem> _toItems() => _items!.entries

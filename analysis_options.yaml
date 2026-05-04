@@ -1,4 +1,7 @@
 include: package:flutter_lints/flutter.yaml
 analyzer:
+  exclude:
+    - build/**
+    - "**/build/**"
   errors:
     library_private_types_in_public_api: ignore

@@ -7,16 +7,11 @@ ThemeData createThemeData({
   required AppStyle style,
 }) => ThemeData(
   brightness: brightness,
-  fontFamily: 'Inter',
+  fontFamily: 'SF Pro',
   scaffoldBackgroundColor: palette2.background,
   appBarTheme: appBarTheme(palette2, typography2),
   iconTheme: iconThemeData(palette2),
-  menuButtonTheme: MenuButtonThemeData(
-    style: MenuItemButton.styleFrom(
-      textStyle: typography2.m,
-      foregroundColor: palette2.foreground,
-    ),
-  ),
+  menuButtonTheme: menuButtonThemeData(palette2),
   extensions: {palette2, style},
 );
 
@@ -33,3 +28,8 @@ AppBarTheme appBarTheme(ColorPalette2 palette, AppTypography2 typography) =>
 
 IconThemeData iconThemeData(ColorPalette2 palette) =>
     IconThemeData(color: palette.secondary, size: 24.0);
+
+MenuButtonThemeData menuButtonThemeData(ColorPalette2 palette) =>
+    MenuButtonThemeData(
+      style: MenuItemButton.styleFrom(foregroundColor: palette.foreground),
+    );

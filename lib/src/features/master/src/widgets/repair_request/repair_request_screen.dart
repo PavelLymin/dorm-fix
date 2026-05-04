@@ -23,7 +23,7 @@ class _RepairRequestScreenState extends State<RepairRequestScreen> {
   void initState() {
     super.initState();
     context.read<RepairWatcherBloc>().add(
-      .get(specId: widget.specId, dormId: 7),
+      .get(specId: widget.specId, dormId: widget.dormId),
     );
   }
 

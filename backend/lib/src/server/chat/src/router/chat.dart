@@ -1,7 +1,7 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../../../../core/auth/auth.dart';
-import '../../../../core/rest_api/src/rest_api.dart';
+import '../../../../core/rest_api/rest_api.dart';
 import '../../chat.dart';
 
 class CharRouter {

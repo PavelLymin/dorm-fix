@@ -1,7 +1,7 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import '../../../../core/rest_api/src/rest_api.dart';
+import '../../../../core/rest_api/rest_api.dart';
 import '../../room.dart';
 
 class RoomRouter {

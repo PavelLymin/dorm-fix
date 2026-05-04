@@ -87,16 +87,15 @@ class _SearchInputState extends State<_SearchInput> {
   }
 
   @override
-  Widget build(BuildContext context) => UiTextField.standard(
+  Widget build(BuildContext context) => UiTextField.search(
     controller: _controller,
     onChanged: context.read<SearchDormitoryBloc>().onQueryChanged.add,
     style: .new(
-      hintText: 'Поиск общежитий...',
-      prefixIcon: const Icon(Icons.search_outlined),
+      hintText: 'Поиск',
       suffixIcon: _controller.text.isEmpty
           ? null
           : IconButton(
-              icon: const Icon(Icons.clear),
+              icon: const Icon(UiIcons.close),
               onPressed: () {
                 setState(() => _controller.clear());
               },

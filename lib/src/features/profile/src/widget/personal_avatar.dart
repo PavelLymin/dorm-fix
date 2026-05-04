@@ -53,8 +53,7 @@ class _PersonalAvatarView extends StatelessWidget {
               ),
               master: (m) => _TitlePersonalAvatar(
                 displayName: m.user.displayName ?? 'User',
-                title: m.dormitory.name,
-                subtitle: m.dormitory.address,
+                title: m.specialization.title,
               ),
             ),
           ),
@@ -89,13 +88,21 @@ class UserAvatar extends StatelessWidget {
 class _TitlePersonalAvatar extends StatelessWidget {
   const _TitlePersonalAvatar({
     required this.displayName,
-    required this.title,
-    required this.subtitle,
+    this.title,
+    this.subtitle,
   });
 
   final String displayName;
-  final String title;
-  final String subtitle;
+  final String? title;
+  final String? subtitle;
+
+  String? get _title {
+    if (title == null && subtitle == null) return null;
+    if (title == null) return subtitle;
+    if (subtitle == null) return title;
+
+    return '$title, $subtitle';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,10 +112,8 @@ class _TitlePersonalAvatar extends StatelessWidget {
       crossAxisAlignment: .start,
       children: [
         UiText2.lBold(displayName),
-        UiText2.m(
-          '$title, $subtitle',
-          color: theme.colorPalette2.foregroundSecondary,
-        ),
+        if (_title != null)
+          UiText2.m(_title!, color: theme.colorPalette2.foregroundSecondary),
       ],
     );
   }

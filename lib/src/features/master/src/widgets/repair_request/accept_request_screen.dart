@@ -1,10 +1,8 @@
-import 'package:dorm_fix/src/features/repair_request/request.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-
 import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../../material/material.dart';
-import 'selection_materials_screen.dart';
+import '../../../../repair_request/request.dart';
 
 class AcceptRequestScreen extends StatefulWidget {
   const AcceptRequestScreen({super.key, required this.requestId});
@@ -18,8 +16,6 @@ class AcceptRequestScreen extends StatefulWidget {
 class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
   late final MaterialsUsedController _materialsNotifier;
   late final RepairActionBloc _repairActionBloc;
-  late final MaterialBloc _materialBloc;
-  late final MaterialTypeBloc _materialTypeBloc;
 
   @override
   void initState() {
@@ -31,22 +27,13 @@ class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
       problemRepository: dependency.problemRepository,
       logger: dependency.logger,
     );
-    _materialTypeBloc = MaterialTypeBloc(
-      materialTypeRepository: dependency.materialTypeRepository,
-      logger: dependency.logger,
-    )..add(.get());
-    _materialBloc = MaterialBloc(
-      materialRepository: dependency.materialRepository,
-      logger: dependency.logger,
-    )..add(.get());
   }
 
   @override
   void dispose() {
     _materialsNotifier.dispose();
     _repairActionBloc.close();
-    _materialTypeBloc.close();
-    _materialBloc.close();
+
     super.dispose();
   }
 
@@ -72,14 +59,8 @@ class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
                   context,
                   spacing: .0,
                   title: 'Выбор материалов',
-                  widget: MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(value: _materialTypeBloc),
-                      BlocProvider.value(value: _materialBloc),
-                    ],
-                    child: SelectionMaterialsScreen(
-                      materialsNotifier: _materialsNotifier,
-                    ),
+                  widget: SelectionMaterialsScreen(
+                    materialsNotifier: _materialsNotifier,
                   ),
                 ),
                 label: Text('Выбрать материалы'),

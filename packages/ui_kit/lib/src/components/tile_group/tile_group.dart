@@ -1,13 +1,11 @@
 import 'package:ui_kit/ui.dart';
 import 'item.dart';
-import 'tile_group_style.dart';
 part 'model.dart';
 
 class TileGroup extends StatefulWidget {
-  const TileGroup({super.key, required this.items, this.style});
+  const TileGroup({super.key, required this.items});
 
   final List<TileGroupItem> items;
-  final TileGroupStyle? style;
 
   @override
   State<TileGroup> createState() => _TileGroupState();
@@ -30,7 +28,6 @@ class _TileGroupState extends State<TileGroup> {
             isFirst: index == 0,
             isLast: index == widget.items.length - 1,
             constraints: constraints,
-            style: widget.style,
           );
         },
       ),

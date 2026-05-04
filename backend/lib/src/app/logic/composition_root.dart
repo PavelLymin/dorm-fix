@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:logger/web.dart';
 import '../../core/database/database.dart';
-import '../../core/rest_api/src/rest_api.dart';
+import '../../core/rest_api/rest_api.dart';
 import '../../core/ws/ws.dart';
 import '../../server/chat/chat.dart';
 import '../../server/chat/src/router/message.dart';

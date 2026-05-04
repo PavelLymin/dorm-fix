@@ -10,37 +10,73 @@ class TextFieldsPreview extends StatefulWidget {
 class _TextFieldsPreviewState extends State<TextFieldsPreview> {
   @override
   Widget build(BuildContext context) => UiCard.standart(
-    child: const SizedBox(
-      width: 200,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          UiTextField.standard(style: UiTextFieldStyle(hintText: 'Text input')),
-          SizedBox(height: 16),
-          UiTextField.standard(
-            style: UiTextFieldStyle(
-              hintText: 'Text input',
-              helperText: 'Helper',
-            ),
+    child: Column(
+      mainAxisSize: .min,
+      children: [
+        UiTextField.standard(style: UiTextFieldStyle(hintText: 'Text input')),
+        SizedBox(height: 16),
+        UiTextField.standard(
+          style: UiTextFieldStyle(hintText: 'Text input', helperText: 'Helper'),
+        ),
+        SizedBox(height: 16),
+        UiTextField.standard(
+          style: UiTextFieldStyle(hintText: 'Text input', errorText: 'Error'),
+        ),
+        SizedBox(height: 16),
+        UiTextField.standard(
+          showCounter: true,
+          maxLength: 10,
+          style: UiTextFieldStyle(hintText: 'Text input'),
+        ),
+        SizedBox(height: 16),
+        UiTextField.standard(
+          showCounter: true,
+          enabled: false,
+          style: UiTextFieldStyle(hintText: 'Disabled'),
+        ),
+      ],
+    ),
+  );
+}
+
+class SearchFieldsPreview extends StatefulWidget {
+  const SearchFieldsPreview({super.key});
+
+  @override
+  State<SearchFieldsPreview> createState() => _SearchFieldsPreviewState();
+}
+
+class _SearchFieldsPreviewState extends State<SearchFieldsPreview> {
+  @override
+  Widget build(BuildContext context) => UiCard.standart(
+    child: Column(
+      mainAxisSize: .min,
+      children: [
+        UiTextField.search(style: UiTextFieldStyle(hintText: 'Search input')),
+        SizedBox(height: 16),
+        UiTextField.search(
+          style: UiTextFieldStyle(
+            hintText: 'Search input',
+            helperText: 'Helper',
           ),
-          SizedBox(height: 16),
-          UiTextField.standard(
-            style: UiTextFieldStyle(hintText: 'Text input', errorText: 'Error'),
-          ),
-          SizedBox(height: 16),
-          UiTextField.standard(
-            showCounter: true,
-            maxLength: 10,
-            style: UiTextFieldStyle(hintText: 'Text input'),
-          ),
-          SizedBox(height: 16),
-          UiTextField.standard(
-            showCounter: true,
-            enabled: false,
-            style: UiTextFieldStyle(hintText: 'Disabled'),
-          ),
-        ],
-      ),
+        ),
+        SizedBox(height: 16),
+        UiTextField.search(
+          style: UiTextFieldStyle(hintText: 'Search input', errorText: 'Error'),
+        ),
+        SizedBox(height: 16),
+        UiTextField.search(
+          showCounter: true,
+          maxLength: 10,
+          style: UiTextFieldStyle(hintText: 'Search input'),
+        ),
+        SizedBox(height: 16),
+        UiTextField.search(
+          showCounter: true,
+          enabled: false,
+          style: UiTextFieldStyle(hintText: 'Disabled search input'),
+        ),
+      ],
     ),
   );
 }

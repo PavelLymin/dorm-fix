@@ -81,13 +81,6 @@ class _ButtonAdd extends StatelessWidget {
           WidgetState.any: palette.foreground,
         }).resolve(controller.value),
       ),
-      style: ButtonStyle(
-        padding: .all(pickerStyle.buttonAddPadding),
-        backgroundColor: AppWidgetStateMap({
-          WidgetState.disabled: palette.disabled,
-          WidgetState.any: palette.secondary.withValues(alpha: .2),
-        }),
-      ),
     );
   }
 }

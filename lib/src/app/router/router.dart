@@ -6,6 +6,7 @@ import '../../features/authentication/authentication.dart';
 import '../../features/instructions/instructions.dart';
 import '../../features/map/map.dart';
 import '../../features/master/master.dart';
+import '../../features/material/material.dart';
 import '../../features/specialization/specialization.dart';
 import '../../features/profile/profile.dart';
 import '../../features/repair_request/request.dart';
@@ -25,13 +26,10 @@ class AppRouter extends RootStackRouter {
       guards: [authGuard],
       builder: (_, _) => const SplashScreen(),
     ),
-    NamedRouteDef(
-      name: 'SignIn',
-      builder: (context, data) => const AuthScreen(),
-    ),
+    NamedRouteDef(name: 'SignIn', builder: (_, _) => const AuthScreen()),
     NamedRouteDef(
       name: 'PincodeScreen',
-      builder: (context, data) {
+      builder: (_, data) {
         final phoneNumber = data.params.get('phone_number');
         final verificationId = data.params.get('verification_id');
         return PincodeScreen(
@@ -40,18 +38,14 @@ class AppRouter extends RootStackRouter {
         );
       },
     ),
-    NamedRouteDef(
-      name: 'MapScreen',
-      builder: (context, data) => const MapScreen(),
-    ),
+    NamedRouteDef(name: 'MapScreen', builder: (_, _) => const MapScreen()),
     NamedRouteDef(
       name: 'UpdatePhoneScreen',
-      builder: (context, data) =>
-          UpdatePhoneScreen(user: data.params.get('user')),
+      builder: (_, data) => UpdatePhoneScreen(user: data.params.get('user')),
     ),
     NamedRouteDef(
       name: 'ExtraDataScreen',
-      builder: (context, data) => ExtraDataScreen(
+      builder: (_, data) => ExtraDataScreen(
         dormitoryId: data.params.getInt('dormitory_id'),
         roomId: data.params.getInt('room_id'),
       ),
@@ -70,7 +64,7 @@ class AppRouter extends RootStackRouter {
     ),
     NamedRouteDef(
       name: 'StudentRootSreen',
-      builder: (context, data) {
+      builder: (context, _) {
         final dependency = DependeciesScope.of(context);
         return MultiBlocProvider(
           providers: [
@@ -94,7 +88,7 @@ class AppRouter extends RootStackRouter {
         NamedRouteDef(
           initial: true,
           name: 'StudentTabsScreen',
-          builder: (context, data) => RootScreen(pages: studentPages),
+          builder: (_, _) => RootScreen(pages: studentPages),
           children: [
             NamedRouteDef(
               name: 'StudentHomeTab',
@@ -125,19 +119,35 @@ class AppRouter extends RootStackRouter {
         ),
         NamedRouteDef(
           name: 'HistoryScreen',
-          builder: (context, data) => const HistoryScreen(),
+          builder: (_, _) => const HistoryScreen(),
         ),
       ],
     ),
     NamedRouteDef(
       name: 'MasterRootSreen',
-      builder: (context, data) {
+      builder: (context, _) {
         final dependency = DependeciesScope.of(context);
-        return BlocProvider(
-          create: (context) => RepairWatcherBloc(
-            requestRepository: dependency.requestRepository,
-            logger: dependency.logger,
-          ),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => RepairWatcherBloc(
+                requestRepository: dependency.requestRepository,
+                logger: dependency.logger,
+              ),
+            ),
+            BlocProvider(
+              create: (context) => MaterialTypeBloc(
+                materialTypeRepository: dependency.materialTypeRepository,
+                logger: dependency.logger,
+              )..add(.get()),
+            ),
+            BlocProvider(
+              create: (context) => MaterialBloc(
+                materialRepository: dependency.materialRepository,
+                logger: dependency.logger,
+              )..add(.get()),
+            ),
+          ],
           child: const AutoRouter(),
         );
       },
@@ -160,6 +170,10 @@ class AppRouter extends RootStackRouter {
                   dormId: parentParams.getInt('dorm_id'),
                 );
               },
+            ),
+            NamedRouteDef(
+              name: 'MaterialTab',
+              builder: (_, _) => const MaterialScreen(),
             ),
             NamedRouteDef(
               name: 'ProfileTab',
@@ -195,6 +209,7 @@ const List<AppPage> studentPages = <AppPage>[
 
 const List<AppPage> masterPages = <AppPage>[
   AppPage(name: 'MasterHomeTab', title: 'Домашняя', icon: UiIcons.home),
+  AppPage(name: 'MaterialTab', title: 'Материалы', icon: UiIcons.clock),
   AppPage(name: 'ProfileTab', title: 'Профиль', icon: UiIcons.userProfile),
 ];
 

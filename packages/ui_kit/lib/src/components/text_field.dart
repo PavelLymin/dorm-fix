@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:ui_kit/ui.dart';
 
-enum UiTextInputVariant { standard }
+enum UiTextInputVariant { standard, search }
 
 class UiTextField extends StatefulWidget {
   const UiTextField.standard({
@@ -28,6 +28,31 @@ class UiTextField extends StatefulWidget {
     this.showCounter = false,
     super.key,
   }) : variant = .standard;
+
+  const UiTextField.search({
+    this.controller,
+    this.focusNode,
+    this.style,
+    this.enabled,
+    this.inputFormatters,
+    this.keyboardType,
+    this.maxLength,
+    this.maxLines = 1,
+    this.restorationId,
+    this.onTap,
+    this.onChanged,
+    this.onEditingComplete,
+    this.textInputAction,
+    this.selectionControls,
+    this.maxLengthEnforcement,
+    this.textAlign = .start,
+    this.textCapitalization = .none,
+    this.autofocus = false,
+    this.expands = false,
+    this.obscureText = false,
+    this.showCounter = false,
+    super.key,
+  }) : variant = .search;
 
   final UiTextFieldStyle? style;
   final TextEditingController? controller;
@@ -65,6 +90,10 @@ class _UiTextFieldState extends State<UiTextField> {
 
     final variantStyle = switch (widget.variant) {
       .standard => StandardUiTextFieldStyle(
+        palette: palette,
+        typography: typography,
+      ),
+      .search => SearchUiTextFieldStyle(
         palette: palette,
         typography: typography,
       ),
@@ -126,7 +155,7 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
   bool? get filled => true;
 
   @override
-  Color? get fillColor => palette.action;
+  Color? get fillColor => palette.input;
 
   @override
   TextStyle? get textStyle => typography.m.copyWith(color: palette.foreground);
@@ -148,7 +177,7 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
 
   @override
   InputBorder? get border => OutlineInputBorder(
-    borderRadius: const .all(.circular(16)),
+    borderRadius: const .all(.circular(20.0)),
     borderSide: const BorderSide(style: .none),
   );
 
@@ -165,14 +194,11 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
   InputBorder? get enabledBorder => border;
 
   @override
-  InputBorder? get disabledBorder => OutlineInputBorder(
-    borderRadius: const .all(.circular(16)),
-    borderSide: const BorderSide(style: .none),
-  );
+  InputBorder? get disabledBorder => border;
 
   @override
   EdgeInsetsGeometry? get contentPadding =>
-      const .symmetric(horizontal: 16.0, vertical: 12.0);
+      const .symmetric(horizontal: 20.0, vertical: 12.0);
 
   @override
   BoxConstraints? get constraints => const BoxConstraints(minHeight: 32);
@@ -191,6 +217,86 @@ class StandardUiTextFieldStyle extends UiTextFieldStyle {
 
   @override
   Color? get prefixIconColor => palette.foregroundSecondary;
+}
+
+class SearchUiTextFieldStyle extends UiTextFieldStyle {
+  const SearchUiTextFieldStyle({
+    required this.palette,
+    required this.typography,
+  });
+
+  final ColorPalette2 palette;
+  final AppTypography2 typography;
+
+  @override
+  bool? get filled => true;
+
+  @override
+  Color? get fillColor => palette.inputSearch;
+
+  @override
+  TextStyle? get textStyle => typography.m.copyWith(color: palette.foreground);
+
+  @override
+  TextStyle? get counterStyle =>
+      typography.xs.copyWith(color: palette.foreground.withValues(alpha: .58));
+
+  @override
+  TextStyle? get errorStyle => typography.xs.copyWith(color: palette.disabled);
+
+  @override
+  TextStyle? get hintStyle =>
+      typography.m.copyWith(color: palette.foregroundSecondary);
+
+  @override
+  TextStyle? get helperStyle =>
+      typography.m.copyWith(color: palette.foregroundSecondary);
+
+  @override
+  InputBorder? get border => OutlineInputBorder(
+    borderRadius: const .all(.circular(20.0)),
+    borderSide: const BorderSide(style: .none),
+  );
+
+  @override
+  InputBorder? get focusedBorder => border;
+
+  @override
+  InputBorder? get focusedErrorBorder => border;
+
+  @override
+  InputBorder? get errorBorder => border;
+
+  @override
+  InputBorder? get enabledBorder => border;
+
+  @override
+  InputBorder? get disabledBorder => border;
+
+  @override
+  EdgeInsetsGeometry? get contentPadding =>
+      const .symmetric(horizontal: 20.0, vertical: 12.0);
+
+  @override
+  BoxConstraints? get constraints => const BoxConstraints(minHeight: 32);
+
+  @override
+  Color? get cursorColor => palette.primary;
+
+  @override
+  double get cursorWidth => 2.0;
+
+  @override
+  bool? get isDense => true;
+
+  @override
+  Color? get suffixIconColor => palette.foregroundSecondary;
+
+  @override
+  Color? get prefixIconColor => palette.foregroundSecondary;
+
+  @override
+  Widget? get prefixIcon => const Icon(UiIcons.search);
 }
 
 class UiTextFieldStyle extends InputDecoration {

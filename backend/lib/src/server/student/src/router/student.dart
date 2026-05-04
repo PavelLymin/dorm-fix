@@ -4,7 +4,7 @@ import 'package:firebase_admin/testing.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../../../../core/auth/src/require_user.dart';
-import '../../../../core/rest_api/src/rest_api.dart';
+import '../../../../core/rest_api/rest_api.dart';
 import '../../../profile/profile.dart';
 import '../../student.dart';
 

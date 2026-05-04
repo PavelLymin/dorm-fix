@@ -49,6 +49,7 @@ dependencies:
   flutter_dotenv: ^6.0.0
   # Yandex MapKit
   yandex_mapkit: ^4.2.1
+  # Supabase
   supabase_flutter: ^2.12.4
 
 dev_dependencies:

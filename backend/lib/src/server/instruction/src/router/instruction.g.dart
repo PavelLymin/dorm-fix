@@ -8,7 +8,7 @@ part of 'instruction.dart';
 
 Router _$InstructionServiceRouter(InstructionService service) {
   final router = Router();
-  router.add('GET', '/instructions', service.getInstructions);
-  router.add('GET', '/instructions/<id>', service.getInstructionById);
+  router.add('GET', r'/instructions', service.getInstructions);
+  router.add('GET', r'/instructions/<id>', service.getInstructionById);
   return router;
 }

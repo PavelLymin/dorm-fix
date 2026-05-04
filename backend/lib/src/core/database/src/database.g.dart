@@ -4751,6 +4751,17 @@ class $MaterialsTable extends Materials
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _searchNameMeta = const VerificationMeta(
+    'searchName',
+  );
+  @override
+  late final GeneratedColumn<String> searchName = GeneratedColumn<String>(
+    'search_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -4759,6 +4770,7 @@ class $MaterialsTable extends Materials
     description,
     photoPath,
     quantity,
+    searchName,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -4818,6 +4830,14 @@ class $MaterialsTable extends Materials
     } else if (isInserting) {
       context.missing(_quantityMeta);
     }
+    if (data.containsKey('search_name')) {
+      context.handle(
+        _searchNameMeta,
+        searchName.isAcceptableOrUnknown(data['search_name']!, _searchNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_searchNameMeta);
+    }
     return context;
   }
 
@@ -4851,6 +4871,10 @@ class $MaterialsTable extends Materials
         DriftSqlType.int,
         data['${effectivePrefix}quantity'],
       )!,
+      searchName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}search_name'],
+      )!,
     );
   }
 
@@ -4867,6 +4891,7 @@ class Material extends DataClass implements Insertable<Material> {
   final String description;
   final String photoPath;
   final int quantity;
+  final String searchName;
   const Material({
     required this.id,
     required this.typeId,
@@ -4874,6 +4899,7 @@ class Material extends DataClass implements Insertable<Material> {
     required this.description,
     required this.photoPath,
     required this.quantity,
+    required this.searchName,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -4884,6 +4910,7 @@ class Material extends DataClass implements Insertable<Material> {
     map['description'] = Variable<String>(description);
     map['photo_path'] = Variable<String>(photoPath);
     map['quantity'] = Variable<int>(quantity);
+    map['search_name'] = Variable<String>(searchName);
     return map;
   }
 
@@ -4895,6 +4922,7 @@ class Material extends DataClass implements Insertable<Material> {
       description: Value(description),
       photoPath: Value(photoPath),
       quantity: Value(quantity),
+      searchName: Value(searchName),
     );
   }
 
@@ -4910,6 +4938,7 @@ class Material extends DataClass implements Insertable<Material> {
       description: serializer.fromJson<String>(json['description']),
       photoPath: serializer.fromJson<String>(json['photoPath']),
       quantity: serializer.fromJson<int>(json['quantity']),
+      searchName: serializer.fromJson<String>(json['searchName']),
     );
   }
   @override
@@ -4922,6 +4951,7 @@ class Material extends DataClass implements Insertable<Material> {
       'description': serializer.toJson<String>(description),
       'photoPath': serializer.toJson<String>(photoPath),
       'quantity': serializer.toJson<int>(quantity),
+      'searchName': serializer.toJson<String>(searchName),
     };
   }
 
@@ -4932,6 +4962,7 @@ class Material extends DataClass implements Insertable<Material> {
     String? description,
     String? photoPath,
     int? quantity,
+    String? searchName,
   }) => Material(
     id: id ?? this.id,
     typeId: typeId ?? this.typeId,
@@ -4939,6 +4970,7 @@ class Material extends DataClass implements Insertable<Material> {
     description: description ?? this.description,
     photoPath: photoPath ?? this.photoPath,
     quantity: quantity ?? this.quantity,
+    searchName: searchName ?? this.searchName,
   );
   Material copyWithCompanion(MaterialsCompanion data) {
     return Material(
@@ -4950,6 +4982,9 @@ class Material extends DataClass implements Insertable<Material> {
           : this.description,
       photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
       quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      searchName: data.searchName.present
+          ? data.searchName.value
+          : this.searchName,
     );
   }
 
@@ -4961,14 +4996,22 @@ class Material extends DataClass implements Insertable<Material> {
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('photoPath: $photoPath, ')
-          ..write('quantity: $quantity')
+          ..write('quantity: $quantity, ')
+          ..write('searchName: $searchName')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, typeId, name, description, photoPath, quantity);
+  int get hashCode => Object.hash(
+    id,
+    typeId,
+    name,
+    description,
+    photoPath,
+    quantity,
+    searchName,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4978,7 +5021,8 @@ class Material extends DataClass implements Insertable<Material> {
           other.name == this.name &&
           other.description == this.description &&
           other.photoPath == this.photoPath &&
-          other.quantity == this.quantity);
+          other.quantity == this.quantity &&
+          other.searchName == this.searchName);
 }
 
 class MaterialsCompanion extends UpdateCompanion<Material> {
@@ -4988,6 +5032,7 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
   final Value<String> description;
   final Value<String> photoPath;
   final Value<int> quantity;
+  final Value<String> searchName;
   const MaterialsCompanion({
     this.id = const Value.absent(),
     this.typeId = const Value.absent(),
@@ -4995,6 +5040,7 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
     this.description = const Value.absent(),
     this.photoPath = const Value.absent(),
     this.quantity = const Value.absent(),
+    this.searchName = const Value.absent(),
   });
   MaterialsCompanion.insert({
     this.id = const Value.absent(),
@@ -5003,11 +5049,13 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
     required String description,
     required String photoPath,
     required int quantity,
+    required String searchName,
   }) : typeId = Value(typeId),
        name = Value(name),
        description = Value(description),
        photoPath = Value(photoPath),
-       quantity = Value(quantity);
+       quantity = Value(quantity),
+       searchName = Value(searchName);
   static Insertable<Material> custom({
     Expression<int>? id,
     Expression<int>? typeId,
@@ -5015,6 +5063,7 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
     Expression<String>? description,
     Expression<String>? photoPath,
     Expression<int>? quantity,
+    Expression<String>? searchName,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -5023,6 +5072,7 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
       if (description != null) 'description': description,
       if (photoPath != null) 'photo_path': photoPath,
       if (quantity != null) 'quantity': quantity,
+      if (searchName != null) 'search_name': searchName,
     });
   }
 
@@ -5033,6 +5083,7 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
     Value<String>? description,
     Value<String>? photoPath,
     Value<int>? quantity,
+    Value<String>? searchName,
   }) {
     return MaterialsCompanion(
       id: id ?? this.id,
@@ -5041,6 +5092,7 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
       description: description ?? this.description,
       photoPath: photoPath ?? this.photoPath,
       quantity: quantity ?? this.quantity,
+      searchName: searchName ?? this.searchName,
     );
   }
 
@@ -5065,6 +5117,9 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
     if (quantity.present) {
       map['quantity'] = Variable<int>(quantity.value);
     }
+    if (searchName.present) {
+      map['search_name'] = Variable<String>(searchName.value);
+    }
     return map;
   }
 
@@ -5076,7 +5131,8 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('photoPath: $photoPath, ')
-          ..write('quantity: $quantity')
+          ..write('quantity: $quantity, ')
+          ..write('searchName: $searchName')
           ..write(')'))
         .toString();
   }
@@ -12137,6 +12193,7 @@ typedef $$MaterialsTableCreateCompanionBuilder =
       required String description,
       required String photoPath,
       required int quantity,
+      required String searchName,
     });
 typedef $$MaterialsTableUpdateCompanionBuilder =
     MaterialsCompanion Function({
@@ -12146,6 +12203,7 @@ typedef $$MaterialsTableUpdateCompanionBuilder =
       Value<String> description,
       Value<String> photoPath,
       Value<int> quantity,
+      Value<String> searchName,
     });
 
 final class $$MaterialsTableReferences
@@ -12203,6 +12261,11 @@ class $$MaterialsTableFilterComposer
 
   ColumnFilters<int> get quantity => $composableBuilder(
     column: $table.quantity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get searchName => $composableBuilder(
+    column: $table.searchName,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -12264,6 +12327,11 @@ class $$MaterialsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get searchName => $composableBuilder(
+    column: $table.searchName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$MaterialTypesTableOrderingComposer get typeId {
     final $$MaterialTypesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -12313,6 +12381,11 @@ class $$MaterialsTableAnnotationComposer
 
   GeneratedColumn<int> get quantity =>
       $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<String> get searchName => $composableBuilder(
+    column: $table.searchName,
+    builder: (column) => column,
+  );
 
   $$MaterialTypesTableAnnotationComposer get typeId {
     final $$MaterialTypesTableAnnotationComposer composer = $composerBuilder(
@@ -12372,6 +12445,7 @@ class $$MaterialsTableTableManager
                 Value<String> description = const Value.absent(),
                 Value<String> photoPath = const Value.absent(),
                 Value<int> quantity = const Value.absent(),
+                Value<String> searchName = const Value.absent(),
               }) => MaterialsCompanion(
                 id: id,
                 typeId: typeId,
@@ -12379,6 +12453,7 @@ class $$MaterialsTableTableManager
                 description: description,
                 photoPath: photoPath,
                 quantity: quantity,
+                searchName: searchName,
               ),
           createCompanionCallback:
               ({
@@ -12388,6 +12463,7 @@ class $$MaterialsTableTableManager
                 required String description,
                 required String photoPath,
                 required int quantity,
+                required String searchName,
               }) => MaterialsCompanion.insert(
                 id: id,
                 typeId: typeId,
@@ -12395,6 +12471,7 @@ class $$MaterialsTableTableManager
                 description: description,
                 photoPath: photoPath,
                 quantity: quantity,
+                searchName: searchName,
               ),
           withReferenceMapper: (p0) => p0
               .map(

@@ -5,7 +5,7 @@ typedef MaterialEventMatch<R, E extends MaterialEvent> = R Function(E event);
 sealed class MaterialEvent {
   const MaterialEvent();
 
-  factory MaterialEvent.get() = _GetMaterialsEvent;
+  factory MaterialEvent.get({String? query}) = _GetMaterialsEvent;
   factory MaterialEvent.filterChanged({int? typeId}) =>
       _FilterChangedEvent(typeId: typeId);
 
@@ -19,7 +19,9 @@ sealed class MaterialEvent {
 }
 
 final class _GetMaterialsEvent extends MaterialEvent {
-  const _GetMaterialsEvent();
+  const _GetMaterialsEvent({this.query});
+
+  final String? query;
 }
 
 final class _FilterChangedEvent extends MaterialEvent {

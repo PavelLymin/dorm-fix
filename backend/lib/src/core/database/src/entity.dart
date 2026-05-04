@@ -155,6 +155,7 @@ class Materials extends Table {
   IntColumn get quantity =>
       // ignore: recursive_getters
       integer().check(quantity.isBiggerThanValue(0)).named('quantity')();
+  TextColumn get searchName => text().named('search_name')();
 }
 
 class Instructions extends Table {

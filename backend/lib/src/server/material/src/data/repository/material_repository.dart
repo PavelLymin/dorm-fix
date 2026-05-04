@@ -3,7 +3,7 @@ import '../../../../../core/database/database.dart';
 import '../../../material.dart';
 
 abstract interface class IMaterialRepository {
-  Future<List<MaterialEntity>> getMaterials({int? typeId});
+  Future<List<MaterialEntity>> getMaterials({int? typeId, String? searchQuery});
 
   Future<void> consumeMaterial(int materialId, int usedQuantity);
 }
@@ -14,7 +14,10 @@ class MaterialRepositoryImpl implements IMaterialRepository {
   final Database _database;
 
   @override
-  Future<List<MaterialEntity>> getMaterials({int? typeId}) async {
+  Future<List<MaterialEntity>> getMaterials({
+    int? typeId,
+    String? searchQuery,
+  }) async {
     final query = _database.select(_database.materials).join([
       innerJoin(
         _database.materialTypes,
@@ -22,7 +25,9 @@ class MaterialRepositoryImpl implements IMaterialRepository {
       ),
     ]);
     if (typeId != null) query.where(_database.materials.typeId.equals(typeId));
-
+    if (searchQuery != null) {
+      query.where(_database.materials.searchName.contains(searchQuery));
+    }
     final data = await query.get();
 
     return data

@@ -2,19 +2,23 @@ import 'package:ui_kit/ui.dart';
 
 class TileGroupStyle {
   TileGroupStyle({
-    this.iconSize,
+    double? iconSize,
+    EdgeInsets? padding,
+    BorderRadius? borderRadius,
     this.selectedColor,
-    this.padding,
-    this.borderRadius,
     this.titleStyle,
     this.subtitleStyle,
     this.buttonStyle,
-  });
+  }) : iconSize = iconSize ?? 24.0,
+       padding =
+           padding ??
+           const .only(left: 20.0, right: 20.0, top: 12.0, bottom: 12.0),
+       borderRadius = borderRadius ?? const .all(.circular(20.0));
 
   final double? iconSize;
   final Color? selectedColor;
   final EdgeInsets? padding;
-  final BorderRadiusGeometry? borderRadius;
+  final BorderRadius? borderRadius;
   final TextStyle? titleStyle;
   final TextStyle? subtitleStyle;
   final ButtonStyle? buttonStyle;
@@ -23,7 +27,7 @@ class TileGroupStyle {
     Color? selectedColor,
     EdgeInsets? padding,
     double? iconSize,
-    BorderRadiusGeometry? borderRadius,
+    BorderRadius? borderRadius,
     TextStyle? titleStyle,
     TextStyle? subtitleStyle,
     ButtonStyle? buttonStyle,
@@ -32,8 +36,8 @@ class TileGroupStyle {
     padding: padding ?? this.padding,
     iconSize: iconSize ?? this.iconSize,
     borderRadius: borderRadius ?? this.borderRadius,
-    titleStyle: titleStyle ?? this.titleStyle,
-    subtitleStyle: subtitleStyle ?? this.subtitleStyle,
+    titleStyle: this.titleStyle?.merge(titleStyle),
+    subtitleStyle: this.subtitleStyle?.merge(subtitleStyle),
     buttonStyle: buttonStyle ?? this.buttonStyle,
   );
 
@@ -79,7 +83,6 @@ class TileGroupStyle {
           WidgetState.any: palette.foreground.withValues(alpha: .1),
         }),
         backgroundColor: AppWidgetStateMap<Color>({
-          WidgetState.selected: palette.secondary,
           WidgetState.disabled: palette.disabled,
           WidgetState.any: palette.card,
         }),

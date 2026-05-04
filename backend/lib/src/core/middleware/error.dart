@@ -1,6 +1,6 @@
 import 'package:logger/web.dart';
 import 'package:shelf/shelf.dart';
-import '../rest_api/src/rest_api.dart';
+import '../rest_api/rest_api.dart';
 
 abstract class ErrorMiddleware {
   static Middleware call(Logger logger, RestApi restApi) {

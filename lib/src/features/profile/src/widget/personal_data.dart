@@ -88,8 +88,15 @@ class PersonalData extends StatelessWidget {
       TileGroupItem(
         title: localizations.dormitory,
         sufixIcon: icon,
-        prefixIcon: Icon(Icons.apartment),
+        prefixIcon: Icon(UiIcons.home),
         subTitle: localizations.dormitory_name(master.dormitory.number),
+        onTap: () {},
+      ),
+      TileGroupItem(
+        title: 'Специализация',
+        sufixIcon: icon,
+        prefixIcon: Icon(UiIcons.key),
+        subTitle: master.specialization.title,
         onTap: () {},
       ),
     ]);

@@ -3,10 +3,16 @@ part of 'material_bloc.dart';
 typedef MaterialStateMatch<R, S extends MaterialState> = R Function(S state);
 
 sealed class MaterialState {
-  const MaterialState({this.materials = const [], this.typeId});
+  const MaterialState({this.materials = const [], this._typeId});
 
   final List<MaterialEntity> materials;
-  final int? typeId;
+  final int? _typeId;
+
+  int? get typeId {
+    if (_typeId != null && _typeId < 1) return null;
+
+    return _typeId;
+  }
 
   const factory MaterialState.loading({
     required List<MaterialEntity> materials,
@@ -19,7 +25,7 @@ sealed class MaterialState {
   const factory MaterialState.error({
     required List<MaterialEntity> materials,
     int? typeId,
-    required Object message,
+    required Object error,
   }) = _MaterialError;
 
   R map<R>({
@@ -72,7 +78,7 @@ sealed class MaterialState {
         _MaterialError _ => MaterialState.error(
           materials: materials ?? this.materials,
           typeId: typeId ?? this.typeId,
-          message: (this as _MaterialError).message,
+          error: (this as _MaterialError).error,
         ),
       };
 
@@ -92,8 +98,8 @@ final class _MaterialError extends MaterialState {
   const _MaterialError({
     required super.materials,
     super.typeId,
-    required this.message,
+    required this.error,
   });
 
-  final Object message;
+  final Object error;
 }

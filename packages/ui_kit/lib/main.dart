@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) => WindowSizeScope(
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
+      theme: darkTheme,
       home: const UiPreview(),
     ),
   );
@@ -114,6 +114,13 @@ class _UiPreviewState extends State<UiPreview>
                 Align(alignment: .center, child: UiText2.h5Bold('Text Fields')),
                 const SizedBox(height: 8),
                 const TextFieldsPreview(),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: .center,
+                  child: UiText2.h5Bold('Search Fields'),
+                ),
+                const SizedBox(height: 8),
+                const SearchFieldsPreview(),
                 const SizedBox(height: 24),
                 Align(alignment: .center, child: UiText2.h5Bold('Pin')),
                 const SizedBox(height: 8),

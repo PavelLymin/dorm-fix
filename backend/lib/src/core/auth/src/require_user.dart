@@ -1,6 +1,6 @@
 import 'package:shelf/shelf.dart';
 import '../../../server/profile/profile.dart';
-import '../../rest_api/src/rest_api.dart';
+import '../../rest_api/rest_api.dart';
 
 abstract class RequireUser {
   const RequireUser();
