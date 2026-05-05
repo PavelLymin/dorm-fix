@@ -49,11 +49,11 @@ class _SettingsState extends State<Settings> {
         title: l10n.notifications,
         sufixIcon: icon,
         prefixIcon: Icon(UiIcons.bell),
-        subTitle: l10n.notifications_off,
+        subTitle: l10n.notifications,
         onTap: () {},
       ),
       TileGroupItem(
-        title: l10n.theme,
+        title: l10n.subject,
         sufixIcon: icon,
         prefixIcon: Icon(UiIcons.palette),
         onTap: () {},
@@ -70,7 +70,7 @@ class _SettingsState extends State<Settings> {
         title: l10n.language,
         sufixIcon: icon,
         prefixIcon: Icon(UiIcons.globe),
-        subTitle: l10n.russian,
+        // subTitle: l10n.russian,
         onTap: () {},
         initial: settings.locale.index,
         selectItem: TileSelectItem(

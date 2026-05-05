@@ -18,9 +18,9 @@ enum ThemeModeVO {
 
 extension ThemeModeVOLocalization on ThemeModeVO {
   String label(AppLocalizations l10n) => map(
-    light: (_) => l10n.theme_light,
-    dark: (_) => l10n.theme_dark,
-    system: (_) => l10n.theme_system,
+    light: (_) => l10n.light_theme,
+    dark: (_) => l10n.dark_theme,
+    system: (_) => l10n.system_theme,
   );
 }
 
@@ -39,7 +39,7 @@ enum LocaleVO {
 
 extension LocaleVOLocalization on LocaleVO {
   String label(AppLocalizations l10n) =>
-      map(russian: (_) => l10n.russian, english: (_) => l10n.english);
+      map(russian: (_) => l10n.russian_lang, english: (_) => l10n.english_lang);
 }
 
 final class SettingsEntity {

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../../../core/utils/utils.dart';
 import '../../authentication.dart';
 import 'auth_button.dart';
@@ -18,6 +19,7 @@ class _AuthFormState extends State<AuthForm> with _AuthFormStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
+    final local = AppLocalizations.of(context);
     return BlocProvider.value(
       value: _buttonBloc,
       child: BlocListener<AuthBloc, AuthState>(
@@ -74,10 +76,10 @@ class _AuthFormState extends State<AuthForm> with _AuthFormStateMixin {
             crossAxisAlignment: .stretch,
             mainAxisSize: .min,
             children: [
-              UiText2.lBold('Введите номер телефона'),
+              UiText2.lBold(local.enter_phone_number),
               const SizedBox(height: 4.0),
               UiText2.m(
-                'Отправим на него SMS-код для подтверждения',
+                local.sms_confirmation_hint,
                 color: palette.foregroundSecondary,
               ),
               const SizedBox(height: 10.0),

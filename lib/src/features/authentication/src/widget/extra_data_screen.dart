@@ -1,3 +1,4 @@
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../app/widget/dependencies_scope.dart';
@@ -23,10 +24,11 @@ class _ExtraDataScreenState extends State<ExtraDataScreen>
     with _PersonalDataScreenStateMixin {
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     return BlocProvider<StudentBloc>.value(
       value: _studentBloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Ваши данные')),
+        appBar: AppBar(title: Text(local.your_data)),
         body: SafeArea(
           child: Padding(
             padding: AppInsets.screen,
@@ -37,7 +39,7 @@ class _ExtraDataScreenState extends State<ExtraDataScreen>
               children: [
                 Padding(
                   padding: const .only(top: 24.0, bottom: 10.0),
-                  child: UiText2.lBold('Добавьте фото'),
+                  child: UiText2.lBold(local.add_photo),
                 ),
                 Align(
                   alignment: .center,
@@ -45,7 +47,7 @@ class _ExtraDataScreenState extends State<ExtraDataScreen>
                 ),
                 Padding(
                   padding: const .only(top: 24.0, bottom: 10.0),
-                  child: UiText2.lBold('Укажите имя'),
+                  child: UiText2.lBold(local.specify_name),
                 ),
                 UiTextField.standard(
                   controller: _nameController,
@@ -56,7 +58,7 @@ class _ExtraDataScreenState extends State<ExtraDataScreen>
                 ),
                 Padding(
                   padding: const .only(top: 24.0, bottom: 10.0),
-                  child: UiText2.lBold('Укажите почту'),
+                  child: UiText2.lBold(local.specify_mail),
                 ),
                 UiTextField.standard(
                   controller: _emailController,
@@ -67,7 +69,7 @@ class _ExtraDataScreenState extends State<ExtraDataScreen>
                 ),
                 Padding(
                   padding: const .only(top: 24.0, bottom: 10.0),
-                  child: UiText2.lBold('Укажите телефон'),
+                  child: UiText2.lBold(local.specify_number),
                 ),
                 UiTextField.standard(
                   controller: _phoneController,
@@ -86,7 +88,7 @@ class _ExtraDataScreenState extends State<ExtraDataScreen>
                         label: BlocBuilder<StudentBloc, StudentState>(
                           builder: (context, state) {
                             return state.maybeMap(
-                              orElse: () => Text('Продолжить'),
+                              orElse: () => Text(local.continue_btn),
                               loading: (_) => const CircularProgressIndicator(),
                             );
                           },

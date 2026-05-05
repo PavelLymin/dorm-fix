@@ -1,5 +1,6 @@
 import 'package:ui_kit/ui.dart';
 
+import '../../../../../l10n/gen/app_localizations.dart';
 import 'pincode_form.dart';
 
 class PincodeScreen extends StatelessWidget {
@@ -15,7 +16,10 @@ class PincodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Вход в профиль'), toolbarHeight: 42.0),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).login_to_profile),
+        toolbarHeight: 42.0,
+      ),
       body: Padding(
         padding: AppInsets.screen,
         child: SafeArea(

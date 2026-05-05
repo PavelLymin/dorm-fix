@@ -65,7 +65,7 @@ class PersonalData extends StatelessWidget {
           title: localizations.dormitory,
           sufixIcon: icon,
           prefixIcon: Icon(UiIcons.home),
-          subTitle: localizations.dormitory_name(student.dormitory.number),
+          subTitle: localizations.dormitory_number(student.dormitory.number),
           onTap: () {},
         ),
         TileGroupItem(
@@ -89,7 +89,7 @@ class PersonalData extends StatelessWidget {
         title: localizations.dormitory,
         sufixIcon: icon,
         prefixIcon: Icon(UiIcons.home),
-        subTitle: localizations.dormitory_name(master.dormitory.number),
+        subTitle: localizations.dormitory_number(master.dormitory.number),
         onTap: () {},
       ),
       TileGroupItem(

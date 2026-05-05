@@ -1,3 +1,4 @@
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:ui_kit/ui.dart';
 
 import 'auth_form.dart';
@@ -9,7 +10,10 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Вход в профиль'), toolbarHeight: 42.0),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).login_to_profile),
+        toolbarHeight: 42.0,
+      ),
       body: SafeArea(
         child: Padding(
           padding: AppInsets.screen,

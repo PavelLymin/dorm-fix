@@ -25,7 +25,7 @@ class ProfileAppBar extends StatelessWidget {
                   ? null
                   : () => showUiBottomSheet(
                       context,
-                      title: localizations.name_photo,
+                      title: localizations.edit_name_and_photo,
                       isScrollControlled: true,
                       widget: NamePhotoEdit(
                         user: user.mapAuthUser(

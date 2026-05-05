@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../../../core/utils/utils.dart';
 import '../../authentication.dart';
 import 'auth_button.dart';
@@ -23,6 +24,7 @@ class _PincodeFormState extends State<PincodeForm> with _PincodeFormStateMixiN {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
+    final local = AppLocalizations.of(context);
     return BlocProvider.value(
       value: _buttonBloc,
       child: BlocListener<AuthBloc, AuthState>(
@@ -39,10 +41,10 @@ class _PincodeFormState extends State<PincodeForm> with _PincodeFormStateMixiN {
           crossAxisAlignment: .stretch,
           mainAxisSize: .min,
           children: [
-            UiText2.lBold('Введите код из SMS'),
+            UiText2.lBold(local.enter_sms_code),
             const SizedBox(height: 4.0),
             UiText2.m(
-              'Отправили на номер ${widget.phoneNumber}',
+              local.sent_to_number(widget.phoneNumber),
               color: palette.foregroundSecondary,
             ),
             const SizedBox(height: 10.0),

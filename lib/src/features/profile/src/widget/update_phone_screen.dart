@@ -80,7 +80,7 @@ class _UpdatePhoneScreenState extends State<UpdatePhoneScreen> {
               builder: (_, value, _) => UiButton.filledPrimary(
                 enabled: value,
                 onPressed: _updatePhoneNumber,
-                label: Text(localizations.next),
+                label: Text(localizations.save),
               ),
             ),
           ],

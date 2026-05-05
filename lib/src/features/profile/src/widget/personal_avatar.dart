@@ -48,7 +48,7 @@ class _PersonalAvatarView extends StatelessWidget {
             profile: (p) => p.mapRoleUser(
               student: (s) => _TitlePersonalAvatar(
                 displayName: s.user.displayName ?? 'User',
-                title: localizations.dormitory_name(s.dormitory.number),
+                title: localizations.dormitory_number(s.dormitory.number),
                 subtitle: s.room.number,
               ),
               master: (m) => _TitlePersonalAvatar(

@@ -54,7 +54,7 @@ class _EmailAddressEditState extends State<EmailAddressEdit>
           builder: (_, value, _) => UiButton.filledPrimary(
             onPressed: () {},
             enabled: value,
-            label: Text(AppLocalizations.of(context).update),
+            label: Text(AppLocalizations.of(context).save),
           ),
         ),
       ],
@@ -193,7 +193,7 @@ class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
           ),
         ),
         builder: (context, state) => state.maybeMap(
-          orElse: () => Text(AppLocalizations.of(context).update),
+          orElse: () => Text(AppLocalizations.of(context).save),
           loading: (_) => SizedBox.square(
             dimension: 20,
             child: CircularProgressIndicator(

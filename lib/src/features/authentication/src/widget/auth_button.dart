@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../authentication.dart';
 
 class AuthButton extends StatelessWidget {
@@ -20,7 +21,7 @@ class AuthButton extends StatelessWidget {
         ),
         enabled: state.isEnabled,
         label: state.maybeMap(
-          orElse: (_) => const Text('Продолжить'),
+          orElse: (_) => Text(AppLocalizations.of(context).continue_btn),
           loading: (_) => SizedBox.square(
             dimension: 20.0,
             child: CircularProgressIndicator(

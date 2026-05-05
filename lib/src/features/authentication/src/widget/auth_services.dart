@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../authentication.dart';
 
 class AuthServices extends StatelessWidget {
@@ -10,6 +11,7 @@ class AuthServices extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
+    final local = AppLocalizations.of(context);
     return Column(
       mainAxisAlignment: .center,
       crossAxisAlignment: .stretch,
@@ -26,7 +28,7 @@ class AuthServices extends StatelessWidget {
               Flexible(
                 child: Align(
                   alignment: .center,
-                  child: const Text('Войти с помощью Google'),
+                  child: Text(local.login_via_telegram),
                 ),
               ),
             ],
@@ -47,7 +49,7 @@ class AuthServices extends StatelessWidget {
               Flexible(
                 child: Align(
                   alignment: .center,
-                  child: const Text('Войти с помощью Telegram'),
+                  child: Text(local.login_via_google),
                 ),
               ),
             ],

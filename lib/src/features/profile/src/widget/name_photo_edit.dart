@@ -67,7 +67,7 @@ class _NamePhotoEditState extends State<NamePhotoEdit> {
               ),
             ),
             const SizedBox(height: 24.0),
-            UiText2.lBold(AppLocalizations.of(context).provide_name),
+            UiText2.lBold(AppLocalizations.of(context).specify_name),
             const SizedBox(height: 10.0),
             UiTextField.standard(
               controller: _controller,
