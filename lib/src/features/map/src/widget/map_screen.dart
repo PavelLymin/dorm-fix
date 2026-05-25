@@ -1,3 +1,4 @@
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -203,7 +204,7 @@ class MapAppbar extends StatelessWidget {
       child: Padding(
         padding: AppInsets.screen,
         child: UiText2.lBold(
-          'Выберите общежитие',
+          AppLocalizations.of(context).select_dormitory,
           softWrap: true,
           textAlign: .left,
         ),
@@ -239,23 +240,20 @@ class SearchButton extends StatelessWidget {
               mainAxisSize: .min,
               spacing: 24.0,
               children: [
-                UiText2.lBold('Выбор общежития'),
+                UiText2.lBold(AppLocalizations.of(context).dormitory_selection),
                 GestureDetector(
                   onTap: () => showUiBottomSheet(
                     context,
                     spacing: 0.0,
-                    title: 'Выбор общежития',
+                    title: AppLocalizations.of(context).dormitory_selection,
                     widget: MapControllerScope(
                       controller: MapControllerScope.of(context),
                       child: SearchDormitoryScreen(),
                     ),
                   ),
-                  child: UiTextField.standard(
+                  child: UiTextField.search(
                     enabled: false,
-                    style: .new(
-                      hintText: 'Поиск общежитий...',
-                      prefixIcon: const Icon(UiIcons.search),
-                    ),
+                    style: .new(hintText: AppLocalizations.of(context).search),
                   ),
                 ),
               ],

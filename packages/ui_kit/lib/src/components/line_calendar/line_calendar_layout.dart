@@ -1,4 +1,5 @@
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:ui_kit/ui.dart';
 
 class DefaultData extends ContainerBoxParentData<RenderBox>
@@ -143,17 +144,18 @@ class Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
     final theme = Theme.of(context);
-    return ValueListenableBuilder(
-      valueListenable: controller,
-      builder: (context, value, child) {
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, child) {
         return UiCard.clickable(
           padding: .all(0),
           selectedColor: theme.colorPalette2.primary,
           disabledColor: theme.colorPalette2.disabled,
-          isSelected: date == value,
-          onTap: controller.isWeekDay(date)
-              ? () => controller.value = date
+          isSelected: date == controller.initial,
+          onTap: controller.isUseDay(date)
+              ? () => controller.selectedDate = date
               : null,
           builder: (context, state, _) => Column(
             crossAxisAlignment: .center,
@@ -165,7 +167,7 @@ class Item extends StatelessWidget {
                 style: style.dateTextStyle(context).resolve(state),
               ),
               Text(
-                date.weekday.toString(),
+                DateFormat('E', locale).format(date).toUpperCase(),
                 style: style.weekdayTextStyle(context).resolve(state),
               ),
             ],

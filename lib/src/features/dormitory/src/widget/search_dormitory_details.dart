@@ -1,3 +1,4 @@
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../room/room.dart';
 import '../../dormitory.dart';
@@ -37,10 +38,10 @@ class SearchDormitoryDetails extends StatelessWidget {
           onPressed: () => showUiBottomSheet(
             context,
             spacing: 0.0,
-            title: 'Выбор комнаты',
+            title: AppLocalizations.of(context).select_room,
             widget: SearchRoomScreen(dormitory: dormitory),
           ),
-          label: Text('Выбрать'),
+          label: Text(AppLocalizations.of(context).select),
         ),
       ],
     );

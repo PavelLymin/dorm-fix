@@ -24,7 +24,7 @@ class _LineCalendarPickerState extends State<LineCalendarPicker> {
   }
 
   void _onChange() {
-    context.read<RequestFormBloc>().add(.update(date: _controller.value));
+    context.read<RequestFormBloc>().add(.update(date: _controller.initial));
   }
 
   @override
@@ -40,7 +40,8 @@ class _LineCalendarPickerState extends State<LineCalendarPicker> {
         listenWhen: (previous, current) =>
             previous.currentFormModel.date != current.currentFormModel.date,
         listener: (context, state) => state.mapOrNull(
-          initial: (state) => _controller.value = state.currentFormModel.date,
+          initial: (state) =>
+              _controller.selectedDate = state.currentFormModel.date,
         ),
         child: LineCalendar(
           today: _workingDateTime.today,

@@ -70,7 +70,6 @@ class _SettingsState extends State<Settings> {
         title: l10n.language,
         sufixIcon: icon,
         prefixIcon: Icon(UiIcons.globe),
-        // subTitle: l10n.russian,
         onTap: () {},
         initial: settings.locale.index,
         selectItem: TileSelectItem(

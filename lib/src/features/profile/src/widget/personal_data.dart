@@ -93,7 +93,7 @@ class PersonalData extends StatelessWidget {
         onTap: () {},
       ),
       TileGroupItem(
-        title: 'Специализация',
+        title: localizations.specialization,
         sufixIcon: icon,
         prefixIcon: Icon(UiIcons.key),
         subTitle: master.specialization.title,

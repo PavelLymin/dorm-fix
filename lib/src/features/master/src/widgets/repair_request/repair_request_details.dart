@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../../l10n/gen/app_localizations.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
 import '../../../../repair_request/request.dart';
 
@@ -34,11 +35,12 @@ class _MasterRequestDetailsState extends State<MasterRequestDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     final status = widget.request.currentStatus;
     return BlocProvider.value(
       value: _repairActionBloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Заявка')),
+        appBar: AppBar(title: Text(local.application)),
         body: SafeArea(
           child: Padding(
             padding: AppInsets.screen,
@@ -48,12 +50,16 @@ class _MasterRequestDetailsState extends State<MasterRequestDetails> {
                   RequestImages(problems: widget.request.problems),
                 SliverPadding(
                   padding: .only(top: 24.0, bottom: 10.0),
-                  sliver: SliverToBoxAdapter(child: UiText2.lBold('Детали')),
+                  sliver: SliverToBoxAdapter(
+                    child: UiText2.lBold(local.details),
+                  ),
                 ),
                 RequestDetails(request: widget.request),
                 SliverPadding(
                   padding: const .only(top: 24.0, bottom: 10.0),
-                  sliver: SliverToBoxAdapter(child: UiText2.lBold('Описание')),
+                  sliver: SliverToBoxAdapter(
+                    child: UiText2.lBold(local.description),
+                  ),
                 ),
                 SliverToBoxAdapter(
                   child: UiCard.standart(
@@ -63,7 +69,7 @@ class _MasterRequestDetailsState extends State<MasterRequestDetails> {
                 SliverPadding(
                   padding: const .only(top: 24.0, bottom: 10.0),
                   sliver: SliverToBoxAdapter(
-                    child: UiText2.lBold('Дата и время ремонта'),
+                    child: UiText2.lBold(local.repair_date_time),
                   ),
                 ),
                 RequestDateTime(request: widget.request),
@@ -105,14 +111,15 @@ class _AcceptCancelButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     return SliverPadding(
       padding: .only(top: 32.0),
       sliver: SliverToBoxAdapter(
         child: UiButton.filledPrimary(
           onPressed: () => onPressed(context),
           label: status == .inProgress
-              ? const Text('Завершить заявку')
-              : const Text('Принять заявку'),
+              ? Text(local.finish_application)
+              : Text(local.accept_application),
         ),
       ),
     );
@@ -137,7 +144,7 @@ class _CancelButton extends StatelessWidget {
             .updateStatus(id: id, status: .canceled),
           ),
           label: Text(
-            'Отменить заявку',
+            AppLocalizations.of(context).cancel_application,
             style: TextStyle(color: palette.destructive),
           ),
         ),

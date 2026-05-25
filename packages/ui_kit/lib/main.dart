@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:ui_kit/calendar_preview.dart';
 import 'package:ui_kit/carousel_preview.dart';
 import 'package:ui_kit/detail_card_preview.dart';
@@ -22,7 +23,12 @@ import 'bottom_sheet_preview.dart';
 
 final themeModeSwitcher = ValueNotifier<ThemeMode>(.light);
 
-void main() async => runApp(const MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting(null, null);
+
+  runApp(const MainApp());
+}
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

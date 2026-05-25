@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dorm_fix/src/features/map/map.dart';
 import 'package:ui_kit/ui.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../dormitory.dart';
 
 class SearchDormitories extends StatelessWidget {
@@ -53,7 +54,7 @@ class _Item extends StatelessWidget {
     showUiBottomSheet(
       context,
       spacing: 0.0,
-      title: 'Общежитие',
+      title: AppLocalizations.of(context).dormitory,
       widget: SearchDormitoryDetails(dormitory: dormitory),
     );
   }

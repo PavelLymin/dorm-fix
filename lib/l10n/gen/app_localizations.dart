@@ -194,6 +194,12 @@ abstract class AppLocalizations {
   /// **'Select master or service'**
   String get select_master_or_service;
 
+  /// No description provided for @select_room.
+  ///
+  /// In en, this message translates to:
+  /// **'Select room'**
+  String get select_room;
+
   /// No description provided for @select_dormitory.
   ///
   /// In en, this message translates to:
@@ -590,6 +596,12 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profile;
 
+  /// No description provided for @repair_without_materials.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair without materials'**
+  String get repair_without_materials;
+
   /// No description provided for @russian_lang.
   ///
   /// In en, this message translates to:
@@ -625,6 +637,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tips'**
   String get advices;
+
+  /// No description provided for @all_advices.
+  ///
+  /// In en, this message translates to:
+  /// **'All tips'**
+  String get all_advices;
 
   /// No description provided for @repair_advices.
   ///
@@ -751,6 +769,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Specify reason'**
   String get specify_reason;
+
+  /// No description provided for @photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get photos;
 
   /// No description provided for @language.
   ///

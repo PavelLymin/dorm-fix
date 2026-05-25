@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../instructions.dart';
@@ -45,7 +46,7 @@ class _InstructionsHorizontState extends State<InstructionsHorizont> {
           mainAxisAlignment: .spaceBetween,
           crossAxisAlignment: .center,
           children: [
-            UiText2.lBold('Советы по ремонту'),
+            UiText2.lBold(AppLocalizations.of(context).repair_advices),
             UiButton.icon(
               onPressed: _jumpToEnd,
               icon: const Icon(UiIcons.chevronRight),
@@ -118,7 +119,8 @@ class _InstructionContent extends StatelessWidget {
           mainAxisSize: .min,
           children: [
             if (instruction != null) UiText2.m(instruction!.title),
-            if (instruction == null) UiText2.m('Все советы'),
+            if (instruction == null)
+              UiText2.m(AppLocalizations.of(context).all_advices),
             const Spacer(),
             if (instruction != null)
               UiText2.m(
@@ -126,7 +128,10 @@ class _InstructionContent extends StatelessWidget {
                 color: palette.foregroundSecondary,
               ),
             if (instruction == null)
-              UiText2.m('Далее', color: palette.foregroundSecondary),
+              UiText2.m(
+                AppLocalizations.of(context).continue_btn,
+                color: palette.foregroundSecondary,
+              ),
             if (instruction != null) const SizedBox(height: 4.0),
             if (instruction != null)
               UiText2.m(

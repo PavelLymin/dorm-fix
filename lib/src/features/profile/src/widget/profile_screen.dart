@@ -18,9 +18,9 @@ class ProfileScreen extends StatelessWidget {
           padding: AppInsets.screen,
           child: CustomScrollView(
             slivers: [
-              SliverPadding(
+              const SliverPadding(
                 padding: .only(top: 32.0),
-                sliver: SliverToBoxAdapter(child: const PersonalAvatar()),
+                sliver: SliverToBoxAdapter(child: PersonalAvatar()),
               ),
               SliverPadding(
                 padding: .only(top: 24.0, bottom: 10.0),

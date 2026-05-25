@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../instructions.dart';
 
 class InstructionsScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Советы')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).advices)),
       body: SafeArea(
         child: Padding(
           padding: AppInsets.screen,

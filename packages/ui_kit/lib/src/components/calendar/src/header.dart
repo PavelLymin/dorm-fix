@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:ui_kit/ui.dart';
 
 class Header extends StatelessWidget {
@@ -16,6 +17,7 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
+    final locale = Localizations.localeOf(context).languageCode;
     return UiCard.standart(
       padding: .symmetric(horizontal: 20.0, vertical: 10.0),
       child: Row(
@@ -35,9 +37,8 @@ class Header extends StatelessWidget {
           const Spacer(),
           ValueListenableBuilder(
             valueListenable: currentDate,
-            builder: (context, value, child) {
-              return UiText2.m(value.toString());
-            },
+            builder: (context, value, child) =>
+                UiText2.m(DateFormat.yMMMM(locale).format(value).toUpperCase()),
           ),
           const Spacer(),
           UiButton.icon(

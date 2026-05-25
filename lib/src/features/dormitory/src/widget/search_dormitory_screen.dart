@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../l10n/gen/app_localizations.dart';
 import '../../../../app/widget/dependencies_scope.dart';
 import '../../../dormitory/dormitory.dart';
 
@@ -91,7 +92,7 @@ class _SearchInputState extends State<_SearchInput> {
     controller: _controller,
     onChanged: context.read<SearchDormitoryBloc>().onQueryChanged.add,
     style: .new(
-      hintText: 'Поиск',
+      hintText: AppLocalizations.of(context).search,
       suffixIcon: _controller.text.isEmpty
           ? null
           : IconButton(

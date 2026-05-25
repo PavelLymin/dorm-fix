@@ -1,3 +1,4 @@
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../request.dart';
@@ -38,7 +39,7 @@ class _DescriptionTextState extends State<DescriptionText> {
       showCounter: true,
       textInputAction: .done,
       style: UiTextFieldStyle(
-        hintText: 'Введите проблему',
+        hintText: AppLocalizations.of(context).enter_problem,
         fillColor: palette.card,
       ),
     );

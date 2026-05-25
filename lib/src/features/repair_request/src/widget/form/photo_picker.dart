@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../../l10n/gen/app_localizations.dart';
 import '../../../request.dart';
 
 class PhotoPicker extends StatelessWidget {
@@ -42,7 +43,7 @@ class _TitlePicker extends StatelessWidget {
       crossAxisAlignment: .center,
       mainAxisSize: .max,
       children: [
-        UiText2.m('Фотографии'),
+        UiText2.m(AppLocalizations.of(context).photos),
         UiButton.icon(
           onPressed: onPressed,
           icon: Icon(

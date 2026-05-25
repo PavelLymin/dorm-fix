@@ -1,3 +1,4 @@
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../dormitory.dart';
@@ -34,7 +35,7 @@ class _DropDownDormitoriesState extends State<DropDownDormitories> {
             )
             .toList();
         return UiDropDownButton<int>(
-          hintText: 'Общежитие',
+          hintText: AppLocalizations.of(context).dormitory,
           initialSelection: widget.initialId,
           selectOnly: true,
           textAlign: .start,

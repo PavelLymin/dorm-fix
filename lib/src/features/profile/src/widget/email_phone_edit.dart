@@ -41,7 +41,7 @@ class _EmailAddressEditState extends State<EmailAddressEdit>
               builder: (_, value, _) {
                 if (value.text.isEmpty) return const SizedBox.shrink();
                 return IconButton(
-                  icon: const Icon(Icons.clear),
+                  icon: const Icon(UiIcons.close),
                   onPressed: () => _controller.clear(),
                 );
               },
@@ -138,7 +138,7 @@ class _PhoneNumberEditState extends State<PhoneNumberEdit> {
         crossAxisAlignment: .stretch,
         mainAxisSize: .min,
         children: [
-          UiText2.lBold('Укажите номер телефона'),
+          UiText2.lBold(AppLocalizations.of(context).specify_number),
           const SizedBox(height: 10.0),
           UiTextField.standard(
             controller: _controller,
@@ -195,7 +195,7 @@ class _ButtonPhoneUpdateState extends State<_ButtonPhoneUpdate>
         builder: (context, state) => state.maybeMap(
           orElse: () => Text(AppLocalizations.of(context).save),
           loading: (_) => SizedBox.square(
-            dimension: 20,
+            dimension: 20.0,
             child: CircularProgressIndicator(
               strokeWidth: 2,
               color: Theme.of(context).colorPalette2.foregroundAccent,

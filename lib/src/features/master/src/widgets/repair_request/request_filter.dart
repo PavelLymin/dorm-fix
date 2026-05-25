@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
+import '../../../../../../l10n/gen/app_localizations.dart';
 import '../../../../dormitory/dormitory.dart';
 import '../../../../repair_request/request.dart';
 
@@ -24,6 +25,7 @@ class _RequestFilterState extends State<RequestFilter> {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
     final typography = theme.appTypography2;
+    final local = AppLocalizations.of(context);
     return Row(
       mainAxisAlignment: .center,
       crossAxisAlignment: .center,
@@ -37,7 +39,7 @@ class _RequestFilterState extends State<RequestFilter> {
                 onSelected: (value) => context.read<RepairWatcherBloc>().add(
                   .get(specId: widget.specId, dormId: value),
                 ),
-                hintText: 'Общежитие',
+                hintText: local.dormitory,
                 dropdownMenuEntries: state.dormitories
                     .map(
                       (e) => DropdownMenuEntry(
@@ -57,8 +59,8 @@ class _RequestFilterState extends State<RequestFilter> {
             label: Row(
               mainAxisAlignment: .spaceBetween,
               children: [
-                UiText2.m('Дата'),
-                const Icon(Icons.keyboard_arrow_down_rounded),
+                UiText2.m(local.date),
+                const Icon(UiIcons.chevronDown),
               ],
             ),
             style: ButtonStyle(

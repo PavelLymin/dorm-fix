@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../repair_request/request.dart';
@@ -35,7 +36,7 @@ class _RepairRequestScreenState extends State<RepairRequestScreen> {
           mainAxisAlignment: .spaceBetween,
           crossAxisAlignment: .center,
           children: [
-            const Text('Заявки'),
+            Text(AppLocalizations.of(context).applications),
             UiButton.icon(onPressed: () {}, icon: const Icon(UiIcons.bell)),
           ],
         ),

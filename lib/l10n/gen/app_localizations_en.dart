@@ -59,6 +59,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get select_master_or_service => 'Select master or service';
 
   @override
+  String get select_room => 'Select room';
+
+  @override
   String get select_dormitory => 'Select dormitory';
 
   @override
@@ -262,6 +265,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile => 'Profile';
 
   @override
+  String get repair_without_materials => 'Repair without materials';
+
+  @override
   String get russian_lang => 'Russian';
 
   @override
@@ -278,6 +284,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get advices => 'Tips';
+
+  @override
+  String get all_advices => 'All tips';
 
   @override
   String get repair_advices => 'Repair tips';
@@ -341,6 +350,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get specify_reason => 'Specify reason';
+
+  @override
+  String get photos => 'Photos';
 
   @override
   String get language => 'Language';

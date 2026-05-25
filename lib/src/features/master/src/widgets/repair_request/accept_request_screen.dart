@@ -1,3 +1,4 @@
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
 import '../../../../../app/widget/dependencies_scope.dart';
@@ -39,6 +40,7 @@ class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(title: Text('Завершить заявку')),
       body: SafeArea(
@@ -51,19 +53,19 @@ class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
             children: [
               Padding(
                 padding: const .only(top: 24.0, bottom: 10.0),
-                child: UiText2.lBold('Выберите использованные материалы'),
+                child: UiText2.lBold(local.select_materials_used),
               ),
               _AddedMaterials(materialsNotifier: _materialsNotifier),
               UiButton.filledSecondary(
                 onPressed: () => showUiBottomSheet(
                   context,
                   spacing: .0,
-                  title: 'Выбор материалов',
+                  title: local.material_selection,
                   widget: SelectionMaterialsScreen(
                     materialsNotifier: _materialsNotifier,
                   ),
                 ),
-                label: Text('Выбрать материалы'),
+                label: Text(local.select_materials),
               ),
               const Spacer(),
               BlocProvider.value(
@@ -128,6 +130,7 @@ class _CompleteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     return UiButton.filledSecondary(
       onPressed: () {
         context.read<RepairActionBloc>().add(
@@ -142,10 +145,8 @@ class _CompleteButton extends StatelessWidget {
       label: ListenableBuilder(
         listenable: _materialsNotifier,
         builder: (context, child) {
-          if (_materialsNotifier.value.isNotEmpty) {
-            return Text('Завершить');
-          }
-          return Text('Ремонт без материалов');
+          if (_materialsNotifier.value.isNotEmpty) return Text(local.finish);
+          return Text(local.repair_without_materials);
         },
       ),
     );

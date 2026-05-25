@@ -1,3 +1,4 @@
+import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart' hide MaterialState;
 import '../../material.dart';
@@ -10,7 +11,7 @@ class MaterialScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Материалы')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).materials)),
       body: Padding(
         padding: AppInsets.screen,
         child: SafeArea(
@@ -91,7 +92,7 @@ class _Item extends StatelessWidget {
           children: [
             UiText2.lBold(material.name, maxLines: 2),
             const Spacer(),
-            UiText2.m('Quantity: ${material.quantity}'),
+            UiText2.m('${material.quantity} шт.'),
             const SizedBox(height: spacing),
             UiText2.m(
               material.description,
@@ -134,7 +135,7 @@ class __SearcherState extends State<_Searcher> {
       child: UiTextField.search(
         controller: _controller,
         onChanged: context.read<MaterialBloc>().onQueryChanged.add,
-        style: .new(hintText: 'Поиск'),
+        style: .new(hintText: AppLocalizations.of(context).search),
       ),
     );
   }

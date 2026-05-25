@@ -59,6 +59,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get select_master_or_service => 'Выберите мастера или услугу';
 
   @override
+  String get select_room => 'Выберите комнату';
+
+  @override
   String get select_dormitory => 'Выберите общежитие';
 
   @override
@@ -262,6 +265,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profile => 'Профиль';
 
   @override
+  String get repair_without_materials => 'Ремонт без материалов';
+
+  @override
   String get russian_lang => 'Русский';
 
   @override
@@ -278,6 +284,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get advices => 'Советы';
+
+  @override
+  String get all_advices => 'Все советы';
 
   @override
   String get repair_advices => 'Советы по ремонту';
@@ -341,6 +350,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get specify_reason => 'Укажите причину';
+
+  @override
+  String get photos => 'Фотографии';
 
   @override
   String get language => 'Язык';

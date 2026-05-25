@@ -25,8 +25,11 @@ extension ThemeModeVOLocalization on ThemeModeVO {
 }
 
 enum LocaleVO {
-  russian,
-  english;
+  russian(locale: 'ru_RU'),
+  english(locale: 'en_US');
+
+  const LocaleVO({required this.locale});
+  final String locale;
 
   T map<T>({
     required T Function(LocaleVO) russian,

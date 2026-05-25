@@ -7,11 +7,15 @@ extension YearMonthDay on DateTime {
   DateTime truncateAndStripTimezone() => _truncateAndStripTimezone(this);
 }
 
-class LineCalendarController extends ValueNotifier<DateTime> {
-  LineCalendarController(DateTime date, {this.unUseWeekDays = const []})
-    : super(_initDateTime(date, unUseWeekDays));
+class LineCalendarController extends ChangeNotifier {
+  LineCalendarController(DateTime initial, {this.unUseWeekDays = const []}) {
+    _initial = _initDateTime(initial, unUseWeekDays);
+  }
 
   final List<int> unUseWeekDays;
+  DateTime? _initial;
+
+  DateTime? get initial => _initial;
 
   static DateTime _initDateTime(
     DateTime date, [
@@ -26,13 +30,13 @@ class LineCalendarController extends ValueNotifier<DateTime> {
     return date;
   }
 
-  @override
-  set value(DateTime newValue) {
+  set selectedDate(DateTime newValue) {
     newValue = newValue.truncateAndStripTimezone();
     if (!unUseWeekDays.contains(newValue.weekday)) {
-      super.value = newValue;
+      _initial = newValue;
     }
+    notifyListeners();
   }
 
-  bool isWeekDay(DateTime date) => !unUseWeekDays.contains(date.weekday);
+  bool isUseDay(DateTime date) => !unUseWeekDays.contains(date.weekday);
 }
