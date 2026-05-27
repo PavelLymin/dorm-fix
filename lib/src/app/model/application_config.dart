@@ -65,7 +65,7 @@ abstract final class Config {
     defaultValue: '${dotenv.env['SUPABASE_URL']}/storage/v1/object/',
   );
 
-  static const String problemsBucket = 'problems/';
+  static const String problemsBucket = 'problems';
 
   static const String avatarsBucket = 'avatars/';
 

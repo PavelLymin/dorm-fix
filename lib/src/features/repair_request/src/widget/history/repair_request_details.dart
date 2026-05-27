@@ -2,9 +2,14 @@ import 'package:ui_kit/ui.dart';
 import '../../../request.dart';
 
 class RepairRequestDetails extends StatelessWidget {
-  const RepairRequestDetails({super.key, required this.request});
+  const RepairRequestDetails({
+    super.key,
+    required this.request,
+    required this.images,
+  });
 
   final FullRepairRequest request;
+  final List<String> images;
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +20,7 @@ class RepairRequestDetails extends StatelessWidget {
           padding: AppInsets.screen,
           child: CustomScrollView(
             slivers: [
-              if (request.problems.isNotEmpty)
-                RequestImages(problems: request.problems),
+              if (request.problems.isNotEmpty) RequestImages(images: images),
               SliverPadding(
                 padding: .only(top: 24.0, bottom: 10.0),
                 sliver: SliverToBoxAdapter(child: UiText2.lBold('Детали')),

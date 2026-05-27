@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../../app/model/application_config.dart';
+
 abstract interface class IProblemRepository {
   Future<List<String>> uploadProblems({
     required List<String> problems,
     required int requestId,
   });
+
+  String getUrl({required String photoPath});
 }
 
 class ProblemRepositoryImpl implements IProblemRepository {
@@ -40,4 +44,8 @@ class ProblemRepositoryImpl implements IProblemRepository {
 
     return urls;
   }
+
+  @override
+  String getUrl({required String photoPath}) =>
+      _supabase.storage.from(Config.problemsBucket).getPublicUrl(photoPath);
 }

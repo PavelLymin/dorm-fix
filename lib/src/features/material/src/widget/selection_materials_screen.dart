@@ -4,9 +4,12 @@ import '../../material.dart';
 import 'material_types.dart';
 
 class SelectionMaterialsScreen extends StatelessWidget {
-  const SelectionMaterialsScreen({super.key, required this.materialsNotifier});
+  const SelectionMaterialsScreen({
+    super.key,
+    required this.materialsController,
+  });
 
-  final MaterialsUsedController materialsNotifier;
+  final MaterialsUsedController materialsController;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class SelectionMaterialsScreen extends StatelessWidget {
                           Flexible(child: UiText2.m(material.name)),
                           _ItemIndicator(
                             material: material,
-                            materialsNotifier: materialsNotifier,
+                            materialsController: materialsController,
                           ),
                         ],
                       ),
@@ -57,45 +60,32 @@ class SelectionMaterialsScreen extends StatelessWidget {
 class _ItemIndicator extends StatefulWidget {
   const _ItemIndicator({
     required this.material,
-    required this.materialsNotifier,
+    required this.materialsController,
   });
 
   final MaterialEntity material;
-  final MaterialsUsedController materialsNotifier;
+  final MaterialsUsedController materialsController;
 
   @override
   State<_ItemIndicator> createState() => __ItemIndicatorState();
 }
 
 class __ItemIndicatorState extends State<_ItemIndicator> {
-  late final ValueNotifier<int> _count;
+  late final MaterialQuantityNotifier _quentityController;
 
   @override
   void initState() {
     super.initState();
-    _count = ValueNotifier(
-      widget.materialsNotifier.value[widget.material.id]?.quantity ?? 0,
+    _quentityController = MaterialQuantityNotifier(
+      widget.materialsController.value[widget.material.id]?.selectedAmount ?? 0,
+      maxQuantity: widget.material.quantity,
     );
-    _count.addListener(_countChanged);
   }
 
   @override
   void dispose() {
-    _count.removeListener(_countChanged);
-    _count.dispose();
+    _quentityController.dispose();
     super.dispose();
-  }
-
-  void _countChanged() {
-    if (_count.value == 0) {
-      widget.materialsNotifier.removeMaterial(widget.material.id);
-      return;
-    }
-    widget.materialsNotifier.addMaterial(
-      widget.material.id,
-      widget.material.name,
-      _count.value,
-    );
   }
 
   @override
@@ -106,53 +96,10 @@ class __ItemIndicatorState extends State<_ItemIndicator> {
     final width = style.iconSize * 2 + countWidth;
     return SizedBox(
       width: width,
-      child: Align(
-        alignment: .centerRight,
-        child: ValueListenableBuilder(
-          valueListenable: _count,
-          builder: (_, count, _) {
-            if (count == 0) {
-              return UiButton.icon(
-                style: ButtonStyle(
-                  padding: .all(.zero),
-                  minimumSize: .all(.zero),
-                  tapTargetSize: .shrinkWrap,
-                ),
-                onPressed: () => _count.value++,
-                icon: const Icon(UiIcons.plus),
-              );
-            }
-            return Row(
-              mainAxisAlignment: .center,
-              crossAxisAlignment: .end,
-              mainAxisSize: .min,
-              children: [
-                UiButton.icon(
-                  style: ButtonStyle(
-                    padding: .all(.zero),
-                    minimumSize: .all(.zero),
-                    tapTargetSize: .shrinkWrap,
-                  ),
-                  onPressed: () => _count.value++,
-                  icon: const Icon(UiIcons.plus),
-                ),
-                SizedBox(
-                  width: countWidth,
-                  child: UiText2.m(textAlign: .center, count.toString()),
-                ),
-                UiButton.icon(
-                  style: ButtonStyle(
-                    padding: .all(.zero),
-                    minimumSize: .all(.zero),
-                    tapTargetSize: .shrinkWrap,
-                  ),
-                  onPressed: () => _count.value--,
-                  icon: const Icon(UiIcons.menu),
-                ),
-              ],
-            );
-          },
-        ),
+      child: UiCounter(
+        onIncrement: () => _quentityController.increment(widget.material),
+        onDecrement: () => _quentityController.decrement(widget.material),
+        valueListenable: _quentityController,
       ),
     );
   }

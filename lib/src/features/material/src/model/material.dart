@@ -1,7 +1,7 @@
 import '../../material.dart';
 
 class MaterialEntity {
-  MaterialEntity({
+  const MaterialEntity({
     required this.id,
     required this.type,
     required this.name,
@@ -17,20 +17,24 @@ class MaterialEntity {
   final String photoPath;
   final int quantity;
 
+  bool canSubtract(int amountToSubtract) {
+    if (amountToSubtract <= 0) return false;
+    return (quantity - amountToSubtract) >= 0;
+  }
+
   MaterialEntity copyWith({
     int? id,
     MaterialTypeEntity? type,
     String? name,
     String? description,
     String? photoPath,
-    int? quantity,
   }) => MaterialEntity(
     id: id ?? this.id,
     type: type ?? this.type,
     name: name ?? this.name,
     description: description ?? this.description,
     photoPath: photoPath ?? this.photoPath,
-    quantity: quantity ?? this.quantity,
+    quantity: quantity,
   );
 
   @override
@@ -49,4 +53,20 @@ class MaterialEntity {
 
   @override
   int get hashCode => id.hashCode;
+}
+
+class MaterialDraft {
+  const MaterialDraft({required this.material, required this.selectedAmount});
+
+  final MaterialEntity material;
+  final int selectedAmount;
+
+  MaterialDraft updatedAmount(int newAmount) {
+    if (newAmount < 0) newAmount = 0;
+    if (newAmount > material.quantity) {
+      newAmount = material.quantity;
+    }
+
+    return MaterialDraft(material: material, selectedAmount: newAmount);
+  }
 }

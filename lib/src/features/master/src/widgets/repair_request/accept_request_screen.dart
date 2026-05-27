@@ -15,24 +15,24 @@ class AcceptRequestScreen extends StatefulWidget {
 }
 
 class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
-  late final MaterialsUsedController _materialsNotifier;
+  late final MaterialsUsedController _controller;
   late final RepairActionBloc _repairActionBloc;
 
   @override
   void initState() {
     super.initState();
-    _materialsNotifier = MaterialsUsedController({});
     final dependency = DependeciesScope.of(context);
     _repairActionBloc = RepairActionBloc(
       requestRepository: dependency.requestRepository,
       problemRepository: dependency.problemRepository,
       logger: dependency.logger,
     );
+    _controller = MaterialsUsedController();
   }
 
   @override
   void dispose() {
-    _materialsNotifier.dispose();
+    _controller.dispose();
     _repairActionBloc.close();
 
     super.dispose();
@@ -55,14 +55,14 @@ class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
                 padding: const .only(top: 24.0, bottom: 10.0),
                 child: UiText2.lBold(local.select_materials_used),
               ),
-              _AddedMaterials(materialsNotifier: _materialsNotifier),
+              _AddedMaterials(materialsController: _controller),
               UiButton.filledSecondary(
                 onPressed: () => showUiBottomSheet(
                   context,
                   spacing: .0,
                   title: local.material_selection,
                   widget: SelectionMaterialsScreen(
-                    materialsNotifier: _materialsNotifier,
+                    materialsController: _controller,
                   ),
                 ),
                 label: Text(local.select_materials),
@@ -72,7 +72,7 @@ class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
                 value: _repairActionBloc,
                 child: _CompleteButton(
                   requestId: widget.requestId,
-                  materialsNotifier: _materialsNotifier,
+                  materialsController: _controller,
                 ),
               ),
             ],
@@ -84,28 +84,28 @@ class _AcceptRequestScreenState extends State<AcceptRequestScreen> {
 }
 
 class _AddedMaterials extends StatelessWidget {
-  const _AddedMaterials({required this.materialsNotifier});
+  const _AddedMaterials({required this.materialsController});
 
-  final MaterialsUsedController materialsNotifier;
+  final MaterialsUsedController materialsController;
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: materialsNotifier,
-      builder: (_, _) {
-        if (materialsNotifier.value.isNotEmpty) {
+    return ValueListenableBuilder(
+      valueListenable: materialsController,
+      builder: (_, value, _) {
+        if (materialsController.value.isNotEmpty) {
           return Padding(
             padding: const .only(bottom: 20.0),
             child: UiCard.standart(
               child: Column(
-                children: materialsNotifier.value.entries
+                children: value.values
                     .map(
                       (material) => Row(
                         mainAxisAlignment: .spaceBetween,
                         crossAxisAlignment: .center,
                         children: [
-                          UiText2.m(material.value.name),
-                          UiText2.m(material.value.quantity.toString()),
+                          UiText2.m(material.material.name),
+                          UiText2.m(material.selectedAmount.toString()),
                         ],
                       ),
                     )
@@ -123,10 +123,10 @@ class _AddedMaterials extends StatelessWidget {
 class _CompleteButton extends StatelessWidget {
   const _CompleteButton({
     required this.requestId,
-    required this._materialsNotifier,
+    required this.materialsController,
   });
   final int requestId;
-  final MaterialsUsedController _materialsNotifier;
+  final MaterialsUsedController materialsController;
 
   @override
   Widget build(BuildContext context) {
@@ -136,16 +136,16 @@ class _CompleteButton extends StatelessWidget {
         context.read<RepairActionBloc>().add(
           .complete(
             requestId: requestId,
-            materialUsage: _materialsNotifier.value.map(
-              (key, value) => MapEntry(key, value.quantity),
+            materialUsage: materialsController.value.map(
+              (key, value) => MapEntry(key, value.selectedAmount),
             ),
           ),
         );
       },
       label: ListenableBuilder(
-        listenable: _materialsNotifier,
+        listenable: materialsController,
         builder: (context, child) {
-          if (_materialsNotifier.value.isNotEmpty) return Text(local.finish);
+          if (materialsController.value.isNotEmpty) return Text(local.finish);
           return Text(local.repair_without_materials);
         },
       ),

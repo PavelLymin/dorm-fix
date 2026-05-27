@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:dorm_fix/l10n/gen/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart' hide MaterialState;
@@ -84,7 +85,11 @@ class _Item extends StatelessWidget {
     return Padding(
       padding: AppInsets.item,
       child: UiCard.clickable(
-        onTap: () {},
+        onTap: () {
+          context.router.push(
+            NamedRoute('MaterialDetails', params: {'material': material}),
+          );
+        },
         child: Column(
           mainAxisAlignment: .center,
           crossAxisAlignment: .start,

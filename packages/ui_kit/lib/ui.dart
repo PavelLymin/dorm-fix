@@ -25,6 +25,8 @@ export 'package:ui_kit/src/components/carousel.dart';
 export 'package:ui_kit/src/components/calendar/calendar.dart';
 export 'package:ui_kit/src/components/icons.dart';
 export 'package:ui_kit/src/components/selected_control.dart';
+export 'package:ui_kit/src/components/network_image.dart';
+export 'package:ui_kit/src/components/counter.dart';
 
 // Layout
 export 'package:ui_kit/src/layout/window_size.dart';

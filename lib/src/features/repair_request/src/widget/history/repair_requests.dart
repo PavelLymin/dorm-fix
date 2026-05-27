@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dorm_fix/src/app/widget/dependencies_scope.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui.dart';
-import '../../../../../app/model/application_config.dart';
 import '../../../request.dart';
+import '../../model/problem.dart';
 
 class RepairRequest extends StatelessWidget {
   const RepairRequest({super.key, this.itemCount});
@@ -30,25 +31,42 @@ class RepairRequest extends StatelessWidget {
   }
 }
 
-class _Loaded extends StatelessWidget {
+class _Loaded extends StatefulWidget {
   const _Loaded({this.itemCount, required this.requests});
 
   final int? itemCount;
   final List<FullRepairRequest> requests;
 
   @override
+  State<_Loaded> createState() => _LoadedState();
+}
+
+class _LoadedState extends State<_Loaded> {
+  late final IProblemRepository _problemRepository;
+  @override
+  void initState() {
+    super.initState();
+    _problemRepository = DependeciesScope.of(context).problemRepository;
+  }
+
+  List<String> _getUrl(List<FullProblem> problems) => problems
+      .map((e) => _problemRepository.getUrl(photoPath: e.photoPath))
+      .toList();
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.colorPalette2;
-    int length = requests.length;
-    int count = itemCount != null
-        ? itemCount! <= length
-              ? itemCount!
+    int length = widget.requests.length;
+    int count = widget.itemCount != null
+        ? widget.itemCount! <= length
+              ? widget.itemCount!
               : length
         : length;
     return SliverList.builder(
       itemBuilder: (_, index) {
-        final request = requests[requests.length - 1 - index];
+        final request = widget.requests[widget.requests.length - 1 - index];
+        final images = _getUrl(request.problems);
         return Padding(
           padding: const .symmetric(vertical: 8.0),
           child: UiDetailCard<StatusEnum>(
@@ -71,14 +89,12 @@ class _Loaded extends StatelessWidget {
               .canceled: palette.foregroundAccent,
               .notDone: palette.foreground,
             },
-            images: request.problems.map((e) {
-              return '${Config.storageBaseUrl}${Config.problemsBucket}${e.photoPath}';
-            }).toList(),
+            images: images,
             onTap: () {
               context.router.push(
                 NamedRoute(
                   'RepairRequestDetails',
-                  params: {'request': request},
+                  params: {'request': request, 'images': images},
                 ),
               );
             },

@@ -59,8 +59,10 @@ class AppRouter extends RootStackRouter {
     ),
     NamedRouteDef(
       name: 'RepairRequestDetails',
-      builder: (_, data) =>
-          RepairRequestDetails(request: data.params.get('request')),
+      builder: (_, data) => RepairRequestDetails(
+        request: data.params.get('request'),
+        images: data.params.get('images'),
+      ),
     ),
     NamedRouteDef(
       name: 'StudentRootSreen',
@@ -180,6 +182,13 @@ class AppRouter extends RootStackRouter {
               builder: (_, _) => const ProfileScreen(),
             ),
           ],
+        ),
+        NamedRouteDef(
+          name: 'MaterialDetails',
+          builder: (_, data) {
+            final material = data.params.get('material');
+            return MaterialDetails(material: material);
+          },
         ),
         NamedRouteDef(
           name: 'MasterRequestDetails',

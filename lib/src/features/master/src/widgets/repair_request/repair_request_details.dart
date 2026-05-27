@@ -16,6 +16,8 @@ class MasterRequestDetails extends StatefulWidget {
 
 class _MasterRequestDetailsState extends State<MasterRequestDetails> {
   late final RepairActionBloc _repairActionBloc;
+  late final IProblemRepository _problemRepository;
+
   @override
   void initState() {
     super.initState();
@@ -25,6 +27,7 @@ class _MasterRequestDetailsState extends State<MasterRequestDetails> {
       problemRepository: dependency.problemRepository,
       logger: dependency.logger,
     );
+    _problemRepository = dependency.problemRepository;
   }
 
   @override
@@ -47,7 +50,14 @@ class _MasterRequestDetailsState extends State<MasterRequestDetails> {
             child: CustomScrollView(
               slivers: [
                 if (widget.request.problems.isNotEmpty)
-                  RequestImages(problems: widget.request.problems),
+                  RequestImages(
+                    images: widget.request.problems
+                        .map(
+                          (e) =>
+                              _problemRepository.getUrl(photoPath: e.photoPath),
+                        )
+                        .toList(),
+                  ),
                 SliverPadding(
                   padding: .only(top: 24.0, bottom: 10.0),
                   sliver: SliverToBoxAdapter(
