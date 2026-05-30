@@ -97,8 +97,20 @@ class __ItemIndicatorState extends State<_ItemIndicator> {
     return SizedBox(
       width: width,
       child: UiCounter(
-        onIncrement: () => _quentityController.increment(widget.material),
-        onDecrement: () => _quentityController.decrement(widget.material),
+        onIncrement: () {
+          _quentityController.increment(widget.material);
+          widget.materialsController.updateMaterials(
+            widget.material,
+            _quentityController.quantity,
+          );
+        },
+        onDecrement: () {
+          _quentityController.decrement(widget.material);
+          widget.materialsController.updateMaterials(
+            widget.material,
+            _quentityController.quantity,
+          );
+        },
         valueListenable: _quentityController,
       ),
     );

@@ -10,7 +10,7 @@ class AppPage {
   final IconData icon;
 }
 
-class MasterRootScreen extends StatefulWidget {
+class MasterRootScreen extends StatelessWidget {
   const MasterRootScreen({
     super.key,
     required this.pages,
@@ -23,27 +23,17 @@ class MasterRootScreen extends StatefulWidget {
   final int dormitoryId;
 
   @override
-  State<MasterRootScreen> createState() => _MasterRootScreenState();
+  Widget build(BuildContext context) => RootScreen(pages: pages);
 }
 
-class _MasterRootScreenState extends State<MasterRootScreen> {
-  @override
-  Widget build(BuildContext context) => RootScreen(pages: widget.pages);
-}
-
-class StudentRootScreen extends StatefulWidget {
+class StudentRootScreen extends StatelessWidget {
   const StudentRootScreen({super.key, required this.pages});
 
   final List<AppPage> pages;
 
   @override
-  State<StudentRootScreen> createState() => _StudentRootScreenState();
-}
-
-class _StudentRootScreenState extends State<StudentRootScreen> {
-  @override
   Widget build(BuildContext context) {
-    return RootScreen(pages: widget.pages);
+    return RootScreen(pages: pages);
   }
 }
 

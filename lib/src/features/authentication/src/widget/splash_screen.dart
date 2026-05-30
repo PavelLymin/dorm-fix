@@ -21,10 +21,10 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
         profile: (user) => user.mapRoleUser(
           student: (_) =>
-              context.router.replace(const NamedRoute('StudentRootSreen')),
+              context.router.replace(const NamedRoute('StudentRootScreen')),
           master: (m) => context.router.replace(
             NamedRoute(
-              'MasterRootTabs',
+              'MasterRootScreen',
               params: {
                 'spec_id': m.specialization.id,
                 'dorm_id': m.dormitory.id,

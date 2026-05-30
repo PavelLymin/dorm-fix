@@ -1,3 +1,5 @@
+package com.example.dormfix
+
 import android.app.Application
 
 import com.yandex.mapkit.MapKitFactory

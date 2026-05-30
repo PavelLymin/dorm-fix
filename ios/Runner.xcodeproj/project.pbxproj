@@ -71,6 +71,11 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AB7648FC8BB505AB689AFF22 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		C01624C42F9683A800C4D0BA /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		C04D21392FCB3512000430B4 /* Runner copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Runner copy2-Info.plist"; path = "/Users/pavellyamin/Development/dorm_fix/ios/Runner copy2-Info.plist"; sourceTree = "<absolute>"; };
+		C04D21532FCB3516000430B4 /* Runner copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Runner copy copy-Info.plist"; path = "/Users/pavellyamin/Development/dorm_fix/ios/Runner copy copy-Info.plist"; sourceTree = "<absolute>"; };
+		C04D216D2FCB3578000430B4 /* Runner copy3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Runner copy3-Info.plist"; path = "/Users/pavellyamin/Development/dorm_fix/ios/Runner copy3-Info.plist"; sourceTree = "<absolute>"; };
+		C0E414962FCB34C0009CB3F1 /* Runner copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Runner copy-Info.plist"; path = "/Users/pavellyamin/Development/dorm_fix/ios/Runner copy-Info.plist"; sourceTree = "<absolute>"; };
+		C0E414B02FCB34C7009CB3F1 /* Runner copy 2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Runner copy 2-Info.plist"; path = "/Users/pavellyamin/Development/dorm_fix/ios/Runner copy 2-Info.plist"; sourceTree = "<absolute>"; };
 		D2FC2BF84CAE3C8D2F1C18BE /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,6 +152,11 @@
 				439C4540FE838635BDAD88B6 /* Pods */,
 				1520F7E1C9EAB26F028CF864 /* GoogleService-Info.plist */,
 				2CE09EF21430D412C08B4087 /* Frameworks */,
+				C0E414962FCB34C0009CB3F1 /* Runner copy-Info.plist */,
+				C0E414B02FCB34C7009CB3F1 /* Runner copy 2-Info.plist */,
+				C04D21392FCB3512000430B4 /* Runner copy2-Info.plist */,
+				C04D21532FCB3516000430B4 /* Runner copy copy-Info.plist */,
+				C04D216D2FCB3578000430B4 /* Runner copy3-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};

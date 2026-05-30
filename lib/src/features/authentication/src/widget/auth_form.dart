@@ -47,11 +47,11 @@ class _AuthFormState extends State<AuthForm> with _AuthFormStateMixin {
                 ]),
                 profile: (p) => p.mapRoleUser(
                   student: (_) => context.router.replaceAll([
-                    const NamedRoute('StudentRootSreen'),
+                    const NamedRoute('StudentRootScreen'),
                   ]),
                   master: (m) => context.router.replaceAll([
                     NamedRoute(
-                      'MasterRootSreen',
+                      'MasterRootScreen',
                       params: {
                         'spec_id': m.specialization.id,
                         'dorm_id': m.dormitory.id,

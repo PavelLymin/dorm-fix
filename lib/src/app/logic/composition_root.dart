@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,6 +65,9 @@ class CompositionRoot {
 
     // Google
     final googleSignIn = GoogleSignIn.instance;
+    if (Platform.isAndroid) {
+      await googleSignIn.initialize(clientId: Config.googleClientId);
+    }
 
     // WS
     final IWebSocket webSocket = WebSocketBase(

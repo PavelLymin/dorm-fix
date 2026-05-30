@@ -18,8 +18,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
     }
 
     defaultConfig {
@@ -47,5 +49,5 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.yandex.android:maps.mobile:4.22.0-full'
+    implementation("com.yandex.android:maps.mobile:4.22.0-full")
 }

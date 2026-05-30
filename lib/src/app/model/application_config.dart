@@ -1,4 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:io' show Platform;
 
 /// Config for app.
 abstract final class Config {
@@ -14,19 +15,21 @@ abstract final class Config {
 
   /// Base url for api. 'http://10.0.2.2:8080'
   /// e.g. https://api.domain.tld
-  static const String apiBaseUrl = String.fromEnvironment(
+  static final String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://localhost:8080',
+    defaultValue: Platform.isIOS
+        ? 'http://localhost:8080'
+        : 'http://10.0.2.2:8080',
   );
 
   /// Base url for ws.
   /// e.g. ws://api.domain.tld
-  static const String wsBaseUrl = String.fromEnvironment(
+  static final String wsBaseUrl = String.fromEnvironment(
     'WS_BASE_URL',
-    defaultValue: 'ws://localhost:8080',
+    defaultValue: Platform.isIOS ? 'ws://localhost:8080' : 'ws://10.0.2.2:8080',
   );
 
-  static const String googleClientId = String.fromEnvironment(
+  static final String googleClientId = String.fromEnvironment(
     '889571705211-3m5otprqtm98lojcub115a29ed138lil.apps.googleusercontent.com',
     defaultValue: '',
   );

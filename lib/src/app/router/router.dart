@@ -65,7 +65,7 @@ class AppRouter extends RootStackRouter {
       ),
     ),
     NamedRouteDef(
-      name: 'StudentRootSreen',
+      name: 'StudentRootScreen',
       builder: (context, _) {
         final dependency = DependeciesScope.of(context);
         return MultiBlocProvider(
@@ -88,8 +88,8 @@ class AppRouter extends RootStackRouter {
       },
       children: [
         NamedRouteDef(
-          initial: true,
           name: 'StudentTabsScreen',
+          initial: true,
           builder: (_, _) => RootScreen(pages: studentPages),
           children: [
             NamedRouteDef(
@@ -126,8 +126,8 @@ class AppRouter extends RootStackRouter {
       ],
     ),
     NamedRouteDef(
-      name: 'MasterRootSreen',
-      builder: (context, _) {
+      name: 'MasterRootScreen',
+      builder: (context, data) {
         final dependency = DependeciesScope.of(context);
         return MultiBlocProvider(
           providers: [
@@ -150,7 +150,7 @@ class AppRouter extends RootStackRouter {
               )..add(.get()),
             ),
           ],
-          child: const AutoRouter(),
+          child: AutoRouter(),
         );
       },
       children: [
@@ -159,17 +159,18 @@ class AppRouter extends RootStackRouter {
           initial: true,
           builder: (_, data) => MasterRootScreen(
             pages: masterPages,
-            specializationId: data.params.getInt('spec_id'),
-            dormitoryId: data.params.getInt('dorm_id'),
+            specializationId: data.parent!.params.getInt('spec_id'),
+            dormitoryId: data.parent!.params.getInt('dorm_id'),
           ),
           children: [
             NamedRouteDef(
               name: 'MasterHomeTab',
               builder: (_, data) {
-                final parentParams = data.parent!.params;
+                final rootParams =
+                    data.parent?.parent?.params ?? data.parent!.params;
                 return RepairRequestScreen(
-                  specId: parentParams.getInt('spec_id'),
-                  dormId: parentParams.getInt('dorm_id'),
+                  specId: rootParams.getInt('spec_id'),
+                  dormId: rootParams.getInt('dorm_id'),
                 );
               },
             ),

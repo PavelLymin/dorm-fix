@@ -1,4 +1,4 @@
-package com.example.dorm_fix
+package com.example.dormfix
 
 import io.flutter.embedding.android.FlutterActivity
 
